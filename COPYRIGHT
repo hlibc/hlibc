@@ -76,3 +76,8 @@ the first place, and hereby explicitly released to the Public Domain:
 
 All public headers: include/*
 Startup files: crt/*
+
+Note added by CM Graff:
+grafmusl is a fork of musl by CM Graff and its changes are copyrighted
+under Copyright © CM Graff
+
