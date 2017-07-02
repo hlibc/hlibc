@@ -14,6 +14,30 @@ DESCRIPTION:
 	version of musl to its "normative case" of crt stuffs, syscalls and
 	linux ABI
 
+
+BUILDING:
+---------
+
+	Musl contains a shell script wrapper for gcc called musl-gcc. This
+	allows it to be easily installed and used from your home directory
+	without the need for root privilege.
+
+
+		cd grafmusl
+
+		./configure --prefix=/home/$USER/buildarea
+
+		make
+
+		make install
+
+	Test the installation:
+
+		cd /home/$USER/buildarea
+
+		./bin/musl-gcc test.c -static
+
+
 REVISION CONTROL:
 -----------------
 
