@@ -15,6 +15,15 @@ DESCRIPTION:
 	linux ABI
 
 
+CHANGES:
+--------
+
+	Removed src/prng src/stub
+
+	Consolidated documentation into a single README and created a 
+	corresponding web page README.html.
+
+
 BUILDING:
 ---------
 
