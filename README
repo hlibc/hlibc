@@ -18,7 +18,7 @@ DESCRIPTION:
 CHANGES:
 --------
 
-	Removed src/prng src/stub
+	Removed src/prng src/stub src/locale src/network
 
 	Consolidated documentation into a single README and created a 
 	corresponding web page README.html.
