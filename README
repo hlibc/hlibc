@@ -27,6 +27,13 @@ CHANGES:
 	corresponding web page README.html.
 
 
+IRC:
+----
+
+	#musl on irc.freenode.net
+
+
+
 BUILDING:
 ---------
 
@@ -34,19 +41,14 @@ BUILDING:
 	allows it to be easily installed and used from your home directory
 	without the need for root privilege.
 
-
-		cd grafmusl
-
-		./configure --prefix=/home/$USER/buildarea
-
-		make
-
+		cd grafmusl 
+		./configure --prefix=/home/$USER/buildarea 
+		make 
 		make install
 
 	Test the installation:
 
-		cd /home/$USER/buildarea
-
+		cd /home/$USER/buildarea 
 		./bin/musl-gcc test.c -static
 
 
@@ -55,10 +57,28 @@ REVISION CONTROL:
 
 	https://github.com/cmgraff/grafmusl
 
+
 REFERENCES:
 -----------
 
-	https://www.musl-libc.org
+	Musl's home website:
+
+		https://www.musl-libc.org
+
+	A website authored by Rich Felker / dalais, the maker of musl:
+
+		https://ewontfix.com/about 
+
+	A Draft of the C standard.
+
+		http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2086.htm
+
+	Some useful sites from the people on ##c irc.freenode.net
+
+		http://www.iso-9899.info
+
+		http://www.iso-9899.info/wiki/Books
+
 
 
 ORIGINAL README:
