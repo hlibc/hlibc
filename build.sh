@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm -rf installation buildlog
+rm -rf installation buildlog cat_static cat_dynamic
 
 make distclean
 
