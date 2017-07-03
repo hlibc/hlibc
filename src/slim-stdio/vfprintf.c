@@ -597,6 +597,11 @@ static int printf_core(FILE *f, const char *fmt, va_list *ap, union arg *nl_arg,
 			wc[1] = 0;
 			arg.p = wc;
 			p = -1;
+		
+		/* 
+		 * multibyte chars are not supported in grafmusl
+		*/
+		/*
 		case 'S':
 			ws = arg.p;
 			for (i=0; *ws && (l=wctomb(mb, *ws++))>=0 && l<=0U+p-i; i+=l);
@@ -609,6 +614,7 @@ static int printf_core(FILE *f, const char *fmt, va_list *ap, union arg *nl_arg,
 			pad(f, ' ', w, p, fl^LEFT_ADJ);
 			l = w>p ? w : p;
 			continue;
+		*/
 		case 'e': case 'f': case 'g': case 'a':
 		case 'E': case 'F': case 'G': case 'A':
 			l = fmt_fp(f, arg.f, w, p, fl, t);
