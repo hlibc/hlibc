@@ -15,9 +15,15 @@
 	version of musl to its "normative case" of crt stuffs, syscalls and
 	linux ABI
 
+	Musl libc also contains a copy of the the Sun fdlibm libm math
+	library. It is a goal of this project to also understand and disect
+	the sun fdlibm mathematics library.
+
 
 <br clear="left"/></pre><dl>CHANGES:</dl><pre>
 </pre><dd><hr/></dd><pre>
+
+	Complex number support has been removed.
 
 	Removed src/prng src/stub src/search src/temp src/regex
 	src/aio src/mq and numerous other directories and their
@@ -30,6 +36,8 @@
 	Created a build.sh script to automatically build and test
 	the normative libc case.
 
+	Directories which seem like they have been mostly narrowed
+	down have been renamed to "slim-name" ie: "slim-stdio".
 
 <br clear="left"/></pre><dl>IRC:</dl><pre>
 </pre><dd><hr/></dd><pre>
