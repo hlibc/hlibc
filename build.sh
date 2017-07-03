@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm -rf installation buildlog cat_static cat_dynamic
+rm -rf installation buildlog cat_static cat_dynamic pow_test
 
 make distclean
 
@@ -16,5 +16,7 @@ make install
 
 ./installation/bin/musl-gcc tests/cat.c -o cat_static -static
 
+./installation/bin/musl-gcc tests/pow_test.c -o pow_test -static -lm
 
+./pow_test
 
