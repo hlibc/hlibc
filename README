@@ -19,7 +19,9 @@ CHANGES:
 --------
 
 	Removed src/prng src/stub src/search src/temp src/regex
-		src/aio src/mq 
+	src/aio src/mq and numerous other directories and their
+	dependencies in an attempt to narrow musl down to its
+	normative case.
 
 	Consolidated documentation into a single README and created a 
 	corresponding web page README.html.
