@@ -15,7 +15,8 @@
 #include "inode_hash.h"
 
 /* Copyright 2015, C. Graff  "du" */ 
-
+#define DT_DIR 8
+#define DT_REG 4
 
 struct hold {
 	off_t level[100]; 
@@ -57,7 +58,8 @@ int durecurse(char *path, size_t len, int *opt)
 	size_t i = 0;
         DIR *dir;
         struct dirent *dentry; 
-        char *spath = malloc(1);
+       // char *spath = malloc(1);
+	char spath[4096];
 	struct stat sb;
 	size_t dlen = 0;
 	
@@ -72,7 +74,7 @@ int durecurse(char *path, size_t len, int *opt)
                 while ( dentry ) 
                 {
 			dlen = strlen(dentry->d_name);
-			spath = realloc(spath, dlen + len + 2);
+			//spath = realloc(spath, dlen + len + 2);
 			if (!(spath))
 				return -1;
 
@@ -122,15 +124,16 @@ int durecurse(char *path, size_t len, int *opt)
 				
 			} 
                         dentry = readdir(dir); 
+	
                 } 
-                closedir(dir);
-		free(spath);
+               // closedir(dir);
+		//free(spath);
 
         }
         else
 	{ 
 		lstat(path, &sb);
-		printf("%-5zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
+		//printf("%-5zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
 		return 0;
 	} 
 	
