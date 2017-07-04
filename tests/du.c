@@ -33,40 +33,7 @@ int main (int argc, char *argv[])
 
 	int i, opt[7] = { 0, 0, 0, 0, 0, 0, 0}; /* -aHkLsXl */
 	struct stat sb;
-
-	while ((i = getopt (argc, argv, "aHkLsxl")) != -1) 
-		switch (i) {
-			case 'a': 
-				opt[0] = 1; 
-				break; 
-			case 'H': 
-				opt[1] = 1; 
-				break; // -H follow sumbolic links  .. not done
-			case 'k': 
-				opt[2] = 1;
-				hold.block = 1024;
-				break; 
-			case 'L': 
-				opt[3] = 1; 
-				break;
-			case 's': 
-				opt[4] = 1; 
-				break; 
-                        case 'x': 
-				opt[5] = 1; 
-				break; 
-			case 'l': 
-				opt[6] = 1; 
-				break; 
-			default: 
-				cutilerror("Usage: du -aHkLsxl\n", 0);
-				break;
-		} 
-        argv += optind;
-        argc -= optind; 
-
-
-	
+        
 	while(*argv) 
 	{
 		lstat(*argv, &sb); 
