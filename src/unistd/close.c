@@ -4,5 +4,5 @@
 
 int close(int fd)
 {
-	return syscall_cp(SYS_close, fd);
+	return syscall(SYS_close, fd);
 }

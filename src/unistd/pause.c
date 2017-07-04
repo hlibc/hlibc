@@ -4,5 +4,5 @@
 
 int pause(void)
 {
-	return syscall_cp(SYS_pause);
+	return syscall(SYS_pause);
 }
