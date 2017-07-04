@@ -6,7 +6,7 @@
 int sigtimedwait(const sigset_t *mask, siginfo_t *si, const struct timespec *timeout)
 {
 	int ret;
-	do ret = syscall_cp(SYS_rt_sigtimedwait, mask, si, timeout, 8);
+	do ret = syscall(SYS_rt_sigtimedwait, mask, si, timeout, 8);
 	while (ret<0 && errno==EINTR);
 	return ret;
 }

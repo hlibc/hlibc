@@ -11,7 +11,7 @@ int openat(int fd, const char *filename, int flags, ...)
 	va_start(ap, flags);
 	mode = va_arg(ap, mode_t);
 	va_end(ap);
-	return syscall_cp(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
+	return syscall(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
 }
 
 LFS64(openat);
