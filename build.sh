@@ -30,12 +30,12 @@ echo "==========TEST SUITE START=================================="
 
 ./cat_static Makefile > diff1 2>testerr
 
-diff Makefile diff1 && echo "The \`cat' utility successfully copied a file" || echo "cat util failed"
+diff Makefile diff1 2>&1 > testerr && echo "The \`cat' utility successfully copied a file" || echo "cat util failed"
 
 ./control_malloc_driver src >diff2 2>testerr
 
 ./malloc_driver src >diff3 2>testerr
 
-diff diff2 diff3 && echo "The \`malloc_driver' test utility successfully iterated through a dir and ompared equal to its control method" || echo "malloc driver failed"
+diff diff2 diff3 2>&1 > testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and ompared equal to its control method" || echo "malloc driver failed"
 
 echo "============================================================"
