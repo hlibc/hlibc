@@ -1,3 +1,12 @@
+includes()
+{
+	sed -i 's|gstdio.h|stdio.h|g' $@
+	sed -i 's|gstdout|stdout|g' $@
+	sed -i 's|gstdin|stdin|g' $@
+
+}
+includes $@
+
 
 
 
@@ -12,8 +21,8 @@ to()
   sed -i 's|gfgetc|fgetc|g' $@
   sed -i 's|gfgets|fgets|g' $@
   sed -i 's|gfileno|fileno|g' $@
-  sed -i 's|g_fillbuf|_fillbuf|g' $@
-  sed -i 's|g_flushbuf|_flushbuf|g' $@
+#  sed -i 's|g_fillbuf|_fillbuf|g' $@
+#  sed -i 's|g_flushbuf|_flushbuf|g' $@
   sed -i 's|gfopen|fopen|g' $@
   sed -i 's|gfprintf|fprintf|g' $@
   sed -i 's|gfputc|fputc|g' $@
@@ -21,7 +30,7 @@ to()
   sed -i 's|gfread|fread|g' $@
   sed -i 's|gfseek|fseek|g' $@
   sed -i 's|gfwrite|fwrite|g' $@
-  sed -i 's|ggetc|getc|g' $@
+#  sed -i 's|ggetc|getc|g' $@
   sed -i 's|ggetchar|getchar|g' $@
   sed -i 's|ggetdelim|getdelim|g' $@
   sed -i 's|ggetline|getline|g' $@
@@ -41,7 +50,7 @@ to()
   sed -i 's|gvsprintf|vsprintf|g' $@
 }
 
-
+#to $@
 
 from()
 {

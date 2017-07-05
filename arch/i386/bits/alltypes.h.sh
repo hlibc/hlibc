@@ -124,7 +124,7 @@ TYPEDEF unsigned short in_port_t;
 TYPEDEF unsigned int in_addr_t;
 STRUCT in_addr { in_addr_t s_addr; };
 
-TYPEDEF struct __FILE_s FILE;
+//TYPEDEF struct __FILE_s FILE;
 
 TYPEDEF int nl_item;
 
