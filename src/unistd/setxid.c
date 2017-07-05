@@ -20,7 +20,8 @@ static void do_setxid(void *p)
 	if (c->rlim && c->id >= 0 && c->id != getuid()) {
 		struct rlimit inf = { RLIM_INFINITY, RLIM_INFINITY }, old;
 		getrlimit(RLIMIT_NPROC, &old);
-		if ((c->err = -__setrlimit(RLIMIT_NPROC, &inf)) && libc.threads_minus_1)
+		/* this looks wrong ... CM Graff, removed thrd foo-bar */
+		if ((c->err = -__setrlimit(RLIMIT_NPROC, &inf)))
 			return;
 		c->err = -__syscall(c->nr, c->id, c->eid, c->sid);
 		__setrlimit(RLIMIT_NPROC, &old);

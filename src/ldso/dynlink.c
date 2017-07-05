@@ -75,7 +75,7 @@ static int rtld_used;
 static int ssp_used;
 static int runtime;
 static jmp_buf rtld_fail;
-static pthread_rwlock_t lock;
+//static pthread_rwlock_t lock;
 static struct debug debug;
 
 struct debug *_dl_debug_addr = &debug;
@@ -654,8 +654,8 @@ void *dlopen(const char *file, int mode)
 
 	if (!file) return head;
 
-	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
-	pthread_rwlock_wrlock(&lock);
+	//pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
+	//pthread_rwlock_wrlock(&lock);
 
 	if (setjmp(rtld_fail)) {
 		/* Clean up anything new that was (partially) loaded */
@@ -706,8 +706,8 @@ void *dlopen(const char *file, int mode)
 
 	do_init_fini(tail);
 end:
-	pthread_rwlock_unlock(&lock);
-	pthread_setcancelstate(cs, 0);
+	//pthread_rwlock_unlock(&lock);
+	//pthread_setcancelstate(cs, 0);
 	return p;
 }
 
@@ -745,9 +745,9 @@ failed:
 void *__dlsym(void *p, const char *s, void *ra)
 {
 	void *res;
-	pthread_rwlock_rdlock(&lock);
+	//pthread_rwlock_rdlock(&lock);
 	res = do_dlsym(p, s, ra);
-	pthread_rwlock_unlock(&lock);
+	//pthread_rwlock_unlock(&lock);
 	return res;
 }
 #else
