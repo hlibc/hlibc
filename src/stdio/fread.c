@@ -10,7 +10,7 @@ size_t fread(void *destv, size_t size, size_t nmemb, FILE *f)
 	/* Never touch the file if length is zero.. */
 	if (!l) return 0;
 
-	FLOCK(f);
+	//FLOCK(f);
 
 	if (f->rend - f->rpos > 0) {
 		/* First exhaust the buffer. */
@@ -25,12 +25,12 @@ size_t fread(void *destv, size_t size, size_t nmemb, FILE *f)
 	for (; l; l-=k, dest+=k) {
 		k = __toread(f) ? 0 : f->read(f, dest, l);
 		if (k+1<=1) {
-			FUNLOCK(f);
+			//FUNLOCK(f);
 			return (len-l)/size;
 		}
 	}
 
-	FUNLOCK(f);
+	//FUNLOCK(f);
 	return nmemb;
 }
 

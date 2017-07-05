@@ -27,9 +27,9 @@ int __fseeko_unlocked(FILE *f, off_t off, int whence)
 int __fseeko(FILE *f, off_t off, int whence)
 {
 	int result;
-	FLOCK(f);
+	//FLOCK(f);
 	result = __fseeko_unlocked(f, off, whence);
-	FUNLOCK(f);
+	//FUNLOCK(f);
 	return result;
 }
 

@@ -15,7 +15,7 @@ char *fgets(char *s, int n, FILE *f)
 		return s;
 	}
 
-	FLOCK(f);
+	////FLOCK(f);
 
 	while (n) {
 		z = memchr(f->rpos, '\n', f->rend - f->rpos);
@@ -35,7 +35,7 @@ char *fgets(char *s, int n, FILE *f)
 	}
 	*p = 0;
 
-	FUNLOCK(f);
+	////FUNLOCK(f);
 
 	return s;
 }

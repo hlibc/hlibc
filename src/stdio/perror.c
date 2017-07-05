@@ -8,7 +8,7 @@ void perror(const char *msg)
 	FILE *f = stderr;
 	char *errstr = strerror(errno);
 
-	FLOCK(f);
+	//FLOCK(f);
 	
 	if (msg) {
 		fwrite(msg, strlen(msg), 1, f);
@@ -18,5 +18,5 @@ void perror(const char *msg)
 	fwrite(errstr, strlen(errstr), 1, f);
 	fputc('\n', f);
 
-	FUNLOCK(f);
+	//FUNLOCK(f);
 }

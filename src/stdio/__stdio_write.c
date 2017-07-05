@@ -1,11 +1,12 @@
 #include "stdio_impl.h"
 
-
+/*
 static void cleanup(void *p)
 {
 	FILE *f = p;
 	if (!f->lockcount) __unlockfile(f);
 }
+*/
 
 size_t __stdio_write(FILE *f, const unsigned char *buf, size_t len)
 {

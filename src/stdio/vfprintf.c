@@ -655,7 +655,7 @@ int vfprintf(FILE *f, const char *fmt, va_list ap)
 	va_copy(ap2, ap);
 	if (printf_core(0, fmt, &ap2, nl_arg, nl_type) < 0) return -1;
 
-	FLOCK(f);
+	////FLOCK(f);
 	if (!f->buf_size) {
 		saved_buf = f->buf;
 		f->wpos = f->wbase = f->buf = internal_buf;
@@ -670,7 +670,7 @@ int vfprintf(FILE *f, const char *fmt, va_list ap)
 		f->buf_size = 0;
 		f->wpos = f->wbase = f->wend = 0;
 	}
-	FUNLOCK(f);
+	////FUNLOCK(f);
 	va_end(ap2);
 	return ret;
 }

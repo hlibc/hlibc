@@ -17,7 +17,7 @@ ssize_t getdelim(char **s, size_t *n, int delim, FILE *f)
 
 	if (!*s) *n=0;
 
-	FLOCK(f);
+	//FLOCK(f);
 
 	for (;;) {
 		z = memchr(f->rpos, delim, f->rend - f->rpos);
@@ -40,7 +40,7 @@ ssize_t getdelim(char **s, size_t *n, int delim, FILE *f)
 		if (z) break;
 		if ((c = getc_unlocked(f)) == EOF) {
 			if (!i || !feof(f)) {
-				FUNLOCK(f);
+				//FUNLOCK(f);
 				return -1;
 			}
 			break;
@@ -49,11 +49,11 @@ ssize_t getdelim(char **s, size_t *n, int delim, FILE *f)
 	}
 	(*s)[i] = 0;
 
-	FUNLOCK(f);
+	//FUNLOCK(f);
 
 	return i;
 oom:
-	FUNLOCK(f);
+	//FUNLOCK(f);
 	errno = ENOMEM;
 	return -1;
 }

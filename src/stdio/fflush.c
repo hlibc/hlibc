@@ -31,24 +31,24 @@ int fflush(FILE *f)
 	FILE *next;
 
 	if (f) {
-		FLOCK(f);
+		////FLOCK(f);
 		r = __fflush_unlocked(f);
-		FUNLOCK(f);
+		////FUNLOCK(f);
 		return r;
 	}
 
 	r = __stdout_used ? fflush(__stdout_used) : 0;
 
-	OFLLOCK();
+	//OFLLOCK();
 	for (f=libc.ofl_head; f; f=next) {
-		FLOCK(f);
+		////FLOCK(f);
 		//OFLUNLOCK();
 		if (f->wpos > f->wbase) r |= __fflush_unlocked(f);
 		//OFLLOCK();
 		next = f->next;
-		FUNLOCK(f);
+		////FUNLOCK(f);
 	}
-	OFLUNLOCK();
+	//OFLUNLOCK();
 	
 	return r;
 }

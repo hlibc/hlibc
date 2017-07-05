@@ -2,9 +2,9 @@
 
 void clearerr(FILE *f)
 {
-	FLOCK(f);
+	//FLOCK(f);
 	f->flags &= ~(F_EOF|F_ERR);
-	FUNLOCK(f);
+	//FUNLOCK(f);
 }
 
 weak_alias(clearerr, clearerr_unlocked);
