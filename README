@@ -22,6 +22,11 @@ DESCRIPTION:
 CHANGES:
 --------
 
+	All of musl's stdio is now gone and has been replaced with 
+	grafland's stdio which was derived from K&R2.
+	
+	A small experimental malloc implementation was imported and
+	tested.
 
 	Musl's syscall_cp creates a cancellation point (one can see 
 	pthread_cancel in modern musl). All of these instances have
@@ -29,16 +34,13 @@ CHANGES:
 
 	A new string library was imported from grafland libc.
 
-	The ctype library was imported from grafland libc.
-	
-	Doug Lea's public domain malloc dlmalloc is now the default
-	malloc.
+	The ctype library was imported from grafland libc.  
 
 	Architecture specific assembly code has been removed from libm.
 
 	Complex number support has been removed.
 
-	Multibyte support have been completely removed.
+	Multibyte support has been completely removed.
 
 	Removed src/prng src/stub src/search src/temp src/regex
 	src/aio src/mq and numerous other directories and their
