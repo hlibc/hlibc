@@ -1,38 +1,41 @@
 #!/bin/sh
 
+TOOLING="./installation/"
+
 ./clean.sh
 
-make distclean
+./configure --prefix=${TOOLING}
 
-./configure --prefix="./installation"
-
-printf "\ngrafmusl is logging to buildlog\n"
+printf "\ngrafmusl is logging to buildlog\n\n"
 
 make -j4 > buildlog 2>&1
 
 make install
 
-./installation/bin/musl-gcc tests/cat.c -o cat_dynamic
+${TOOLING}/bin/musl-gcc tests/cat.c -o cat_dynamic
 
-./installation/bin/musl-gcc tests/cat.c -o cat_static -static
+${TOOLING}/bin/musl-gcc tests/cat.c -o cat_static -static
 
-./installation/bin/musl-gcc tests/pow_test.c -o pow_test -static -lm
+${TOOLING}/bin/musl-gcc tests/pow_test.c -o pow_test -static -lm
 
-./installation/bin/musl-gcc tests/malloc-driver.c -o malloc_driver -static -lm 
+${TOOLING}/bin/musl-gcc tests/malloc-driver.c -o malloc_driver -static -lm 
 
-./installation/bin/musl-gcc tests/popen-driver.c -o popen_driver -static -lm 
-
-./pow_test
-
-./cat_static Makefile > diff1
-
-diff Makefile diff1 && echo "The \`cat' utility successfully copied a file"
+${TOOLING}/bin/musl-gcc tests/popen-driver.c -o popen_driver -static -lm 
 
 gcc tests/malloc-driver.c -o control_malloc_driver -static -lm
 
-./control_malloc_driver src >diff2
+echo "==========TEST SUITE START=================================="
 
-./malloc_driver src >diff3
+./pow_test
 
-diff diff2 diff3 && echo "The \`malloc_driver' test utility successfully iterated through a dir cnd ompared equal to its control methode"
+./cat_static Makefile > diff1 2>testerr
 
+diff Makefile diff1 && echo "The \`cat' utility successfully copied a file" || echo "cat util failed"
+
+./control_malloc_driver src >diff2 2>testerr
+
+./malloc_driver src >diff3 2>testerr
+
+diff diff2 diff3 && echo "The \`malloc_driver' test utility successfully iterated through a dir and ompared equal to its control method" || echo "malloc driver failed"
+
+echo "============================================================"
