@@ -1,3 +1,3 @@
-rm -rf installation buildlog cat_static cat_dynamic pow_test malloc_driver diff* *_driver 
+rm -rf installation buildlog cat_static cat_dynamic pow_test malloc_driver diff* *_driver testerr
 
 make distclean
