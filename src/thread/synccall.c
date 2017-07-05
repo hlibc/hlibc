@@ -9,7 +9,7 @@ static struct chain {
 static void (*callback)(void *), *context;
 static int chainlen;
 static sem_t chainlock, chaindone;
-static pthread_rwlock_t lock = PTHREAD_RWLOCK_INITIALIZER;
+//static pthread_rwlock_t lock = PTHREAD_RWLOCK_INITIALIZER;
 
 static void handler(int sig, siginfo_t *si, void *ctx)
 {
@@ -67,7 +67,7 @@ void __synccall(void (*func)(void *), void *ctx)
 		return;
 	}
 
-	pthread_rwlock_wrlock(&lock);
+//	pthread_rwlock_wrlock(&lock);
 
 	__syscall(SYS_rt_sigprocmask, SIG_BLOCK, (uint64_t[]){-1}, &oldmask, 8);
 
@@ -103,15 +103,15 @@ void __synccall(void (*func)(void *), void *ctx)
 
 	__syscall(SYS_rt_sigprocmask, SIG_SETMASK, &oldmask, 0, 8);
 
-	pthread_rwlock_unlock(&lock);
+	//pthread_rwlock_unlock(&lock);
 }
 
 void __synccall_lock()
 {
-	pthread_rwlock_rdlock(&lock);
+	//pthread_rwlock_rdlock(&lock);
 }
 
 void __synccall_unlock()
 {
-	pthread_rwlock_unlock(&lock);
+	//pthread_rwlock_unlock(&lock);
 }
