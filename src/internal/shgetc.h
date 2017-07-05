@@ -2,6 +2,11 @@
 
 void __shlim(FILE *, off_t);
 int __shgetc(FILE *);
+
+#define shcnt(f) (f)
+#define shlim(f, lim) (f, lim)
+#define shgetc(f) (f)
+#define shunget(f) (f)
 /*
 #define shcnt(f) ((f)->shcnt + ((f)->rpos - (f)->rend))
 #define shlim(f, lim) __shlim((f), (lim))

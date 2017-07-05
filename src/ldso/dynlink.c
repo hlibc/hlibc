@@ -361,11 +361,13 @@ static struct dso *load_library(const char *name)
 		if (fd < 0) {
 			if (!sys_path) {
 				FILE *f = fopen(ETC_LDSO_PATH, "r");
+				/*
 				if (f) {
 					if (getline(&sys_path, (size_t[1]){0}, f) > 0)
 						sys_path[strlen(sys_path)-1]=0;
 					fclose(f);
 				}
+				*/
 			}
 			if (sys_path) fd = path_open(name, sys_path);
 			else fd = path_open(name, "/lib:/usr/local/lib:/usr/lib");
