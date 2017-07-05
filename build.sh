@@ -20,5 +20,7 @@ make install
 
 ./installation/bin/musl-gcc tests/malloc-driver.c -o malloc_driver -static -lm 
 
+./installation/bin/musl-gcc tests/popen-driver.c -o popen_driver -static -lm 
+
 ./pow_test
 
