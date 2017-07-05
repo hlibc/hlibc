@@ -36,6 +36,6 @@ diff Makefile diff1 2>&1 > testerr && echo "The \`cat' utility successfully copi
 
 ./malloc_driver src >diff3 2>testerr
 
-diff diff2 diff3 2>&1 > testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and ompared equal to its control method" || echo "malloc driver failed"
+diff diff2 diff3 2>&1 > testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || echo "malloc driver failed"
 
 echo "============================================================"
