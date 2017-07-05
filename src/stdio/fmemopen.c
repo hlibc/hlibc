@@ -105,12 +105,12 @@ FILE *fmemopen(void *buf, size_t size, const char *mode)
 	f->seek = mseek;
 	f->close = mclose;
 
-	if (!libc.threaded) {
+	
 		f->lock = -1;
 		f->next = libc.ofl_head;
 		if (libc.ofl_head) libc.ofl_head->prev = f;
 		libc.ofl_head = f;
-	}
+
 
 	return f;
 }

@@ -1,5 +1,5 @@
 #include "stdio_impl.h"
-#include <pthread.h>
+
 
 static void cleanup(void *p)
 {
@@ -15,9 +15,9 @@ size_t __stdio_read(FILE *f, unsigned char *buf, size_t len)
 	};
 	ssize_t cnt;
 
-	pthread_cleanup_push(cleanup, f);
+
 	cnt = syscall(SYS_readv, f->fd, iov, 2);
-	pthread_cleanup_pop(0);
+
 	if (cnt <= 0) {
 		f->flags |= F_EOF ^ ((F_ERR^F_EOF) & cnt);
 		f->rpos = f->rend = 0;

@@ -1,5 +1,5 @@
 #include "stdio_impl.h"
-#include <pthread.h>
+
 
 static void cleanup(void *p)
 {
@@ -18,9 +18,9 @@ size_t __stdio_write(FILE *f, const unsigned char *buf, size_t len)
 	int iovcnt = 2;
 	ssize_t cnt;
 	for (;;) {
-		pthread_cleanup_push(cleanup, f);
+	
 		cnt = syscall(SYS_writev, f->fd, iov, iovcnt);
-		pthread_cleanup_pop(0);
+
 		if (cnt == rem) {
 			f->wend = f->buf + f->buf_size;
 			f->wpos = f->wbase = f->buf;

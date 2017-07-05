@@ -74,12 +74,12 @@ FILE *open_memstream(char **bufp, size_t *sizep)
 	f->seek = ms_seek;
 	f->close = ms_close;
 
-	if (!libc.threaded) {
-		f->lock = -1;
-		f->next = libc.ofl_head;
-		if (libc.ofl_head) libc.ofl_head->prev = f;
-		libc.ofl_head = f;
-	}
+
+	f->lock = -1;
+	f->next = libc.ofl_head;
+	if (libc.ofl_head) libc.ofl_head->prev = f;
+	libc.ofl_head = f;
+
 
 	return f;
 }
