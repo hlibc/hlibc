@@ -7,6 +7,9 @@
 /* popen / pclose */
 #include <sys/types.h>
 #include <sys/wait.h>
+#ifndef _GRAFMUSL_STDIO_
+#define _GRAFMUSL_STDIO_
+
 
 
 #ifndef NULL
@@ -27,9 +30,9 @@
 #ifndef BUFSIZ
 #define BUFSIZ		1024
 #endif
-#ifndef FOPEN_MAX
+
 #define FOPEN_MAX	20
-#endif
+
 
 #define _PRINTF_NAN -(0./0.)
 
@@ -40,10 +43,10 @@ typedef struct {
 	char *rp;
 	char *lp;
 	int len;
-	ssize_t pid; /* for popen */
-} GFILE;
+	ssize_t pid; 
+} FILE;
 
-extern GFILE _IO_stream[FOPEN_MAX];
+extern FILE _IO_stream[FOPEN_MAX];
 
 enum _flags {
 	_READ  = 001,
@@ -54,41 +57,41 @@ enum _flags {
 	_ERR   = 020,
 };
 /* file handling */
-GFILE *gfopen(const char *, const char *);
-int gfclose(GFILE *);
-int gfeof(GFILE *);
-int gferror(GFILE *);
-int gfileno(GFILE *);
+FILE *gfopen(const char *, const char *);
+int gfclose(FILE *);
+int gfeof(FILE *);
+int gferror(FILE *);
+int gfileno(FILE *);
 /* single char io */
-char *gfgets(char *, int, GFILE *);
-int _fillbuf(GFILE *);
-int _flushbuf(int, GFILE *);
-int gfflush(GFILE *);
-int _populate(int, int, int, char *, GFILE *);
+char *gfgets(char *, int, FILE *);
+int _fillbuf(FILE *);
+int _flushbuf(int, FILE *);
+int gfflush(FILE *);
+int _populate(int, int, int, char *, FILE *);
 int ggetchar(void);
 int gputchar(int);
-int ggetc(GFILE *);
-int gfgetc(GFILE *);
-int gputc(int, GFILE *); 
-int gfputc(int, GFILE *); 
+int ggetc(FILE *);
+int gfgetc(FILE *);
+int gputc(int, FILE *); 
+int gfputc(int, FILE *); 
 /* getline */
-ssize_t ggetline (char **, size_t *, GFILE *);
-ssize_t ggetdelim(char **, size_t *, char, GFILE *);
+ssize_t ggetline (char **, size_t *, FILE *);
+ssize_t ggetdelim(char **, size_t *, char, FILE *);
 /* printf */
-int _gprintf_inter(GFILE *, char *, size_t, int, const char *, va_list);
+int _gprintf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int gprintf(const char *, ...);
 int gsprintf(char *, const char *, ...);
 int gsnprintf(char *, size_t, const char *, ...);
 int gdprintf(int, const char *, ...);
-int gfprintf(GFILE *, const char *, ...);
+int gfprintf(FILE *, const char *, ...);
 int gvprintf(const char *, va_list);
 int gvsprintf(char *, const char *, va_list);
 int gvsnprintf(char *, size_t, const char *, va_list);
 int gvdprintf(int, const char *, va_list); /* not implemented */
-int gvfprintf(GFILE *, const char *, va_list);
+int gvfprintf(FILE *, const char *, va_list);
 /* fwrite */
-size_t gfread(void *, size_t, size_t, GFILE *);
-size_t gfwrite(const void *, size_t, size_t, GFILE *);
+size_t gfread(void *, size_t, size_t, FILE *);
+size_t gfwrite(const void *, size_t, size_t, FILE *);
 /* number conversion */
 size_t uint2str(char *, size_t, int);
 size_t flt2str(char *, double);
@@ -96,20 +99,22 @@ size_t int2str(char *, long long, int);
 size_t int2str_inter(char *, long long, int); 
 size_t flt2str(char *, double); 
 /* setbuf ( not implemented ) */
-void gsetbuf(GFILE *, char *);
-void gsetbuffer(GFILE *, char *, size_t);
-void gsetlinebuf(GFILE *);
-int gsetvbuf(GFILE *, char *, int, size_t);
+void gsetbuf(FILE *, char *);
+void gsetbuffer(FILE *, char *, size_t);
+void gsetlinebuf(FILE *);
+int gsetvbuf(FILE *, char *, int, size_t);
 /* popen */
-GFILE *gpopen(const char *, const char *);
-int gpclose(GFILE *);
+FILE *gpopen(const char *, const char *);
+int gpclose(FILE *);
 /* puts */
-int gfputs(const char *, GFILE *);
+int gfputs(const char *, FILE *);
 int gputs(const char *);
-int __puts_inter(const char *, GFILE *, int);
+int __puts_inter(const char *, FILE *, int);
 /* fseek */
-int gfseek(GFILE *, long, int);
+int gfseek(FILE *, long, int);
 
-#define gstdin  (&_IO_stream[0])
-#define gstdout (&_IO_stream[1])
-#define gstderr (&_IO_stream[2])
+#define stdin  (&_IO_stream[0])
+#define stdout (&_IO_stream[1])
+#define stderr (&_IO_stream[2])
+
+#endif

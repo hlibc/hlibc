@@ -48,7 +48,8 @@ typedef union {
 	char __opaque[16];
 	double __align;
 } fpos_t;
-
+#include "gstdio.h"
+/*
 extern FILE *const stdin;
 extern FILE *const stdout;
 extern FILE *const stderr;
@@ -56,6 +57,7 @@ extern FILE *const stderr;
 #define stdin  (stdin)
 #define stdout (stdout)
 #define stderr (stderr)
+*/
 
 FILE *fopen(const char *, const char *);
 FILE *freopen(const char *, const char *, FILE *);

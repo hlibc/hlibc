@@ -33,7 +33,7 @@
 #define F_EOF 16
 #define F_ERR 32
 #define F_SVB 64
-
+/*
 struct __FILE_s {
 	unsigned flags;
 	unsigned char *rpos, *rend;
@@ -62,7 +62,18 @@ struct __FILE_s {
 	unsigned char *shend;
 	off_t shlim, shcnt;
 };
-
+*/
+/*
+typedef struct {
+        int fd;
+        char flags;
+        char *buf;
+        char *rp;
+        char *lp;
+        int len;
+        ssize_t pid; 
+} FILE;
+*/
 size_t __stdio_read(FILE *, unsigned char *, size_t);
 size_t __stdio_write(FILE *, const unsigned char *, size_t);
 size_t __stdout_write(FILE *, const unsigned char *, size_t);

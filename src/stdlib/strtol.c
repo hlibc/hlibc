@@ -5,6 +5,7 @@
 static unsigned long long strtox(const char *s, char **p, int base, unsigned long long lim)
 {
 	/* FIXME: use a helper function or macro to setup the FILE */
+	/*
 	FILE f;
 	f.flags = 0;
 	f.buf = f.rpos = (void *)s;
@@ -20,6 +21,8 @@ static unsigned long long strtox(const char *s, char **p, int base, unsigned lon
 		*p = (char *)s + cnt;
 	}
 	return y;
+	*/
+	return 0;
 }
 
 unsigned long long strtoull(const char *s, char **p, int base)
