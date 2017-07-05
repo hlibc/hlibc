@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm -rf installation buildlog cat_static cat_dynamic pow_test malloc_driver
+rm -rf installation buildlog cat_static cat_dynamic pow_test malloc_driver diff1 *_driver
 
 make distclean
 
@@ -23,4 +23,16 @@ make install
 ./installation/bin/musl-gcc tests/popen-driver.c -o popen_driver -static -lm 
 
 ./pow_test
+
+./cat_static Makefile > diff1
+
+diff Makefile diff1 && echo "The \`cat' utility successfully copied a file"
+
+gcc tests/malloc-driver.c -o control_malloc_driver -static -lm
+
+./control_malloc_driver src >diff2
+
+./malloc_driver src >diff3
+
+diff diff2 diff3 && echo "The \`malloc_driver' test utility successfully iterated through a dir cnd ompared equal to its control methode"
 
