@@ -1,0 +1,15 @@
+int gisalnum(int);
+int gisalpha(int);
+int gisblank(int);
+int giscntrl(int);
+int gisdigit(int);
+int gisgraph(int);
+int gislower(int);
+int gisprint(int);
+int gispunct(int);
+int gisspace(int);
+int gisupper(int);
+int gisxdigit(int);
+int gtolower(int);
+int gtoupper(int); 
+int gisascii(int); 
