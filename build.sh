@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm -rf installation buildlog cat_static cat_dynamic pow_test malloc_driver diff1 *_driver
+./clean.sh
 
 make distclean
 
