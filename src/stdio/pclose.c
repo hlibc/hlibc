@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int pclosee(FILE *fp)
+int pclose(FILE *fp)
 {
 	int ret = 0;
 	pid_t pid = fp->pid;
