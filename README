@@ -90,7 +90,7 @@ AUTOMATIC TESTING:
 ------------------
 
 	grafmusl has an extra script added which is named "build.sh". It
-	serves as a wrapper to the commands listed below and the compiles
+	serves as a wrapper to the makefile commands. It compiles and
 	runs a simple test suite. It's much easier to test grafmusl this
 	way, as the developer can get a basic idea of any regressions by
 	invoking a single command. By default it installs to the directory
@@ -104,11 +104,17 @@ AUTOMATIC TESTING:
 		./build.sh
 
 	If all ran successfully there should be no significant errors and
-	a confirmation notice printing the number 16.0000 indicating that
-	the libm was linked in and calculated pow(2,4). Several other
-	binaries like "cat_static" and "malloc_driver" are also available
-	for simple interactive testing.
+	a confirmation notice containing the results of the test suite 
+	will be printed to screen looking something like this:
 
+	
+		==========TEST SUITE START==================================
+		This number should be (16): 16.000000
+		The `cat' utility successfully copied a file
+		The `malloc_driver' test utility successfully iterated ...
+			...
+		============================================================
+	
 
 
 
