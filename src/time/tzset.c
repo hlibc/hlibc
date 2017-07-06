@@ -108,10 +108,10 @@ void __tzset(void)
 {
 	static int lock[2], init;
 	if (init) return;
-	LOCK(lock);
+
 	if (!init) tzset();
 	init=1;
-	UNLOCK(lock);
+
 }
 
 static int is_leap(int year)

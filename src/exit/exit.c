@@ -16,7 +16,7 @@ void exit(int code)
 	static int lock[2];
 
 	/* If more than one thread calls exit, hang until _Exit ends it all */
-	LOCK(lock);
+
 
 	/* Only do atexit & stdio flush if they were actually used */
 	__funcs_on_exit();
