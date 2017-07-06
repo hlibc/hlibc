@@ -22,6 +22,10 @@ DESCRIPTION:
 CHANGES:
 --------
 
+
+	All of stdlib has been replaced with grafland's stdlib except
+	for strtod and strtol which were retained.
+	
 	All of musl's stdio is now gone and has been replaced with 
 	grafland's stdio which was derived from K&R2.
 	
