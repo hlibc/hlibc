@@ -112,6 +112,10 @@ int gputs(const char *);
 int __puts_inter(const char *, FILE *, int);
 /* fseek */
 int gfseek(FILE *, long, int);
+/* popen */
+int pclose(FILE *);
+FILE *popen(const char *, const char *);
+
 
 #define stdin  (&_IO_stream[0])
 #define stdout (&_IO_stream[1])

@@ -11,7 +11,7 @@
 #include <pwd.h>
 #include <grp.h> 
 
-#define DT_DIR 4
+//#define DT_DIR 4
 
 int find_pattern(char *, size_t, size_t);
 
