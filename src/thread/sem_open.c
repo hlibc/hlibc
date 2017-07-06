@@ -89,7 +89,7 @@ sem_t *sem_open(const char *name, int flags, ...)
 	flags &= ~O_ACCMODE;
 	flags |= O_RDWR;
 
-	pthread_spin_lock(&lock);
+	
 
 	for (;;) {
 		if (!(flags & O_EXCL)) {
@@ -105,11 +105,11 @@ sem_t *sem_open(const char *name, int flags, ...)
 					fd = -1;
 				}
 				if (fd < 0) {
-					pthread_spin_unlock(&lock);
+					
 					return SEM_FAILED;
 				}
 				if ((map = find_map(st.st_ino))) {
-					pthread_spin_unlock(&lock);
+					
 					close(fd);
 					if (map == (sem_t *)-1)
 						return SEM_FAILED;
@@ -119,7 +119,7 @@ sem_t *sem_open(const char *name, int flags, ...)
 			}
 		}
 		if (!(flags & O_CREAT)) {
-			pthread_spin_unlock(&lock);
+			
 			return SEM_FAILED;
 		}
 		if (!linkat(AT_FDCWD, tmp, dir, name, 0)) {
@@ -136,12 +136,12 @@ sem_t *sem_open(const char *name, int flags, ...)
 		}
 	}
 	if (fstat(fd, &st) < 0) {
-		pthread_spin_unlock(&lock);
+		
 		close(fd);
 		return SEM_FAILED;
 	}
 	if (semcnt == SEM_NSEMS_MAX) {
-		pthread_spin_unlock(&lock);
+		
 		close(fd);
 		errno = EMFILE;
 		return SEM_FAILED;
@@ -150,25 +150,25 @@ sem_t *sem_open(const char *name, int flags, ...)
 	map = mmap(0, sizeof(sem_t), PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 	close(fd);
 	if (map == MAP_FAILED) {
-		pthread_spin_unlock(&lock);
+		
 		return SEM_FAILED;
 	}
 	semtab[i].ino = st.st_ino;
 	semtab[i].sem = map;
 	semtab[i].refcnt = 1;
-	pthread_spin_unlock(&lock);
+	
 	return map;
 }
 
 int sem_close(sem_t *sem)
 {
 	int i;
-	pthread_spin_lock(&lock);
+	
 	for (i=0; i<SEM_NSEMS_MAX && semtab[i].sem != sem; i++);
 	if (!--semtab[i].refcnt) {
 		semtab[i].sem = 0;
 		semtab[i].ino = 0;
 	}
-	pthread_spin_unlock(&lock);
+	
 	return munmap(sem, sizeof *sem);
 }
