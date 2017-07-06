@@ -22,6 +22,7 @@ DESCRIPTION:
 CHANGES:
 --------
 
+	Imported bzero from Tuomo Venäläinen's OS-Zero.
 
 	All of stdlib has been replaced with grafland's stdlib except
 	for strtod and strtol which were retained.
