@@ -1,30 +1,39 @@
 #ifndef _STDIO_H
 #define _STDIO_H
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* popen / pclose */
+#include <sys/types.h>
+#include <sys/wait.h>
 
-#define __NEED_FILE
-#define __NEED_va_list
-#define __NEED_size_t
 
-#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
- || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)
+
+
+
+
+
+
+
+
+
 #define __NEED_ssize_t
 #define __NEED_off_t
-#endif
+
 
 #include <bits/alltypes.h>
 
-#undef NULL
-#ifdef __cplusplus
-#define NULL 0
-#else
-#define NULL ((void*)0)
-#endif
 
-#undef EOF
+
+
+
+#define NULL ((void*)0)
+
+
+
 #define EOF (-1)
 
 #undef SEEK_SET
@@ -48,141 +57,81 @@ typedef union {
 	char __opaque[16];
 	double __align;
 } fpos_t;
-#include "gstdio.h"
-/*
-extern FILE *const stdin;
-extern FILE *const stdout;
-extern FILE *const stderr;
 
-#define stdin  (stdin)
-#define stdout (stdout)
-#define stderr (stderr)
-*/
 
-FILE *fopen(const char *, const char *);
-FILE *freopen(const char *, const char *, FILE *);
-int fclose(FILE *);
 
-int remove(const char *);
-int rename(const char *, const char *);
+char *tempnam(const char *, const char *);
 
-int feof(FILE *);
-int ferror(FILE *);
-int fflush(FILE *);
-void clearerr(FILE *);
+//#include "gstdio.h"
+#define _PRINTF_NAN -(0./0.)
 
-int fseek(FILE *, long, int);
-long ftell(FILE *);
-void rewind(FILE *);
+typedef struct {
+        int fd;
+        char flags;
+        char *buf;
+        char *rp;
+        char *lp;
+        int len;
+        ssize_t pid;
+} FILE;
 
-int fgetpos(FILE *, fpos_t *);
-int fsetpos(FILE *, const fpos_t *);
+extern FILE _IO_stream[FOPEN_MAX];
 
-size_t fread(void *, size_t, size_t, FILE *);
-size_t fwrite(const void *, size_t, size_t, FILE *);
+enum _flags {
+        _READ  = 001,
+        _WRITE = 002,
+        _UNBUF = 004,
+        _LNBUF = 030,
+        _EOF   = 010,
+        _ERR   = 020,
+};
 
-int fgetc(FILE *);
-int getc(FILE *);
-int getchar(void);
-int ungetc(int, FILE *);
 
-int fputc(int, FILE *);
 int putc(int, FILE *);
-int putchar(int);
-
-char *fgets(char *, int, FILE *);
-char *gets(char *);
-
-int fputs(const char *, FILE *);
-int puts(const char *);
-
+int fputc(int, FILE *);
+/* getline */
+ssize_t getline (char **, size_t *, FILE *);
+ssize_t getdelim(char **, size_t *, char, FILE *);
+/* printf */
+int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int printf(const char *, ...);
-int fprintf(FILE *, const char *, ...);
 int sprintf(char *, const char *, ...);
 int snprintf(char *, size_t, const char *, ...);
-
+int dprintf(int, const char *, ...);
+int fprintf(FILE *, const char *, ...);
 int vprintf(const char *, va_list);
-int vfprintf(FILE *, const char *, va_list);
 int vsprintf(char *, const char *, va_list);
 int vsnprintf(char *, size_t, const char *, va_list);
-
-int scanf(const char *, ...);
-int fscanf(FILE *, const char *, ...);
-int sscanf(const char *, const char *, ...);
-int vscanf(const char *, va_list);
-int vfscanf(FILE *, const char *, va_list);
-int vsscanf(const char *, const char *, va_list);
-
-void perror(const char *);
-
-int setvbuf(FILE *, char *, int, size_t);
+int vdprintf(int, const char *, va_list); /* not implemented */
+int vfprintf(FILE *, const char *, va_list);
+/* fwrite */
+size_t fread(void *, size_t, size_t, FILE *);
+size_t fwrite(const void *, size_t, size_t, FILE *);
+/* number conversion */
+size_t uint2str(char *, size_t, int);
+size_t flt2str(char *, double);
+size_t int2str(char *, long long, int);
+size_t int2str_inter(char *, long long, int);
+size_t flt2str(char *, double);
+/* setbuf ( not implemented ) */
 void setbuf(FILE *, char *);
-
-char *tmpnam(char *);
-FILE *tmpfile(void);
-
-#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
- || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)
-FILE *fmemopen(void *, size_t, const char *);
-FILE *open_memstream(char **, size_t *);
-FILE *fdopen(int, const char *);
+void setbuffer(FILE *, char *, size_t);
+void setlinebuf(FILE *);
+int setvbuf(FILE *, char *, int, size_t);
+/* popen */
 FILE *popen(const char *, const char *);
 int pclose(FILE *);
-int fileno(FILE *);
-int fseeko(FILE *, off_t, int);
-off_t ftello(FILE *);
-int dprintf(int, const char *, ...);
-int vdprintf(int, const char *, va_list);
-void flockfile(FILE *);
-int ftrylockfile(FILE *);
-void funlockfile(FILE *);
-int getc_unlocked(FILE *);
-int getchar_unlocked(void);
-int putc_unlocked(int, FILE *);
-int putchar_unlocked(int);
-ssize_t getdelim(char **, size_t *, int, FILE *);
-ssize_t getline(char **, size_t *, FILE *);
-int renameat(int, const char *, int, const char *);
-char *ctermid(char *);
-#define L_ctermid 20
-#endif
+/* puts */
+int fputs(const char *, FILE *);
+int puts(const char *);
+int _puts_inter(const char *, FILE *, int); 
+
+#define stdin  (&_IO_stream[0])
+#define stdout (&_IO_stream[1])
+#define stderr (&_IO_stream[2])
 
 
-#if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)
-#define P_tmpdir "/tmp"
-char *tempnam(const char *, const char *);
-#endif
 
-#if defined(_GNU_SOURCE)
-#define L_cuserid 20
-char *cuserid(char *);
-#undef off64_t
-#define off64_t off_t
-int asprintf(char **, const char *, ...);
-int vasprintf(char **, const char *, va_list);
-void setlinebuf(FILE *);
-void setbuffer(FILE *, char *, size_t);
-int fpurge(FILE *);
-int fgetc_unlocked(FILE *);
-int fputc_unlocked(int, FILE *);
-char *fgets_unlocked(char *, int, FILE *);
-int fputs_unlocked(const char *, FILE *);
-#endif
 
-#ifdef _LARGEFILE64_SOURCE
-#define tmpfile64 tmpfile
-#define fopen64 fopen
-#define freopen64 freopen
-#define fseeko64 fseeko
-#define ftello64 ftello
-#define fgetpos64 fgetpos
-#define fsetpos64 fsetpos
-#define fpos64_t fpos_t
-#define off64_t off_t
-#endif
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

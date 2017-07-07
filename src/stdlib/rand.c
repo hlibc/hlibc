@@ -1,4 +1,4 @@
-#include <gstdio.h>
+#include <stdio.h>
 
 static ssize_t cache = 1;
 
