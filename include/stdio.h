@@ -4,49 +4,24 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <string.h>
-
+#include <string.h> 
 /* popen / pclose */
 #include <sys/types.h>
-#include <sys/wait.h>
-
-
-
-
-
-
-
-
-
-
-
+#include <sys/wait.h> 
 #define __NEED_ssize_t
-#define __NEED_off_t
-
-
-#include <bits/alltypes.h>
-
-
-
-
-
-#define NULL ((void*)0)
-
-
-
-#define EOF (-1)
-
+#define __NEED_off_t 
+#include <bits/alltypes.h> 
+#define NULL ((void*)0) 
+#define EOF (-1) 
 #undef SEEK_SET
 #undef SEEK_CUR
 #undef SEEK_END
 #define SEEK_SET 0
 #define SEEK_CUR 1
-#define SEEK_END 2
-
+#define SEEK_END 2 
 #define _IOFBF 0
 #define _IOLBF 1
-#define _IONBF 2
-
+#define _IONBF 2 
 #define BUFSIZ 1024
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 1000
@@ -56,13 +31,9 @@
 typedef union {
 	char __opaque[16];
 	double __align;
-} fpos_t;
+} fpos_t; 
 
 
-
-char *tempnam(const char *, const char *);
-
-//#include "gstdio.h"
 #define _PRINTF_NAN -(0./0.)
 
 typedef struct {
@@ -129,9 +100,5 @@ int _puts_inter(const char *, FILE *, int);
 #define stdin  (&_IO_stream[0])
 #define stdout (&_IO_stream[1])
 #define stderr (&_IO_stream[2])
-
-
-
-
 
 #endif
