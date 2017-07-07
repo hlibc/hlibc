@@ -2,7 +2,6 @@
 
 void __wait(volatile int *addr, volatile int *waiters, int val, int priv)
 {
-	/*
 	int spins=10000;
 	if (priv) priv = 128; priv=0;
 	while (spins--) {
@@ -13,5 +12,4 @@ void __wait(volatile int *addr, volatile int *waiters, int val, int priv)
 	while (*addr==val)
 		__syscall(SYS_futex, (long)addr, FUTEX_WAIT|priv, val, 0);
 	if (waiters) a_dec(waiters);
-	*/
 }
