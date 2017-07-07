@@ -97,6 +97,8 @@ int fputs(const char *, FILE *);
 int puts(const char *);
 int _puts_inter(const char *, FILE *, int); 
 
+char *fgets(char *, int, FILE *);
+
 #define stdin  (&_IO_stream[0])
 #define stdout (&_IO_stream[1])
 #define stderr (&_IO_stream[2])
