@@ -11,6 +11,7 @@ static void nodtor(void *dummy)
 
 int pthread_key_create(pthread_key_t *k, void (*dtor)(void *))
 {
+	/*
 	unsigned i = (uintptr_t)&k / 16 % PTHREAD_KEYS_MAX;
 	unsigned j = i;
 
@@ -23,16 +24,20 @@ int pthread_key_create(pthread_key_t *k, void (*dtor)(void *))
 		}
 	} while ((j=(j+1)%PTHREAD_KEYS_MAX) != i);
 	return EAGAIN;
+	*/
+	return 9;
+	
 }
 
 int pthread_key_delete(pthread_key_t k)
 {
-	keys[k] = 0;
+	//keys[k] = 0;
 	return 0;
 }
 
 void __pthread_tsd_run_dtors()
 {
+	/*
 	pthread_t self = __pthread_self();
 	int i, j, not_finished = self->tsd_used;
 	for (j=0; not_finished && j<PTHREAD_DESTRUCTOR_ITERATIONS; j++) {
@@ -46,4 +51,5 @@ void __pthread_tsd_run_dtors()
 			}
 		}
 	}
+	*/
 }
