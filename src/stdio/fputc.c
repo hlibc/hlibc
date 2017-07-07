@@ -2,6 +2,6 @@
 
 int fputc(int x, FILE *fp)
 {
-	return gputc(x, fp);
+	return putc(x, fp);
 } 
 

@@ -2,6 +2,6 @@
 
 int getchar(void)
 {
-	return ggetc(stdin);
+	return getc(stdin);
 }
 

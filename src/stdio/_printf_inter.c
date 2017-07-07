@@ -73,7 +73,7 @@ int _populate(int incr, int x, int flag, char *s, FILE *fp)
 	if ( flag > 0 )
 		*s = x;
 	else
-		gputc(x, fp);
+		putc(x, fp);
 	return incr + 1;
 }
 

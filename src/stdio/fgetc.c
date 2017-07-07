@@ -2,6 +2,6 @@
 
 int fgetc(FILE *fp)
 {
-	return ggetc(fp);
+	return getc(fp);
 }
 

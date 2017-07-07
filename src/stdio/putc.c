@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int gputc(int x, FILE *fp)
+int putc(int x, FILE *fp)
 {
 	if ((--(fp)->len >= 0))
 	{

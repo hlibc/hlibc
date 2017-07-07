@@ -4,8 +4,8 @@ int __puts_inter(const char *s, FILE *fp, int append)
 {
 	int c;
 	while ((c = *s++))
-		gputc(c, fp);
+		putc(c, fp);
 	if (append)
-		gputc(append, fp);
+		putc(append, fp);
 	return ferror(fp) ? EOF : 0;
 }
