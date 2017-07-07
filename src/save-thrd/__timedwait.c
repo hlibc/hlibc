@@ -7,6 +7,7 @@
 static int do_wait(volatile int *addr, int val,
 	clockid_t clk, const struct timespec *at, int priv)
 {
+	/*
 	int r;
 	struct timespec to, *top=0;
 
@@ -24,6 +25,7 @@ static int do_wait(volatile int *addr, int val,
 
 	r = -__syscall_cp(SYS_futex, addr, FUTEX_WAIT, val, top);
 	if (r == EINTR || r == EINVAL || r == ETIMEDOUT) return r;
+	*/
 	return 0;
 }
 
@@ -31,6 +33,7 @@ int __timedwait(volatile int *addr, int val,
 	clockid_t clk, const struct timespec *at,
 	void (*cleanup)(void *), void *arg, int priv)
 {
+	/*
 	int r, cs;
 
 	if (!cleanup) pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
@@ -42,4 +45,6 @@ int __timedwait(volatile int *addr, int val,
 	if (!cleanup) pthread_setcancelstate(cs, 0);
 
 	return r;
+	*/
+	return 0;
 }
