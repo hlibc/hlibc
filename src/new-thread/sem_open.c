@@ -24,21 +24,28 @@ static pthread_once_t once;
 
 static void init()
 {
+	/*
 	semtab = calloc(sizeof *semtab, SEM_NSEMS_MAX);
+	*/
 }
 
 static sem_t *find_map(ino_t ino)
 {
+	/*
 	int i;
 	for (i=0; i<SEM_NSEMS_MAX && semtab[i].ino != ino; i++);
 	if (i==SEM_NSEMS_MAX) return 0;
 	if (semtab[i].refcnt == INT_MAX) return (sem_t *)-1;
 	semtab[i].refcnt++;
 	return semtab[i].sem;
+	*/
+	sem_t *ret = NULL;
+	return ret;
 }
 
 sem_t *sem_open(const char *name, int flags, ...)
 {
+	/*
 	va_list ap;
 	mode_t mode;
 	unsigned value;
@@ -158,10 +165,14 @@ sem_t *sem_open(const char *name, int flags, ...)
 	semtab[i].refcnt = 1;
 	
 	return map;
+	*/
+	void *ret = NULL;
+	return ret;
 }
 
 int sem_close(sem_t *sem)
 {
+	/*
 	int i;
 	
 	for (i=0; i<SEM_NSEMS_MAX && semtab[i].sem != sem; i++);
@@ -171,4 +182,6 @@ int sem_close(sem_t *sem)
 	}
 	
 	return munmap(sem, sizeof *sem);
+	*/
+	return 0;
 }

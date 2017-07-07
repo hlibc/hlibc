@@ -2,7 +2,8 @@
 
 static long sccp(long nr, long u, long v, long w, long x, long y, long z)
 {
-	return (__syscall)(nr, u, v, w, x, y, z);
+	//return (__syscall)(nr, u, v, w, x, y, z);
+	return 0;
 }
 
 weak_alias(sccp, __syscall_cp);

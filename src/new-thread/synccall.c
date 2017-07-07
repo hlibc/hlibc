@@ -13,6 +13,7 @@ static sem_t chainlock, chaindone;
 
 static void handler(int sig, siginfo_t *si, void *ctx)
 {
+	/*
 	struct chain ch;
 	pthread_t self = __pthread_self();
 	int old_errno = errno;
@@ -21,9 +22,9 @@ static void handler(int sig, siginfo_t *si, void *ctx)
 
 	sigqueue(self->pid, SIGSYNCCALL, (union sigval){0});
 
-	/* Threads which have already decremented themselves from the
-	 * thread count must not act. Block further receipt of signals
-	 * and return. */
+
+
+
 	if (self->dead) {
 		memset(&((ucontext_t *)ctx)->uc_sigmask, -1, 8);
 		errno = old_errno;
@@ -45,18 +46,22 @@ static void handler(int sig, siginfo_t *si, void *ctx)
 	while (sem_wait(&ch.sem));
 
 	errno = old_errno;
+	*/
 }
 
 void __synccall_wait()
 {
+	/*
 	struct chain *ch = cur;
 	sem_post(&ch->sem2);
 	while (sem_wait(&ch->sem));
 	sem_post(&ch->sem);
+	*/
 }
 
 void __synccall(void (*func)(void *), void *ctx)
 {
+	/*
 	pthread_t self;
 	struct sigaction sa;
 	struct chain *next;
@@ -102,7 +107,7 @@ void __synccall(void (*func)(void *), void *ctx)
 	__libc_sigaction(SIGSYNCCALL, &sa, 0);
 
 	__syscall(SYS_rt_sigprocmask, SIG_SETMASK, &oldmask, 0, 8);
-
+	*/
 	//pthread_rwlock_unlock(&lock);
 }
 

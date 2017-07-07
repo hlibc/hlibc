@@ -10,6 +10,7 @@ weak_alias(dummy_0, __pthread_tsd_run_dtors);
 
 void pthread_exit(void *result)
 {
+	/*
 	pthread_t self = pthread_self();
 	int n;
 
@@ -26,7 +27,7 @@ void pthread_exit(void *result)
 
 	__lock(&self->exitlock);
 
-	/* Mark this thread dead before decrementing count */
+
 	__lock(&self->killlock);
 	self->dead = 1;
 	a_store(&self->killlock, 0);
@@ -41,27 +42,32 @@ void pthread_exit(void *result)
 	}
 
 	__syscall(SYS_exit, 0);
+	*/
 }
 
 void __do_cleanup_push(struct __ptcb *cb, void (*f)(void *), void *x)
 {
+	/*
 	struct pthread *self = pthread_self();
 	cb->__next = self->cancelbuf;
 	self->cancelbuf = cb;
+	*/
 }
 
 void __do_cleanup_pop(struct __ptcb *cb, int run)
 {
-	__pthread_self()->cancelbuf = cb->__next;
+	//__pthread_self()->cancelbuf = cb->__next;
 }
 
 static int start(void *p)
 {
+	/*
 	pthread_t self = p;
 	if (self->unblock_cancel)
 		__syscall(SYS_rt_sigprocmask, SIG_UNBLOCK, SIGPT_SET, 0, 8);
 	pthread_exit(self->start(self->start_arg));
 	return 0;
+	*/
 }
 
 #define ROUND(x) (((x)+PAGE_SIZE-1)&-PAGE_SIZE)
@@ -82,6 +88,7 @@ static void init_file_lock(FILE *f)
 
 int pthread_create(pthread_t *res, const pthread_attr_t *attr, void *(*entry)(void *), void *arg)
 {
+	/*
 	int ret;
 	size_t size = DEFAULT_STACK_SIZE + DEFAULT_GUARD_SIZE;
 	size_t guard = DEFAULT_GUARD_SIZE;
@@ -136,5 +143,6 @@ int pthread_create(pthread_t *res, const pthread_attr_t *attr, void *(*entry)(vo
 		return EAGAIN;
 	}
 	*res = new;
+	*/
 	return 0;
 }
