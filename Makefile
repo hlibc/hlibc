@@ -16,7 +16,7 @@ includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
 
-SRCS = $(sort $(wildcard fdlibm/*/*/.c  graflibc/*/*.c musllibc/*/*.c ))
+SRCS = $(sort $(wildcard graflibc/*/*.c musllibc/*/*.c fdlibm/*/*.c ))
 OBJS = $(SRCS:.c=.o)
 LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
