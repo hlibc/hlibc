@@ -31,7 +31,7 @@ static void do_setrlimit(void *p)
 int setrlimit(int resource, const struct rlimit *rlim)
 {
 	struct ctx c = { .res = resource, .rlim = rlim };
-	__synccall(do_setrlimit, &c);
+	//__synccall(do_setrlimit, &c);
 	if (c.err) {
 		errno = c.err;
 		return -1;
