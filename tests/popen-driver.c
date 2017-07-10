@@ -1,12 +1,14 @@
 #include <stdio.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	FILE *fp;
 	int status;
 	char path[4096];
 
-	if (( fp = popen("ls -la", "r")) == NULL)
+	++argv;
+
+	if (( fp = popen(*argv, "r")) == NULL)
 		return 1;
 
 	while (fgets(path, 4096, fp) != NULL)

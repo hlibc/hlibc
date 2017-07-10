@@ -23,6 +23,7 @@ ${TOOLING}/bin/musl-gcc -D_GNU_SOURCE tests/malloc-driver.c -o malloc_driver -st
 ${TOOLING}/bin/musl-gcc tests/popen-driver.c -o popen_driver -static -lm 
 
 gcc tests/malloc-driver.c -o control_malloc_driver -static -lm
+gcc tests/popen-driver.c -o control_popen_driver -static -lm
 echo "============================================================"
 
 echo "==========TEST SUITE START=================================="
@@ -33,11 +34,18 @@ echo "==========TEST SUITE START=================================="
 
 diff Makefile diff1 2>&1 > testerr && echo "The \`cat' utility successfully copied a file" || echo "cat util failed"
 
-./control_malloc_driver src >diff2 2>testerr
+./control_malloc_driver musllibc >diff2 2>testerr
 
-./malloc_driver src >diff3 2>testerr
+./malloc_driver musllibc >diff3 2>testerr
 
 diff diff2 diff3 2>&1 > testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || echo "malloc driver failed"
+
+./control_popen_driver "du muslsrc" >diff2 2>testerr
+
+./popen_driver "du muslsrc" >diff3 2>testerr
+
+diff diff2 diff3 2>&1 > testerr && echo "The \`popen_driver' test utility successfully ran \`du' on a directory and compared equal to its control method" || echo "popen driver failed"
+
 
 echo "============================================================"
 
