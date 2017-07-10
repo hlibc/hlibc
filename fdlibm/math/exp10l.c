@@ -1,6 +1,6 @@
 #define _GNU_SOURCE
 #include <math.h>
-#include "libc.h"
+
 
 long double exp10l(long double x)
 {
