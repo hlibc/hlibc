@@ -29,13 +29,16 @@ static struct rule {
 
 static void zname(char *d, char **s)
 {
+	/*
 	int i;
 	for (i=0; i<TZNAME_MAX && isalpha(d[i]=**s); i++, (*s)++);
 	d[i] = 0;
+	*/
 }
 
 static int hhmmss(char **s)
 {
+	/*
 	int ofs = strtol(*s, s, 10)*3600;
 	if (ofs >= 0) {
 		if (**s == ':') ofs += strtol(*s+1, s, 10)*60;
@@ -45,10 +48,12 @@ static int hhmmss(char **s)
 		if (**s == ':') ofs -= strtol(*s+1, s, 10);
 	}
 	return ofs;
+	*/
 }
 
 static int dstrule(struct rule *rule, char **s)
 {
+	/*
 	if (**s != ',') return -1;
 	switch (*++*s) {
 	case 'J':
@@ -76,10 +81,13 @@ static int dstrule(struct rule *rule, char **s)
 		rule->time = hhmmss(s);
 	} else rule->time = 7200;
 	return 0;
+	*/
+	return 0;
 }
 
 void tzset(void)
 {
+	/*
 	char *z, *a;
 	
 	strcpy(std_name, "GMT");
@@ -102,26 +110,32 @@ void tzset(void)
 
 	if (dstrule(&__dst_start, &z) || dstrule(&__dst_end, &z))
 		__daylight = 0;
+	*/
 }
 
 void __tzset(void)
 {
+	/*
 	static int lock[2], init;
 	if (init) return;
 
 	if (!init) tzset();
 	init=1;
+	*/
 
 }
 
 static int is_leap(int year)
 {
+	/*
 	year -= 100;
 	return !(year&3) && ((year%100) || !(year%400));
+	*/
 }
 
 static int cutoff_yday(struct tm *tm, struct rule *rule)
 {
+	/*
 	static const char days_in_month[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 	static const int first_day[] = {0,31,59,90,120,151,181,212,243,273,304,335};
 	int yday, mday, leap;
@@ -140,10 +154,12 @@ static int cutoff_yday(struct tm *tm, struct rule *rule)
 			mday -= 7;
 		return mday + yday;
 	}
+	*/
 }
 
 struct tm *__dst_adjust(struct tm *tm)
 {
+	/*
 	time_t t;
 	int start, end, secs;
 	int after_start, before_end;
@@ -169,4 +185,5 @@ struct tm *__dst_adjust(struct tm *tm)
 	} else tm->tm_isdst = 0;
 
 	return tm;
+	*/
 }

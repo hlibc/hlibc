@@ -20,7 +20,8 @@ SRCS = $(sort $(wildcard musllibc/*/*.c graflibc/*/*.c fdlibm/*/*.c))
 OBJS = $(SRCS:.c=.o)
 LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
-IMPH = musllibc/internal/stdio_impl.h musllibc/internal/pthread_impl.h musllibc/internal/libc.h
+#IMPH = musllibc/internal/stdio_impl.h musllibc/internal/pthread_impl.h musllibc/internal/libc.h
+IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 LDFLAGS = 
 CPPFLAGS =

@@ -1,5 +1,5 @@
 #include "pthread_impl.h"
-#include "stdio_impl.h"
+#include <stdio.h>
 
 static void dummy_0()
 {

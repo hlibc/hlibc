@@ -1,4 +1,4 @@
-#include "stdio_impl.h"
+#include <stdio.h>
 
 void __shlim(FILE *, off_t);
 int __shgetc(FILE *);
