@@ -22,13 +22,14 @@ DESCRIPTION:
 CHANGES:
 --------
 
+	Fdlibm 'musllibc' and 'graflibc' were all seperated into their
+	own directories but still sharing common headers.
+
 	Imported bzero from Tuomo Venäläinen's OS-Zero.
 
-	All of stdlib has been replaced with grafland's stdlib except
-	for strtod and strtol which were retained.
+	Stdlib has been replaced with grafland libc's stdlib.
 	
-	All of musl's stdio is now gone and has been replaced with 
-	grafland's stdio which was derived from K&R2.
+	Stdio has been replaced with the stdio from grafland libc.
 	
 	A small experimental malloc implementation was imported and
 	tested.
