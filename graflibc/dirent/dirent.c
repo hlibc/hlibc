@@ -30,7 +30,7 @@ void myclosedir(MYDIR *dp)
 MYDirent *myreaddir(MYDIR *dp)
 {
 
-	struct mydirect dirbuf;
+	struct mydirent dirbuf;
 	static MYDirent d;
 	/* local directory structure */
 	/* return: portable structure */

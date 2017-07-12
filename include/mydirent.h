@@ -39,9 +39,9 @@ struct mystat
         short st_gid;
         dev_t st_rdev;
         off_t st_size;
-        time_t st_atime;
-        time_t st_mtime;
-        time_t st_ctime;
+        //time_t st_atime;
+        //time_t st_mtime;
+        //time_t st_ctime;
 };
 #define S_IFMT 0160000
 #define S_IFDIR 0040000
@@ -53,9 +53,10 @@ struct mystat
 #ifndef DIRSIZ
 #define DIRSIZ 14
 #endif
-struct mydirect { /* directory entry */
+struct mydirent { /* directory entry */
         ino_t d_ino;  /* inode number */
         char d_name[DIRSIZ]; /* long name does not have '\0' */
+	int d_type;
 };
 MYDIR *myopendir(char *);
 void myclosedir(MYDIR *);
