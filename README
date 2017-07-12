@@ -98,14 +98,14 @@ BUILDING:
 AUTOMATIC TESTING:
 ------------------
 
-	grafmusl has an extra script added which is named "build.sh". It
-	serves as a wrapper to the makefile commands. It compiles and
-	runs a simple test suite. It's much easier to test grafmusl this
+	grafmusl has an extra script added which is named "build.sh" which
+	serves as a wrapper to the makefile commands. It compiles  and
+	runs a simple test suite. Grafmusl is much easier to test this
 	way, as the developer can get a basic idea of any regressions by
 	invoking a single command. By default it installs to the directory
 	"installation" automatically as a subdirectory of the grafmusl 
 	build system. Use the following instructions to retrieve, build
-	and run the grafmusl test suite.
+	and run the grafmusl and the grafmusl test suite.
 
 
 		git clone https://www.githuc.com/cmgraff/grafmusl
