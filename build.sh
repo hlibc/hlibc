@@ -40,9 +40,9 @@ diff Makefile diff1 2>&1 > testerr && echo "The \`cat' utility successfully copi
 
 diff diff2 diff3 2>&1 > testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || echo "malloc driver failed"
 
-./control_popen_driver "du muslsrc" >diff2 2>testerr
+./control_popen_driver "du musllibc" >diff2 2>testerr
 
-./popen_driver "du muslsrc" >diff3 2>testerr
+./popen_driver "du musllibc" >diff3 2>testerr
 
 diff diff2 diff3 2>&1 > testerr && echo "The \`popen_driver' test utility successfully ran \`du' on a directory and compared equal to its control method" || echo "popen driver failed"
 
