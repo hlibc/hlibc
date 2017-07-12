@@ -12,6 +12,7 @@ void __restore(), __restore_rt();
 
 int __libc_sigaction(int sig, const struct sigaction *sa, struct sigaction *old)
 {
+	/*
 	struct {
 		void *handler;
 		unsigned long flags;
@@ -35,16 +36,19 @@ int __libc_sigaction(int sig, const struct sigaction *sa, struct sigaction *old)
 		old->sa_flags = kold.flags;
 		old->sa_mask = kold.mask;
 	}
+	*/
 	return 0;
 }
 
 int __sigaction(int sig, const struct sigaction *sa, struct sigaction *old)
 {
+	/*
 	if (sig-32U < 3) {
 		errno = EINVAL;
 		return -1;
 	}
 	return __libc_sigaction(sig, sa, old);
+	*/
 }
 
 weak_alias(__sigaction, sigaction);
