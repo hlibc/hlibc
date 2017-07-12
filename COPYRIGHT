@@ -26,13 +26,6 @@ Portions of this software are contributed or derived from software
 authored by third parties. Complete details on the copyright status of
 all code included in musl follows below:
 
-
-The TRE regular expression implementation (src/regex/reg* and
-src/regex/tre*) is Copyright © 2001-2008 Ville Laurikari and licensed
-under a 2-clause BSD license (license text in the source files). The
-included version has been heavily modified by Rich Felker in 2012, in
-the interests of size, simplicity, and namespace cleanliness.
-
 Most of the math library code (src/math/* and src/complex/*) is
 Copyright © 1993,2004 Sun Microsystems or
 Copyright © 2003-2011 David Schultz or
@@ -42,18 +35,6 @@ Copyright © 2008 Stephen L. Moshier
 and labelled as such. All have been licensed under extremely
 permissive terms. See the comments in the individual files for
 details.
-
-The implementation of DES for crypt (src/misc/crypt.c) is Copyright ©
-1994 David Burren. It is licensed under a BSD license.
-
-The smoothsort implementation (src/stdlib/qsort.c) is Copyright © 2011
-Valentin Ochs and is licensed under an MIT-style license.
-
-The BSD PRNG implementation (src/prng/random.c) and XSI search API
-(src/search/*.c) functions are Copyright © 2011 Szabolcs Nagy and
-licensed under following terms: "Permission to use, copy, modify,
-and/or distribute this code for any purpose with or without fee is
-hereby granted. There is no warranty."
 
 The x86_64 port was written by Nicholas J. Kain. Several files (crt)
 were released into the public domain; others are licensed under the
