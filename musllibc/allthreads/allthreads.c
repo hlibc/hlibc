@@ -32,13 +32,9 @@ void pthread_exit(void *result)
 {
 }
 
-void __do_cleanup_push(struct __ptcb *cb, void (*f)(void *), void *x)
-{
-}
+void __do_cleanup_push(struct __ptcb *, void (*)(void *), void *); 
 
-void __do_cleanup_pop(struct __ptcb *cb, int run)
-{ 
-}
+void __do_cleanup_pop(struct __ptcb *, int); 
 
 static int start(void *p)
 {
@@ -112,4 +108,57 @@ void __testcancel(void);
 void pthread_testcancel()
 {
 	__testcancel();
+} 
+
+static long sccp(long nr, long u, long v, long w, long x, long y, long z)
+{ 
+	return 0;
 }
+
+weak_alias(sccp, __syscall_cp);
+
+static void dummy_1()
+{
+}
+
+weak_alias(dummy_1, __testcancel);
+
+
+void __cancel()
+{
+}
+
+long __syscall_cp_asm(volatile void *, long, long, long, long, long, long, long); 
+
+static void _sigaddset(sigset_t *set, int sig)
+{ 
+}
+
+static void cancel_handler(int sig, siginfo_t *si, void *ctx)
+{ 
+} 
+
+static void init_cancellation()
+{ 
+}
+
+int pthread_cancel(pthread_t t)
+{
+	return 0;
+} 
+
+void _pthread_cleanup_push(struct __ptcb *cb, void (*f)(void *), void *x)
+{
+	cb->__f = f;
+	cb->__x = x;
+	__do_cleanup_push(cb, f, x);
+}
+
+void _pthread_cleanup_pop(struct __ptcb *cb, int run)
+{
+	__do_cleanup_pop(cb, run);
+	if (run) cb->__f(cb->__x);
+} 
+
+weak_alias(dummy_1, __do_cleanup_push);
+weak_alias(dummy_1, __do_cleanup_pop);
