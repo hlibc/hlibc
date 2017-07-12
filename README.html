@@ -117,14 +117,22 @@
 	a confirmation notice containing the results of the test suite 
 	will be printed to screen looking something like this:
 
-	
-		==========TEST SUITE START==================================
-		This number should be (16): 16.000000
-		The `cat' utility successfully copied a file
-		The `malloc_driver' test utility successfully iterated ...
-			...
+		==========COMPILING TEST SUITE==============================
 		============================================================
-	
+		==========TEST SUITE START==================================
+		This number should be (16.000000): 16.000000    (4^3)
+		This number should be (15.580524): 15.580524    (3.3^2.3)
+		The `cat' utility successfully copied a file
+		The `malloc_driver' test utility successfully iterated th..
+		The `popen_driver' test utility successfully ran `du' on..
+		============================================================
+		============================================================
+		   If all was successful your compiler will be located at:
+		              ./installation//bin/musl-gcc
+		============================================================
+
+	If any compiler or linker errors occur within this report then the libc
+	has changed and likely regressed or otherwise lost a functionality.
 
 
 
