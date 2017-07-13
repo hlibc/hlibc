@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOOLING="$(pwd)/installation"
+TOOLING="$(pwd)/usr"
 
 ./clean.sh
 
@@ -52,5 +52,5 @@ echo "============================================================"
 echo "============================================================"
 echo "   If all was successful the new compiler wrapper can be"
 echo "   invoked as:"
-echo "              ${TOOLING}/bin/musl-gcc"
+echo "       ${TOOLING}/bin/musl-gcc"
 echo "============================================================"
