@@ -96,6 +96,38 @@
 		./bin/musl-gcc tests/pow_test.c -static
 
 
+<br clear="left"/></pre><dl>LINKING TO OUTSIDE LIBC:</dl><pre>
+</pre><dd><hr/></dd><pre>
+
+
+	Many people wish to know the internal magic behind using the musl-gcc
+	wrapper script. Instead of going into much detail I will offer some
+	instructions on linking against an outside libc (namely ours) without
+	using this wrapper:
+
+		git clone <a href="https://www.github.com/cmgraff/grafmusl ">https://www.github.com/cmgraff/grafmusl </a>
+		cd grafmusl 
+		./configure 
+		make
+
+		gcc -nostdinc -nostdlib -I./include tests/cat.c lib/Scrt1.o lib/libc.a -o cat
+
+		./cat
+
+
+	Basically we tell the compiler to "-nostdinc (do not include any host 
+	headers)", "'-nostdlib' (don't include any host libraries)" "-I./include
+	 (use our header files)" and then finally "(link in our crt stuff) 
+	lib/Scrt1.o" and "(link in our libc) lib/libc.a"
+
+
+	The libc itself is of course at lib/libc.a and the dynamically linked 
+	version is at lib/libc.so. But the "crt stuff" crt start up files are 
+	also needed. These files are written in assembly code and their source 
+	code is located at grafmusl/crt/*.
+
+
+
 <br clear="left"/></pre><dl>AUTOMATIC TESTING:</dl><pre>
 </pre><dd><hr/></dd><pre>
 
