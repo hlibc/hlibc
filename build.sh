@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOOLING="./installation/"
+TOOLING="$(pwd)/installation"
 
 ./clean.sh
 
@@ -50,6 +50,7 @@ diff diff2 diff3 2>&1 > testerr && echo "The \`popen_driver' test utility succes
 echo "============================================================"
 
 echo "============================================================"
-echo "   If all was successful your compiler will be located at:"
+echo "   If all was successful the new compiler wrapper can be"
+echo "   invoked as:"
 echo "              ${TOOLING}/bin/musl-gcc"
 echo "============================================================"
