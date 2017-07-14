@@ -8,7 +8,7 @@ ARCH = i386
 # Installation prefix. DO NOT use /, /usr, or /usr/local !
 prefix = /usr/local/musl
 
-# Installation prefix for musl-gcc compiler wrapper.
+# Installation prefix for gcc-wrap compiler wrapper.
 exec_prefix = /usr/local
 
 # Location for the dynamic linker ld-musl-$(ARCH).so.1

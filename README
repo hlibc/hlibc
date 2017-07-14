@@ -80,7 +80,7 @@ BUILDING:
 ---------
 
 
-	Musl contains a shell script wrapper for gcc called musl-gcc. This
+	Musl contains a shell script wrapper for gcc called gcc-wrap. This
 	allows it to be easily installed and used from your home directory
 	without the need for root privilege.
 
@@ -92,14 +92,14 @@ BUILDING:
 	Test the installation:
 
 		cd /home/$USER/buildarea 
-		./bin/musl-gcc tests/pow_test.c -static
+		./bin/gcc-wrap tests/pow_test.c -static
 
 
 LINKING TO OUTSIDE LIBC:
 ------------------------
 
 
-	Many people wish to know the internal magic behind using the musl-gcc
+	Many people wish to know the internal magic behind using the gcc-wrap
 	wrapper script. Instead of going into much detail I will offer some
 	instructions on linking against an outside libc (namely ours) without
 	using this wrapper:
@@ -163,7 +163,7 @@ AUTOMATIC TESTING:
 		============================================================
 		============================================================
 		   If all was successful your compiler will be located at:
-		              ./usr/bin/musl-gcc
+		              ./usr/bin/gcc-wrap
 		============================================================
 
 	If any compiler or linker errors occur within this report then the libc
@@ -253,7 +253,7 @@ ORIGINAL README:
 	using three separate test frameworks and numerous additional
 	standalone test cases to verify the correctness of the implementation.
 	
-	Included with this package is a gcc wrapper script (musl-gcc) which
+	Included with this package is a gcc wrapper script (gcc-wrap) which
 	allows you to build musl-linked programs using an existing gcc 3.x or
 	4.x toolchain on the host. There are also now at several mini
 	distributions (in the form of build scripts) which provide a
@@ -311,7 +311,7 @@ ORIGINAL INSTALLATION INSTRUCTIONS:
 	
 	In this setup, musl and any third-party libraries linked to musl will
 	reside under an alternate prefix such as /usr/local/musl or /opt/musl.
-	A wrapper script for gcc, called musl-gcc, can be used in place of gcc
+	A wrapper script for gcc, called gcc-wrap, can be used in place of gcc
 	to compile and link programs and libraries against musl.
 	
 	To install musl as an alternate libc, follow these steps:
@@ -341,7 +341,7 @@ ORIGINAL INSTALLATION INSTRUCTIONS:
 	   it attempts to load libraries linked against your host libc. Note
 	   that this step can be skipped if you disabled dynamic linking.
 	
-	After installing, you can use musl via the musl-gcc wrapper. For
+	After installing, you can use musl via the gcc-wrap wrapper. For
 	example:
 	
 	cat > hello.c <<EOF
@@ -352,13 +352,13 @@ ORIGINAL INSTALLATION INSTRUCTIONS:
 		return 0;
 	}
 	EOF
-	musl-gcc hello.c
+	gcc-wrap hello.c
 	./a.out
 	
 	To configure autoconf-based program to compile and link against musl,
 	you may wish to use:
 	
-	CC="musl-gcc -D_GNU_SOURCE" ./configure ...
+	CC="gcc-wrap -D_GNU_SOURCE" ./configure ...
 	
 	Correctly-written build systems should not need -D_GNU_SOURCE as part
 	of $CC, but many programs do not use feature-test macros correctly and
@@ -371,8 +371,8 @@ ORIGINAL INSTALLATION INSTRUCTIONS:
 	
 	Finally, it's worth noting that musl's include and lib directories in
 	the build tree are setup to be usable without installation, if
-	necessary. Just modify the the paths in the spec file used by musl-gcc
-	(it's located at $prefix/lib/musl-gcc.specs) to point to the
+	necessary. Just modify the the paths in the spec file used by gcc-wrap
+	(it's located at $prefix/lib/gcc-wrap.specs) to point to the
 	source/build tree.
 	
 	

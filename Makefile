@@ -44,9 +44,9 @@ EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 SHARED_LIBS = lib/libc.so
-TOOL_LIBS = lib/musl-gcc.specs
+TOOL_LIBS = lib/gcc-wrap.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/musl-gcc
+ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
@@ -106,11 +106,11 @@ $(EMPTY_LIBS):
 lib/%.o: crt/%.o
 	cp $< $@
 
-lib/musl-gcc.specs: tools/musl-gcc.specs.sh config.mak
+lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
 
-tools/musl-gcc: config.mak
-	printf '#!/bin/sh\nexec gcc "$$@" -specs "%s/musl-gcc.specs"\n' "$(libdir)" > $@
+tools/gcc-wrap: config.mak
+	printf '#!/bin/sh\nexec gcc "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%

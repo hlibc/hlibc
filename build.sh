@@ -12,15 +12,15 @@ make -j4 > buildlog 2>&1
 
 make install
 echo "==========COMPILING TEST SUITE=============================="
-${TOOLING}/bin/musl-gcc tests/cat.c -o cat_dynamic
+${TOOLING}/bin/gcc-wrap tests/cat.c -o cat_dynamic
 
-${TOOLING}/bin/musl-gcc tests/cat.c -o cat_static -static
+${TOOLING}/bin/gcc-wrap tests/cat.c -o cat_static -static
 
-${TOOLING}/bin/musl-gcc tests/pow_test.c -o pow_test -static -lm
+${TOOLING}/bin/gcc-wrap tests/pow_test.c -o pow_test -static -lm
 
-${TOOLING}/bin/musl-gcc -D_GNU_SOURCE tests/malloc-driver.c -o malloc_driver -static -lm 
+${TOOLING}/bin/gcc-wrap -D_GNU_SOURCE tests/malloc-driver.c -o malloc_driver -static -lm 
 
-${TOOLING}/bin/musl-gcc tests/popen-driver.c -o popen_driver -static -lm 
+${TOOLING}/bin/gcc-wrap tests/popen-driver.c -o popen_driver -static -lm 
 
 gcc tests/malloc-driver.c -o control_malloc_driver -static -lm
 gcc tests/popen-driver.c -o control_popen_driver -static -lm
@@ -52,5 +52,5 @@ echo "============================================================"
 echo "============================================================"
 echo "   If all was successful the new compiler wrapper can be"
 echo "   invoked as:"
-echo "       ${TOOLING}/bin/musl-gcc"
+echo "       ${TOOLING}/bin/gcc-wrap"
 echo "============================================================"
