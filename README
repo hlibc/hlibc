@@ -111,6 +111,10 @@ LINKING TO OUTSIDE LIBC:
 
 		gcc -nostdinc -nostdlib -I./include tests/cat.c lib/Scrt1.o lib/libc.a -o cat
 
+			or  ...
+
+		gcc -nostdinc -nostdlib -I./include tests/cat.c lib/crt*.o  lib/libc.a -o cat
+
 		./cat
 
 
