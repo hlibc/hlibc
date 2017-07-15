@@ -152,6 +152,10 @@ test:
 
 	./tools/build.sh
 
+web:
+
+	./.tx2html README
+
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
 .PHONY: all clean install tests control

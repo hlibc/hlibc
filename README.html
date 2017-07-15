@@ -9,14 +9,6 @@
 	and arm architectures.
 
 
-<br clear="left"/></pre><dl>IRC:</dl><pre>
-</pre><dd><hr/></dd><pre>
-
-	##programming on irc.freenode.net 
-	#os-zero on irc.freenode.net
-	#musl on irc.freenode.net
-
-
 <br clear="left"/></pre><dl>BUILDING:</dl><pre>
 </pre><dd><hr/></dd><pre>
 
@@ -47,7 +39,7 @@
 		Source code original to the musl C library
 
 	<a href="graflibc/">graflibc/</a>
-		Source code original to graflibc.
+		Source code original to the graflibc C library.
 
 	<a href="fdlibm/">fdlibm/</a>
 		Source code original to the Sun libm math library
@@ -89,12 +81,10 @@
 
 		./cat
 
-
 	Basically we tell the compiler to "-nostdinc (do not include any host 
 	headers)", "'-nostdlib' (don't include any host libraries)" "-I./include
 	 (use our header files)" and then finally "(link in our crt stuff) 
-	lib/Scrt1.o" and "(link in our libc) lib/libc.a"
-
+	lib/Scrt1.o" and "(link in our libc) lib/libc.a" 
 
 	The libc itself is of course at lib/libc.a and the dynamically linked 
 	version is at lib/libc.so. But the "crt stuff" crt start up files are 
@@ -102,10 +92,8 @@
 	code is located at graflibc/crt/*.
 
 
-
 <br clear="left"/></pre><dl>AUTOMATIC TESTING:</dl><pre>
 </pre><dd><hr/></dd><pre>
-	
 	
 	Use the following instructions to retrieve, build and run graflibc 
 	and the graflibc test suite.
@@ -142,7 +130,6 @@
 	tools/build.sh.
 
 
-
 <br clear="left"/></pre><dl>REVISION CONTROL:</dl><pre>
 </pre><dd><hr/></dd><pre>
 
@@ -153,6 +140,21 @@
 </pre><dd><hr/></dd><pre>
 
 	<a href="http://www.csit.parkland.edu/~cgraff1/graflibc">http://www.csit.parkland.edu/~cgraff1/graflibc</a>
+
+
+<br clear="left"/></pre><dl>CONTACT:</dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	<a href="mailto:cm0graff@gmail.com">cm0graff@gmail.com</a>
+
+
+<br clear="left"/></pre><dl>IRC:</dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	##programming on irc.freenode.net 
+	#oszero on irc.freenode.net
+	#musl on irc.freenode.net
+	#graflibc on irc.freenode.net
 
 
 <br clear="left"/></pre><dl>REFERENCES:</dl><pre>
@@ -173,13 +175,4 @@
 		phk.freebsd.dk/pubs/EuroBSDcon2010_SoftwareTools.pdf
 
 		alumnus.caltech.edu/~copeland/work/PDF/1999-08-ppt.pdf
-
-
-<br clear="left"/></pre><dl>CONTACT:</dl><pre>
-</pre><dd><hr/></dd><pre>
-
-	<a href="mailto:cm0graff@gmail.com">cm0graff@gmail.com</a>
-
-
-
 </pre>
