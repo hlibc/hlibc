@@ -59,8 +59,8 @@ All public headers: include/*
 Startup files: crt/*
 
 Note added by CM Graff:
-grafmusl is a fork of musl by CM Graff and its changes are copyrighted
-under Copyright © CM Graff
+grafmusl is a fork of musl by CM Graff et al and its changes are copyrighted
+under Copyright © CM Graff et al
 
 Contributors to grafmusl
 -----------------------
