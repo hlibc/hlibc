@@ -22,14 +22,15 @@ LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
 #IMPH = musllibc/internal/stdio_impl.h musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
-DYNCC = CC="$(PWD)/usr/bin/gcc-wrap -D_GNU_SOURCE -static"
+
+GCC_WRAP = CC="$(PWD)/usr/bin/gcc-wrap -D_GNU_SOURCE -static"
 
 
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=)
 
 
-CONTROL_SRCS = $(sort $(wildcard contr/*.c))
+CONTROL_SRCS = $(sort $(wildcard control/*.c))
 CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
 LDFLAGS = 
@@ -144,14 +145,12 @@ $(DESTDIR)$(syslibdir):
 
 testing: $(TEST_OBJ)
 
-test:
+control: $(CONTROL_OBJ)
 
-	$(MAKE) $(DYNCC) testing
+tests:
+
+	$(MAKE) $(GCC_WRAP) testing
 	$(MAKE) control
-
-
-control: $(CONTROL_OBJ) 
-	
 
 clean_test:
 
@@ -160,4 +159,4 @@ clean_test:
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
-.PHONY: all clean install
+.PHONY: all clean install tests
