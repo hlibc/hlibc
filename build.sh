@@ -7,23 +7,13 @@ make clean
 ./configure --prefix=${TOOLING} 
 mkdir -p ${LOGDIR}
 ./tools/symlink_tests.sh
-printf "\ngrafmusl is logging to ${LOGDIR}/buildlog\n\n" 
-# useless timer loop for visual display
-count="0"
-while [ 1 ] ; do printf "\r.. $count seconds"; sleep 1 ; count=$((count +1)); done & PID=$!
-
+printf "\nThe build is being logging to ${LOGDIR}/buildlog \n\n"
 make -j4 > ${LOGDIR}/buildlog 2>&1
-
-kill $PID
-
 make install
-echo "==========COMPILING TEST SUITE=============================="
-make tests > ${LOGDIR}/testlog 
-
-echo "============================================================"
-
-
-echo "==========TEST SUITE START=================================="
+printf "==========COMPILING TEST SUITE==============================\n"
+make tests > ${LOGDIR}/testlog
+printf "============================================================\n"
+printf "==========TEST SUITE START==================================\n"
 
 ./tests/pow_test
 
@@ -49,10 +39,10 @@ diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`pop
 ./tests/printf-driver >${LOGDIR}/diff3 2>${LOGDIR}/testerr
 
 diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`printf_driver' test utility successfully compared equal to its control method" || echo "printf driver had a float rounding error "
-echo "============================================================"
+printf "============================================================\n"
 
-echo "============================================================"
-echo "   If all was successful the new compiler wrapper can be"
-echo "   invoked as:"
-echo "       ${TOOLING}/bin/gcc-wrap"
-echo "============================================================"
+printf "============================================================\n"
+printf "   If all was successful the new compiler wrapper can be\n"
+printf "   invoked as:\n"
+printf "       ${TOOLING}/bin/gcc-wrap\n"
+printf "============================================================\n"
