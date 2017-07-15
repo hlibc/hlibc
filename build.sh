@@ -18,7 +18,7 @@ make -j4 > ${LOGDIR}/buildlog 2>&1
 
 make install
 echo "==========COMPILING TEST SUITE=============================="
-make test > ${LOGDIR}/testlog 
+make tests > ${LOGDIR}/testlog 
 echo "============================================================"
 
 
