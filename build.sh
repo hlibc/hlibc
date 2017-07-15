@@ -1,50 +1,46 @@
 #!/bin/sh
 
 TOOLING="$(pwd)/usr"
+LOGDIR="$(pwd)/logs"
+
+
 
 ./clean.sh
 
 ./configure --prefix=${TOOLING}
 
-printf "\ngrafmusl is logging to buildlog\n\n"
 
-make -j4 > buildlog 2>&1
+mkdir -p ${LOGDIR}
+
+printf "\ngrafmusl is logging to ${LOGDIR}/buildlog\n\n"
+
+make -j4 > ${LOGDIR}/buildlog 2>&1
 
 make install
 echo "==========COMPILING TEST SUITE=============================="
-${TOOLING}/bin/gcc-wrap tests/cat.c -o cat_dynamic
-
-${TOOLING}/bin/gcc-wrap tests/cat.c -o cat_static -static
-
-${TOOLING}/bin/gcc-wrap tests/pow_test.c -o pow_test -static -lm
-
-${TOOLING}/bin/gcc-wrap -D_GNU_SOURCE tests/malloc-driver.c -o malloc_driver -static -lm 
-
-${TOOLING}/bin/gcc-wrap tests/popen-driver.c -o popen_driver -static -lm 
-
-gcc tests/malloc-driver.c -o control_malloc_driver -static -lm
-gcc tests/popen-driver.c -o control_popen_driver -static -lm
+make test > ${LOGDIR}/testlog 
 echo "============================================================"
+
 
 echo "==========TEST SUITE START=================================="
 
-./pow_test
+./tests/pow_test
 
-./cat_static Makefile > diff1 2>testerr
+./tests/cat Makefile > ${LOGDIR}/diff1 2>${LOGDIR}/testerr
 
-diff Makefile diff1 2>&1 > testerr && echo "The \`cat' utility successfully copied a file" || echo "cat util failed"
+diff Makefile ${LOGDIR}/diff1 2>&1 > ${LOGDIR}/testerr && echo "The \`cat' utility successfully copied a file" || echo "cat util failed"
 
-./control_malloc_driver musllibc >diff2 2>testerr
+./cont/malloc_driver musllibc >${LOGDIR}/diff2 2>${LOGDIR}/testerr
 
-./malloc_driver musllibc >diff3 2>testerr
+./tests/malloc_driver musllibc >${LOGDIR}/diff3 2>${LOGDIR}/testerr
 
-diff diff2 diff3 2>&1 > testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || echo "malloc driver failed"
+diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || echo "malloc driver failed"
 
-./control_popen_driver "du musllibc" >diff2 2>testerr
+./contr/popen_driver "du musllibc" >${LOGDIR}/diff2 2>${LOGDIR}/testerr
 
-./popen_driver "du musllibc" >diff3 2>testerr
+./tests/popen_driver "du musllibc" >${LOGDIR}/diff3 2>${LOGDIR}/testerr
 
-diff diff2 diff3 2>&1 > testerr && echo "The \`popen_driver' test utility successfully ran \`du' on a directory and compared equal to its control method" || echo "popen driver failed"
+diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`popen_driver' test utility successfully ran \`du' on a directory and compared equal to its control method" || echo "popen driver failed"
 
 
 echo "============================================================"
