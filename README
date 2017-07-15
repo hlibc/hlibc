@@ -104,11 +104,6 @@ LINKING TO OUTSIDE LIBC:
 
 AUTOMATIC TESTING:
 ------------------
-
-	
-
-
-
 	
 	
 	Use the following instructions to retrieve, build and run graflibc 
@@ -141,7 +136,7 @@ AUTOMATIC TESTING:
 
 	If you wish to add a new test to the test suite simply put the program
 	under tests/ and it will be compiled along with the other tests. There
-	are no automatic mechanisms for running tests supplied. As of this time
+	are no automatic mechanisms for running supplied tests. As of this time
 	each actual test (and diff if required) must be scripted into 
 	tools/build.sh.
 
