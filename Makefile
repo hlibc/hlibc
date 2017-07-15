@@ -147,8 +147,10 @@ clean_test:
 
 	$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
 	$(RM) -r control
-	
 
+test:
+
+	./tools/build.sh
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 

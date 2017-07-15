@@ -106,19 +106,18 @@
 <br clear="left"/></pre><dl>AUTOMATIC TESTING:</dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	graflibc has an extra script added which is named "build.sh" which
-	serves as a wrapper to the makefile commands. It compiles  and
-	runs a simple test suite. Grafmusl is much easier to test this
-	way, as the developer can get a basic idea of any regressions by
-	invoking a single command. By default it installs to the directory
-	"installation" automatically as a subdirectory of the graflibc 
-	build system. Use the following instructions to retrieve, build
-	and run the graflibc and the graflibc test suite.
+	
 
+
+
+	
+	
+	Use the following instructions to retrieve, build and run graflibc 
+	and the graflibc test suite.
 
 		git clone <a href="https://www.githuc.com/cmgraff/graflibc">https://www.githuc.com/cmgraff/graflibc</a>
 		cd graflibc
-		./build.sh
+		make test
 
 	If all ran successfully there should be no significant errors and
 	a confirmation notice containing the results of the test suite 
@@ -144,7 +143,8 @@
 	If you wish to add a new test to the test suite simply put the program
 	under tests/ and it will be compiled along with the other tests. There
 	are no automatic mechanisms for running tests supplied. As of this time
-	each actual test (and diff if required) must be scripted in build.sh.
+	each actual test (and diff if required) must be scripted into 
+	tools/build.sh.
 
 
 
