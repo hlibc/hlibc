@@ -15,11 +15,14 @@
 <br clear="left"/></pre><dl>CHANGES:</dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	Over 45000 lines of code removed from musl. Only 2500 loc
-	of the original .c files remain.
+	A tests/ directory was created and a control method for comp-
+	aring the libc against that of the host was established.
 
-	Fdlibm 'musllibc' and 'graflibc' were all seperated into their
-	own directories but still sharing common headers.
+	Over 45000 lines of code removed from musl. Only 2500 loc of
+	 the original .c files remain.
+
+	Fdlibm 'musllibc' and 'graflibc' were all seperated into the-
+	ir own directories but still sharing common headers.
 
 	Complex number support has been removed.
 
@@ -32,27 +35,29 @@
 	Imported bzero from Tuomo Venäläinen's OS-Zero.
 
 	Stdlib has been replaced with grafland libc's stdlib.
-	
+
 	Stdio has been replaced with the stdio from grafland libc.
-	
-	A small experimental malloc implementation was imported and
+
+	A small experimental malloc implementation was imported and 
 	tested.
 
 	Musl's syscall_cp creates a cancellation point (one can see 
-	pthread_cancel in modern musl). All of these instances have
+	pthread_cancel in modern musl). All of these instances have 
 	been replaced with syscall proper.
 
 	A new string library was imported from grafland libc.
 
-	The ctype library was imported from grafland libc.  
+	The ctype library was imported from grafland libc.
 
-	Architecture specific assembly code has been removed from libm.
+	Architecture specific assembly code has been removed from li-
+	bm.
 
-	Consolidated documentation into a single README and created a 
-	corresponding web page README.html.
+	Consolidated documentation into a single README and created 
+	a corresponding web page README.html.
 
-	Created a build.sh script to automatically build and test
-	the normative libc case.
+	Created a build.sh script to automatically build and test th-
+	e normative libc case.
+
 
 
 <br clear="left"/></pre><dl>IRC:</dl><pre>
