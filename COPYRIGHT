@@ -1,4 +1,4 @@
-usl as a whole is licensed under the following standard MIT license:
+musl as a whole is licensed under the following standard MIT license:
 
 Copyright © 2005-2012 Rich Felker
 
@@ -63,8 +63,8 @@ grafmusl is a fork of musl by CM Graff et al and its changes are copyrighted
 under Copyright © CM Graff et al
 
 Contributors to grafmusl
------------------------
+------------------------
 CM Graff
-Iaim Hill
+Iain Hill
 Tuomo Venäläinen
 
