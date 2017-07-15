@@ -1,4 +1,4 @@
-#include <gstdio.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[])
 {
@@ -6,10 +6,10 @@ int main(int argc, char *argv[])
 	ssize_t ret = 0; 
 	if ( argc > 1 ) 
 	{
-		GFILE *filepointer = gfopen(argv[1], "r"); 
-		while ( (ret = gfread(buffer, 1, 1000, filepointer)) > 0 )
-			gfwrite(buffer, 1, ret, gstdout);
-		gfclose(filepointer);
+		FILE *filepointer = fopen(argv[1], "r"); 
+		while ( (ret = fread(buffer, 1, 1000, filepointer)) > 0 )
+			fwrite(buffer, 1, ret, stdout);
+		fclose(filepointer);
 	}
 	return 0;
 }
