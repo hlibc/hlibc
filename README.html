@@ -96,9 +96,6 @@
 	<a href="tests/">tests/</a>
 		Various test binaries
 
-	<a href="control/">control/</a>
-		Identical to <a href="tests/">tests/</a>
-
 	<a href="crt/">crt/</a>
 		Crt stuff startup assembly code
 
@@ -185,9 +182,10 @@
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
 
-
 	If you wish to add a new test to the test suite simply put the program
-	under tests/ and it will be compiled along with the other tests. 
+	under tests/ and it will be compiled along with the other tests. There
+	are no automatic mechanisms for running tests supplied. As of this time
+	each actual test (and diff if required) must be scripted in build.sh.
 
 
 

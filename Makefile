@@ -68,7 +68,7 @@ clean:
 	make clean_test
 	rm -f config.mak
 	rm -rf usr logs
-	$(MAKE) clean_test
+	$(MAKE) clean_test 
 	
 
 include/bits:
@@ -145,7 +145,8 @@ tests:
 
 clean_test:
 
-	$(RM) $(TEST_OBJ) $(CONTROL_OBJ)
+	$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
+	$(RM) -r control
 	
 
 
