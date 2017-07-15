@@ -1,9 +1,4 @@
-#
-# Makefile for musl (requires GNU make)
-#
-# This is how simple every makefile should be...
-# No, I take that back - actually most should be less than half this size.
-#
+# Use gmake
 # Use config.mak to override any of the following variables.
 # Do not make changes here.
 #
@@ -20,7 +15,6 @@ SRCS = $(sort $(wildcard musllibc/*/*.c graflibc/*/*.c fdlibm/*/*.c))
 OBJS = $(SRCS:.c=.o)
 LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
-#IMPH = musllibc/internal/stdio_impl.h musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
@@ -57,8 +51,6 @@ ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
-
-
 -include config.mak
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
@@ -73,9 +65,11 @@ clean:
 	rm -f $(ALL_TOOLS)
 	rm -f $(GENH) 
 	rm -f include/bits
-
-distclean: clean
+	make clean_test
 	rm -f config.mak
+	rm -rf usr logs
+	$(MAKE) clean_test
+	
 
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make." ; exit 1 ; }
@@ -152,8 +146,9 @@ tests:
 clean_test:
 
 	$(RM) $(TEST_OBJ) $(CONTROL_OBJ)
+	
 
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
-.PHONY: all clean install tests
+.PHONY: all clean install tests control

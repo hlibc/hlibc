@@ -1,3 +1,20 @@
+
+grafmusl is a heavily modified fork of musl by CM Graff et al and its 
+changes are copyrighted under Copyright © CM Graff et al and licensed
+under the MIT license.
+
+Contributors to grafmusl
+------------------------
+CM Graff
+Iain Hill
+Tuomo Venäläinen
+
+
+
+
+Original copying information below:
+
+
 musl as a whole is licensed under the following standard MIT license:
 
 Copyright © 2005-2012 Rich Felker
@@ -58,13 +75,4 @@ the first place, and hereby explicitly released to the Public Domain:
 All public headers: include/*
 Startup files: crt/*
 
-Note added by CM Graff:
-grafmusl is a fork of musl by CM Graff et al and its changes are copyrighted
-under Copyright © CM Graff et al
-
-Contributors to grafmusl
-------------------------
-CM Graff
-Iain Hill
-Tuomo Venäläinen
 
