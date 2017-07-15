@@ -1,23 +1,55 @@
+graflibc (graflibc/)
+-------------------- 
+graflibc is copyrighted under Copyright © 2016-2017 CM Graff et al and 
+licensed under the MIT license. All files without copyright comments in 
+this area are original works by CM Graff.
 
-grafmusl is a heavily modified fork of musl by CM Graff et al and its 
-changes are copyrighted under Copyright © CM Graff et al and licensed
-under the MIT license.
-
-Contributors to grafmusl
-------------------------
-CM Graff
-Iain Hill
-Tuomo Venäläinen
-
-
-
-
-Original copying information below:
+	Contributors to graflibc
+	------------------------
+	CM Graff
+	Iain Hill
+	Tuomo Venäläinen
 
 
-musl as a whole is licensed under the following standard MIT license:
+Musl libc (muslibc/) 
+--------------------
+musl as a whole is Copyright © 2005-2012 Rich Felker licensed under the  
+MIT license . All files in this area which have no copyright comments 
+are original works Copyright © 2005-2012 Rich Felker, 
 
-Copyright © 2005-2012 Rich Felker
+	Contributors to musllibc
+	------------------------
+	Rich Felker
+	Nicholas J. Kain (musllibc/*/x86_64/)
+
+
+Mathematics Library (fdlibm/)
+-----------------------------
+The mathematics library was written at Sun laboratories and is licensed 
+with the MIT licence.
+
+	Contributors to Sun's fdlibm
+	----------------------------
+	Copyright © 1993,2004 Sun Microsystems or
+	Copyright © 2003-2011 David Schultz or
+	Copyright © 2003-2009 Steven G. Kargl or
+	Copyright © 2003-2009 Bruce D. Evans or
+	Copyright © 2008 Stephen L. Moshier
+
+
+Header files (include/)
+-----------------------
+Public domain header files from musl-0.9.0 and grafland libc 
+
+
+Crt files (crt/)
+----------------
+Public domain crt files from musl-0.9.0 
+
+
+
+MIT LICENSE:
+------------
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -37,42 +69,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-Portions of this software are contributed or derived from software
-authored by third parties. Complete details on the copyright status of
-all code included in musl follows below:
-
-Most of the math library code (src/math/* and src/complex/*) is
-Copyright © 1993,2004 Sun Microsystems or
-Copyright © 2003-2011 David Schultz or
-Copyright © 2003-2009 Steven G. Kargl or
-Copyright © 2003-2009 Bruce D. Evans or
-Copyright © 2008 Stephen L. Moshier
-and labelled as such. All have been licensed under extremely
-permissive terms. See the comments in the individual files for
-details.
-
-The x86_64 port was written by Nicholas J. Kain. Several files (crt)
-were released into the public domain; others are licensed under the
-standard MIT license terms at the top of this file. See individual
-files for their copyright status.
-
-All files which have no copyright comments are original works
-Copyright © 2005-2012 Rich Felker, the main author of this library.
-The decision to exclude such comments is intentional, as it should be
-possible to carry around the complete source code on tiny storage
-media. All public header files (include/*) should be treated as Public
-Domain as they intentionally contain no content which can be covered
-by copyright. Some source modules may fall in this category as well.
-If you believe that a file is so trivial that it should be in the
-Public Domain, please contact me and, if I agree, I will explicitly
-release it from copyright.
-
-The following files are trivial, in my opinion not copyrightable in
-the first place, and hereby explicitly released to the Public Domain:
-
-All public headers: include/*
-Startup files: crt/*
-
-
