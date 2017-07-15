@@ -1,20 +1,19 @@
 #!/bin/sh
 
 TOOLING="$(pwd)/usr"
-LOGDIR="$(pwd)/logs"
+LOGDIR="$(pwd)/logs" 
 
-
-
-make clean
-
-./configure --prefix=${TOOLING}
-
-
-mkdir -p ${LOGDIR}
-
-printf "\ngrafmusl is logging to ${LOGDIR}/buildlog\n\n"
+make clean 
+./configure --prefix=${TOOLING} 
+mkdir -p ${LOGDIR} 
+printf "\ngrafmusl is logging to ${LOGDIR}/buildlog\n\n" 
+# useless timer loop for visual display
+count="0"
+while [ 1 ] ; do printf "\r.. $count seconds"; sleep 1 ; count=$((count +1)); done & PID=$!
 
 make -j4 > ${LOGDIR}/buildlog 2>&1
+
+kill $PID
 
 make install
 echo "==========COMPILING TEST SUITE=============================="
@@ -44,11 +43,11 @@ diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`mal
 diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`popen_driver' test utility successfully ran \`du' on a directory and compared equal to its control method" || echo "popen driver failed"
 
 
-#./control/printf-driver >${LOGDIR}/diff2 2>${LOGDIR}/testerr
+./control/printf-driver >${LOGDIR}/diff2 2>${LOGDIR}/testerr
 
-#./tests/printf-driver >${LOGDIR}/diff3 2>${LOGDIR}/testerr
+./tests/printf-driver >${LOGDIR}/diff3 2>${LOGDIR}/testerr
 
-#diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`printf_driver' test utility successfully compared equal to its control method" || echo "printf driver failed"
+diff ${LOGDIR}/diff2 ${LOGDIR}/diff3 2>&1 > ${LOGDIR}/testerr && echo "The \`printf_driver' test utility successfully compared equal to its control method" || echo "printf driver had a float rounding error "
 echo "============================================================"
 
 echo "============================================================"
