@@ -23,13 +23,10 @@ GENH = include/bits/alltypes.h
 #IMPH = musllibc/internal/stdio_impl.h musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
-GCC_WRAP = CC="$(PWD)/usr/bin/gcc-wrap -D_GNU_SOURCE -static"
-
-
+# test suite
+GCC_WRAP = CC="$(PWD)/usr/bin/gcc-wrap -D_GNU_SOURCE -static" 
 TEST_SRCS = $(sort $(wildcard tests/*.c))
-TEST_OBJ = $(TEST_SRCS:.c=)
-
-
+TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c))
 CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
@@ -150,7 +147,7 @@ control: $(CONTROL_OBJ)
 tests:
 
 	$(MAKE) $(GCC_WRAP) testing
-	$(MAKE) control
+	$(MAKE) control 2>/dev/null
 
 clean_test:
 

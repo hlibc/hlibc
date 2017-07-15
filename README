@@ -80,6 +80,36 @@ BUILDING:
 		cd /home/$USER/buildarea 
 		./bin/gcc-wrap tests/pow_test.c -static
 
+STRUCTURE:
+----------
+
+	musllibc/
+		Source code original the musl C library
+
+	graflibc/
+		Source code original to the grafland C library
+
+	fdlibm/
+		Source code original to the Sun libm math library
+
+	tests/
+		Various test binaries
+
+	control/
+		Identical to tests/
+
+	crt/
+		Crt stuff startup assembly code
+
+	include/
+		Header files.
+
+	arch/
+		Architecture specific header files.
+
+	tools/
+		several tools including the gcc-wrap wrapper script
+
 
 LINKING TO OUTSIDE LIBC:
 ------------------------
@@ -153,6 +183,10 @@ AUTOMATIC TESTING:
 
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
+
+
+	If you wish to add a new test to the test suite simply put the program
+	under tests/ and it will be compiled along with the other tests. 
 
 
 
