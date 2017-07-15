@@ -5,7 +5,8 @@ LOGDIR="$(pwd)/logs"
 
 make clean 
 ./configure --prefix=${TOOLING} 
-mkdir -p ${LOGDIR} 
+mkdir -p ${LOGDIR}
+./tools/symlink_tests.sh
 printf "\ngrafmusl is logging to ${LOGDIR}/buildlog\n\n" 
 # useless timer loop for visual display
 count="0"
