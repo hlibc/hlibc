@@ -28,6 +28,10 @@ DYNCC = CC="$(PWD)/usr/bin/gcc-wrap -D_GNU_SOURCE -static"
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=)
 
+
+CONTROL_SRCS = $(sort $(wildcard contr/*.c))
+CONTROL_OBJ = $(CONTROL_SRCS:.c=)
+
 LDFLAGS = 
 CPPFLAGS =
 CFLAGS = -Os -pipe
@@ -143,10 +147,15 @@ testing: $(TEST_OBJ)
 test:
 
 	$(MAKE) $(DYNCC) testing
+	$(MAKE) control
+
+
+control: $(CONTROL_OBJ) 
+	
 
 clean_test:
 
-	$(RM) $(TEST_OBJ)
+	$(RM) $(TEST_OBJ) $(CONTROL_OBJ)
 
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
