@@ -22,6 +22,11 @@ LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
 #IMPH = musllibc/internal/stdio_impl.h musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
+DYNCC = CC="$(PWD)/usr/bin/gcc-wrap -D_GNU_SOURCE -static"
+
+
+TEST_SRCS = $(sort $(wildcard tests/*.c))
+TEST_OBJ = $(TEST_SRCS:.c=)
 
 LDFLAGS = 
 CPPFLAGS =
@@ -49,6 +54,8 @@ ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
 ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
+
+
 
 -include config.mak
 
@@ -130,6 +137,17 @@ $(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(syslibdir)
 
 $(DESTDIR)$(syslibdir):
 	install -d -m 755 $(DESTDIR)$(syslibdir)
+
+testing: $(TEST_OBJ)
+
+test:
+
+	$(MAKE) $(DYNCC) testing
+
+clean_test:
+
+	$(RM) $(TEST_OBJ)
+
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
