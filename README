@@ -3,7 +3,7 @@ graflibc
 DESCRIPTION:
 ------------
 
-	graflibc is an experimental libc targetted at the linux kernel's
+	graflibc is an experimental libc targeted at the linux kernel's
 	syscall ABI. It is a standalone libc which supports i386, x86_64
 	and arm architectures.
 
