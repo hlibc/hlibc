@@ -27,9 +27,8 @@
 		./bin/gcc-wrap tests/pow_test.c -static
 
 	Make sure you are using the -static argument whenever you compile
-	anything or the dynamically linked libc.so will be used instead of
-	the libc.a. For the libc.so to work correctly the linker paths must
-	be set up
+	anything using the gcc wrapper because graflibc only supports static
+	linking at this time.
 
 
 <br clear="left"/></pre><dl>STRUCTURE:</dl><pre>
