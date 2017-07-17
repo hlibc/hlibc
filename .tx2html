@@ -1,10 +1,11 @@
 #!/bin/sh
+
 set -xe
 
 sed_minus_i()
 {
-	# sed -i is not in posix, so emulate it for conveniece 
-	TMPFILE=$(tempfile)
+	# sed -i is not in posix, so emulate it for conveniece
+	TMPFILE=temp
 	cp $2 "$TMPFILE"
 	sed "$1" "$TMPFILE" > $2
 	rm "$TMPFILE"
