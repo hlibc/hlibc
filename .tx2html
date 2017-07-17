@@ -4,9 +4,10 @@ set -xe
 sed_minus_i()
 {
 	# sed -i is not in posix, so emulate it for conveniece 
-	cp $2 temp
-	sed "$1" temp > $2
-	rm temp
+	TMPFILE=$(tempfile)
+	cp $2 "$TMPFILE"
+	sed "$1" "$TMPFILE" > $2
+	rm "$TMPFILE"
 }
 
 
