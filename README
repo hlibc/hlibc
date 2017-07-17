@@ -27,7 +27,7 @@ BUILDING:
 
 	Make sure you are using the -static argument whenever you compile
 	anything using the gcc wrapper because graflibc only supports static
-	linking at this time.
+	linking at this time. Or delete the libc.so stub in the lib/ directory
 
 
 STRUCTURE:
