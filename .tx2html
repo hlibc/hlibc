@@ -1,6 +1,14 @@
 #!/bin/sh
 set -xe
 
+sed_minus_i()
+{
+	# sed -i is not in posix, so emulate it for conveniece 
+	cp $2 temp
+	sed "$1" temp > $2
+	rm temp
+}
+
 
 text2htmlsh()
 {
@@ -9,19 +17,19 @@ text2htmlsh()
 	cat $FILE >> ${FILE}.html
 	printf '</pre>\n' >> ${FILE}.html
 	# mark up directories
-	sed -i 's/\([a-Z,0-9,/,-,.,_]*\/\)$/<a href="&">&<\/a>/g' ${FILE}.html
+	sed_minus_i 's/\([a-Z,0-9,/,-,.,_]*\/\)$/<a href="&">&<\/a>/g' ${FILE}.html
 	# mark up hyper links
-	sed -i 's/\(http.*\)/<a href="&">&<\/a>/g' ${FILE}.html
+	sed_minus_i 's/\(http.*\)/<a href="&">&<\/a>/g' ${FILE}.html
 	# mark up mailing links
-	sed -i 's/\([a-Z,0-9,.,-]*@.*\)/<a href="mailto:&">&<\/a>/g' ${FILE}.html
+	sed_minus_i 's/\([a-Z,0-9,.,-]*@.*\)/<a href="mailto:&">&<\/a>/g' ${FILE}.html
 	# If the title occurs on the first line then make it attr strong
-	sed -i '2s/\(^[^\t][a-Z].*\)/<br clear="left"\/><\/pre><dl><strong>&<\/strong><\/dl><pre>/' ${FILE}.html
+	sed_minus_i 's/\(^[^\t][a-Z].*\)/<br clear="left"\/><\/pre><dl><strong>&<\/strong><\/dl><pre>/' ${FILE}.html
 	# mark up anything that does not begin with a tab
-	sed -i 's/\(^[^\t][a-Z].*\)/<br clear="left"\/><\/pre><dl>&<\/dl><pre>/g' ${FILE}.html
+	sed_minus_i 's/\(^[^\t][a-Z].*\)/<br clear="left"\/><\/pre><dl>&<\/dl><pre>/g' ${FILE}.html
 	# mark up underlines
-	sed -i 's/\(^[^\t]-.*\)/<\/pre><dd><hr\/><\/dd><pre>/g' ${FILE}.html
+	sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><dd><hr\/><\/dd><pre>/g' ${FILE}.html
 	# mark up images
-	sed -i 's/\([a-Z,0-9,\/,.,-]*.png\)/<\/pre><dl><img src="&" style="float:left;height:15em;margin-right:1em"><\/img><pre><\/dl>/g' ${FILE}.html
+	sed_minus_i 's/\([a-Z,0-9,\/,.,-]*.png\)/<\/pre><dl><img src="&" style="float:left;height:15em;margin-right:1em"><\/img><pre><\/dl>/g' ${FILE}.html
 }
 
 
