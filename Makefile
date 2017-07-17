@@ -142,6 +142,7 @@ control: $(CONTROL_OBJ)
 tests:
 
 	$(MAKE) $(GCC_WRAP_D) testing
+	rm -rf $(TEST_OBJ)
 	$(MAKE) $(GCC_WRAP) testing
 	$(MAKE) control 2>/dev/null
 
