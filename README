@@ -127,6 +127,26 @@ AUTOMATIC TESTING:
 	tools/build.sh.
 
 
+USING LLVM/CLANG:
+-----------------
+
+	llvm/clang can be used to build graflibc. If your default libc happens
+	to be something other than clang then you can set CC as an environment
+	variable.
+
+		CC=clang ./configure
+
+		CC=clang make
+
+		make install
+
+	llvm/clang does not work with a specs file wrapper so the gcc-wrap
+	conveniece compiler wrapper can not be used at this time. Instead
+	one must link to the libc.a "by hand" as follows:
+
+		clang -nostdinc -nostdlib -I./include tests/cat.c lib/crt*.o lib/libc.a -o cat
+
+
 REVISION CONTROL:
 -----------------
 
