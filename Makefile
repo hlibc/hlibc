@@ -159,6 +159,18 @@ web:
 
 	./.tx2html README
 
+clang:
+
+	mkdir -p $(PWD)/usr
+
+	CC=clang ./configure --prefix=$(PWD)/usr
+
+	CC=clang make -j4
+
+	make install
+
+	clang -D_GNU_SOURCE -nostdinc -nostdlib -I./include tests/malloc-driver.c lib/crt*.o  lib/libc.a -o clang-driver
+
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
 .PHONY: all clean install tests control
