@@ -190,9 +190,9 @@ tryflag CFLAGS_C99FSE -std=c99
 tryflag CFLAGS_C99FSE -nostdinc
 tryflag CFLAGS_C99FSE -ffreestanding \
 || tryflag CFLAGS_C99FSE -fno-builtin
-tryflag CFLAGS_C99FSE -fexcess-precision=standard \
-|| tryflag CFLAGS_C99FSE -ffloat-store
-tryflag CFLAGS_C99FSE -frounding-math
+#tryflag CFLAGS_C99FSE -fexcess-precision=standard \
+#|| tryflag CFLAGS_C99FSE -ffloat-store
+#tryflag CFLAGS_C99FSE -frounding-math
 
 #
 # Setup basic default CFLAGS: debug, optimization, and -pipe
@@ -217,10 +217,10 @@ fi
 #
 # Some optimization levels add bloated alignment that hurt performance
 #
-tryflag CFLAGS_AUTO -falign-functions=1
-tryflag CFLAGS_AUTO -falign-labels=1
-tryflag CFLAGS_AUTO -falign-loops=1
-tryflag CFLAGS_AUTO -falign-jumps=1
+#tryflag CFLAGS_AUTO -falign-functions=1
+#tryflag CFLAGS_AUTO -falign-labels=1
+#tryflag CFLAGS_AUTO -falign-loops=1
+#tryflag CFLAGS_AUTO -falign-jumps=1
 
 #
 # On x86, make sure we don't have incompatible instruction set
