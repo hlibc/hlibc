@@ -19,7 +19,7 @@ IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static" 
-GCC_WRAP_D = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE" 
+#GCC_WRAP_D = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE" 
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c))
@@ -27,7 +27,8 @@ CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
 LDFLAGS = 
 CPPFLAGS =
-CFLAGS = -Os -pipe
+#CFLAGS = -Os -pipe
+CFLAGS = 
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
 
 CFLAGS_ALL = $(CFLAGS_C99FSE)
@@ -141,8 +142,8 @@ control: $(CONTROL_OBJ)
 
 tests:
 
-	$(MAKE) $(GCC_WRAP_D) testing
-	rm -rf $(TEST_OBJ)
+	#$(MAKE) $(GCC_WRAP_D) testing
+	#rm -rf $(TEST_OBJ)
 	$(MAKE) $(GCC_WRAP) testing
 	$(MAKE) control 2>/dev/null
 

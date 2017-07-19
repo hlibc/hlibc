@@ -197,22 +197,22 @@ tryflag CFLAGS_C99FSE -ffreestanding \
 #
 # Setup basic default CFLAGS: debug, optimization, and -pipe
 #
-if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then :
-else
-tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
-fi
-test "x$debug" = xyes && CFLAGS_AUTO="-g"
-tryflag CFLAGS_AUTO -pipe
+#if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then :
+#else
+#tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
+#fi
+#test "x$debug" = xyes && CFLAGS_AUTO="-g"
+#tryflag CFLAGS_AUTO -pipe
 
 #
 # If debugging is disabled, omit bloated DWARF2 unwind tables & frame ptr
 #
-if fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS" ; then :
-else 
-tryflag CFLAGS_AUTO -fno-unwind-tables
-tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
-tryflag CFLAGS_AUTO -fomit-frame-pointer
-fi
+#if fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS" ; then :
+#else 
+#tryflag CFLAGS_AUTO -fno-unwind-tables
+#tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
+#tryflag CFLAGS_AUTO -fomit-frame-pointer
+#fi
 
 #
 # Some optimization levels add bloated alignment that hurt performance
