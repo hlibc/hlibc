@@ -172,7 +172,7 @@ int main (int argc, char *argv[])
 
 		if ( durecurse(*argv, strlen(*argv), opt) ) 
 		{
-			printf("%-5zu\t%s\n", hold.level[1] + 4, *argv); 
+			printf("%zu\t%s\n", hold.level[1] + 4, *argv); 
 			destroytab(); 
 		}
 		++argv; 
@@ -230,7 +230,7 @@ int durecurse(char *path, size_t len, int *opt)
 					i = ( sb.st_blocks * 512 ) / hold.block; 
 
 					if (opt[0] == 1 && dentry->d_type == DT_REG) // -a 
-						printf("%-5zu\t%s\n", i, spath ); 
+						printf("%zu\t%s\n", i, spath ); 
 					c = 1;
 					while ( c <= 35 ) 
 						hold.level[c++] += i;
@@ -239,7 +239,7 @@ int durecurse(char *path, size_t len, int *opt)
 				{ 	
 					if ( opt[4] == 0 ) // -s 
 					{
-                               	         	printf("%-5zu", hold.level[hold.depth]);
+                               	         	printf("%zu", hold.level[hold.depth]);
 						printf("\t%s\n", spath );
 					}
                                	        hold.level[hold.depth] = 0; 
@@ -257,7 +257,7 @@ int durecurse(char *path, size_t len, int *opt)
         else
 	{ 
 		lstat(path, &sb);
-		printf("%-5zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
+		printf("%zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
 		return 0;
 	} 
 	
