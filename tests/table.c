@@ -224,7 +224,7 @@ int durecurse(char *path, size_t len, int *opt)
 					lstat(spath, &sb); 
 			
 				char temp[4096] = { 0 };
-				sprintf(temp, "%zu", sb.st_ino);
+				sprintf(temp, "%zu", (size_t)sb.st_ino);
 				if (install(temp, temp))
 				{ 
 					i = ( sb.st_blocks * 512 ) / hold.block; 
@@ -257,7 +257,7 @@ int durecurse(char *path, size_t len, int *opt)
         else
 	{ 
 		lstat(path, &sb);
-		printf("%zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
+		printf("%zu\t%s\n", (size_t)(sb.st_blocks * 512 ) /hold.block, path); 
 		return 0;
 	} 
 	

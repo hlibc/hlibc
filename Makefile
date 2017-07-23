@@ -28,7 +28,7 @@ CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 LDFLAGS = 
 CPPFLAGS =
 #CFLAGS = -Os -pipe
-CFLAGS = 
+CFLAGS =
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
 
 CFLAGS_ALL = $(CFLAGS_C99FSE)
@@ -74,7 +74,7 @@ clean:
 	
 
 include/bits:
-	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make." ; exit 1 ; }
+	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make test' to invoke the suite" ; exit 1 ; }
 	ln -sf ../arch/$(ARCH)/bits $@
 
 include/bits/alltypes.h.sh: include/bits
@@ -145,7 +145,7 @@ tests:
 	#$(MAKE) $(GCC_WRAP_D) testing
 	#rm -rf $(TEST_OBJ)
 	$(MAKE) $(GCC_WRAP) testing
-	$(MAKE) control 2>/dev/null
+	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
 clean_test:
 
