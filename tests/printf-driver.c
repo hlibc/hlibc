@@ -103,9 +103,10 @@ int main(int argc, char *argv[])
 		ssize_t t3[22] = {-0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20 };
 
 
-		
+		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t2[0], t2[1],t2[2],t2[3],t2[4],t2[5],t2[6],t2[7],t2[8],t2[9],t2[10]);
 
-
+		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[0], t3[1], t3[2],t3[3],t3[4],t3[5],t3[6],t3[7],t3[8],t3[9],t3[10]);
+		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]);
 		//printf("%ld\n", 10);
 		//printf("%d\n", 0);
 		//printf("%zu\n", 11);

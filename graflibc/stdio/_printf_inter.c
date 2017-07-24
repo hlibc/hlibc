@@ -203,6 +203,12 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 					case 'u':
 						zuval = va_arg(ap, size_t);
 						goto uinteger;
+
+					case 'd':
+						lval = va_arg(ap, ssize_t);
+                                                goto integer;
+					default:
+						break;
 				}
 				break;
 			default:
