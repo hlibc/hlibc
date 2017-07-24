@@ -89,7 +89,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 	size_t bound = BUFSIZ;
 	int base = 10;
 
-	/* Hold comverted numerical strings */
+	/* Hold converted numerical strings */
 	char converted[BUFSIZ] = { 0 };
 	size_t convlen = 0;
 	size_t j = 0;
