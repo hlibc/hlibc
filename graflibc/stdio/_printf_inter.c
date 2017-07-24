@@ -1,5 +1,22 @@
 #include <stdio.h> 
 
+
+size_t uint2str(char *s, size_t n, int base)
+{
+	static size_t i = 0; 
+	if (n / base )
+	{
+	      i = 0;
+	       uint2str(s, n / base, base); 
+	}
+	if (n % base + '0' > '9')
+		s[i] = (n % base + '0' + 39);
+	else
+		s[i] = (n % base + '0'); 
+
+	return ++i;
+}
+
 size_t __int2str(char *s, long long n, int base)
 {
 	static size_t i = 0; 
@@ -193,7 +210,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 				base = 10;
 				break;
 			uinteger:
-				convlen = int2str(converted, zuval, base);
+				convlen = uint2str(converted, zuval, base);
 				for ( j = 0 ; j < convlen ; ++j)
 					i = _populate(i, converted[j], flag, str++, fp);
 				break;
