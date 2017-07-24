@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdarg.h>
 
 void simple_copy(char *src, char *dest)
@@ -87,6 +89,10 @@ int main(int argc, char *argv[])
 
 		double two = 2;
 		printf("%f\n", two);
+
+
+
+		printf("%zu\n", (size_t)-1);
 
 		//printf("%ld\n", 10);
 		//printf("%d\n", 0);
