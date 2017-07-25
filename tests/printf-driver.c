@@ -112,13 +112,15 @@ int main(int argc, char *argv[])
 	
 		printf("LONG_MAX %zd\n", LONG_MAX);
 		printf("LONG_MIN %zd\n", LONG_MIN);
-		
-
 		printf("-LONG_MAX %zd\n", -LONG_MAX);
 		printf("-LONG_MIN %zd\n", -LONG_MIN);
+		printf("SIZE_MAX %zu\n", SIZE_MAX);
+		printf("SSIZE_MAX %zd\n", SSIZE_MAX);
+		printf("LLONG_MAX %zd\n", LLONG_MAX);
+		printf("LLONG_MIN %zd\n", LLONG_MIN);
 
 		//double f1[100];
-		double flt =0;
+		double flt = 0;
 		double step = .01237;
 		while (flt < 1 )
 		{
