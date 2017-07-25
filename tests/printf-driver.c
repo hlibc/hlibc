@@ -109,14 +109,12 @@ int main(int argc, char *argv[])
 		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]);
 
 	
-		printf("%zd\n", LONG_MAX);
-		printf("%zd\n", LONG_MIN);
-		printf("%zd\n", LONG_MIN + 100);
+		printf("LONG_MAX %zd\n", LONG_MAX);
+		printf("LONG_MIN %zd\n", LONG_MIN);
+		
 
-		printf("%zd\n", -LONG_MAX);	
-		//printf("%ld\n", 10);
-		//printf("%d\n", 0);
-		//printf("%zu\n", 11);
+		printf("-LONG_MAX %zd\n", -LONG_MAX);
+		printf("-LONG_MIN %zd\n", -LONG_MIN);
 
 	}
 	return 0;
