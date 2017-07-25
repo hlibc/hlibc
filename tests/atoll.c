@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-
+        //LONG_MAX = 9223372036854775807
+        //LONG_MIN = -9223372036854775808
 int main(int argc, char *argv[])
 {
 	printf("123456789 = %ld\n", atoll("123456789"));
@@ -12,8 +13,8 @@ int main(int argc, char *argv[])
 	printf("LLONG_MAX = %ld\n", LLONG_MAX);
 	printf("LLONG_MIN = %ld\n", LLONG_MIN);
 
-	printf("2147483647 %ld\n", atoll("2147483647"));
-	printf("-2147483648 %ld\n", atoll("-2147483648")); 
+	printf("9223372036854775807 %ld\n", atoll("9223372036854775807"));
+	printf("-9223372036854775808 %ld\n", atoll("-9223372036854775808")); 
 	
 	printf("123456 %ld\n", atoll("123456"));
 	printf("-123456 %ld\n", atoll("-123456"));
