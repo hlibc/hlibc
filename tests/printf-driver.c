@@ -110,14 +110,15 @@ int main(int argc, char *argv[])
 		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]);
 
 	
+		size_t hold = SIZE_MAX;
 		printf("LONG_MAX %zd\n", LONG_MAX);
 		printf("LONG_MIN %zd\n", LONG_MIN);
-		printf("-LONG_MAX %zd\n", -LONG_MAX);
-		printf("-LONG_MIN %zd\n", -LONG_MIN);
-		printf("SIZE_MAX %zu\n", SIZE_MAX);
+		//printf("-LONG_MAX %zd\n", -LONG_MAX);
+		//printf("-LONG_MIN %zd\n", -LONG_MIN);
+		printf("SIZE_MAX %zu\n", hold);
 		printf("SSIZE_MAX %zd\n", SSIZE_MAX);
-		printf("LLONG_MAX %zd\n", LLONG_MAX);
-		printf("LLONG_MIN %zd\n", LLONG_MIN);
+		printf("LLONG_MAX %lld\n", LLONG_MAX);
+		printf("LLONG_MIN %lld\n", LLONG_MIN);
 
 		//double f1[100];
 		double flt = 0;
