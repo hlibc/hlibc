@@ -29,16 +29,11 @@ size_t __int2str(char *s, long long n, int base)
 	      i = 0;
 	       __int2str(s, n / base, base); 
 	}
-	if (n % base + '0' > '9')
-	{
-		val = (n % base);
-		s[i] = (-val + '0' + 39);
-	}
-	else
-	{
-		val = (n % base);
-		s[i] = (-val + '0'); 
-	} 
+	if (n % base + '0' > '9') 
+		s[i] = (-(n % base) + '0' + 39); 
+	else 
+		s[i] = (-(n % base) + '0'); 
+
 	return ++i;
 }
 
