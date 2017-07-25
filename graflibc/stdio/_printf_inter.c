@@ -17,6 +17,11 @@ size_t __uint2str(char *s, size_t n, int base)
 
 size_t __int2str(char *s, long long n, int base)
 {
+	/*
+		Do these calculations in the negative range so 
+		that the entire range of LONG_MIN to LONG_MAX
+		is handled
+	*/
 	static size_t i = 0; 
 	long long val = 0;
 	if (-n / base) 
@@ -27,7 +32,6 @@ size_t __int2str(char *s, long long n, int base)
 	if (n % base + '0' > '9')
 	{
 		val = (n % base);
-	
 		s[i] = (-val + '0' + 39);
 	}
 	else
