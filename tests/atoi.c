@@ -12,5 +12,7 @@ int main(int argc, char *argv[])
 	printf("INT_MAX = %d\n", INT_MAX);
 	printf("INT_MIN = %d\n", INT_MIN);
 
+	printf("2147483647 %d\n", atoi("2147483647"));
+	printf("-2147483648 %d\n", atoi("-2147483648"));
 	return 0;
 }
