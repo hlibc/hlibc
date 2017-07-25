@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <float.h>
 
 void simple_copy(char *src, char *dest)
 {
@@ -125,7 +126,15 @@ int main(int argc, char *argv[])
 			printf("%lf ", flt);
 		}
 		printf("\n");
-
+		printf("FLT_MAX %lf\n", FLT_MAX);
+		printf("FLT_MAX / 2 %lf\n", FLT_MAX / 2);
+		printf("FLT_MAX / 10000 %lf\n", FLT_MAX / 10000);
+		printf("928734982734.234234234 %lf\n", 928734982734.234234234);
+		printf("9928734982734.234234234 %lf\n", 9928734982734.234234234);
+		printf("99928734982734.234234234 %lf\n", 99928734982734.234234234);
+		printf("999928734982734.234234234 %lf\n", 999928734982734.234234234);
+		printf("9999928734982734.234234234 %lf\n", 9999928734982734.234234234);
+	
 	}
 	return 0;
 }
