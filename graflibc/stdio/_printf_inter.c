@@ -1,6 +1,5 @@
 #include <stdio.h> 
 
-
 size_t __uint2str(char *s, size_t n, int base)
 {
 	static size_t i = 0; 
@@ -13,10 +12,8 @@ size_t __uint2str(char *s, size_t n, int base)
 		s[i] = (n % base + '0' + 39);
 	else
 		s[i] = (n % base + '0'); 
-
 	return ++i;
-}
-
+} 
 size_t uint2str(char *s, size_t n, int base)
 {
 	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }; 
@@ -26,22 +23,29 @@ size_t uint2str(char *s, size_t n, int base)
 		return 1;
 	} 
 	return __uint2str(s, n, base);
-}
-
-
+} 
 
 size_t __int2str(char *s, long long n, int base)
 {
 	static size_t i = 0; 
-	if (n / base )
+	long long val = 0;
+	if (-n / base) 
 	{
 	      i = 0;
 	       __int2str(s, n / base, base); 
 	}
 	if (n % base + '0' > '9')
-		s[i] = (n % base + '0' + 39);
+	{
+		val = (n % base);
+	
+		s[i] = (-val + '0' + 39);
+	}
 	else
-		s[i] = (n % base + '0'); 
+	{
+		val = (n % base);
+		s[i] = (-val + '0'); 
+	}
+	
 
 	return ++i;
 }
@@ -50,17 +54,20 @@ size_t int2str(char *s, long long n, int base)
 { 
 	int toggle = 0;
 	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-	if ( n < 0 )
+	if ( n > 0 )
 	{
 		n = -n;
+	}
+	else{
 		s[0] = '-';
 		toggle = 1;
 	}
-	if ( n <10 )
-	{
-		s[toggle] = convtab[n];
-		return toggle + 1;
-	} 
+	
+	//if ( n <10 )
+	//{
+	//	s[toggle] = convtab[n];
+	//	return toggle + 1;
+	//} `
 	return __int2str(s + toggle, n, base) + toggle;
 }
 

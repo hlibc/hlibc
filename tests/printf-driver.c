@@ -111,6 +111,9 @@ int main(int argc, char *argv[])
 	
 		printf("%zd\n", LONG_MAX);
 		printf("%zd\n", LONG_MIN);
+		printf("%zd\n", LONG_MIN + 100);
+
+		printf("%zd\n", -LONG_MAX);	
 		//printf("%ld\n", 10);
 		//printf("%d\n", 0);
 		//printf("%zu\n", 11);

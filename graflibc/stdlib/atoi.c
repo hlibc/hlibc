@@ -1,8 +1,12 @@
-int gatoi(const char *s)
+#include <stdlib.h>
+#include <ctype.h>
+
+int atoi(const char *s)
 {
-	int i, n;
-	i = n = 0;
-	for (i = 0; s[i] >= '0' && s[i] <= '9'; ++i)
-		n = 10 * n + (s[i] - '0');
-	return n;
+	size_t i;
+	int ret;
+	i = ret = 0;
+	for (i = 0; s[i] && isdigit(s[i]); ++i)
+		ret = 10 * ret + (s[i] - '0');
+	return ret;
 } 
