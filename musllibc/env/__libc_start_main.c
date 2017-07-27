@@ -4,6 +4,9 @@
 09:28 <interviewer> regarding __libc_start_main is that part of gcc or is that
 			 defined in the assembly crt files?
 
+09:25 < developer> interviewer, __lib_start_main is the thing responsible fort setting 
+                        up libc and calling your main function, it's called by 
+                        _start, which is defined in assembly files
 
 09:28 < developer> _start is the entry point the kernel program loader 
                         jumps to, it sets up some registers containing 
