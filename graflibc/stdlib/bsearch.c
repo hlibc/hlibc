@@ -4,6 +4,7 @@
 #include <gstring.h>
 #include <glimits.h>
 
+/* Copyright (c) 2017, Iain Hill */
 
 void* bsearch (const void *key, const void *base, size_t nmemb, size_t size,
          int (*compar)(const void*, const void*))
