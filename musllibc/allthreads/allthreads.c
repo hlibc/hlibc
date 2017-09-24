@@ -130,17 +130,6 @@ void __cancel()
 
 long __syscall_cp_asm(volatile void *, long, long, long, long, long, long, long); 
 
-static void _sigaddset(sigset_t *set, int sig)
-{ 
-}
-
-static void cancel_handler(int sig, siginfo_t *si, void *ctx)
-{ 
-} 
-
-static void init_cancellation()
-{ 
-}
 
 int pthread_cancel(pthread_t t)
 {
