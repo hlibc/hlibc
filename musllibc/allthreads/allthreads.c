@@ -26,9 +26,7 @@ void __do_cleanup_pop(struct __ptcb *, int);
 
 static int start(void *p)
 {
-}
-
-#define ROUND(x) (((x)+PAGE_SIZE-1)&-PAGE_SIZE)
+} 
 
 /* pthread_key_create.c overrides this */
 static const size_t dummyno = 0;
