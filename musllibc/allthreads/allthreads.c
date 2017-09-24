@@ -10,12 +10,11 @@ static struct atfork_funcs {
 	struct atfork_funcs *prev, *next;
 } *funcs;
 
-static int lock[2];
-
 int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void))
 { 
 	return 0;
 }
+
 static void dummy_0()
 {
 }
@@ -68,7 +67,6 @@ int pthread_join(pthread_t t, void **res)
 static struct pthread main_thread;
 
 /* pthread_key_create.c overrides this */
-static const void *dummyray[1] = { 0 };
 weak_alias(dummy, __pthread_tsd_main);
 
 static int init_main_thread()
@@ -119,13 +117,9 @@ static void dummy_1()
 
 weak_alias(dummy_1, __testcancel);
 
-
 void __cancel()
 {
 }
-
-long __syscall_cp_asm(volatile void *, long, long, long, long, long, long, long); 
-
 
 int pthread_cancel(pthread_t t)
 {
