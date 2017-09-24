@@ -3,13 +3,6 @@
 #include "pthread_impl.h"
 #include <stdio.h>
 
-static struct atfork_funcs {
-	void (*prepare)(void);
-	void (*parent)(void);
-	void (*child)(void);
-	struct atfork_funcs *prev, *next;
-} *funcs;
-
 int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void))
 { 
 	return 0;
