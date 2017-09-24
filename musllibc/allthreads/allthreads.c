@@ -12,10 +12,6 @@ static struct atfork_funcs {
 
 static int lock[2];
 
-void __fork_handler(int who)
-{ 
-}
-
 int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void))
 { 
 	return 0;
