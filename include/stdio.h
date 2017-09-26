@@ -31,8 +31,7 @@
 typedef union {
 	char __opaque[16];
 	double __align;
-} fpos_t; 
-
+} fpos_t;
 
 #define _PRINTF_NAN -(0./0.)
 
@@ -56,7 +55,6 @@ enum _flags {
         _EOF   = 010,
         _ERR   = 020,
 };
-
 
 int putc(int, FILE *);
 int fputc(int, FILE *);
@@ -95,23 +93,15 @@ int pclose(FILE *);
 /* puts */
 int fputs(const char *, FILE *);
 int puts(const char *);
-int _puts_inter(const char *, FILE *, int); 
-
+int _puts_inter(const char *, FILE *, int);
 char *fgets(char *, int, FILE *);
-
 FILE *fopen(const char *path, const char *mode);
 int fgetc(FILE *stream);
-
-char *fgets(char *s, int size, FILE *stream);
-
+char *fgets(char *s, int size, FILE *stream); 
 int getc(FILE *stream);
-
 int getchar(void);
-
 int fclose(FILE *stream);
-
 #define stdin  (&_IO_stream[0])
 #define stdout (&_IO_stream[1])
 #define stderr (&_IO_stream[2])
-
 #endif

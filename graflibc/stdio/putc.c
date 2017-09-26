@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "../internal/internal.h"
 
 int putc(int x, FILE *fp)
 {

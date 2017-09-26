@@ -1,4 +1,5 @@
 #include <mydirent.h>
+#include <stdlib.h>
 
 //int fstat(int fd, struct stat *);
 /* opendir: open a directory for readdir calls */
