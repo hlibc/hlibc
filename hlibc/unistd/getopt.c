@@ -6,7 +6,7 @@
  * 
  *
  *
- * Modified by CM Graff for graflibc
+ * Modified by CM Graff for hlibc
  */
 
 #include <unistd.h>

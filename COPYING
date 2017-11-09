@@ -1,14 +1,16 @@
-graflibc (graflibc/)
+hlibc (hlibc/)
 -------------------- 
-graflibc is copyrighted under Copyright © 2016-2017 CM Graff et al and 
+hlibc is copyrighted under Copyright © 2016-2017 CM Graff et al and 
 licensed under the MIT license. All files without copyright comments in 
 this area are original works by CM Graff.
 
-	Contributors to graflibc
+	Contributors to hlibc
 	------------------------
 	CM Graff
 	Iain Hill
 	Tuomo Venäläinen
+	Zach van Rijn
+	
 
 
 Musl libc (muslibc/) 
