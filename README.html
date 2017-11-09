@@ -1,23 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"> <pre>
-<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>graflibc</strong></dl><pre></dl><pre>
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>hlibc</strong></dl><pre></dl><pre>
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>DESCRIPTION:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	graflibc is an experimental libc targeted at the linux kernel's syscall
+	hlibc is an experimental libc targeted at the linux kernel's syscall
 	ABI. It is a standalone libc which supports i386, x86_64 and arm 
-	architectures. graflibc can be compiled with either gcc or the <a href="llvm/">llvm/</a>
+	architectures. hlibc can be compiled with either gcc or the <a href="llvm/">llvm/</a>
 	clang compiler.
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>BUILDING:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	graflibc contains a shell script wrapper for gcc called gcc-wrap. This
+	hlibc contains a shell script wrapper for gcc called gcc-wrap. This
 	allows it to be easily installed and used from your home directory
 	without the need for root privilege.
 
-		cd graflibc 
+		cd hlibc 
 		./configure --prefix=/home/$USER/buildarea 
 		make 
 		make install
@@ -28,7 +28,7 @@
 		./bin/gcc-wrap tests/pow_test.c -static
 
 	Make sure you are using the -static argument whenever you compile
-	anything using the gcc wrapper because graflibc only supports static
+	anything using the gcc wrapper because hlibc only supports static
 	linking at this time. Or delete the libc.so stub in the lib/ directory
 	which will cause the compiler to statically link to the libc.a by
 	default.
@@ -40,8 +40,8 @@
 	<a href="musllibc/">musllibc/</a>
 		Source code original to the musl C library
 
-	<a href="graflibc/">graflibc/</a>
-		Source code original to the graflibc C library.
+	<a href="hlibc/">hlibc/</a>
+		Source code original to the hlibc C library.
 
 	<a href="fdlibm/">fdlibm/</a>
 		Source code original to the Sun libm math library
@@ -70,8 +70,8 @@
 	instructions on linking against an outside libc (namely ours) without
 	using this wrapper:
 
-		git clone <a href="https://www.github.com/cmgraff/graflibc ">https://www.github.com/cmgraff/graflibc </a>
-		cd graflibc 
+		git clone <a href="https://www.github.com/cmgraff/hlibc ">https://www.github.com/cmgraff/hlibc </a>
+		cd hlibc 
 		./configure 
 		make
 
@@ -90,17 +90,17 @@
 
 	The libc itself is of course at lib/libc.a But the "crt stuff" crt 
 	start up files are also needed. These files are written in assembly 
-	code and their source code is located at graflibc/crt/*.
+	code and their source code is located at hlibc/crt/*.
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>AUTOMATIC TESTING:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 	
-	Use the following instructions to retrieve, build and run graflibc 
-	and the graflibc test suite.
+	Use the following instructions to retrieve, build and run hlibc 
+	and the hlibc test suite.
 
-		git clone <a href="https://www.githuc.com/cmgraff/graflibc">https://www.githuc.com/cmgraff/graflibc</a>
-		cd graflibc
+		git clone <a href="https://www.githuc.com/cmgraff/hlibc">https://www.githuc.com/cmgraff/hlibc</a>
+		cd hlibc
 		make test
 
 	If all ran successfully there should be no significant errors and
@@ -134,7 +134,7 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>USING LLVM/CLANG:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	llvm/clang can be used to build graflibc. If your default libc happens
+	llvm/clang can be used to build hlibc. If your default libc happens
 	to be something other than clang then you can set CC as an environment
 	variable.
 
@@ -154,13 +154,13 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>REVISION CONTROL:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	<a href="https://github.com/cmgraff/graflibc">https://github.com/cmgraff/graflibc</a>
+	<a href="https://github.com/cmgraff/hlibc">https://github.com/cmgraff/hlibc</a>
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>WEB HOME:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	<a href="http://www.csit.parkland.edu/~cgraff1/graflibc">http://www.csit.parkland.edu/~cgraff1/graflibc</a>
+	<a href="http://www.csit.parkland.edu/~cgraff1/hlibc">http://www.csit.parkland.edu/~cgraff1/hlibc</a>
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>CONTACT:</strong></dl><pre></dl><pre>
@@ -172,7 +172,7 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>IRC:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	#graflibc on irc.freenode.net
+	#hlibc on irc.freenode.net
 
 
 </pre>

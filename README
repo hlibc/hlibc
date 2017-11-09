@@ -1,22 +1,22 @@
-graflibc
+hlibc
 
 DESCRIPTION:
 ------------
 
-	graflibc is an experimental libc targeted at the linux kernel's syscall
+	hlibc is an experimental libc targeted at the linux kernel's syscall
 	ABI. It is a standalone libc which supports i386, x86_64 and arm 
-	architectures. graflibc can be compiled with either gcc or the llvm/
+	architectures. hlibc can be compiled with either gcc or the llvm/
 	clang compiler.
 
 
 BUILDING:
 ---------
 
-	graflibc contains a shell script wrapper for gcc called gcc-wrap. This
+	hlibc contains a shell script wrapper for gcc called gcc-wrap. This
 	allows it to be easily installed and used from your home directory
 	without the need for root privilege.
 
-		cd graflibc 
+		cd hlibc 
 		./configure --prefix=/home/$USER/buildarea 
 		make 
 		make install
@@ -27,7 +27,7 @@ BUILDING:
 		./bin/gcc-wrap tests/pow_test.c -static
 
 	Make sure you are using the -static argument whenever you compile
-	anything using the gcc wrapper because graflibc only supports static
+	anything using the gcc wrapper because hlibc only supports static
 	linking at this time. Or delete the libc.so stub in the lib/ directory
 	which will cause the compiler to statically link to the libc.a by
 	default.
@@ -39,8 +39,8 @@ STRUCTURE:
 	musllibc/
 		Source code original to the musl C library
 
-	graflibc/
-		Source code original to the graflibc C library.
+	hlibc/
+		Source code original to the hlibc C library.
 
 	fdlibm/
 		Source code original to the Sun libm math library
@@ -69,8 +69,8 @@ LINKING TO OUTSIDE LIBC:
 	instructions on linking against an outside libc (namely ours) without
 	using this wrapper:
 
-		git clone https://www.github.com/cmgraff/graflibc 
-		cd graflibc 
+		git clone https://www.github.com/cmgraff/hlibc 
+		cd hlibc 
 		./configure 
 		make
 
@@ -89,17 +89,17 @@ LINKING TO OUTSIDE LIBC:
 
 	The libc itself is of course at lib/libc.a But the "crt stuff" crt 
 	start up files are also needed. These files are written in assembly 
-	code and their source code is located at graflibc/crt/*.
+	code and their source code is located at hlibc/crt/*.
 
 
 AUTOMATIC TESTING:
 ------------------
 	
-	Use the following instructions to retrieve, build and run graflibc 
-	and the graflibc test suite.
+	Use the following instructions to retrieve, build and run hlibc 
+	and the hlibc test suite.
 
-		git clone https://www.githuc.com/cmgraff/graflibc
-		cd graflibc
+		git clone https://www.githuc.com/cmgraff/hlibc
+		cd hlibc
 		make test
 
 	If all ran successfully there should be no significant errors and
@@ -133,7 +133,7 @@ AUTOMATIC TESTING:
 USING LLVM/CLANG:
 -----------------
 
-	llvm/clang can be used to build graflibc. If your default libc happens
+	llvm/clang can be used to build hlibc. If your default libc happens
 	to be something other than clang then you can set CC as an environment
 	variable.
 
@@ -153,13 +153,13 @@ USING LLVM/CLANG:
 REVISION CONTROL:
 -----------------
 
-	https://github.com/cmgraff/graflibc
+	https://github.com/cmgraff/hlibc
 
 
 WEB HOME:
 ---------
 
-	http://www.csit.parkland.edu/~cgraff1/graflibc
+	http://www.csit.parkland.edu/~cgraff1/hlibc
 
 
 CONTACT:
@@ -171,6 +171,6 @@ CONTACT:
 IRC:
 ----
 
-	#graflibc on irc.freenode.net
+	#hlibc on irc.freenode.net
 
 
