@@ -5,7 +5,7 @@ DESCRIPTION:
 
 	hlibc is an experimental libc targeted at the linux kernel's syscall
 	ABI. It is a standalone libc which supports i386, x86_64 and arm 
-	architectures. hlibc can be compiled with either gcc or the llvm/
+	architectures. hlibc can be compiled with either gcc or the llvm
 	clang compiler.
 
 
