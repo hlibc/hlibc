@@ -1,40 +1,45 @@
+#include <features.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <strings.h>
-#include <features.h>
 
-/* Derived from OS-Zero strings.c. Copyright (C) 2017, Tuomo Venäläinen */
+/* Derived from OS-Zero strings.c. Copyright (C) 2017, Tuomo Venäläinen
+ */
 
 void
-bzero(void *ptr, size_t nb)
+bzero (void *ptr, size_t nb)
 {
     int8_t *bptr = ptr;
-    int8_t  zb = 0;
-    long    zw = 0;
-    long    nleft = nb;
-    long    n = 0;
-    long   *lptr;
-    long    cnt;
-    size_t  val;
+    int8_t zb    = 0;
+    long zw      = 0;
+    long nleft   = nb;
+    long n       = 0;
+    long *lptr;
+    long cnt;
+    size_t val;
 
-    /* Added as a hack, until integrated with the build system -CM Graff */
-    int LONGSIZE = sizeof(long);
+    /* Added as a hack, until integrated with the build system -CM Graff
+     */
+    int LONGSIZE     = sizeof (long);
     int LONGSIZELOG2 = 3;
 
-    cnt = sizeof(long);
-    val = (uintptr_t)bptr & (cnt - 1);
-    if (val) {
+    cnt = sizeof (long);
+    val = (uintptr_t) bptr & (cnt - 1);
+    if (val)
+    {
         n = cnt - val;
     }
     nleft -= n;
-    while (n--) {
+    while (n--)
+    {
         /* set unaligned leading bytes */
         *bptr++ = zb;
     }
-    lptr = (long *)bptr;
-    n = nleft >> (3 + LONGSIZELOG2 - 1);
-    nleft &= ~(8 * sizeof(long) - 1);
-    while (n--) {
+    lptr = (long *) bptr;
+    n    = nleft >> (3 + LONGSIZELOG2 - 1);
+    nleft &= ~(8 * sizeof (long) - 1);
+    while (n--)
+    {
         /* set long-words */
         lptr[0] = zw;
         lptr[1] = zw;
@@ -48,12 +53,14 @@ bzero(void *ptr, size_t nb)
     }
     n = nleft >> LONGSIZELOG2;
     nleft &= (LONGSIZE - 1);
-    while (n--) {
+    while (n--)
+    {
         /* set long-words */
         *lptr++ = zw;
     }
-    bptr = (int8_t *)lptr;
-    while (nleft--) {
+    bptr = (int8_t *) lptr;
+    while (nleft--)
+    {
         /* set trailing bytes */
         *bptr++ = zb;
     }

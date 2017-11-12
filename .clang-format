@@ -3,7 +3,7 @@ AccessModifierOffset: -1
 AlignAfterOpenBracket: AlwaysBreak
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: false
-AlignEscapedNewlines: Right
+#AlignEscapedNewlines: Right
 AlignOperands: false
 AlignTrailingComments: false
 AllowAllParametersOfDeclarationOnNextLine: true
@@ -28,13 +28,13 @@ BraceWrapping:
     AfterNamespace: true
     AfterStruct: true
     AfterUnion: true
-    AfterExternBlock: true
+#    AfterExternBlock: true
     BeforeCatch: true
     BeforeElse: true
     IndentBraces: false
-    SplitEmptyFunction: true
-    SplitEmptyNamespace: true
-BreakBeforeInheritanceComma: false
+#    SplitEmptyFunction: true
+#    SplitEmptyNamespace: true
+#BreakBeforeInheritanceComma: false
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializersBeforeComma: false
 #ColumnLimit: 64
@@ -47,9 +47,9 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
 #ExperimentalAutoDetectBinPacking: false
-FixNamespaceComments: true
+#FixNamespaceComments: true
 IndentCaseLabels: false
-IndentPPDirectives: AfterHash
+#IndentPPDirectives: AfterHash
 IndentWidth: 4
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -67,8 +67,8 @@ PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 60
 PointerAlignment: Right
 ReflowComments: true
-SortIncludes: true
-SortUsingDeclarations: true
+#SortIncludes: false
+#SortUsingDeclarations: true
 SpaceAfterCStyleCast: true
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeParens: Always

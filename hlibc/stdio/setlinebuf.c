@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-void setlinebuf(FILE *fp)
+void
+setlinebuf (FILE *fp)
 {
-	setvbuf(fp, NULL, _LNBUF, BUFSIZ);
+    setvbuf (fp, NULL, _LNBUF, BUFSIZ);
 }

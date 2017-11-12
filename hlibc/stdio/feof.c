@@ -1,8 +1,9 @@
-#include <stdio.h> 
+#include <stdio.h>
 
-int feof(FILE *fp)
+int
+feof (FILE *fp)
 {
-	if ((fp->flags & _EOF) != 0)
-		return 0;
-	return 1;
+    if ((fp->flags & _EOF) != 0)
+        return 0;
+    return 1;
 }

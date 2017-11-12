@@ -1,7 +1,7 @@
-#include <stdio.h> 
+#include <stdio.h>
 
-int fputc(int x, FILE *fp)
+int
+fputc (int x, FILE *fp)
 {
-	return putc(x, fp);
-} 
-
+    return putc (x, fp);
+}

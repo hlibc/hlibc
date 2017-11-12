@@ -1,7 +1,7 @@
-#include <stdio.h> 
+#include <stdio.h>
 
-int fileno(FILE *fp)
+int
+fileno (FILE *fp)
 {
-	return fp->fd;
-} 
-
+    return fp->fd;
+}
