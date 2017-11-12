@@ -1,46 +1,46 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include "../internal/internal.h"
 
 size_t __uint2str(char *s, size_t n, int base)
 {
-	static size_t i = 0; 
+	static size_t i = 0;
 	if (n / base )
 	{
 	      i = 0;
-	       __uint2str(s, n / base, base); 
+	       __uint2str(s, n / base, base);
 	}
 	if (n % base + '0' > '9')
 		s[i] = (n % base + '0' + 39);
 	else
-		s[i] = (n % base + '0'); 
+		s[i] = (n % base + '0');
 	return ++i;
-} 
+}
 
 size_t __int2str(char *s, long long n, int base)
 {
 	/*
-		Do these calculations in the negative range so 
+		Do these calculations in the negative range so
 		that the entire range of LONG_MIN to LONG_MAX
 		is handled
 	*/
-	static size_t i = 0; 
+	static size_t i = 0;
 	long long val = 0;
-	if (-n / base) 
+	if (-n / base)
 	{
 	      i = 0;
-	       __int2str(s, n / base, base); 
+	       __int2str(s, n / base, base);
 	}
-	if (n % base + '0' > '9') 
-		s[i] = (-(n % base) + '0' + 39); 
-	else 
-		s[i] = (-(n % base) + '0'); 
+	if (n % base + '0' > '9')
+		s[i] = (-(n % base) + '0' + 39);
+	else
+		s[i] = (-(n % base) + '0');
 
 	return ++i;
 }
 
 size_t int2str(char *s, long long n, int base)
-{ 
-	int toggle = 0; 
+{
+	int toggle = 0;
 	if ( n > 0 )
 	{
 		n = -n;
@@ -48,32 +48,32 @@ size_t int2str(char *s, long long n, int base)
 	else{
 		s[0] = '-';
 		toggle = 1;
-	} 
+	}
 	return __int2str(s + toggle, n, base) + toggle;
 }
 
 
 size_t uint2str(char *s, size_t n, int base)
 {
-	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }; 
+	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 	if ( n <10 )
 	{
 		s[0] = convtab[n];
 		return 1;
-	} 
+	}
 	return __uint2str(s, n, base);
-} 
+}
 
 size_t flt2str(char *s, double flt)
 {
-	size_t i = 0; 
+	size_t i = 0;
 	long long real = flt;
-	double imag = flt - real; 
+	double imag = flt - real;
 	int prec = 20;
-	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }; 
-	
-	if ( real != 0) 
-		i = int2str(s, real, 10); 
+	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+	if ( real != 0)
+		i = int2str(s, real, 10);
 	else
 		s[i++] = '0';
 
@@ -90,7 +90,7 @@ size_t flt2str(char *s, double flt)
 			real = 0;
 		}
 	}
-	else 
+	else
 	{
 		memset(s + i, '0', 20);
 		i += 20;
@@ -109,7 +109,7 @@ int _populate(int incr, int x, int flag, char *s, FILE *fp)
 
 int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
-	
+
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
 	/* flag == 0 == printf, vprintf, dprintf etc  */
@@ -131,13 +131,13 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 	long long lval = 0;
 	long double fval = 0;
 
-	/* float precision */ 
-	size_t precision = 6; 
+	/* float precision */
+	size_t precision = 6;
 
 	if ( flag == 2 ) 	/* snprintf */
 		bound = lim;
 
-	for (p = fmt; *p && i < bound; p++) 
+	for (p = fmt; *p && i < bound; p++)
 	{
 		if (*p != '%')
 		{
@@ -148,14 +148,14 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 		{
 			case 'c':
 				cval = va_arg(ap, int);
-				goto character; 
+				goto character;
 			case 's':
 				sval = va_arg(ap, char *);
-				goto string; 
+				goto string;
 			case 'o':
 				base = 8;
 				lval = va_arg(ap, int);
-				goto integer; 
+				goto integer;
 			case 'd':
 				lval = va_arg(ap, int);
 				goto integer;
@@ -170,7 +170,6 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 				switch (*++p)
 				{
 					case 'f':
-						fval = 0;
 						fval = va_arg(ap, long double);
 						goto floating;
 				}
@@ -190,7 +189,6 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 						}
 						break;
 					case 'f':
-						fval = 0;
 						fval = va_arg(ap, double);
 						goto floating;
 					default:
@@ -256,4 +254,3 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 
 	return i;
 }
-
