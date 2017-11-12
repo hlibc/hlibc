@@ -98,7 +98,7 @@ AUTOMATIC TESTING:
 	Use the following instructions to retrieve, build and run hlibc 
 	and the hlibc test suite.
 
-		git clone https://www.githuc.com/cmgraff/hlibc
+		git clone https://www.github.com/cmgraff/hlibc
 		cd hlibc
 		make test
 
