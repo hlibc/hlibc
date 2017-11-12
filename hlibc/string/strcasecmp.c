@@ -1,15 +1,15 @@
 #include <stddef.h>
 #include <ctype.h>
 #include <string.h>
-#include <ctype.h>
 
 /* Copyright (c) 2017, Iain Hill */
 
 int strcasecmp(const char *s, const char *t)
 {
-	int s_bis, t_bis;
+	int s_bis = 0;
+    int t_bis = 0;
 
-        while (*s && *t)
+    while (*s && *t)
 	{
 		s_bis = tolower(*s);
 		t_bis = tolower(*t);
@@ -26,4 +26,3 @@ int strcasecmp(const char *s, const char *t)
 	}
         return s_bis - t_bis;
 }
-
