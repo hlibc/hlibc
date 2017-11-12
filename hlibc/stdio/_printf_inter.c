@@ -87,7 +87,6 @@ size_t flt2str(char *s, double flt)
 			real = imag;
 			imag -= real;
 			s[i++] = convtab[real];
-			real = 0;
 		}
 	}
 	else
