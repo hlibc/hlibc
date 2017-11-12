@@ -41,8 +41,8 @@ BreakConstructorInitializersBeforeComma: false
 ColumnLimit: 72
 CommentPragmas: '^ IWYU pragma:'
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
-ConstructorInitializerIndentWidth: 8
-ContinuationIndentWidth: 8
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
@@ -50,7 +50,7 @@ DisableFormat: false
 FixNamespaceComments: true
 IndentCaseLabels: false
 IndentPPDirectives: AfterHash
-IndentWidth: 8
+IndentWidth: 4
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp
@@ -71,8 +71,8 @@ SortIncludes: true
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: true
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeParens: Never
-SpaceInEmptyParentheses: false
+SpaceBeforeParens: Always
+SpaceInEmptyParentheses: true
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false
@@ -80,5 +80,5 @@ SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: Auto
-TabWidth: 8
-UseTab: true
+TabWidth: 4
+UseTab: Never
