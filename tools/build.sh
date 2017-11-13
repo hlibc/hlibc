@@ -40,5 +40,12 @@ diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
 echo "The \`printf_driver' test utility successfully compared equal to its control method" || \
 echo "The printf driver had a float rounding error "
 
+
+
+./tests/printf-driver Makefile ${SUF}/testfile
+diff Makefile ${SUF}/testfile 2>&1 > ${SUF}/testerr && \
+echo "The \`printf_driver' test utility successfully created and copied a file" || \
+echo "The printf driver was unable to create and copy a file"
+
 printf "============================================================\n"
 
