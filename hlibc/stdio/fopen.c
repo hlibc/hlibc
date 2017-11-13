@@ -4,7 +4,7 @@ FILE *fopen(const char *name, const char *mode)
 {
 	int fd = 0;
 	FILE *fp;
-	int perms     = 0; // not yet used
+	int perms     = 0666; // not yet used
 	const char *p = mode;
 	int oflags    = 0;
 	int iflags    = 0;
@@ -33,7 +33,7 @@ FILE *fopen(const char *name, const char *mode)
 			}
 			break;
 		case 'w':
-			oflags = O_RDWR;
+			oflags = O_RDWR | O_CREAT;
 			iflags = _WRITE;
 			switch (*p) {
 			case '+':
