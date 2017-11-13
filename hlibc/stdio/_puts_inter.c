@@ -1,14 +1,14 @@
 #include "../internal/internal.h"
 #include <stdio.h>
 
-int __puts_inter (const char *s, FILE *fp, int append)
+int __puts_inter(const char *s, FILE *fp, int append)
 {
 	int c;
 	while ((c = *s++)) {
-		putc (c, fp);
+		putc(c, fp);
 	}
 	if (append) {
-		putc (append, fp);
+		putc(append, fp);
 	}
-	return ferror (fp) ? EOF : 0;
+	return ferror(fp) ? EOF : 0;
 }

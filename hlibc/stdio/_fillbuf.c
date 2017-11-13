@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-int _fillbuf (FILE *fp)
+int _fillbuf(FILE *fp)
 {
 	int bufsize		   = 0;
-	static char buffer[BUFSIZ] = {0};
+	static char buffer[BUFSIZ] = { 0 };
 
 	if ((fp->flags & (_READ | _EOF | _ERR)) != _READ)
 		return EOF;
@@ -11,7 +11,7 @@ int _fillbuf (FILE *fp)
 	if (fp->buf == NULL)
 		fp->buf = buffer;
 	fp->rp		= fp->buf;
-	fp->len		= read (fp->fd, fp->rp, bufsize);
+	fp->len		= read(fp->fd, fp->rp, bufsize);
 
 	if (--fp->len < 0) {
 		if (fp->len == -1)
@@ -19,9 +19,9 @@ int _fillbuf (FILE *fp)
 		else
 			fp->flags |= _ERR;
 		fp->len = 0;
-		fflush (NULL);
+		fflush(NULL);
 		return EOF;
 	}
 
-	return (unsigned char) *fp->rp++;
+	return (unsigned char)*fp->rp++;
 }

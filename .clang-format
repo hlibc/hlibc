@@ -38,12 +38,12 @@ BraceWrapping:
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializersBeforeComma: false
 #ColumnLimit: 64
-ColumnLimit: 72
+ColumnLimit: 80
 CommentPragmas: '^ IWYU pragma:'
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 8
 ContinuationIndentWidth: 8
-Cpp11BracedListStyle: true
+Cpp11BracedListStyle: false
 DerivePointerAlignment: false
 DisableFormat: false
 #ExperimentalAutoDetectBinPacking: false
@@ -69,10 +69,10 @@ PointerAlignment: Right
 ReflowComments: true
 #SortIncludes: false
 #SortUsingDeclarations: true
-SpaceAfterCStyleCast: true
+SpaceAfterCStyleCast: false
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeParens: Always
-SpaceInEmptyParentheses: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false

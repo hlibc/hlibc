@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-FILE *fopen (const char *name, const char *mode)
+FILE *fopen(const char *name, const char *mode)
 {
 	int fd = 0;
 	FILE *fp;
@@ -63,12 +63,12 @@ FILE *fopen (const char *name, const char *mode)
 	}
 
 	if (name != NULL) {
-		if ((fd = open (name, oflags, perms)) == -1) {
+		if ((fd = open(name, oflags, perms)) == -1) {
 			return NULL;
 		}
 
 		if (seek == SEEK_END) {
-			lseek (fd, 0L, seek);
+			lseek(fd, 0L, seek);
 		}
 
 		fp->len = 0;

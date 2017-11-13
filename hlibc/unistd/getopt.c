@@ -14,7 +14,7 @@
 char *optarg; /* Global argument pointer. */
 int optind	= 0; /* Global argv index. */
 static char *scan = NULL; /* Private scan pointer. */
-int getopt (int argc, char *const argv[], const char *optstring)
+int getopt(int argc, char *const argv[], const char *optstring)
 {
 	char c;
 	char *place;
@@ -40,7 +40,7 @@ int getopt (int argc, char *const argv[], const char *optstring)
 	}
 
 	c     = *scan++;
-	place = strchr (optstring, c);
+	place = strchr(optstring, c);
 
 	if (!place || c == ':') {
 		return '?';
@@ -56,7 +56,7 @@ int getopt (int argc, char *const argv[], const char *optstring)
 			optind++;
 		}
 		else {
-			write (2, "option requires argument\n", 27);
+			write(2, "option requires argument\n", 27);
 			return ':';
 		}
 	}

@@ -1,6 +1,6 @@
 #include <string.h>
 
-char *rindex (const char *s, int c)
+char *rindex(const char *s, int c)
 {
 	int i = 0;
 	while (s[i] != '\0') {

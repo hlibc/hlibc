@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-char *strtok (char *s, const char *delim)
+char *strtok(char *s, const char *delim)
 {
 	char *token;
 	char *span;
@@ -20,10 +20,10 @@ char *strtok (char *s, const char *delim)
 
 	c = *s++;
 
-	for (span = (char *) delim; (hold = *span++) != 0;) {
+	for (span = (char *)delim; (hold = *span++) != 0;) {
 		if (c == hold) {
 			c    = *s++;
-			span = (char *) delim;
+			span = (char *)delim;
 		}
 	}
 
@@ -35,7 +35,7 @@ char *strtok (char *s, const char *delim)
 
 	while (1) {
 		c    = *s++;
-		span = (char *) delim;
+		span = (char *)delim;
 		do {
 			if ((hold = *span++) == c) {
 				if (c == 0) {

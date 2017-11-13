@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int fileno (FILE *fp)
+int fileno(FILE *fp)
 {
 	return fp->fd;
 }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int setvbuf (FILE *fp, char *buf, int mode, size_t size)
+int setvbuf(FILE *fp, char *buf, int mode, size_t size)
 {
 	fp->buf   = buf;
 	fp->flags = mode;

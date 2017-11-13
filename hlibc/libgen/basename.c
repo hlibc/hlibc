@@ -1,10 +1,10 @@
 #include <libgen.h>
 #include <string.h>
 
-char *basename (char *path)
+char *basename(char *path)
 {
 	size_t i	  = 0;
-	int pathtab[4096] = {0};
+	int pathtab[4096] = { 0 };
 	size_t npth       = 0;
 
 	for (i = 0; path[i] != '\0' && i < 4096; i++) {

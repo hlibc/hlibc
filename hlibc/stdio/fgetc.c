@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int fgetc (FILE *fp)
+int fgetc(FILE *fp)
 {
-	return getc (fp);
+	return getc(fp);
 }

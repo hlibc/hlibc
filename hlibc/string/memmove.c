@@ -2,13 +2,13 @@
 
 #include <string.h>
 
-void *memmove (void *to, const void *from, size_t size)
+void *memmove(void *to, const void *from, size_t size)
 {
 	unsigned char *p1;
 	const unsigned char *p2;
 
-	p1 = (unsigned char *) to;
-	p2 = (const unsigned char *) from;
+	p1 = (unsigned char *)to;
+	p2 = (const unsigned char *)from;
 
 	p2 = p2 + size;
 
@@ -18,7 +18,7 @@ void *memmove (void *to, const void *from, size_t size)
 	}
 
 	if (p2 != from) {
-		p2 = (const unsigned char *) from;
+		p2 = (const unsigned char *)from;
 		p2 = p2 + size;
 		p1 = p1 + size;
 

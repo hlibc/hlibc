@@ -1,10 +1,10 @@
 #include "../internal/internal.h"
 #include <stdio.h>
 
-int _flushbuf (int x, FILE *fp)
+int _flushbuf(int x, FILE *fp)
 {
 	int bufsize;
-	static char buffer[BUFSIZ] = {0};
+	static char buffer[BUFSIZ] = { 0 };
 	bufsize			   = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
 
 	if (fp->buf == NULL) {
@@ -13,7 +13,7 @@ int _flushbuf (int x, FILE *fp)
 	}
 	else if (
 		fp->flags & _WRITE
-		&& write (fp->fd, fp->buf, fp->rp - fp->buf) < 0) {
+		&& write(fp->fd, fp->buf, fp->rp - fp->buf) < 0) {
 		fp->flags |= _ERR;
 		return EOF;
 	}
@@ -21,6 +21,6 @@ int _flushbuf (int x, FILE *fp)
 	fp->rp  = fp->buf;
 	fp->len = bufsize - 1;
 	if (x != EOF)
-		*fp->rp++ = (char) x;
+		*fp->rp++ = (char)x;
 	return x;
 }

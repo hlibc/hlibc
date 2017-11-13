@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-int ispunct (int x)
+int ispunct(int x)
 {
 	if (x >= '!' && x <= '/')
 		return 1;

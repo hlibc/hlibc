@@ -6,12 +6,12 @@
 
 /* Copyright (c) 2017, Iain Hill */
 
-void *bsearch (
-	const void *key,
+void *
+bsearch(const void *key,
 	const void *base,
 	size_t nmemb,
 	size_t size,
-	int (*compar) (const void *, const void *))
+	int (*compar)(const void *, const void *))
 {
 	size_t low, high, mid;
 	const void *ptr;
@@ -20,15 +20,15 @@ void *bsearch (
 	low  = 0;
 	high = nmemb;
 	while (low < high) {
-		mid = (low + high) / 2;
-		ptr = (void *) (((const char *) base) + (mid * size));
-		comparison = (*compar) (key, ptr);
+		mid	= (low + high) / 2;
+		ptr	= (void *)(((const char *)base) + (mid * size));
+		comparison = (*compar)(key, ptr);
 		if (comparison < 0)
 			high = mid;
 		else if (comparison > 0)
 			low = mid + 1;
 		else
-			return (void *) ptr;
+			return (void *)ptr;
 	}
 
 	return NULL;

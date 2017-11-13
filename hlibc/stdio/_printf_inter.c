@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <string.h> /* only for memset() */
 
-size_t __uint2str (char *s, size_t n, int base)
+size_t __uint2str(char *s, size_t n, int base)
 {
 	static size_t i = 0;
 	if (n / base) {
 		i = 0;
-		__uint2str (s, n / base, base);
+		__uint2str(s, n / base, base);
 	}
 	if (n % base + '0' > '9') {
 		s[i] = (n % base + '0' + 39);
@@ -18,7 +18,7 @@ size_t __uint2str (char *s, size_t n, int base)
 	return ++i;
 }
 
-size_t __int2str (char *s, long long n, int base)
+size_t __int2str(char *s, long long n, int base)
 {
 	/*
 	    Do these calculations in the negative range so
@@ -29,7 +29,7 @@ size_t __int2str (char *s, long long n, int base)
 	long long val   = 0;
 	if (-n / base) {
 		i = 0;
-		__int2str (s, n / base, base);
+		__int2str(s, n / base, base);
 	}
 	if (n % base + '0' > '9') {
 		s[i] = (-(n % base) + '0' + 39);
@@ -41,7 +41,7 @@ size_t __int2str (char *s, long long n, int base)
 	return ++i;
 }
 
-size_t int2str (char *s, long long n, int base)
+size_t int2str(char *s, long long n, int base)
 {
 	int toggle = 0;
 	if (n > 0) {
@@ -51,31 +51,29 @@ size_t int2str (char *s, long long n, int base)
 		s[0]   = '-';
 		toggle = 1;
 	}
-	return __int2str (s + toggle, n, base) + toggle;
+	return __int2str(s + toggle, n, base) + toggle;
 }
 
-size_t uint2str (char *s, size_t n, int base)
+size_t uint2str(char *s, size_t n, int base)
 {
-	int convtab[10]
-		= {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 	if (n < 10) {
 		s[0] = convtab[n];
 		return 1;
 	}
-	return __uint2str (s, n, base);
+	return __uint2str(s, n, base);
 }
 
-size_t flt2str (char *s, double flt)
+size_t flt2str(char *s, double flt)
 {
-	size_t i       = 0;
-	long long real = flt;
-	double imag    = flt - real;
-	int prec       = 20;
-	int convtab[10]
-		= {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+	size_t i	= 0;
+	long long real  = flt;
+	double imag     = flt - real;
+	int prec	= 20;
+	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 	if (real != 0) {
-		i = int2str (s, real, 10);
+		i = int2str(s, real, 10);
 	}
 	else {
 		s[i++] = '0';
@@ -91,30 +89,25 @@ size_t flt2str (char *s, double flt)
 		}
 	}
 	else {
-		memset (s + i, '0', 20);
+		memset(s + i, '0', 20);
 		i += 20;
 	}
 	return i;
 }
 
-int _populate (int incr, int x, int flag, char *s, FILE *fp)
+int _populate(int incr, int x, int flag, char *s, FILE *fp)
 {
 	if (flag > 0) {
 		*s = x;
 	}
 	else {
-		putc (x, fp);
+		putc(x, fp);
 	}
 	return incr + 1;
 }
 
-int _printf_inter (
-	FILE *fp,
-	char *str,
-	size_t lim,
-	int flag,
-	const char *fmt,
-	va_list ap)
+int _printf_inter(
+	FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
@@ -126,7 +119,7 @@ int _printf_inter (
 	int base      = 10;
 
 	/* Hold converted numerical strings */
-	char converted[BUFSIZ] = {0};
+	char converted[BUFSIZ] = { 0 };
 	size_t convlen	 = 0;
 	size_t j	       = 0;
 
@@ -146,51 +139,51 @@ int _printf_inter (
 
 	for (p = fmt; *p && i < bound; p++) {
 		if (*p != '%') {
-			i = _populate (i, *p, flag, str++, fp);
+			i = _populate(i, *p, flag, str++, fp);
 			continue;
 		}
 		switch (*++p) {
 		case 'c':
-			cval = va_arg (ap, int);
+			cval = va_arg(ap, int);
 			goto character;
 		case 's':
-			sval = va_arg (ap, char *);
+			sval = va_arg(ap, char *);
 			goto string;
 		case 'o':
 			base = 8;
-			lval = va_arg (ap, int);
+			lval = va_arg(ap, int);
 			goto integer;
 		case 'd':
-			lval = va_arg (ap, int);
+			lval = va_arg(ap, int);
 			goto integer;
 		case 'x':
 			base = 16;
-			lval = va_arg (ap, int);
+			lval = va_arg(ap, int);
 			goto integer;
 		case 'f':
-			fval = va_arg (ap, double);
+			fval = va_arg(ap, double);
 			goto floating;
 		case 'L':
 			switch (*++p) {
 			case 'f':
-				fval = va_arg (ap, long double);
+				fval = va_arg(ap, long double);
 				goto floating;
 			}
 			break;
 		case 'l':
 			switch (*++p) {
 			case 'd':
-				lval = va_arg (ap, long);
+				lval = va_arg(ap, long);
 				goto integer;
 			case 'l':
 				switch (*++p) {
 				case 'd':
-					lval = va_arg (ap, long long);
+					lval = va_arg(ap, long long);
 					goto integer;
 				}
 				break;
 			case 'f':
-				fval = va_arg (ap, double);
+				fval = va_arg(ap, double);
 				goto floating;
 			default:
 				break;
@@ -199,82 +192,61 @@ int _printf_inter (
 		case 'z':
 			switch (*++p) {
 			case 'u':
-				zuval = va_arg (ap, size_t);
+				zuval = va_arg(ap, size_t);
 				goto uinteger;
 
 			case 'd':
-				lval = va_arg (ap, ssize_t);
+				lval = va_arg(ap, ssize_t);
 				goto integer;
 			default:
 				break;
 			}
 			break;
 		default:
-			i = _populate (i, *p, flag, str++, fp);
+			i = _populate(i, *p, flag, str++, fp);
 			break;
 		string:
 			for (; *sval; sval++, ++i) {
-				i = _populate (
-					i, *sval, flag, str++, fp);
+				i = _populate(i, *sval, flag, str++, fp);
 			}
 			break;
 		character:
-			i = _populate (i, cval, flag, str++, fp);
+			i = _populate(i, cval, flag, str++, fp);
 			break;
 		integer:
-			memset (converted, 0, 100);
-			convlen = int2str (converted, lval, base);
+			memset(converted, 0, 100);
+			convlen = int2str(converted, lval, base);
 			for (j = 0; j < convlen; ++j) {
-				i = _populate (
-					i,
-					converted[j],
-					flag,
-					str++,
-					fp);
+				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			base = 10;
 			break;
 		uinteger:
-			convlen = uint2str (converted, zuval, base);
+			convlen = uint2str(converted, zuval, base);
 			for (j = 0; j < convlen; ++j) {
-				i = _populate (
-					i,
-					converted[j],
-					flag,
-					str++,
-					fp);
+				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			break;
 		floating:
-			convlen = flt2str (converted, fval);
+			convlen = flt2str(converted, fval);
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {
 						convlen = precision;
 					}
 				}
-				i = _populate (
-					i,
-					converted[j],
-					flag,
-					str++,
-					fp);
+				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			break;
 		}
 	}
 
 	if (flag > 0) {
-		_populate (
-			i,
-			'\0',
-			flag,
-			str,
-			fp); /* don't incr for '\0' */
+		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 
 	if (flag == 0) {
-		_flushbuf (EOF, fp);
+		_flushbuf(EOF, fp);
 	}
 	// fflush(NULL);
 	// fflush(fp);
