@@ -14,35 +14,31 @@ static void _swap (void *v, size_t i, size_t j, size_t width);
 void
 qsort (void *base, size_t nel, size_t width, comp fn)
 {
-    unsigned char *b = (void *) base;
-    size_t i, left, last;
+	unsigned char *b = (void *) base;
+	size_t i, left, last;
 
-    left = 0;
-    if (nel)
-    {
-        nel--;
-    }
+	left = 0;
+	if (nel) {
+		nel--;
+	}
 
-    if (left >= nel)
-    {
-        return;
-    }
+	if (left >= nel) {
+		return;
+	}
 
-    _swap (b, left, nel / 2, width);
+	_swap (b, left, nel / 2, width);
 
-    last = left;
-    for (i = left + 1; i <= nel; i++)
-    {
-        if ((fn) (&b[i * width], &b[left * width]) < 0)
-        {
-            _swap (b, ++last, i, width);
-        }
-    }
+	last = left;
+	for (i = left + 1; i <= nel; i++) {
+		if ((fn) (&b[i * width], &b[left * width]) < 0) {
+			_swap (b, ++last, i, width);
+		}
+	}
 
-    _swap (b, left, last, width);
+	_swap (b, left, last, width);
 
-    qsort (b + (left * width), last - left, width, fn);
-    qsort (b + ((last + 1) * width), nel - last, width, fn);
+	qsort (b + (left * width), last - left, width, fn);
+	qsort (b + ((last + 1) * width), nel - last, width, fn);
 }
 
 /*
@@ -51,21 +47,19 @@ qsort (void *base, size_t nel, size_t width, comp fn)
 static void
 _swap (void *string, size_t i, size_t j, size_t width)
 {
-    if (i == j)
-    {
-        return; /* return directly if swap is not required */
-    }
+	if (i == j) {
+		return; /* return directly if swap is not required */
+	}
 
-    unsigned char t;
-    unsigned char *s = string;
+	unsigned char t;
+	unsigned char *s = string;
 
-    i = i * width;
-    j = j * width;
+	i = i * width;
+	j = j * width;
 
-    for (; width > 0; --width)
-    {
-        t                = *(s + width + i);
-        *(s + width + i) = *(s + width + j);
-        *(s + width + j) = t;
-    }
+	for (; width > 0; --width) {
+		t		 = *(s + width + i);
+		*(s + width + i) = *(s + width + j);
+		*(s + width + j) = t;
+	}
 }

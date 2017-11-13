@@ -3,7 +3,7 @@
 int
 isalpha (int x)
 {
-    if (isupper (x) || islower (x))
-        return 1;
-    return 0;
+	if (isupper (x) || islower (x))
+		return 1;
+	return 0;
 }

@@ -3,5 +3,5 @@
 void
 setbuf (FILE *fp, char *buf)
 {
-    setvbuf (fp, buf, 0, BUFSIZ);
+	setvbuf (fp, buf, 0, BUFSIZ);
 }

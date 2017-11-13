@@ -3,5 +3,5 @@
 int
 fileno (FILE *fp)
 {
-    return fp->fd;
+	return fp->fd;
 }

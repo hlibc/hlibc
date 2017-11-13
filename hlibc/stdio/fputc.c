@@ -3,5 +3,5 @@
 int
 fputc (int x, FILE *fp)
 {
-    return putc (x, fp);
+	return putc (x, fp);
 }

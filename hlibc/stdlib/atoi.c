@@ -4,5 +4,5 @@
 int
 atoi (const char *s)
 {
-    return atoll (s);
+	return atoll (s);
 }
