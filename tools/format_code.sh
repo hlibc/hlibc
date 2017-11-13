@@ -42,4 +42,5 @@ command -v clang-format >/dev/null 2>&1 || { \
 for f in $DIRS; do
 	echo "Processing '$f'..."
 	find $f -type f -name "*.h" | xargs clang-format -i;
+	find $f -type f -name "*.c" | xargs clang-format -i;
 done;
