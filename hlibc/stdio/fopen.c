@@ -62,22 +62,20 @@ FILE *fopen(const char *name, const char *mode)
 		}
 	}
 
-	if (name != NULL) {
+	if (name != NULL){
 		if ((fd = open(name, oflags, perms)) == -1) {
 			return NULL;
 		}
-
-		if (seek == SEEK_END) {
-			lseek(fd, 0L, seek);
-		}
-
-		fp->len = 0;
-		fp->rp = fp->buf = NULL;
-		fp->flags	= iflags;
-		fp->fd		 = fd;
-
-		return fp;
 	}
 
-	return NULL;
+	if (seek == SEEK_END) {
+		lseek(fd, 0L, seek);
+	}
+
+	fp->len = 0;
+	fp->rp = fp->buf = NULL;
+	fp->flags	= iflags;
+	fp->fd		 = fd;
+
+	return fp;
 }
