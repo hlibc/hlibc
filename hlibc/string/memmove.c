@@ -2,8 +2,7 @@
 
 #include <string.h>
 
-void *
-memmove (void *to, const void *from, size_t size)
+void *memmove (void *to, const void *from, size_t size)
 {
 	unsigned char *p1;
 	const unsigned char *p2;

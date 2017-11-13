@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int
-_fillbuf (FILE *fp)
+int _fillbuf (FILE *fp)
 {
 	int bufsize		   = 0;
 	static char buffer[BUFSIZ] = {0};

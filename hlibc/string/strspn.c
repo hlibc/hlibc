@@ -1,8 +1,7 @@
 #include <stddef.h>
 #include <string.h>
 
-size_t
-strspn (const char *s1, const char *accept)
+size_t strspn (const char *s1, const char *accept)
 {
 	size_t i = 0;
 	size_t j = 0;

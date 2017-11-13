@@ -3,8 +3,7 @@
 
 /* Copyright (c) 2017, Iain Hill */
 
-char *
-strchrnul (const char *s, int c)
+char *strchrnul (const char *s, int c)
 {
 	for (; *s != '\0'; s++) {
 		if (*s == c) {

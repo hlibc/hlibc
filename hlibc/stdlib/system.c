@@ -6,8 +6,7 @@
 
 /* Copyright (c) 2017, Iain Hill */
 
-int
-system (const char *cmd)
+int system (const char *cmd)
 {
 	int state;
 	pid_t pid;

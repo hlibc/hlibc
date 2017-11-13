@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *
-strndup (const char *s, size_t lim)
+char *strndup (const char *s, size_t lim)
 {
 	char *ret;
 	size_t len = strnlen (s, lim) + 1;

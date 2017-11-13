@@ -1,7 +1,6 @@
 #include <ctype.h>
 
-int
-isgraph (int x)
+int isgraph (int x)
 {
 	if (x == ' ')
 		return 0;

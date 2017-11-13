@@ -2,8 +2,7 @@
 
 /* TODO: Ensure that the FILE struct is completely reset */
 
-int
-fseek (FILE *fp, long offset, int whence)
+int fseek (FILE *fp, long offset, int whence)
 {
 	int ret = 0;
 	_flushbuf (EOF, fp);

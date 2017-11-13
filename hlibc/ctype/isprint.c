@@ -1,7 +1,6 @@
 #include <ctype.h>
 
-int
-isprint (int x)
+int isprint (int x)
 {
 	if (iscntrl (x))
 		return 0;

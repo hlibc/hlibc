@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int
-sprintf (char *str, const char *fmt, ...)
+int sprintf (char *str, const char *fmt, ...)
 {
 	int ret = 0;
 	va_list argptr;

@@ -23,8 +23,7 @@ find_free_block (struct block_meta **last, size_t size)
 	return current;
 }
 
-struct block_meta *
-request_space (struct block_meta *last, size_t size)
+struct block_meta *request_space (struct block_meta *last, size_t size)
 {
 	struct block_meta *block;
 	block	 = sbrk (0);
@@ -43,8 +42,7 @@ request_space (struct block_meta *last, size_t size)
 	block->free = 0;
 	return block;
 }
-void *
-malloc (size_t size)
+void *malloc (size_t size)
 {
 	struct block_meta *block;
 
@@ -76,14 +74,12 @@ malloc (size_t size)
 	return (block + 1);
 }
 
-struct block_meta *
-get_block_ptr (void *ptr)
+struct block_meta *get_block_ptr (void *ptr)
 {
 	return (struct block_meta *) ptr - 1;
 }
 
-void
-free (void *ptr)
+void free (void *ptr)
 {
 	if (!ptr) {
 		return;
@@ -96,18 +92,17 @@ free (void *ptr)
 	block_ptr->free = 1;
 }
 
-void *
-realloc (void *ptr, size_t size)
+void *realloc (void *ptr, size_t size)
 {
 	if (!ptr) {
 		return malloc (size); // NULL ptr. realloc should act
-				      // like malloc.
+		// like malloc.
 	}
 
 	struct block_meta *block_ptr = get_block_ptr (ptr);
 	if (block_ptr->size >= size) {
 		return ptr; // We have enough space. Could free some
-			    // once we
+		// once we
 		// implement split.
 	}
 
@@ -124,8 +119,7 @@ realloc (void *ptr, size_t size)
 	return new_ptr;
 }
 
-void *
-calloc (size_t nelem, size_t elsize)
+void *calloc (size_t nelem, size_t elsize)
 {
 	size_t size = nelem * elsize;
 	void *ptr   = malloc (size);

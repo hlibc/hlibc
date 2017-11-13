@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <string.h> /* only for memset() */
 
-size_t
-__uint2str (char *s, size_t n, int base)
+size_t __uint2str (char *s, size_t n, int base)
 {
 	static size_t i = 0;
 	if (n / base) {
@@ -19,8 +18,7 @@ __uint2str (char *s, size_t n, int base)
 	return ++i;
 }
 
-size_t
-__int2str (char *s, long long n, int base)
+size_t __int2str (char *s, long long n, int base)
 {
 	/*
 	    Do these calculations in the negative range so
@@ -43,8 +41,7 @@ __int2str (char *s, long long n, int base)
 	return ++i;
 }
 
-size_t
-int2str (char *s, long long n, int base)
+size_t int2str (char *s, long long n, int base)
 {
 	int toggle = 0;
 	if (n > 0) {
@@ -57,8 +54,7 @@ int2str (char *s, long long n, int base)
 	return __int2str (s + toggle, n, base) + toggle;
 }
 
-size_t
-uint2str (char *s, size_t n, int base)
+size_t uint2str (char *s, size_t n, int base)
 {
 	int convtab[10]
 		= {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
@@ -69,8 +65,7 @@ uint2str (char *s, size_t n, int base)
 	return __uint2str (s, n, base);
 }
 
-size_t
-flt2str (char *s, double flt)
+size_t flt2str (char *s, double flt)
 {
 	size_t i       = 0;
 	long long real = flt;
@@ -102,8 +97,7 @@ flt2str (char *s, double flt)
 	return i;
 }
 
-int
-_populate (int incr, int x, int flag, char *s, FILE *fp)
+int _populate (int incr, int x, int flag, char *s, FILE *fp)
 {
 	if (flag > 0) {
 		*s = x;
@@ -114,8 +108,7 @@ _populate (int incr, int x, int flag, char *s, FILE *fp)
 	return incr + 1;
 }
 
-int
-_printf_inter (
+int _printf_inter (
 	FILE *fp,
 	char *str,
 	size_t lim,

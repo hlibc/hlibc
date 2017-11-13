@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-char *
-fgets (char *s, int n, FILE *iop)
+char *fgets (char *s, int n, FILE *iop)
 {
 	register int c    = 0;
 	register char *cs = s;

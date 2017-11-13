@@ -1,7 +1,6 @@
 #include <ctype.h>
 
-int
-isblank (int x)
+int isblank (int x)
 {
 	int ret = 1;
 	switch (x) {

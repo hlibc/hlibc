@@ -6,8 +6,7 @@
 /* Derived from OS-Zero strings.c. Copyright (C) 2017, Tuomo Venäläinen
  */
 
-void
-bzero (void *ptr, size_t nb)
+void bzero (void *ptr, size_t nb)
 {
 	int8_t *bptr = ptr;
 	int8_t zb    = 0;

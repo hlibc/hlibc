@@ -1,8 +1,7 @@
 #include <libgen.h>
 #include <string.h>
 
-char *
-basename (char *path)
+char *basename (char *path)
 {
 	size_t i	  = 0;
 	int pathtab[4096] = {0};

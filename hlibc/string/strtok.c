@@ -2,8 +2,7 @@
 
 #include <string.h>
 
-char *
-strtok (char *s, const char *delim)
+char *strtok (char *s, const char *delim)
 {
 	char *token;
 	char *span;

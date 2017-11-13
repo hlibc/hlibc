@@ -1,8 +1,7 @@
 #include "../internal/internal.h"
 #include <stdio.h>
 
-int
-_flushbuf (int x, FILE *fp)
+int _flushbuf (int x, FILE *fp)
 {
 	int bufsize;
 	static char buffer[BUFSIZ] = {0};

@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int
-dprintf (int fd, const char *fmt, ...)
+int dprintf (int fd, const char *fmt, ...)
 {
 	int ret = 0;
 	va_list argptr;

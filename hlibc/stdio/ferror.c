@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int
-ferror (FILE *fp)
+int ferror (FILE *fp)
 {
 	if ((fp->flags & _ERR) != 0)
 		return 0;

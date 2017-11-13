@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-FILE *
-fopen (const char *name, const char *mode)
+FILE *fopen (const char *name, const char *mode)
 {
 	int fd = 0;
 	FILE *fp;

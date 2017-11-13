@@ -5,8 +5,7 @@
 #include <gstdlib.h>
 #include <gstring.h>
 
-double
-gatof (const char *s)
+double gatof (const char *s)
 {
 	double val, power;
 	static size_t i = 0;

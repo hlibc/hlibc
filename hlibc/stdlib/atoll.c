@@ -1,8 +1,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-long long
-atoll (const char *s)
+long long atoll (const char *s)
 {
 	size_t i;
 	long long ret;

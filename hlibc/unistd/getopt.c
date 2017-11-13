@@ -14,8 +14,7 @@
 char *optarg; /* Global argument pointer. */
 int optind	= 0; /* Global argv index. */
 static char *scan = NULL; /* Private scan pointer. */
-int
-getopt (int argc, char *const argv[], const char *optstring)
+int getopt (int argc, char *const argv[], const char *optstring)
 {
 	char c;
 	char *place;

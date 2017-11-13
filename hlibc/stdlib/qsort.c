@@ -11,8 +11,7 @@ static void _swap (void *v, size_t i, size_t j, size_t width);
 /*
  * qsort:	generic qsort function.
  */
-void
-qsort (void *base, size_t nel, size_t width, comp fn)
+void qsort (void *base, size_t nel, size_t width, comp fn)
 {
 	unsigned char *b = (void *) base;
 	size_t i, left, last;
@@ -44,8 +43,7 @@ qsort (void *base, size_t nel, size_t width, comp fn)
 /*
  * Swap for 'width' places, 'i' to 'j' on the given string.
  */
-static void
-_swap (void *string, size_t i, size_t j, size_t width)
+static void _swap (void *string, size_t i, size_t j, size_t width)
 {
 	if (i == j) {
 		return; /* return directly if swap is not required */

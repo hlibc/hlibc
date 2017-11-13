@@ -1,7 +1,6 @@
 #include <unistd.h>
 
-void
-swab (const void *from, void *to, ssize_t n)
+void swab (const void *from, void *to, ssize_t n)
 {
 	ssize_t i	 = 0;
 	const char *fromm = from;

@@ -1,7 +1,6 @@
 #include <ctype.h>
 
-int
-isxdigit (int x)
+int isxdigit (int x)
 {
 	if (isdigit (x))
 		return 1;

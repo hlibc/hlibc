@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int
-fflush (FILE *fp)
+int fflush (FILE *fp)
 {
 	int ret  = 0;
 	size_t i = 0;

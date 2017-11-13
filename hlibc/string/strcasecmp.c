@@ -4,8 +4,7 @@
 
 /* Copyright (c) 2017, Iain Hill */
 
-int
-strcasecmp (const char *s, const char *t)
+int strcasecmp (const char *s, const char *t)
 {
 	int s_bis = 0;
 	int t_bis = 0;

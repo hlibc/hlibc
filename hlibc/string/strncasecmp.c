@@ -4,8 +4,7 @@
 
 /* Copyright (c) 2017, Iain Hill */
 
-int
-strncasecmp (const char *s, const char *t, size_t n)
+int strncasecmp (const char *s, const char *t, size_t n)
 {
 	int s_bis = 0;
 	int t_bis = 0;

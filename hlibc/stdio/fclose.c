@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int
-fclose (FILE *fp)
+int fclose (FILE *fp)
 {
 	int ret = 0;
 	if (fp != NULL) {

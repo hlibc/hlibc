@@ -1,7 +1,6 @@
 #include <ctype.h>
 
-int
-isspace (int x)
+int isspace (int x)
 {
 	int ret = 1;
 	switch (x) {

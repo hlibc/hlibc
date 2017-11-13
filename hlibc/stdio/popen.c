@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-FILE *
-popen (const char *command, const char *type)
+FILE *popen (const char *command, const char *type)
 {
 	FILE *ret;
 	int pipefd[2] = {0};

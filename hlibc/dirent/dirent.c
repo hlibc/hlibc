@@ -3,8 +3,7 @@
 
 // int fstat(int fd, struct stat *);
 /* opendir: open a directory for readdir calls */
-MYDIR *
-myopendir (char *dirname)
+MYDIR *myopendir (char *dirname)
 {
 	int fd;
 	struct mystat stbuf;
@@ -18,8 +17,7 @@ myopendir (char *dirname)
 	return dp;
 }
 /* closedir: close directory opened by opendir */
-void
-myclosedir (MYDIR *dp)
+void myclosedir (MYDIR *dp)
 {
 	if (dp) {
 		close (dp->fd);
@@ -29,8 +27,7 @@ myclosedir (MYDIR *dp)
 //#include <sys/dir.h>
 /* local directory structure */
 /* readdir: read directory entries in sequence */
-MYDirent *
-myreaddir (MYDIR *dp)
+MYDirent *myreaddir (MYDIR *dp)
 {
 	struct mydirent dirbuf;
 	static MYDirent d;

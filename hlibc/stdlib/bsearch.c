@@ -6,8 +6,7 @@
 
 /* Copyright (c) 2017, Iain Hill */
 
-void *
-bsearch (
+void *bsearch (
 	const void *key,
 	const void *base,
 	size_t nmemb,
