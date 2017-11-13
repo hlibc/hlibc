@@ -27,13 +27,13 @@ DIRS="$ROOT/hlibc" # space-separated list of directories to format
 # ======
 
 command -v clang-format >/dev/null 2>&1 || { \
-	echo >&2 "ERROR: 'clang-format' not found."; \
-	exit 1;
+	printf "%s" "ERROR: 'clang-format' not found." \
+	exit 1
 }
 
 [ -f $ROOT/.clang-format ] || { \
-	echo >&2 "ERROR: '$ROOT/.clang-format' not found."; \
-	exit 1;
+	printf "%s" "ERROR: '$ROOT/.clang-format' not found." \
+	exit 1
 }
 
 # FORMAT
@@ -41,6 +41,6 @@ command -v clang-format >/dev/null 2>&1 || { \
 
 for f in $DIRS; do
 	echo "Processing '$f'..."
-	find $f -type f -name "*.h" | xargs clang-format -i;
-	find $f -type f -name "*.c" | xargs clang-format -i;
-done;
+	find "$f" -type f -name "*.h" | xargs clang-format -i
+	find "$f" -type f -name "*.c" | xargs clang-format -i
+done
