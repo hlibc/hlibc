@@ -33,7 +33,7 @@ FILE *popen(const char *command, const char *type)
 			goto errorplace;
 		}
 		execvp(argv[0], argv);
-		_exit(1);
+		_exit(127);
 	}
 	else {
 		close(pipefd[1]);
