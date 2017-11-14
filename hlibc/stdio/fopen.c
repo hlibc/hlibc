@@ -33,14 +33,14 @@ FILE *fopen(const char *name, const char *mode)
 			}
 			break;
 		case 'w':
-			
+
 			oflags = O_TRUNC | O_CREAT | O_RDWR;
 			iflags = _WRITE;
 			switch (*p) {
 			case '+':
-				oflags = O_RDWR | O_CREAT ;
+				oflags = O_RDWR | O_CREAT;
 				iflags = _WRITE;
-				seek = SEEK_END;
+				seek   = SEEK_END;
 				break;
 			default:
 				break;
@@ -64,7 +64,7 @@ FILE *fopen(const char *name, const char *mode)
 		}
 	}
 
-	if (name != NULL){
+	if (name != NULL) {
 		if ((fd = open(name, oflags, perms)) == -1) {
 			return NULL;
 		}

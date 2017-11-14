@@ -70,15 +70,15 @@ These are notes taken from dalias, they should be applied to the float
 conversion routine below.  -graff
 
 A:
-10 is 1010 (<<3 | <<1) in binary so it increases the number of bits you'd 
-need to preserve the value by 2 each time you do it but a given floating 
-point type has fixed width so after a few steps you're throwing away data 
+10 is 1010 (<<3 | <<1) in binary so it increases the number of bits you'd
+need to preserve the value by 2 each time you do it but a given floating
+point type has fixed width so after a few steps you're throwing away data
 
 B:
-you could use a large array of doubles whose sum is the whole value, and 
+you could use a large array of doubles whose sum is the whole value, and
 multiply by 10 in it but that's less efficient than an array of ints
-since the exponents are redundant ultimately your bignum work should yield 
-a nice way to do it what's in musl is just very-special-case bignum without 
+since the exponents are redundant ultimately your bignum work should yield
+a nice way to do it what's in musl is just very-special-case bignum without
 generality to do other ops
 
 */
