@@ -301,7 +301,7 @@ END
         print OFD $xdata;
         close OFD;
 
-        print "Edited $cfname\n";
+        print "Rolled back faulty assumption in $cfname\n";
     }
 
     undef;
