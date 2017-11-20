@@ -194,6 +194,11 @@ ROADMAP:
 	and then with the internal atexit-style handlers.
 	(advanced)
 
+	Rewrite hlibc/malloc using the existing one as an example. Using a simple
+	linked list structure. Use K&R2 as a reference. This malloc is from a 
+	forum post and needs to be rewitten ASAP.
+
+
 
 REVISION CONTROL:
 -----------------
