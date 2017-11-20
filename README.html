@@ -150,6 +150,51 @@
 
 		clang -nostdinc -nostdlib -I./include tests/cat.c lib/crt*.o lib/libc.a -o cat
 
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>ROADMAP:</strong></dl><pre></dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	Opacify the stdio structure 
+	(easy)
+
+	Write more tests in C, add them to tests/ and script them into build.sh
+	Scripting should be kept dead simple. No comments, no new ideas are 
+	needed. Only dead simple testing strategies. Focus should be kept on 
+	tests for string functions. Utility code can be taken from arbsh/posix 
+	if new, unique C code is needed.
+	(easy)
+
+	Remove and rewrite strtok
+	(intermediate)
+
+	Add an fdopen() function and redesign popen() to use it
+	(advanced)
+
+	Redesign the syscall interface to use unique code and start removing the
+	remnants of <a href="musllibc/">musllibc/</a>
+	(advanced)
+
+	Add more string functions, essentially finishing hlibc/string for non-
+	wide character support.
+	(intermediate)
+
+	Support for properly printing and rounding of floats / doubles.
+		When this is done the printf test in tools/build.sh can be
+		uncommented. In the meantime that test can be used to finish
+		_print_inter
+	(extremely advanced)
+
+	Update the arm port and use it to add the aarch64 target.
+	(advanced)
+
+	Rewrite getopt(), write tests for getopt(). This getopt version was
+	written by Henry Spencer and is not unique to hlibc.
+	(intermediate)
+
+	Address proper switching between unbuffered, line buffered and buffered
+	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
+	and then with the internal atexit-style handlers.
+	(advanced)
+
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>REVISION CONTROL:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
