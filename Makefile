@@ -20,6 +20,7 @@ IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 # test suite
 #GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static"
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap-new.sh -D_GNU_SOURCE -static"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap-new.sh -D_GNU_SOURCE -static"
 #GCC_WRAP_D = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE" 
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=) 
@@ -74,6 +75,8 @@ clean:
 	make clean_test
 	rm -f config.mak
 	rm -rf usr logs
+	rm tools/clang-wrap-new.sh
+	rm tools/gcc-wrap-new.sh
 	$(MAKE) clean_test 
 	
 
@@ -151,6 +154,11 @@ tests:
 	$(MAKE) $(GCC_WRAP) testing
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
+ctests:
+
+	CC=clang $(MAKE) $(CLANG_WRAP) testing
+	CC=clang LDLIBS="-lm" $(MAKE) control 2>/dev/null
+
 clean_test:
 
 	$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
@@ -164,17 +172,9 @@ web:
 
 	./.tx2html README
 
-clang:
+testclang:
 
-	mkdir -p $(PWD)/usr
-
-	CC=clang ./configure --prefix=$(PWD)/usr
-
-	CC=clang make -j4
-
-	make install
-
-	clang -D_GNU_SOURCE -nostdinc -nostdlib -I./include tests/malloc-driver.c lib/crt*.o  lib/libc.a -o clang-driver
+	CC=clang ./tools/clangbuild.sh
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
