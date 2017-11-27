@@ -62,37 +62,6 @@
 		several tools including the gcc-wrap wrapper script
 
 
-<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>LINKING TO OUTSIDE LIBC:</strong></dl><pre></dl><pre>
-</pre><dd><hr/></dd><pre>
-
-	Many people wish to know the internal magic behind using the gcc-wrap
-	wrapper script. Instead of going into much detail I will offer some
-	instructions on linking against an outside libc (namely ours) without
-	using this wrapper:
-
-		git clone <a href="https://www.github.com/cmgraff/hlibc ">https://www.github.com/cmgraff/hlibc </a>
-		cd hlibc 
-		./configure 
-		make
-
-		gcc -nostdinc -nostdlib -I./include tests/cat.c lib/Scrt1.o lib/libc.a -o cat
-
-			or  ...
-
-		gcc -nostdinc -nostdlib -I./include tests/cat.c lib/crt*.o  lib/libc.a -o cat
-
-		./cat
-
-	Basically we tell the compiler to "-nostdinc (do not include any host 
-	headers)", "'-nostdlib' (don't include any host libraries)" "-I./include
-	 (use our header files)" and then finally "(link in our crt stuff) 
-	lib/Scrt1.o" and "(link in our libc) lib/libc.a" 
-
-	The libc itself is of course at lib/libc.a But the "crt stuff" crt 
-	start up files are also needed. These files are written in assembly 
-	code and their source code is located at hlibc/crt/*.
-
-
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>AUTOMATIC TESTING:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 	
@@ -107,19 +76,18 @@
 	a confirmation notice containing the results of the test suite 
 	will be printed to screen looking something like this:
 
-		==========COMPILING TEST SUITE==============================
-		============================================================
-		==========TEST SUITE START==================================
-		This number should be (16.000000): 16.000000    (4^3)
-		This number should be (15.580524): 15.580524    (3.3^2.3)
-		The `cat' utility successfully copied a file
-		The `malloc_driver' test utility successfully iterated th..
-		The `popen_driver' test utility successfully ran `du' on..
-		============================================================
-		============================================================
-		   If all was successful your compiler will be located at:
-		              ./usr/bin/gcc-wrap
-		============================================================
+	==========COMPILING TESTS ===================================
+	=============================================================
+	==========TEST RESULT START==================================
+	This number should be (16.000000): 16.000000    (4^3)
+	This number should be (15.580524): 15.580524    (3.3^2.3)
+	The `cat' utility successfully copied a file
+	The `malloc_driver' test utility successfully iterated through a d ....
+	The `popen_driver' test utility successfully ran `du' on a directo ....
+	The `printf_driver' test utility successfully created and copied a ....
+	The `popen-to-file' driver test utility successfully ran `du' on a ....
+	============================================================
+
 
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
@@ -144,11 +112,10 @@
 
 		make install
 
-	llvm/clang does not work with a specs file wrapper so the gcc-wrap
-	conveniece compiler wrapper can not be used at this time. Instead
-	one must link to the libc.a "by hand" as follows:
+	Build and run the automatic test suite with clang:
 
-		clang -nostdinc -nostdlib -I./include tests/cat.c lib/crt*.o lib/libc.a -o cat
+		CC=clang make testclang
+
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>ROADMAP:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
@@ -199,6 +166,8 @@
 	linked list structure. Use K&R2 as a reference. This malloc is from a 
 	forum post and needs to be rewritten ASAP.
 
+	Get rid of the gcc wrapper program, and rewrite it in POSIX shell to use
+	either clang or gcc.
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>REVISION CONTROL:</strong></dl><pre></dl><pre>
