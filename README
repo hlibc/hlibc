@@ -198,6 +198,8 @@ ROADMAP:
 	linked list structure. Use K&R2 as a reference. This malloc is from a 
 	forum post and needs to be rewritten ASAP.
 
+	Get rid of the gcc wrapper program, and rewrite it in POSIX shell to use
+	either clang or gcc.
 
 
 REVISION CONTROL:
