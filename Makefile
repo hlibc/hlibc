@@ -48,7 +48,6 @@ CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 SHARED_LIBS = lib/libc.so
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS)
-ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
@@ -56,7 +55,11 @@ LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
-install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
+wrappers:
+	
+
+install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
+	-mkdir $(DESTDIR)$(bindir)
 	./tools/create_wrappers.sh
 	cp tools/gcc-wrap-new.sh $(DESTDIR)/$(prefix)/bin/
 	cp tools/clang-wrap-new.sh $(DESTDIR)/$(prefix)/bin/
