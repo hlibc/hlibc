@@ -119,9 +119,6 @@ USING LLVM/CLANG:
 ROADMAP:
 --------
 
-	Opacify the stdio structure 
-	(easy)
-
 	Write more tests in C, add them to tests/ and script them into build.sh
 	Scripting should be kept dead simple. No comments, no new ideas are 
 	needed. Only dead simple testing strategies. Focus should be kept on 
@@ -165,8 +162,9 @@ ROADMAP:
 	linked list structure. Use K&R2 as a reference. This malloc is from a 
 	forum post and needs to be rewritten ASAP.
 
-	Get rid of the gcc wrapper program, and rewrite it in POSIX shell to use
-	either clang or gcc.
+	Remove remnants of gcc-wrap.
+	(easy)
+
 
 
 REVISION CONTROL:
