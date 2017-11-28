@@ -36,7 +36,6 @@ int fputc(int, FILE *);
 ssize_t getline (char **, size_t *, FILE *);
 ssize_t getdelim(char **, size_t *, char, FILE *);
 /* printf */
-int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int printf(const char *, ...);
 int sprintf(char *, const char *, ...);
 int snprintf(char *, size_t, const char *, ...);
@@ -67,7 +66,6 @@ int pclose(FILE *);
 /* puts */
 int fputs(const char *, FILE *);
 int puts(const char *);
-int _puts_inter(const char *, FILE *, int);
 char *fgets(char *, int, FILE *);
 FILE *fopen(const char *path, const char *mode);
 int fgetc(FILE *stream);

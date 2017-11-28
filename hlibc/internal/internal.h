@@ -38,10 +38,12 @@ enum _flags {
         _EOF   = 010,
         _ERR   = 020,
 };
-//#define stdin  (&_IO_stream[0])
-//#define stdout (&_IO_stream[1])
-//#define stderr (&_IO_stream[2])
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
+int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
+int _puts_inter(const char *, FILE *, int);
+int putc(int, FILE *);
+int fputc(int, FILE *);
+
 #endif
