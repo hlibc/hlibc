@@ -158,9 +158,10 @@ ROADMAP:
 	and then with the internal atexit-style handlers.
 	(advanced)
 
-	Rewrite hlibc/malloc using the existing one as an example. Using a simple
-	linked list structure. Use K&R2 as a reference. This malloc is from a 
-	forum post and needs to be rewritten ASAP.
+	Fix opendir/readdir to properly repond to files with which it lacks
+	permission to handle.
+	(advanced?)
+
 
 REVISION CONTROL:
 -----------------
