@@ -9,9 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <pwd.h>
-#include <grp.h> 
-
-//#define DT_DIR 4
+#include <grp.h>
 
 int find_pattern(char *, size_t, size_t);
 
@@ -31,7 +29,7 @@ int find_pattern(char *path, size_t tot, size_t last)
 	char *spath = NULL;
 	size_t dlen = 0; 
 	
-	if ( ( dir = opendir(path) ) ) 
+	if ((dir = opendir(path))) 
 	{
 		d = readdir(dir); 
 		while (d) 
@@ -58,9 +56,10 @@ int find_pattern(char *path, size_t tot, size_t last)
 		}
 		
 	}
-	if ( spath)
+	if (spath)
 		free(spath);
-	closedir(dir);
+	if(dir)
+		closedir(dir);
 	return 0;
 }
 
