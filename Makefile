@@ -18,8 +18,8 @@ GENH = include/bits/alltypes.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap-new.sh -D_GNU_SOURCE -static"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap-new.sh -D_GNU_SOURCE -static"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c))
@@ -58,8 +58,8 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
 	-mkdir $(DESTDIR)$(bindir)
 	./tools/create_wrappers.sh
-	cp tools/gcc-wrap-new.sh $(DESTDIR)/$(prefix)/bin/
-	cp tools/clang-wrap-new.sh $(DESTDIR)/$(prefix)/bin/
+	cp tools/gcc-wrap $(DESTDIR)/$(prefix)/bin/
+	cp tools/clang-wrap $(DESTDIR)/$(prefix)/bin/
 
 clean:
 	rm -f crt/*.o
@@ -72,8 +72,8 @@ clean:
 	make clean_test
 	rm -f config.mak
 	rm -rf usr logs
-	rm tools/clang-wrap-new.sh
-	rm tools/gcc-wrap-new.sh
+	rm tools/clang-wrap
+	rm tools/gcc-wrap
 	$(MAKE) clean_test 
 	
 
