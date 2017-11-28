@@ -13,5 +13,5 @@ char *rindex(const char *s, int c)
 	if (i == 0 && s[i] != c) {
 		return NULL;
 	}
-	return i + s;
+	return (char *)s + i;
 }

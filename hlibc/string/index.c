@@ -1,7 +1,7 @@
 #include <string.h>
 
 char *index(const char *s, int c)
-{
+{ 
 	size_t i = 0;
 	while (s[i] != c && s[i] != '\0') {
 		++i;
@@ -9,5 +9,5 @@ char *index(const char *s, int c)
 	if (s[i] != c && c != '\0') {
 		return NULL;
 	}
-	return i + s;
+	return (char *)s + i;
 }

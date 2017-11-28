@@ -1,4 +1,3 @@
-#include <features.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <strings.h>
