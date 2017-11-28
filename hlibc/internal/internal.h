@@ -50,4 +50,5 @@ int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 int ferror(FILE *stream);
 int getc(FILE *);
+int _fillbuf(FILE *);
 #endif
