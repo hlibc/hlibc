@@ -30,6 +30,7 @@
 #define _PRINTF_NAN -(0./0.)
 typedef struct FILE FILE;
 /* putc/getc */
+int getc(FILE *);
 int putc(int, FILE *);
 int fputc(int, FILE *);
 /* getline */
@@ -49,32 +50,29 @@ int vfprintf(FILE *, const char *, va_list);
 /* fwrite */
 size_t fread(void *, size_t, size_t, FILE *);
 size_t fwrite(const void *, size_t, size_t, FILE *);
-/* number conversion */
-size_t uint2str(char *, size_t, int);
-size_t flt2str(char *, double);
-size_t int2str(char *, long long, int);
-size_t int2str_inter(char *, long long, int);
-size_t flt2str(char *, double);
+
 /* setbuf ( not implemented ) */
 void setbuf(FILE *, char *);
 void setbuffer(FILE *, char *, size_t);
 void setlinebuf(FILE *);
 int setvbuf(FILE *, char *, int, size_t);
+
 /* popen */
 FILE *popen(const char *, const char *);
 int pclose(FILE *);
+
 /* puts */
 int fputs(const char *, FILE *);
 int puts(const char *);
 char *fgets(char *, int, FILE *);
 FILE *fopen(const char *, const char *);
 int fgetc(FILE *m);
-char *fgets(char *, int, FILE *); 
-int getc(FILE *);
+char *fgets(char *, int, FILE *);
 int getchar(void);
 int fclose(FILE *);
 int fflush(FILE *);
 int ferror(FILE *);
+
 /* opaque objects */
 FILE *stdin;
 FILE *stdout;

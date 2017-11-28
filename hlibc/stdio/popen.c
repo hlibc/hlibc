@@ -1,5 +1,4 @@
 #include "../internal/internal.h"
-
 #include <unistd.h>
 
 FILE *popen(const char *command, const char *type)

@@ -1,4 +1,3 @@
-//#include "../internal/internal.h"
 #include "../internal/internal.h"
 
 FILE _IO_stream[FOPEN_MAX] = { { 0, _READ, NULL, NULL, NULL, 0, 0 },

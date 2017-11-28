@@ -1,5 +1,5 @@
 #ifndef _INTERNAL_
-#define _INERNAL_
+#define _INTERNAL_
 #define NULL ((void*)0) 
 #define EOF (-1) 
 #undef SEEK_SET
@@ -46,10 +46,6 @@ extern FILE *stderr;
 int putc(int, FILE *);
 int fputc(int, FILE *);
 int fflush(FILE *);
-/* internal only */
-int _flushbuf(int, FILE *);
-int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
-int __puts_inter(const char *, FILE *, int);
 int ferror(FILE *stream);
 int getc(FILE *);
 int _fillbuf(FILE *);
@@ -57,4 +53,15 @@ int fclose(FILE *);
 FILE *fopen(const char *, const char *);
 int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
+/* internal only */
+int _flushbuf(int, FILE *);
+int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
+int __puts_inter(const char *, FILE *, int);
+/* number conversion */
+size_t uint2str(char *, size_t, int);
+size_t flt2str(char *, double);
+size_t int2str(char *, long long, int);
+size_t int2str_inter(char *, long long, int);
+size_t flt2str(char *, double);
+
 #endif
