@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "../../musllibc/internal/syscall.h"
+#include <sys/mman.h>
 struct block_meta
 {
 	size_t size;
@@ -28,13 +29,13 @@ struct block_meta *request_space(struct block_meta *last, size_t size)
 	struct block_meta *block;
 	block	 = sbrk(0);
 	void *request = sbrk(size + META_SIZE);
-	assert((void *)block == request); // Not thread safe.
+	assert((void *)block == request);
 	if (request == (void *)-1) {
-		return NULL; // sbrk failed.
+		return NULL;
 	}
 
 	if (last) {
-		last->next = block; // NULL on first request.
+		last->next = block;
 	}
 
 	block->size = size;
@@ -50,7 +51,7 @@ void *malloc(size_t size)
 		return NULL;
 	}
 
-	if (!global_base) { // First call.
+	if (!global_base) {
 		block = request_space(NULL, size);
 		if (!block) {
 			return NULL;
@@ -60,13 +61,13 @@ void *malloc(size_t size)
 	else {
 		struct block_meta *last = global_base;
 		block			= find_free_block(&last, size);
-		if (!block) { // Failed to find free block.
+		if (!block) {
 			block = request_space(last, size);
 			if (!block) {
 				return NULL;
 			}
 		}
-		else { // Found free block
+		else {
 			block->free = 0;
 		}
 	}
@@ -84,9 +85,6 @@ void free(void *ptr)
 	if (!ptr) {
 		return;
 	}
-
-	// TODO: consider merging blocks once splitting blocks is
-	// implemented.
 	struct block_meta *block_ptr = get_block_ptr(ptr);
 	assert(block_ptr->free == 0);
 	block_ptr->free = 1;
@@ -95,25 +93,18 @@ void free(void *ptr)
 void *realloc(void *ptr, size_t size)
 {
 	if (!ptr) {
-		return malloc(size); // NULL ptr. realloc should act
-		// like malloc.
+		return malloc(size);
 	}
 
 	struct block_meta *block_ptr = get_block_ptr(ptr);
 	if (block_ptr->size >= size) {
-		return ptr; // We have enough space. Could free some
-		// once we
-		// implement split.
+		return ptr;
 	}
-
-	// Need to really realloc. Malloc new space and free old space.
-	// Then copy old data to new space.
 	void *new_ptr;
 	new_ptr = malloc(size);
 	if (!new_ptr) {
 		return NULL;
 	}
-
 	memcpy(new_ptr, ptr, block_ptr->size);
 	free(ptr);
 	return new_ptr;
