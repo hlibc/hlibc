@@ -55,9 +55,6 @@ LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
-wrappers:
-	
-
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
 	-mkdir $(DESTDIR)$(bindir)
 	./tools/create_wrappers.sh
@@ -117,10 +114,6 @@ $(EMPTY_LIBS):
 
 lib/%.o: crt/%.o
 	cp $< $@
-
-tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
-	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
