@@ -22,8 +22,8 @@ diff Makefile ${SUF}/diff1 2>&1 > ${SUF}/testerr && \
 echo "The \`cat' utility successfully copied a file" || \
 echo "The cat util failed" 
 
-./control/malloc-driver musllibc > ${SUF}/diff2 2>${SUF}/testerr 
-./tests/malloc-driver musllibc > ${SUF}/diff3 2>${SUF}/testerr 
+./control/malloc-driver /usr > ${SUF}/diff2 2>${SUF}/testerr 
+./tests/malloc-driver /usr > ${SUF}/diff3 2>${SUF}/testerr 
 diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
 echo "The \`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || \
 echo "The malloc driver failed" 
