@@ -118,9 +118,6 @@ $(EMPTY_LIBS):
 lib/%.o: crt/%.o
 	cp $< $@
 
-lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
-
 tools/gcc-wrap: config.mak
 	printf '#!/bin/sh\nexec gcc "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
