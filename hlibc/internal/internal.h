@@ -41,9 +41,13 @@ enum _flags {
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
-int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
-int _puts_inter(const char *, FILE *, int);
 int putc(int, FILE *);
 int fputc(int, FILE *);
-
+int fflush(FILE *);
+/* internal only */
+int _flushbuf(int, FILE *);
+int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
+int __puts_inter(const char *, FILE *, int);
+int ferror(FILE *stream);
+int getc(FILE *);
 #endif

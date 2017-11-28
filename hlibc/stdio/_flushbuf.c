@@ -1,5 +1,4 @@
 #include "../internal/internal.h"
-//#include "../internal/internal.h"
 
 int _flushbuf(int x, FILE *fp)
 {
