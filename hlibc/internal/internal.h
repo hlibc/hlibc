@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <fcntl.h>
+#include <unistd.h>
 typedef struct {
         int fd;
         char flags;
