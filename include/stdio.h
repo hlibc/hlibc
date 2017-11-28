@@ -27,37 +27,9 @@
 #define FOPEN_MAX 1000
 #define TMP_MAX 10000
 #define L_tmpnam 20
-
-typedef union {
-	char __opaque[16];
-	double __align;
-} fpos_t;
-
 #define _PRINTF_NAN -(0./0.)
-/*
-typedef struct {
-        int fd;
-        char flags;
-        char *buf;
-        char *rp;
-        char *lp;
-        int len;
-        ssize_t pid;
-} FILE;
-*/
 typedef struct FILE FILE;
-//extern FILE _IO_stream[FOPEN_MAX];
-
-/*
-enum _flags {
-        _READ  = 001,
-        _WRITE = 002,
-        _UNBUF = 004,
-        _LNBUF = 030,
-        _EOF   = 010,
-        _ERR   = 020,
-};
-*/
+/* putc/getc */
 int putc(int, FILE *);
 int fputc(int, FILE *);
 /* getline */
@@ -103,10 +75,7 @@ char *fgets(char *s, int size, FILE *stream);
 int getc(FILE *stream);
 int getchar(void);
 int fclose(FILE *stream);
-//#define stdin  (&_IO_stream[0])
-//#define stdout (&_IO_stream[1])
-//#define stderr (&_IO_stream[2])
-
+/* opaque objects */
 FILE *stdin;
 FILE *stdout;
 FILE *stderr;
