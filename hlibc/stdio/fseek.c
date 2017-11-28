@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 /* TODO: Ensure that the FILE struct is completely reset */
 

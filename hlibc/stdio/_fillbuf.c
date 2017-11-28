@@ -1,4 +1,5 @@
-#include <stdio.h>
+//#include "../internal/internal.h"
+#include "../internal/internal.h"
 
 int _fillbuf(FILE *fp)
 {

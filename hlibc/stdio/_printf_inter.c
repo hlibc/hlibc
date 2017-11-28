@@ -1,5 +1,5 @@
 #include "../internal/internal.h"
-#include <stdio.h>
+#include <stdarg.h>
 #include <string.h> /* only for memset() */
 
 size_t __uint2str(char *s, size_t n, int base)

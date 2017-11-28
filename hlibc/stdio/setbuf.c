@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 void setbuf(FILE *fp, char *buf)
 {

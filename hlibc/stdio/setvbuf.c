@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 int setvbuf(FILE *fp, char *buf, int mode, size_t size)
 {

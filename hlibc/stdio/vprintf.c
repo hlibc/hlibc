@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 int vprintf(const char *fmt, va_list argptr)
 {

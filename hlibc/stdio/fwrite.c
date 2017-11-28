@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *fp)
 {

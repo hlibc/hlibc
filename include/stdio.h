@@ -34,7 +34,7 @@ typedef union {
 } fpos_t;
 
 #define _PRINTF_NAN -(0./0.)
-
+/*
 typedef struct {
         int fd;
         char flags;
@@ -44,9 +44,11 @@ typedef struct {
         int len;
         ssize_t pid;
 } FILE;
+*/
+typedef struct FILE FILE;
+//extern FILE _IO_stream[FOPEN_MAX];
 
-extern FILE _IO_stream[FOPEN_MAX];
-
+/*
 enum _flags {
         _READ  = 001,
         _WRITE = 002,
@@ -55,7 +57,7 @@ enum _flags {
         _EOF   = 010,
         _ERR   = 020,
 };
-
+*/
 int putc(int, FILE *);
 int fputc(int, FILE *);
 /* getline */
@@ -101,7 +103,11 @@ char *fgets(char *s, int size, FILE *stream);
 int getc(FILE *stream);
 int getchar(void);
 int fclose(FILE *stream);
-#define stdin  (&_IO_stream[0])
-#define stdout (&_IO_stream[1])
-#define stderr (&_IO_stream[2])
+//#define stdin  (&_IO_stream[0])
+//#define stdout (&_IO_stream[1])
+//#define stderr (&_IO_stream[2])
+
+FILE *stdin;
+FILE *stdout;
+FILE *stderr;
 #endif

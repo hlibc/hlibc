@@ -1,5 +1,5 @@
 #include "../internal/internal.h"
-#include <stdio.h>
+
 
 int __puts_inter(const char *s, FILE *fp, int append)
 {

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 int fprintf(FILE *stream, const char *fmt, ...)
 {

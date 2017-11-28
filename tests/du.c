@@ -7,13 +7,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
 #include <limits.h>
-
-
-
-
-
 /* Copyright 2015, C. Graff  "du" */ 
 
 #define HASH 10111
@@ -78,7 +72,7 @@ int main (int argc, char *argv[])
 
 	int i, opt[7] = { 0, 0, 0, 0, 0, 0, 0}; /* -aHkLsXl */
 	struct stat sb;
-
+	
 	while ((i = getopt (argc, argv, "aHkLsxl")) != -1) 
 		switch (i) {
 			case 'a': 

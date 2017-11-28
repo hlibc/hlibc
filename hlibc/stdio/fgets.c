@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 
 char *fgets(char *s, int n, FILE *iop)
 {

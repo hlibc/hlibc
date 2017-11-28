@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "../internal/internal.h"
 int getc(FILE *fp)
 {
 	if ((--(fp)->len >= 0))
