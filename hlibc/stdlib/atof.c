@@ -1,11 +1,11 @@
-#include <gctype.h>
-#include <glimits.h>
-#include <gstddef.h>
-#include <gstddef.h>
-#include <gstdlib.h>
-#include <gstring.h>
+#include <ctype.h>
+#include <limits.h>
+#include <stddef.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
-double gatof(const char *s)
+double atof(const char *s)
 {
 	double val, power;
 	static size_t i = 0;
