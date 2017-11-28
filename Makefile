@@ -62,19 +62,19 @@ install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DEST
 	cp tools/clang-wrap $(DESTDIR)/$(prefix)/bin/
 
 clean:
-	rm -f crt/*.o
-	rm -f $(OBJS)
-	rm -f $(LOBJS)
-	rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
-	rm -f $(ALL_TOOLS)
-	rm -f $(GENH) 
-	rm -f include/bits
-	make clean_test
-	rm -f config.mak
-	rm -rf usr logs
-	rm tools/clang-wrap
-	rm tools/gcc-wrap
-	$(MAKE) clean_test 
+	-rm -f crt/*.o
+	-rm -f $(OBJS)
+	-rm -f $(LOBJS)
+	-rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
+	-rm -f $(ALL_TOOLS)
+	-rm -f $(GENH) 
+	-rm -f include/bits
+	-make clean_test
+	-rm -f config.mak
+	-rm -rf usr logs
+	-rm tools/clang-wrap
+	-rm tools/gcc-wrap
+	-$(MAKE) clean_test 
 	
 
 include/bits:

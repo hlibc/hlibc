@@ -2,8 +2,12 @@
 #define _SYSCALL_H
 
 /* This header is mostly useless leftover wrapper cruft */
-
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/syscall.h>
+#include <stdint.h>
+int brk(void *);
+void *sbrk(intptr_t);
 
 #define socketcall __socketcall
 #define socketcall_cp __socketcall_cp
@@ -20,5 +24,4 @@ long (__syscall_cp)(long, long, long, long, long, long, long);
 
 #define __syscall_cp(...) __SYSCALL_DISP(__syscall_cp,__VA_ARGS__)
 #define syscall_cp(...) __syscall_ret(__syscall_cp(__VA_ARGS__))
-
 #endif

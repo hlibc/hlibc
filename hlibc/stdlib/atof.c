@@ -11,7 +11,7 @@ double atof(const char *s)
 	static size_t i = 0;
 	int sign	= 0;
 	if (isspace(*s))
-		gatof(s + ++i);
+		atof(s + ++i);
 	sign = (s[i] == '-') ? -1 : 1;
 	if (s[i] == '+' || s[i] == '-')
 		i++;

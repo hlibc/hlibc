@@ -2,6 +2,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "../../musllibc/internal/syscall.h"
 struct block_meta
 {
 	size_t size;

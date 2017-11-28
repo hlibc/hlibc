@@ -20,6 +20,8 @@
 #include <stdarg.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 typedef struct {
         int fd;
         char flags;
@@ -51,4 +53,8 @@ int __puts_inter(const char *, FILE *, int);
 int ferror(FILE *stream);
 int getc(FILE *);
 int _fillbuf(FILE *);
+int fclose(FILE *);
+FILE *fopen(const char *, const char *);
+int setvbuf(FILE *, char *, int, size_t);
+pid_t waitpid(pid_t, int *, int);
 #endif

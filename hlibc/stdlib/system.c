@@ -3,7 +3,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <sys/types.h>
+#include <sys/wait.h>
 /* Copyright (c) 2017, Iain Hill */
 
 int system(const char *cmd)
