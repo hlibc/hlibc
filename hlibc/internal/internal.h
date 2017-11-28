@@ -1,27 +1,26 @@
 #ifndef _INTERNAL_
 #define _INTERNAL_
-#define NULL ((void*)0) 
-#define EOF (-1) 
+
+#define NULL ((void*)0)
+#define EOF (-1)
 #undef SEEK_SET
 #undef SEEK_CUR
 #undef SEEK_END
 #define SEEK_SET 0
 #define SEEK_CUR 1
-#define SEEK_END 2 
-#define _IOFBF 0
-#define _IOLBF 1
-#define _IONBF 2 
+#define SEEK_END 2
 #define BUFSIZ 1024
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 1000
 #define TMP_MAX 10000
-#define L_tmpnam 20
 #include <sys/types.h>
 #include <stdarg.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+
+
 typedef struct {
         int fd;
         char flags;
@@ -31,7 +30,9 @@ typedef struct {
         int len;
         ssize_t pid;
 } FILE;
+
 extern FILE _IO_stream[FOPEN_MAX];
+
 enum _flags {
         _READ  = 001,
         _WRITE = 002,
@@ -40,24 +41,29 @@ enum _flags {
         _EOF   = 010,
         _ERR   = 020,
 };
+
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
+
+/* interdependent functions */
 int putc(int, FILE *);
 int fputc(int, FILE *);
 int fflush(FILE *);
 int ferror(FILE *stream);
 int getc(FILE *);
-int _fillbuf(FILE *);
 int fclose(FILE *);
 FILE *fopen(const char *, const char *);
 int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
-/* internal only */
+
+/* internal */
+int _fillbuf(FILE *);
 int _flushbuf(int, FILE *);
 int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
-/* number conversion */
+
+/* internal number conversion */
 size_t uint2str(char *, size_t, int);
 size_t flt2str(char *, double);
 size_t int2str(char *, long long, int);

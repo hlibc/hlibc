@@ -5,7 +5,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h> 
-/* popen / pclose */
+/* for popen / pclose */
 #include <sys/types.h>
 #include <sys/wait.h> 
 #define __NEED_ssize_t
@@ -18,24 +18,24 @@
 #undef SEEK_END
 #define SEEK_SET 0
 #define SEEK_CUR 1
-#define SEEK_END 2 
-#define _IOFBF 0
-#define _IOLBF 1
-#define _IONBF 2 
+#define SEEK_END 2
 #define BUFSIZ 1024
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 1000
 #define TMP_MAX 10000
-#define L_tmpnam 20
-#define _PRINTF_NAN -(0./0.)
+
+/* The opaque stdio declaration */
 typedef struct FILE FILE;
+
 /* putc/getc */
 int getc(FILE *);
 int putc(int, FILE *);
 int fputc(int, FILE *);
+
 /* getline */
 ssize_t getline (char **, size_t *, FILE *);
 ssize_t getdelim(char **, size_t *, char, FILE *);
+
 /* printf */
 int printf(const char *, ...);
 int sprintf(char *, const char *, ...);
@@ -47,6 +47,7 @@ int vsprintf(char *, const char *, va_list);
 int vsnprintf(char *, size_t, const char *, va_list);
 int vdprintf(int, const char *, va_list); /* not implemented */
 int vfprintf(FILE *, const char *, va_list);
+
 /* fwrite */
 size_t fread(void *, size_t, size_t, FILE *);
 size_t fwrite(const void *, size_t, size_t, FILE *);
