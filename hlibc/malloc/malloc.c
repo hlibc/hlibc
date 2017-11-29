@@ -35,13 +35,13 @@ void *malloc(unsigned nbytes)
 		if (p->s.size >= nunits) {
 			if (p->s.size == nunits)
 				prevp->s.ptr = p->s.ptr;
-		else {
-			p->s.size -= nunits;
-			p += p->s.size;
-			p->s.size = nunits;
-		}
-		freep = prevp;
-		return (void *)(p+1);
+			else {
+				p->s.size -= nunits;
+				p += p->s.size;
+				p->s.size = nunits;
+			}
+			freep = prevp;
+			return (void *)(p+1);
 		}
 		if (p == freep)
 			if ((p = morecore(nunits)) == NULL)
@@ -59,9 +59,9 @@ static Header *morecore(unsigned nu)
 	cp = sbrk(nu * sizeof(Header));
 	if (cp == (char *) -1)
 		return NULL;
-		up = (Header *) cp;
-		up->s.size = nu;
-		free((void *)(up+1));
+	up = (Header *) cp;
+	up->s.size = nu;
+	free((void *)(up+1));
 	return freep;
 }
 
