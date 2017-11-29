@@ -16,16 +16,15 @@ union header {
 }header;
 
 typedef union header Header;
-static Header *morecore(unsigned nu);
+static Header *morecore(size_t nu);
 void free(void *ap);
 static Header base;
 static Header *freep = NULL;
 
-void *malloc(unsigned nbytes)
+void *malloc(size_t nbytes)
 {
 	Header *p, *prevp;
-	Header *moreroce(unsigned);
-	unsigned nunits;
+	size_t nunits;
 	nunits = (nbytes+sizeof(Header)-1)/sizeof(header) + 1;
 	if ((prevp = freep) == NULL) {
 		base.s.ptr = freep = prevp = &base;
@@ -49,13 +48,13 @@ void *malloc(unsigned nbytes)
 	}
 }
 
-#define NALLOC 1024
-static Header *morecore(unsigned nu)
+
+static Header *morecore(size_t nu)
 {
 	char *cp;
 	Header *up;
-	if (nu < NALLOC)
-		nu = NALLOC;
+	if (nu < 1024)
+		nu = 1024;
 	cp = sbrk(nu * sizeof(Header));
 	if (cp == (char *) -1)
 		return NULL;
