@@ -62,8 +62,6 @@ static Header *morecore(unsigned nu)
 	up = (Header *) cp;
 	up->s.size = nu;
 	free((up+1));
-	//free((void *)(up+1));
-
 	return freep;
 }
 
