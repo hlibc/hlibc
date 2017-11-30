@@ -55,7 +55,9 @@ static Header *morecore(size_t nu)
 	Header *up;
 	if (nu < 1024)
 		nu = 1024;
-	cp = sbrk(nu * sizeof(Header));
+	/* cp = sbrk(nu * sizeof(Header)); */
+	cp = mmap(cp, nu * sizeof(Header), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+
 	if (cp == (char *) -1)
 		return NULL;
 	up = (Header *) cp;
