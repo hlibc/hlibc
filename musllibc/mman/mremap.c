@@ -4,7 +4,7 @@
 #include "syscall.h"
 #include "libc.h"
 
-void *__mremap(void *old_addr, size_t old_len, size_t new_len, int flags, ...)
+void *mremap(void *old_addr, size_t old_len, size_t new_len, int flags, ...)
 {
 	va_list ap;
 	void *new_addr;
@@ -16,4 +16,3 @@ void *__mremap(void *old_addr, size_t old_len, size_t new_len, int flags, ...)
 	return (void *)syscall(SYS_mremap, old_addr, old_len, new_len, flags, new_addr);
 }
 
-weak_alias(__mremap, mremap);
