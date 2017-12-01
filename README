@@ -12,9 +12,9 @@ DESCRIPTION:
 BUILDING:
 ---------
 
-	hlibc contains a shell script wrapper for gcc called gcc-wrap. This
-	allows it to be easily installed and used from your home directory
-	without the need for root privilege.
+	hlibc contains a shell wrapper for gcc called gcc-wrap. This allows it 
+	to be easily installed and used from your home directory without the 
+	need for root privilege.
 
 		cd hlibc 
 		./configure --prefix=/home/$USER/buildarea 
@@ -30,7 +30,7 @@ BUILDING:
 	anything using the gcc wrapper because hlibc only supports static
 	linking at this time. Or delete the libc.so stub in the lib/ directory
 	which will cause the compiler to statically link to the libc.a by
-	default. If your compiler is llvm clang, then use clang-wrap.
+	default. 
 
 
 STRUCTURE:
@@ -101,19 +101,9 @@ AUTOMATIC TESTING:
 USING LLVM/CLANG:
 -----------------
 
-	llvm/clang can be used to build hlibc. If your default libc happens
-	to be something other than clang then you can set CC as an environment
-	variable.
-
-		CC=clang ./configure
-
-		CC=clang make
-
-		make install
-
-	Build and run the automatic test suite with clang:
-
-		CC=clang make testclang
+	Clang does work with hlibc. However, there is no wrapper script for
+	making it work without installing the libc.a to /lib as there is with
+	gcc. Hopefully this changes in the near future.
 
 
 ROADMAP:
@@ -157,10 +147,6 @@ ROADMAP:
 	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
 	and then with the internal atexit-style handlers.
 	(advanced)
-
-	Fix opendir/readdir to properly repond to files with which it lacks
-	permission to handle.
-	(advanced?)
 
 	Remove the weak_alias subsystem from musllibc/.
 
