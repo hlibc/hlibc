@@ -5,12 +5,12 @@
 #include "syscall.h"
 #include "libc.h"
 
-static void dummy1(int x) { }
-static void dummy0(void) { }
-weak_alias(dummy1, __vm_lock);
-weak_alias(dummy0, __vm_unlock);
+//static void dummy1(int x) { }
+//static void dummy0(void) { }
+//weak_alias(dummy1, __vm_lock);
+//weak_alias(dummy0, __vm_unlock);
 
-void *__mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
+void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 {
 	void *ret;
 	if (sizeof(off_t) > sizeof(long))
@@ -26,6 +26,3 @@ void *__mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	return ret;
 }
 
-weak_alias(__mmap, mmap);
-
-LFS64(mmap);
