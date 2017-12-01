@@ -1,4 +1,4 @@
-COMMAND='rm -rf grafmusl ; git clone https://www.github.com/cmgraff/grafmusl; cd grafmusl ; make test'
+COMMAND='rm -rf hlibc ; git clone https://www.github.com/cmgraff/hlibc; cd hlibc ; make test'
 
 test_i386()
 {
