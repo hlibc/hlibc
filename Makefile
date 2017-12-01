@@ -18,8 +18,8 @@ GENH = include/bits/alltypes.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static" 
+#GCC_WRAP_D = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE" 
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c))
@@ -47,7 +47,9 @@ EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 SHARED_LIBS = lib/libc.so
-ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS)
+TOOL_LIBS = lib/gcc-wrap.specs
+ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
@@ -55,26 +57,20 @@ LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
-install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
-	-mkdir $(DESTDIR)$(bindir)
-	./tools/create_wrappers.sh
-	cp tools/gcc-wrap $(DESTDIR)/$(prefix)/bin/
-	cp tools/clang-wrap $(DESTDIR)/$(prefix)/bin/
+install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
 
 clean:
-	-rm -f crt/*.o
-	-rm -f $(OBJS)
-	-rm -f $(LOBJS)
-	-rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
-	-rm -f $(ALL_TOOLS)
-	-rm -f $(GENH) 
-	-rm -f include/bits
-	-make clean_test
-	-rm -f config.mak
-	-rm -rf usr logs
-	-rm tools/clang-wrap
-	-rm tools/gcc-wrap
-	-$(MAKE) clean_test 
+	rm -f crt/*.o
+	rm -f $(OBJS)
+	rm -f $(LOBJS)
+	rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
+	rm -f $(ALL_TOOLS)
+	rm -f $(GENH) 
+	rm -f include/bits
+	make clean_test
+	rm -f config.mak
+	rm -rf usr logs
+	$(MAKE) clean_test 
 	
 
 include/bits:
@@ -115,6 +111,13 @@ $(EMPTY_LIBS):
 lib/%.o: crt/%.o
 	cp $< $@
 
+lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
+	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
+
+tools/gcc-wrap: config.mak
+	printf '#!/bin/sh\nexec gcc "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	chmod +x $@
+
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
 
@@ -144,11 +147,6 @@ tests:
 	$(MAKE) $(GCC_WRAP) testing
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
-ctests:
-
-	CC=clang $(MAKE) $(CLANG_WRAP) testing
-	CC=clang LDLIBS="-lm" $(MAKE) control 2>/dev/null
-
 clean_test:
 
 	$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
@@ -162,9 +160,17 @@ web:
 
 	./.tx2html README
 
-testclang:
+clang:
 
-	CC=clang ./tools/clangbuild.sh
+	mkdir -p $(PWD)/usr
+
+	CC=clang ./configure --prefix=$(PWD)/usr
+
+	CC=clang make -j4
+
+	make install
+
+	clang -D_GNU_SOURCE -nostdinc -nostdlib -I./include tests/malloc-driver.c lib/crt*.o  lib/libc.a -o clang-driver
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
