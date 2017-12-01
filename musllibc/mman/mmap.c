@@ -5,11 +5,6 @@
 #include "syscall.h"
 #include "libc.h"
 
-//static void dummy1(int x) { }
-//static void dummy0(void) { }
-//weak_alias(dummy1, __vm_lock);
-//weak_alias(dummy0, __vm_unlock);
-
 void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 {
 	void *ret;
