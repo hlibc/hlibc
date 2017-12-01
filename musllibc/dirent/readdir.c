@@ -8,14 +8,14 @@
 #include "syscall.h"
 #include "libc.h"
 
-int __getdents(int, struct dirent *, size_t);
+int getdents(int, struct dirent *, size_t);
 
 struct dirent *readdir(DIR *dir)
 {
 	struct dirent *de;
 	
 	if (dir->buf_pos >= dir->buf_end) {
-		int len = __getdents(dir->fd, (void *)dir->buf, sizeof dir->buf);
+		int len = getdents(dir->fd, (void *)dir->buf, sizeof dir->buf);
 		if (len <= 0) return 0;
 		dir->buf_end = len;
 		dir->buf_pos = 0;
@@ -26,4 +26,3 @@ struct dirent *readdir(DIR *dir)
 	return de;
 }
 
-LFS64(readdir);
