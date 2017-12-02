@@ -29,10 +29,6 @@ int pthread_create(pthread_t *res, const pthread_attr_t *attr, void *(*entry)(vo
 	return 0;
 } 
 
-static void dummy(void *p)
-{
-}
-
 int pthread_join(pthread_t t, void **res)
 { 
 	return 0;
