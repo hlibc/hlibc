@@ -12,4 +12,4 @@ off_t lseek(int fd, off_t offset, int whence)
 #endif
 }
 
-LFS64(lseek);
+//(lseek);

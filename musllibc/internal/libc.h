@@ -56,10 +56,10 @@ void __synccall_wait(void);
 int __setxid(int, int, int, int); 
 
 
-#undef LFS64_2
-#define LFS64_2(x, y) extern __typeof(x) y
+//#undef //_2
+//#define //_2(x, y) extern __typeof(x) y
 
-#undef LFS64
-#define LFS64(x) LFS64_2(x, x##64)
+//#undef //
+//#define //(x) //_2(x, x##64)
 
 #endif

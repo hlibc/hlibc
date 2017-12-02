@@ -14,4 +14,4 @@ int open(const char *filename, int flags, ...)
 	return syscall(SYS_open, filename, flags|O_LARGEFILE, mode);
 }
 
-LFS64(open);
+//(open);

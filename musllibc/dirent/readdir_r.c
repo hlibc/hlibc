@@ -27,4 +27,4 @@ int readdir_r(DIR *dir, struct dirent *buf, struct dirent **result)
 	return 0;
 }
 
-LFS64_2(readdir_r, readdir64_r);
+//_2(readdir_r, readdir64_r);
