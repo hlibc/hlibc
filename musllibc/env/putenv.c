@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-extern char **__environ;
+extern char **environ;
 char **__env_map;
 
 int __putenv(char *s, int a)
@@ -16,13 +16,13 @@ int __putenv(char *s, int a)
 	static char **oldenv;
 	
 	if (!end || l == 1) return -1;
-	for (; __environ[i] && memcmp(s, __environ[i], l); i++);
+	for (; environ[i] && memcmp(s, environ[i], l); i++);
 	if (a) {
 		if (!__env_map) {
 			__env_map = calloc(2, sizeof(char *));
 			if (__env_map) __env_map[0] = s;
 		} else {
-			for (; __env_map[j] && __env_map[j] != __environ[i]; j++);
+			for (; __env_map[j] && __env_map[j] != environ[i]; j++);
 			if (!__env_map[j]) {
 				newmap = realloc(__env_map, sizeof(char *)*(j+2));
 				if (newmap) {
@@ -35,21 +35,21 @@ int __putenv(char *s, int a)
 			}
 		}
 	}
-	if (!__environ[i]) {
+	if (!environ[i]) {
 		newenv = malloc(sizeof(char *)*(i+2));
 		if (!newenv) {
 			if (a && __env_map) __env_map[j] = 0;
 			return -1;
 		}
-		memcpy(newenv, __environ, sizeof(char *)*i);
+		memcpy(newenv, environ, sizeof(char *)*i);
 		newenv[i] = s;
 		newenv[i+1] = 0;
-		__environ = newenv;
+		environ = newenv;
 		free(oldenv);
-		oldenv = __environ;
+		oldenv = environ;
 	}
 
-	__environ[i] = s;
+	environ[i] = s;
 	return 0;
 }
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <errno.h>
 
-extern char **__environ;
+extern char **environ;
 extern char **__env_map;
 
 int unsetenv(const char *name)
@@ -16,16 +16,16 @@ int unsetenv(const char *name)
 		return -1;
 	}
 again:
-	for (i=0; __environ[i] && (memcmp(name, __environ[i], l) || __environ[i][l] != '='); i++);
-	if (__environ[i]) {
+	for (i=0; environ[i] && (memcmp(name, environ[i], l) || environ[i][l] != '='); i++);
+	if (environ[i]) {
 		if (__env_map) {
-			for (j=0; __env_map[j] && __env_map[j] != __environ[i]; j++);
+			for (j=0; __env_map[j] && __env_map[j] != environ[i]; j++);
 			free (__env_map[j]);
 			for (; __env_map[j]; j++)
 				__env_map[j] = __env_map[j+1];
 		}
-		for (; __environ[i]; i++)
-			__environ[i] = __environ[i+1];
+		for (; environ[i]; i++)
+			environ[i] = environ[i+1];
 		goto again;
 	}
 	return 0;

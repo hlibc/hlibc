@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-extern char **__environ;
+extern char **environ;
 
 int clearenv()
 {
-	__environ[0] = 0;
+	environ[0] = 0;
 	return 0;
 }

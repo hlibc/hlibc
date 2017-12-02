@@ -60,7 +60,7 @@
 09:36 <@author> developer, *nod* but you really need LTO for this
 09:36 < developer> yeah
 */
-
+extern char **environ;
 void init_security(size_t *);
 
 int __libc_start_main(
@@ -70,7 +70,7 @@ int __libc_start_main(
 {
 	char **envp = argv+argc+1, **auxv = envp;
 
-	__environ = envp;
+	environ = envp;
 	do auxv++; while (*auxv);
 	libc.auxv = (void *)++auxv;
 	libc.ldso_fini = ldso_fini;
