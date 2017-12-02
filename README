@@ -148,9 +148,6 @@ ROADMAP:
 	and then with the internal atexit-style handlers.
 	(advanced)
 
-	Remove the weak_alias subsystem from musllibc/.
-
-
 REVISION CONTROL:
 -----------------
 
