@@ -66,19 +66,9 @@ pthread_t __pthread_self_def()
 	return __pthread_self();
 }
 
-weak_alias(__pthread_self_def, pthread_self);
-weak_alias(__pthread_self_def, __pthread_self_init);
-
 void pthread_testcancel()
 {
 } 
-
-//static long sccp(long nr, long u, long v, long w, long x, long y, long z)
-//{ 
-//	return 0;
-//}
-
-//weak_alias(sccp, __syscall_cp);
 
 static void dummy_1()
 {
