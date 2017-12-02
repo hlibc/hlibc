@@ -195,7 +195,7 @@ static double sin_pi(double x)
 }
 
 
-double __lgamma_r(double x, int *signgamp)
+double gamma_r(double x, int *signgamp)
 {
 	double t,y,z,nadj,p,p1,p2,p3,q,r,w;
 	int32_t hx;
@@ -310,4 +310,3 @@ double __lgamma_r(double x, int *signgamp)
 	return r;
 }
 
-weak_alias(__lgamma_r, lgamma_r);

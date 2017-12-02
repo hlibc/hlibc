@@ -6,7 +6,7 @@
 
 uintptr_t __stack_chk_guard;
 
-void __init_ssp(size_t *auxv)
+void init_ssp(size_t *auxv)
 {
 	size_t i;
 	pthread_t self = __pthread_self_init();

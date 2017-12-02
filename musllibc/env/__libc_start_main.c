@@ -61,7 +61,7 @@
 09:36 < developer> yeah
 */
 
-void __init_security(size_t *);
+void init_security(size_t *);
 
 int __libc_start_main(
 	int (*main)(int, char **, char **), int argc, char **argv,
@@ -76,7 +76,7 @@ int __libc_start_main(
 	libc.ldso_fini = ldso_fini;
 	libc.fini = fini;
 
-	__init_security((void *)auxv);
+	init_security((void *)auxv);
 
 	/* Execute constructors (static) linked into the application */
 	if (init) init(argc, argv, envp);

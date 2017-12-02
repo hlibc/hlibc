@@ -130,7 +130,7 @@ static float sin_pif(float x)
 }
 
 
-float __lgammaf_r(float x, int *signgamp)
+float lgammaf_r(float x, int *signgamp)
 {
 	float t,y,z,nadj,p,p1,p2,p3,q,r,w;
 	int32_t hx;
@@ -245,4 +245,3 @@ float __lgammaf_r(float x, int *signgamp)
 	return r;
 }
 
-weak_alias(__lgammaf_r, lgammaf_r);
