@@ -8,14 +8,6 @@ int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(vo
 	return 0;
 }
 
-static void dummy_0()
-{
-}
-
-weak_alias(dummy_0, __synccall_lock);
-weak_alias(dummy_0, __synccall_unlock);
-weak_alias(dummy_0, __pthread_tsd_run_dtors);
-
 void pthread_exit(void *result)
 {
 }
@@ -27,10 +19,6 @@ void __do_cleanup_pop(struct __ptcb *, int);
 static int start(void *p)
 {
 } 
-
-/* pthread_key_create.c overrides this */
-static const size_t dummyno = 0;
-weak_alias(dummyno, __pthread_tsd_size);
 
 static void init_file_lock(FILE *f)
 { 
@@ -53,13 +41,11 @@ int pthread_join(pthread_t t, void **res)
 static struct pthread main_thread;
 
 /* pthread_key_create.c overrides this */
-weak_alias(dummy, __pthread_tsd_main);
-
 static int init_main_thread()
 {
 	if (__set_thread_area(&main_thread) < 0) return -1;
 	main_thread.canceldisable = libc.canceldisable;
-	main_thread.tsd = (void **)__pthread_tsd_main;
+	main_thread.tsd = NULL;
 	main_thread.errno_ptr = __errno_location();
 	main_thread.self = &main_thread;
 	main_thread.tid = main_thread.pid =
@@ -87,12 +73,12 @@ void pthread_testcancel()
 {
 } 
 
-static long sccp(long nr, long u, long v, long w, long x, long y, long z)
-{ 
-	return 0;
-}
+//static long sccp(long nr, long u, long v, long w, long x, long y, long z)
+//{ 
+//	return 0;
+//}
 
-weak_alias(sccp, __syscall_cp);
+//weak_alias(sccp, __syscall_cp);
 
 static void dummy_1()
 {
