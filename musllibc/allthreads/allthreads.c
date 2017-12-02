@@ -88,11 +88,8 @@ pthread_t __pthread_self_def()
 weak_alias(__pthread_self_def, pthread_self);
 weak_alias(__pthread_self_def, __pthread_self_init);
 
-void __testcancel(void);
-
 void pthread_testcancel()
 {
-	__testcancel();
 } 
 
 static long sccp(long nr, long u, long v, long w, long x, long y, long z)
@@ -104,9 +101,7 @@ weak_alias(sccp, __syscall_cp);
 
 static void dummy_1()
 {
-}
-
-weak_alias(dummy_1, __testcancel);
+} 
 
 void __cancel()
 {

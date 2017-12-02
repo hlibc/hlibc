@@ -3,13 +3,6 @@
 #include <stdio.h>
 #include "libc.h"
 
-//static void dummy()
-//{
-//}
-
-/* __towrite.c and atexit.c override these */
-//weak_alias(dummy, __funcs_on_exit);
-//weak_alias(dummy, __fflush_on_exit);
 void __funcs_on_exit();
 void exit(int code)
 {
@@ -29,3 +22,4 @@ void exit(int code)
 	_Exit(code);
 	for(;;);
 }
+
