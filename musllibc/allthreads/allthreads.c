@@ -70,10 +70,6 @@ void pthread_testcancel()
 {
 } 
 
-static void dummy_1()
-{
-} 
-
 void __cancel()
 {
 }
@@ -87,14 +83,12 @@ void _pthread_cleanup_push(struct __ptcb *cb, void (*f)(void *), void *x)
 {
 	cb->__f = f;
 	cb->__x = x;
-	__do_cleanup_push(cb, f, x);
 }
 
 void _pthread_cleanup_pop(struct __ptcb *cb, int run)
 {
-	__do_cleanup_pop(cb, run);
 	if (run) cb->__f(cb->__x);
 } 
 
-weak_alias(dummy_1, __do_cleanup_push);
-weak_alias(dummy_1, __do_cleanup_pop);
+
+
