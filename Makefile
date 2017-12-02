@@ -60,17 +60,18 @@ all: $(ALL_LIBS) $(ALL_TOOLS)
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
 
 clean:
-	rm -f crt/*.o
-	rm -f $(OBJS)
-	rm -f $(LOBJS)
-	rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
-	rm -f $(ALL_TOOLS)
-	rm -f $(GENH) 
-	rm -f include/bits
-	make clean_test
-	rm -f config.mak
-	rm -rf usr logs
-	$(MAKE) clean_test 
+	-rm -f crt/*.o
+	-rm -f $(OBJS)
+	-rm -f $(LOBJS)
+	-rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
+	-rm -f $(ALL_TOOLS)
+	-rm -f $(GENH) 
+	-rm -f include/bits
+	-make clean_test
+	-rm -f config.mak
+	-rm -rf usr logs
+	-$(MAKE) clean_test 
+	rm test_i386_log test_x86_64_log
 	
 
 include/bits:
