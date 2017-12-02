@@ -3,14 +3,14 @@
 #include <stdio.h>
 #include "libc.h"
 
-static void dummy()
-{
-}
+//static void dummy()
+//{
+//}
 
 /* __towrite.c and atexit.c override these */
-weak_alias(dummy, __funcs_on_exit);
-weak_alias(dummy, __fflush_on_exit);
-
+//weak_alias(dummy, __funcs_on_exit);
+//weak_alias(dummy, __fflush_on_exit);
+void __funcs_on_exit();
 void exit(int code)
 {
 	static int lock[2];
@@ -20,7 +20,7 @@ void exit(int code)
 
 	/* Only do atexit & stdio flush if they were actually used */
 	__funcs_on_exit();
-	__fflush_on_exit();
+	//__fflush_on_exit(); // this is gone, replace with fflush()?
 
 	/* Destructor s**t is kept separate from atexit to avoid bloat */
 	if (libc.fini) libc.fini();
