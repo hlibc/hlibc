@@ -18,7 +18,7 @@ void simple_copy(char *src, char *dest)
 void simplecat(char *file)
 {
 	int c = 0;
-	FILE *fp = fopen(file, "r+");
+	FILE *fp = fopen(file, "r");
 	while ((c = getc(fp)) != EOF)
 		putc(c, stdout);
 	fclose(fp);
