@@ -17,10 +17,7 @@ struct __libc {
 	FILE *ofl_head;
 	int ofl_lock[2];
 };
-
-
 #if !defined(__PIC__) || 100*__GNUC__+__GNUC_MINOR__ >= 303 || defined(__PCC__) || defined(__TINYC__)
-
 #ifdef __PIC__
 #if __GNUC__ < 4
 #define BROKEN_VISIBILITY 1
@@ -29,20 +26,14 @@ struct __libc {
 #else
 #define ATTR_LIBC_VISIBILITY
 #endif
-
 extern struct __libc __libc ATTR_LIBC_VISIBILITY;
 #define libc __libc
-
 #else
-
 #define USE_LIBC_ACCESSOR
 #define ATTR_LIBC_VISIBILITY
 extern struct __libc *__libc_loc(void) __attribute__((const));
 #define libc (*__libc_loc())
-
 #endif
-
-
 /* Designed to avoid any overhead in non-threaded processes */
 void __lock(volatile int *);
 void __unlock(volatile int *);
@@ -50,16 +41,7 @@ int __lockfile(FILE *);
 void __unlockfile(FILE *);
 #define LOCK(x) (libc.threads_minus_1 ? (__lock(x),1) : ((void)(x),1))
 #define UNLOCK(x) (libc.threads_minus_1 ? (__unlock(x),1) : ((void)(x),1))
-
 void __synccall(void (*)(void *), void *);
 void __synccall_wait(void);
-int __setxid(int, int, int, int); 
-
-
-//#undef //_2
-//#define //_2(x, y) extern __typeof(x) y
-
-//#undef //
-//#define //(x) //_2(x, x##64)
-
+int __setxid(int, int, int, int);
 #endif
