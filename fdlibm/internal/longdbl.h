@@ -34,7 +34,6 @@ union ldshape {
 
 // union and macros for freebsd
 
-#if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384
 
 union IEEEl2bits {
 	long double e;
@@ -52,6 +51,24 @@ union IEEEl2bits {
 	} xbits;
 };
 
+#if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384
+/*
+union IEEEl2bits {
+	long double e;
+	struct {
+		uint32_t manl:32;
+		uint32_t manh:32;
+		uint32_t exp:15;
+		uint32_t sign:1;
+		uint32_t pad:16;
+	} bits;
+	struct {
+		uint64_t man:64;
+		uint32_t expsign:16;
+		uint32_t pad:16;
+	} xbits;
+};
+*/
 #define LDBL_MANL_SIZE 32
 #define LDBL_MANH_SIZE 32
 #define LDBL_NBIT (1ull << LDBL_MANH_SIZE-1)
@@ -78,7 +95,7 @@ union IEEEl2bits {
 #define LDBL_MIN_10_EXP (-4931)
 #define LDBL_DIG 33
 */
-
+/*
 union IEEEl2bits {
 	long double e;
 	struct {
@@ -93,7 +110,7 @@ union IEEEl2bits {
 		uint32_t expsign:16;
 	} xbits;
 };
-
+*/
 #define LDBL_MANL_SIZE 64
 #define LDBL_MANH_SIZE 48
 #define LDBL_NBIT (1ull << LDBL_MANH_SIZE)
