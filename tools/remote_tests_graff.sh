@@ -1,4 +1,5 @@
 COMMAND='rm -rf hlibc ; git clone https://www.github.com/cmgraff/hlibc; cd hlibc ; make test'
+LLVMCOMMAND='rm -rf clanghlibc ; git clone https://www.github.com/cmgraff/hlibc clanghlibc; cd clanghlibc ; make testclang'
 
 test_i386()
 {
@@ -18,3 +19,8 @@ test_arm()
 }
 test_arm > test_arm_log 2>&1
 
+test_arm_clang()
+{
+	ssh cgraff1@arm.zv.io -f "$LLVMCOMMAND"
+}
+test_arm > test_arm__clang_log 2>&1
