@@ -19,7 +19,7 @@ IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static" 
-#GCC_WRAP_D = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE" 
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -static"
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c))
@@ -58,6 +58,8 @@ LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
+	cp tools/clang-wrap $(DESTDIR)$(bindir)/
+
 
 clean:
 	-rm -f crt/*.o
@@ -143,9 +145,13 @@ control: $(CONTROL_OBJ)
 
 tests:
 
-	#$(MAKE) $(GCC_WRAP_D) testing
-	#rm -rf $(TEST_OBJ)
 	$(MAKE) $(GCC_WRAP) testing
+	LDLIBS="-lm" $(MAKE) control 2>/dev/null
+
+
+clangtests:
+
+	$(MAKE) $(CLANG_WRAP) testing
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
 clean_test:
@@ -158,6 +164,12 @@ test:
 	./tools/create_wrappers.sh
 	./tools/build.sh
 
+
+clangtest:
+
+	./tools/create_wrappers.sh
+	./tools/clangbuild.sh
+
 web:
 
 	./.tx2html README
@@ -168,11 +180,9 @@ clang:
 
 	CC=clang ./configure --prefix=$(PWD)/usr
 
-	CC=clang make -j4
+	CC=clang make
 
 	make install
-
-	clang -D_GNU_SOURCE -nostdinc -nostdlib -I./include tests/malloc-driver.c lib/crt*.o  lib/libc.a -o clang-driver
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
