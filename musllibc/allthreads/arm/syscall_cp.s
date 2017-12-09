@@ -5,10 +5,8 @@ __syscall_cp_asm:
 	stmfd sp!,{r4,r5,r6,r7,lr}
 	stmfd sp!,{r0}
 	bl 1f
-1:	mov r4,#(1f-.)
-	add r4,r4,lr
-	str r4,[r0,#4]
-	str sp,[r0]
+1:	ldr r0,[r0]
+	cmp r0,#0
 	mov r7,r1
 	mov r0,r2
 	mov r1,r3
