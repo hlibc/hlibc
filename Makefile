@@ -18,8 +18,8 @@ GENH = include/bits/alltypes.h
 IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static" 
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -static"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap" 
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap"
 TEST_SRCS = $(sort $(wildcard tests/*.c))
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c))
@@ -73,7 +73,7 @@ clean:
 	-rm -f config.mak
 	-rm -rf usr logs
 	-$(MAKE) clean_test 
-	rm test_i386_log test_x86_64_log test_arm_log
+	rm test_i386_log test_x86_64_log test_arm_log test_arm_clang_log
 	
 
 include/bits:
