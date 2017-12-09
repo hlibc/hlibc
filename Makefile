@@ -155,6 +155,7 @@ clean_test:
 
 test:
 
+	./tools/create_wrappers.sh
 	./tools/build.sh
 
 web:
