@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "../../musllibc/internal/syscall.h"
 #include <sys/mman.h>
-
+#include <errno.h>
 typedef long Align;
 
 union header {
@@ -97,12 +97,15 @@ void *realloc(void *ptr, size_t size)
 
 void *calloc(size_t nmemb, size_t size)
 {
-	void *ret;
+	void *ret = NULL;
 	size_t len = 0;
-	len = _safe_multiply(nmemb, size, (size_t)-1);
-	if (len)
+	if (len = _safe_multiply(nmemb, size, (size_t)-1))
+	{
 		ret = malloc(len);
-	memset(ret, 0, size);
+		memset(ret, 0, len);
+	}else {
+		errno = ENOMEM;
+	}
 	return ret;
 }
 
