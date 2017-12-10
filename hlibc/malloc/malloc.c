@@ -98,7 +98,10 @@ void *realloc(void *ptr, size_t size)
 void *calloc(size_t nmemb, size_t size)
 {
 	void *ret;
-	ret = malloc(nmemb * size);
+	size_t len = 0;
+	len = _safe_multiply(nmemb, size, (size_t)-1);
+	if (len)
+		ret = malloc(len);
 	memset(ret, 0, size);
 	return ret;
 }

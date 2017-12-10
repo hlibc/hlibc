@@ -20,7 +20,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-
 typedef struct {
         int fd;
         char flags;
@@ -70,4 +69,7 @@ size_t int2str(char *, long long, int);
 size_t int2str_inter(char *, long long, int);
 size_t flt2str(char *, double);
 
+/* safe arithmetic */
+size_t _safe_multiply(size_t, size_t, size_t);
+size_t _safe_division(size_t, size_t);
 #endif
