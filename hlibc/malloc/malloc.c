@@ -5,6 +5,8 @@
 #include "../../musllibc/internal/syscall.h"
 #include <sys/mman.h>
 #include <errno.h>
+#include "../internal/internal.h"
+
 typedef long Align;
 
 union header {
