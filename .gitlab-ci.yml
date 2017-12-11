@@ -1,10 +1,10 @@
 variables:
-  AVER: 3.7 # Alpine version (must exist on Docker Hub)
+  AVER: "3.7" # Alpine version (must exist on Docker Hub)
   REPO: $CI_PROJECT_DIR
-  TB32:  i386.zv.io # unused; runs on Host (Docker)
-  TB64: amd64.zv.io # unused; runs on Host (Docker)
-  TBA7:   arm.zv.io #         runs on Host (native)
-  USER: robot       # should be unprivileged dummy account
+  TB32:  "i386.zv.io" # unused; runs on Host (Docker)
+  TB64: "amd64.zv.io" # unused; runs on Host (Docker)
+  TBA7:   "arm.zv.io" #         runs on Host (native)
+  USER: "robot"       # should be unprivileged dummy account
 
 #build:
 #  cache:
