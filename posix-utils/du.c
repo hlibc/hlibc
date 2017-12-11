@@ -163,7 +163,7 @@ int durecurse(char *path, size_t len, int *opt)
         else
 	{ 
 		lstat(path, &sb);
-		printf("%-5zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
+		printf("%zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
 		return 0;
 	} 
 	
