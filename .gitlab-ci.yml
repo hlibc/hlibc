@@ -26,7 +26,7 @@ test:TB64:
 test:TBA7:
   image: alpine:$AVER # Host environment
   script:
-  - apk update && apk add bash openssh-client
+  - apk update && apk add bash openssh-client rsync
   - mkdir ~/.ssh
   - chmod 700 ~/.ssh
   - eval $(ssh-agent)
