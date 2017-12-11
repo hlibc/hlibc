@@ -1,0 +1,35 @@
+variables:
+  AVER: 3.7 # Alpine version (must exist on Docker Hub)
+  REPO: $CI_PROJECT_DIR
+  TB32:  i386.zv.io # unused; runs on Host (Docker)
+  TB64: amd64.zv.io # unused; runs on Host (Docker)
+  TBA7:   arm.zv.io #         runs on Host (native)
+  USER: robot       # should be unprivileged dummy account
+
+#build:
+#  cache:
+#    paths:
+#      - posix-utils/
+
+test:TB32:
+  image: i386/alpine:$AVER
+  script:
+  - apk update && apk add gcc make musl-dev
+  - ./configure && make test
+
+test:TB64:
+  image: amd64/alpine:$AVER
+  script:
+  - apk update && apk add gcc make musl-dev
+  - ./configure && make test
+
+# Copy and test on *remote* ARM machine
+test:TB64:
+  script:
+  - mkdir ~/.ssh
+  - chmod 700 ~/.ssh
+  - eval $(ssh-agent)
+  - ssh-add <(echo "$ID_RSA")
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - scp -r . $USER@$TBA7:/home/$USER/
+  - ssh $USER@$TBA7 "./configure && make test"
