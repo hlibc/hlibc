@@ -25,6 +25,7 @@
 */
 
 #define GSHPROMPT	"gsh>> "
+#define GSHPROMPT_LEN	6
 
 struct glb
 { 
@@ -132,6 +133,7 @@ int main(int argc, char **argv)
 		{ 
 			//l = readline(GSHPROMPT);
 			//add_history(l);
+			write(2, GSHPROMPT, GSHPROMPT_LEN);
 			l = fgets(l, 1024, stdin);
 			++glb.count;
 		}
@@ -282,11 +284,8 @@ int execute()
 				execvp(cmds[k].argv[0], cmds[k].argv);
                			write(2, "gsh: ", 6);
 				write(2, cmds[k].argv[0], strlen(cmds[k].argv[0]));
-			}
-			else
-				write(2, "gsh: ", 6);
-			write(2, " not found\n", 11);
-                        
+				write(2, " not found\n", 11);
+			} 
                         _exit(1); 
 		} 
 		
@@ -295,10 +294,10 @@ int execute()
 		{ 
 			waitpid(cmds[k].pids, &cmds[k].err, 0); 
 			
-                	//if( cmds[k].out != -1 )
-                        //	close(cmds[k].out); 
-                	//if( cmds[k].in != -1 )
-                        //	close(cmds[k].in); 
+                	if( cmds[k].out != -1 )
+                        	close(cmds[k].out); 
+                	if( cmds[k].in != -1 )
+                        	close(cmds[k].in); 
 		}
 		else
 		{ 
