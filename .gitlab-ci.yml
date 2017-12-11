@@ -27,11 +27,11 @@ test:TB64:
 test:TBA7:
   image: alpine:$AVER # Host environment
   script:
-  - apk update && apk add openssh-client
+  - apk update && apk add bash openssh-client
   - mkdir ~/.ssh
   - chmod 700 ~/.ssh
   - eval $(ssh-agent)
-  - ssh-add <(echo "$ID_RSA")
+  - bash -c 'ssh-add <(echo "$ID_RSA")'
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - scp -r . $USER@$TBA7:/home/$USER/
   - ssh $USER@$TBA7 "./configure && make test"
