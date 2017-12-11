@@ -24,8 +24,10 @@ test:TB64:
   - ./configure && make test
 
 # Copy and test on *remote* ARM machine
-test:TB64:
+test:TBA7:
+  image: alpine:$AVER # Host environment
   script:
+  - apk update && apk add openssh-client
   - mkdir ~/.ssh
   - chmod 700 ~/.ssh
   - eval $(ssh-agent)
