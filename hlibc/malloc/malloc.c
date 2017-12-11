@@ -2,112 +2,128 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "../../musllibc/internal/syscall.h"
-#include <sys/mman.h>
-#include <errno.h>
-#include "../internal/internal.h"
-
-typedef long Align;
-
-union header {
-	struct {
-		union header *ptr;
-		size_t size;
-	} s;
-	Align x;
-}header;
-
-typedef union header Header;
-static Header *morecore(size_t nu);
-void free(void *ap);
-static Header base;
-static Header *freep = NULL;
-
-void *malloc(size_t nbytes)
+struct block_meta
 {
-	Header *p, *prevp;
-	size_t nunits;
-	nunits = (nbytes+sizeof(Header)-1)/sizeof(header) + 1;
-	if ((prevp = freep) == NULL) {
-		base.s.ptr = freep = prevp = &base;
-		base.s.size = 0;
+	size_t size;
+	struct block_meta *next;
+	int free;
+};
+#define META_SIZE sizeof(struct block_meta)
+
+void *global_base = NULL;
+
+struct block_meta *find_free_block(struct block_meta **last, size_t size)
+{
+	struct block_meta *current = global_base;
+	while (current && !(current->free && current->size >= size)) {
+		*last   = current;
+		current = current->next;
 	}
-	for (p = prevp->s.ptr; ; prevp = p, p = p->s.ptr) {
-		if (p->s.size >= nunits) {
-			if (p->s.size == nunits)
-				prevp->s.ptr = p->s.ptr;
-			else {
-				p->s.size -= nunits;
-				p += p->s.size;
-				p->s.size = nunits;
-			}
-			freep = prevp;
-			return (void *)(p+1);
-		}
-		if (p == freep)
-			if ((p = morecore(nunits)) == NULL)
-				return NULL;
-	}
+	return current;
 }
 
-
-static Header *morecore(size_t nu)
+struct block_meta *request_space(struct block_meta *last, size_t size)
 {
-	char *cp;
-	Header *up;
-	if (nu < 1024)
-		nu = 1024;
-	/* cp = sbrk(nu * sizeof(Header)); */
-	cp = mmap(cp, nu * sizeof(Header), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+	struct block_meta *block;
+	block	 = sbrk(0);
+	void *request = sbrk(size + META_SIZE);
+	assert((void *)block == request); // Not thread safe.
+	if (request == (void *)-1) {
+		return NULL; // sbrk failed.
+	}
 
-	if (cp == (char *) -1)
+	if (last) {
+		last->next = block; // NULL on first request.
+	}
+
+	block->size = size;
+	block->next = NULL;
+	block->free = 0;
+	return block;
+}
+void *malloc(size_t size)
+{
+	struct block_meta *block;
+
+	if (size <= 0) {
 		return NULL;
-	up = (Header *) cp;
-	up->s.size = nu;
-	free((up+1));
-	return freep;
+	}
+
+	if (!global_base) { // First call.
+		block = request_space(NULL, size);
+		if (!block) {
+			return NULL;
+		}
+		global_base = block;
+	}
+	else {
+		struct block_meta *last = global_base;
+		block			= find_free_block(&last, size);
+		if (!block) { // Failed to find free block.
+			block = request_space(last, size);
+			if (!block) {
+				return NULL;
+			}
+		}
+		else { // Found free block
+			block->free = 0;
+		}
+	}
+
+	return (block + 1);
 }
 
-void free(void *ap)
+struct block_meta *get_block_ptr(void *ptr)
 {
-	Header *bp, *p;
-	bp = (Header *)ap - 1;
-	for (p = freep; !(bp > p && bp < p->s.ptr); p = p->s.ptr)
-		if (p >= p->s.ptr && (bp > p || bp < p->s.ptr))
-			break;
-	if (bp + bp->s.size == p->s.ptr) {
-		bp->s.size += p->s.ptr->s.size;
-		bp->s.ptr = p->s.ptr->s.ptr;
-	} else
-		bp->s.ptr = p->s.ptr;
-	if (p + p->s.size == bp) {
-		p->s.size += bp->s.size;
-		p->s.ptr = bp->s.ptr;
-	} else
-		p->s.ptr = bp;
-	freep = p;
+	return (struct block_meta *)ptr - 1;
+}
+
+void free(void *ptr)
+{
+	if (!ptr) {
+		return;
+	}
+
+	// TODO: consider merging blocks once splitting blocks is
+	// implemented.
+	struct block_meta *block_ptr = get_block_ptr(ptr);
+	assert(block_ptr->free == 0);
+	block_ptr->free = 1;
 }
 
 void *realloc(void *ptr, size_t size)
 {
-	if (ptr == NULL)
-		return ptr = malloc(size);
+	if (!ptr) {
+		return malloc(size); // NULL ptr. realloc should act
+		// like malloc.
+	}
+
+	struct block_meta *block_ptr = get_block_ptr(ptr);
+	if (block_ptr->size >= size) {
+		return ptr; // We have enough space. Could free some
+		// once we
+		// implement split.
+	}
+
+	// Need to really realloc. Malloc new space and free old space.
+	// Then copy old data to new space.
+	void *new_ptr;
+	new_ptr = malloc(size);
+	if (!new_ptr) {
+		return NULL;
+	}
+
+	memcpy(new_ptr, ptr, block_ptr->size);
 	free(ptr);
-	ptr = malloc(size);
+	return new_ptr;
+}
+
+void *calloc(size_t nelem, size_t elsize)
+{
+	size_t size = nelem * elsize;
+	void *ptr   = malloc(size);
+	if (ptr) {
+		memset(ptr, 0, size);
+	}
 	return ptr;
 }
-
-void *calloc(size_t nmemb, size_t size)
-{
-	void *ret = NULL;
-	size_t len = 0;
-	if (len = _safe_multiply(nmemb, size, (size_t)-1))
-	{
-		ret = malloc(len);
-		memset(ret, 0, len);
-	}else {
-		errno = ENOMEM;
-	}
-	return ret;
-}
-
