@@ -2,34 +2,33 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
-struct block_meta
+
+typedef struct object
 {
 	size_t size;
-	struct block_meta *next;
+	struct object *next;
 	int free;
-};
-#define META_SIZE sizeof(struct block_meta)
+}object;
 
-void *global_base = NULL;
+void *base = NULL;
 
-struct block_meta *find_free_block(struct block_meta **last, size_t size)
+object *find_free_block(object **last, size_t size)
 {
-	struct block_meta *current = global_base;
+	object *current = base;
 	while (current && !(current->free && current->size >= size)) {
-		*last   = current;
+		*last = current;
 		current = current->next;
 	}
 	return current;
 }
 
-struct block_meta *request_space(struct block_meta *last, size_t size)
+object *request_space(object *last, size_t size)
 {
-	struct block_meta *block;
-	block	 = sbrk(0);
-	void *request = sbrk(size + META_SIZE);
-	assert((void *)block == request); // Not thread safe.
+	object *block;
+	block = sbrk(0);
+	void *request = sbrk(size + sizeof(object));
 	if (request == (void *)-1) {
-		return NULL; // sbrk failed.
+		return NULL;
 	}
 
 	if (last) {
@@ -43,29 +42,29 @@ struct block_meta *request_space(struct block_meta *last, size_t size)
 }
 void *malloc(size_t size)
 {
-	struct block_meta *block;
+	object *block;
 
 	if (size <= 0) {
 		return NULL;
 	}
 
-	if (!global_base) { // First call.
+	if (!base) {
 		block = request_space(NULL, size);
 		if (!block) {
 			return NULL;
 		}
-		global_base = block;
+		base = block;
 	}
 	else {
-		struct block_meta *last = global_base;
-		block			= find_free_block(&last, size);
-		if (!block) { // Failed to find free block.
+		object *last = base;
+		block = find_free_block(&last, size);
+		if (!block) {
 			block = request_space(last, size);
 			if (!block) {
 				return NULL;
 			}
 		}
-		else { // Found free block
+		else {
 			block->free = 0;
 		}
 	}
@@ -73,45 +72,36 @@ void *malloc(size_t size)
 	return (block + 1);
 }
 
-struct block_meta *get_block_ptr(void *ptr)
+object *get_block_ptr(void *ptr)
 {
-	return (struct block_meta *)ptr - 1;
+	return (object *)ptr - 1;
 }
 
 void free(void *ptr)
 {
+	object *block_ptr;
 	if (!ptr) {
 		return;
 	}
-
-	// TODO: consider merging blocks once splitting blocks is
-	// implemented.
-	struct block_meta *block_ptr = get_block_ptr(ptr);
-	assert(block_ptr->free == 0);
+	block_ptr = (object *)ptr - 1;
 	block_ptr->free = 1;
 }
 
 void *realloc(void *ptr, size_t size)
 {
-	if (!ptr) {
-		return malloc(size); // NULL ptr. realloc should act
-		// like malloc.
-	}
-
-	struct block_meta *block_ptr = get_block_ptr(ptr);
-	if (block_ptr->size >= size) {
-		return ptr; // We have enough space. Could free some
-		// once we
-		// implement split.
-	}
-
-	// Need to really realloc. Malloc new space and free old space.
-	// Then copy old data to new space.
 	void *new_ptr;
-	new_ptr = malloc(size);
-	if (!new_ptr) {
-		return NULL;
+	object *block_ptr;
+	if (!ptr) {
+		return malloc(size);
 	}
+
+	block_ptr = (object *)ptr - 1;
+	if (block_ptr->size >= size) {
+		return ptr;
+	}
+	
+	if(!(new_ptr = malloc(size))) 
+		return NULL;
 
 	memcpy(new_ptr, ptr, block_ptr->size);
 	free(ptr);
@@ -121,7 +111,7 @@ void *realloc(void *ptr, size_t size)
 void *calloc(size_t nelem, size_t elsize)
 {
 	size_t size = nelem * elsize;
-	void *ptr   = malloc(size);
+	void *ptr = malloc(size);
 	if (ptr) {
 		memset(ptr, 0, size);
 	}
