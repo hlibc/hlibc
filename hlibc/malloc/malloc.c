@@ -2,6 +2,12 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "../internal/internal.h"
+#include "../../musllibc/internal/syscall.h"
+#include <sys/mman.h>
+#include <errno.h>
+#include "../internal/internal.h"
+
 
 typedef struct object
 {
@@ -14,106 +20,90 @@ void *base = NULL;
 
 object *find_free_block(object **last, size_t size)
 {
-	object *current = base;
-	while (current && !(current->free && current->size >= size)) {
-		*last = current;
-		current = current->next;
-	}
-	return current;
+	object *o;
+	for ( o = base; o && !(o->free && o->size >= size); o = o->next)
+		*last = o;
+	return o;
 }
 
 object *request_space(object *last, size_t size)
 {
-	object *block;
-	block = sbrk(0);
-	void *request = sbrk(size + sizeof(object));
-	if (request == (void *)-1) {
+	object *o;
+	/* if ((o = sbrk(size + sizeof(object))) == (void *)-1) */
+	if ((o = mmap(o, size * sizeof(object), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0)) == (void *)-1)
 		return NULL;
-	}
-
-	if (last) {
-		last->next = block; // NULL on first request.
-	}
-
-	block->size = size;
-	block->next = NULL;
-	block->free = 0;
-	return block;
+	if (last)
+		last->next = o;
+	o->size = size;
+	o->next = NULL;
+	o->free = 0;
+	return o;
 }
 void *malloc(size_t size)
 {
-	object *block;
-
-	if (size <= 0) {
+	object *o;
+	object *last;
+	if (size <= 0)
 		return NULL;
-	}
 
 	if (!base) {
-		block = request_space(NULL, size);
-		if (!block) {
+		if(!(o = request_space(NULL, size)))
 			return NULL;
-		}
-		base = block;
+		base = o;
 	}
 	else {
-		object *last = base;
-		block = find_free_block(&last, size);
-		if (!block) {
-			block = request_space(last, size);
-			if (!block) {
+		last = base;
+		if (!(o = find_free_block(&last, size))){
+			if (!(o = request_space(last, size))) 
 				return NULL;
-			}
 		}
-		else {
-			block->free = 0;
-		}
+		else 
+			o->free = 0;
 	}
 
-	return (block + 1);
-}
-
-object *get_block_ptr(void *ptr)
-{
-	return (object *)ptr - 1;
+	return (o + 1);
 }
 
 void free(void *ptr)
 {
-	object *block_ptr;
-	if (!ptr) {
+	object *o;
+	if (!ptr)
 		return;
-	}
-	block_ptr = (object *)ptr - 1;
-	block_ptr->free = 1;
+	
+	o = (object *)ptr - 1;
+	o->free = 1;
+	//munmap(o, o->size);
+	
 }
 
 void *realloc(void *ptr, size_t size)
 {
-	void *new_ptr;
-	object *block_ptr;
-	if (!ptr) {
+	void *ret;
+	object *o;
+	if (!ptr)
 		return malloc(size);
-	}
 
-	block_ptr = (object *)ptr - 1;
-	if (block_ptr->size >= size) {
+	o = (object *)ptr - 1;
+	if (o->size >= size)
 		return ptr;
-	}
 	
-	if(!(new_ptr = malloc(size))) 
+	if(!(ret = malloc(size))) 
 		return NULL;
 
-	memcpy(new_ptr, ptr, block_ptr->size);
+	memcpy(ret, ptr, o->size);
 	free(ptr);
-	return new_ptr;
+	return ret;
 }
 
 void *calloc(size_t nelem, size_t elsize)
 {
-	size_t size = nelem * elsize;
-	void *ptr = malloc(size);
-	if (ptr) {
+	size_t size = 0;
+	void *ptr;
+	size = _safe_multiply(nelem, elsize, (size_t)-1);
+	if(!(ptr = malloc(size)))
+                return NULL;
+	else
 		memset(ptr, 0, size);
-	}
+
 	return ptr;
 }
