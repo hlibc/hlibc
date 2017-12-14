@@ -31,6 +31,9 @@ object *delhead(object *o)
         object *tmp = o->next;
         o->next->prev = NULL;
         munmap(o, o->size);
+	/*
+		"base" must be reset if the head of the list is deleted
+	*/
 	base = tmp;
         return tmp;
 }
@@ -43,7 +46,7 @@ object *deltail(object *o)
         return tmp;
 }
 
-object *find_free_block(object **last, size_t size)
+object *find_free_object(object **last, size_t size)
 {
 	object *o;
 	object *p;
@@ -56,8 +59,9 @@ object *find_free_block(object **last, size_t size)
 	if (set == 1)
 		return o;
 	/* 
-	   only munmap in the case that all data chunks are too small
-	   to reuse
+		only munmap in the case that all data chunks are too small to 
+		reuse. Move this code chunk to the top for naive munmap/mmap
+		pairs.
 	*/
 	for ( p = base; p ; p = p->next)
 	{
@@ -70,7 +74,6 @@ object *find_free_block(object **last, size_t size)
 			else p = delmiddle(p);
 		}
         }
-	
 	return o;
 }
 
@@ -107,7 +110,7 @@ void *malloc(size_t size)
 	}
 	else {
 		last = base;
-		if (!(o = find_free_block(&last, size))){
+		if (!(o = find_free_object(&last, size))){
 			if (!(o = morecore(last, size))) 
 				return NULL;
 		}
