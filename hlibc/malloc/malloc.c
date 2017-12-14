@@ -6,8 +6,6 @@
 #include "../../musllibc/internal/syscall.h"
 #include <sys/mman.h>
 #include <errno.h>
-#include "../internal/internal.h"
-
 
 typedef struct object
 {
@@ -32,9 +30,11 @@ object *delhead(object *o)
 {
         object *tmp = o->next;
         o->next->prev = NULL;
-        //munmap(o, o->size);
+        munmap(o, o->size);
+	base = tmp;
         return tmp;
 }
+
 object *deltail(object *o)
 {
         object *tmp = o->prev;
@@ -43,17 +43,24 @@ object *deltail(object *o)
         return tmp;
 }
 
-
 object *find_free_block(object **last, size_t size)
 {
 	object *o;
 	object *p;
-	for ( p = base; p ; p = p->next)
+	int set = 0;
+	for ( o = base; o && !(o->free && o->size >= size); o = o->next)
 	{ 
-		//fprintf(stderr, "address %zu\n", &p[0]);
-		//fprintf(stderr, "address %zu\n", &p->next[0]);
-		//fprintf(stderr, "address %zu\n", &p->prev[0]);
-		//fprintf(stderr, "set complete\n");
+		*last = o;
+		set = 1;
+	} 
+	if (set == 1)
+		return o;
+	/* 
+	   only munmap in the case that all data chunks are too small
+	   to reuse
+	*/
+	for ( p = base; p ; p = p->next)
+	{
 		if (p->free == 1)
 		{
 			if (p->next == NULL)
@@ -63,18 +70,16 @@ object *find_free_block(object **last, size_t size)
 			else p = delmiddle(p);
 		}
         }
-	//fprintf(stderr, "done\n");
-	for ( o = base; o && !(o->free && o->size >= size); o = o->next)
-	{ 
-		*last = o;
-	} 
+	
 	return o;
 }
 
-object *request_space(object *last, size_t size)
+object *morecore(object *last, size_t size)
 {
 	object *o;
 	/* if ((o = sbrk(size + sizeof(object))) == (void *)-1) */
+	if (size < 1024)
+		size = 1024;
 	if ((o = mmap(o, size * sizeof(object), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0)) == (void *)-1)
 		return NULL;
 	if (last)
@@ -96,14 +101,14 @@ void *malloc(size_t size)
 		return NULL;
 
 	if (!base) {
-		if(!(o = request_space(NULL, size)))
+		if(!(o = morecore(NULL, size)))
 			return NULL;
 		base = o;
 	}
 	else {
 		last = base;
 		if (!(o = find_free_block(&last, size))){
-			if (!(o = request_space(last, size))) 
+			if (!(o = morecore(last, size))) 
 				return NULL;
 		}
 		else 
@@ -118,15 +123,8 @@ void free(void *ptr)
 	object *o;
 	if (!ptr)
 		return;
-
 	o = (object *)ptr - 1;
-
-	//o = o->next;
 	o->free = 1;
-	object *hold = NULL;
-	object *h; 
-	//munmap(hold + 1, sizeof(object));
-	
 }
 
 void *realloc(void *ptr, size_t size)
