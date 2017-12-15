@@ -4,7 +4,7 @@ TOOLING=$(pwd)/usr
 
 SUF="$(pwd)/logs" 
 make clean 
-CC=$2 ./configure --prefix=${TOOLING} 
+CC=$2 ./configure --prefix=${TOOLING} --enable-gcc-wrapper
 mkdir -p ${SUF}
 mkdir -p control
 for i in tests/*.c
