@@ -17,6 +17,19 @@ printf "==========TEST RESULT START==================================\n"
 
 ./tests/pow_test 
 
+./tests/puts-driver > ${SUF}/diff2 2>${SUF}/testerr
+./control/puts-driver > ${SUF}/diff3 2>${SUF}/testerr
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "The \`puts-driver' test compared equal to its control method" || \
+echo "The puts-driver test failed" 
+
+./tests/strerror-driver > ${SUF}/diff2 2>${SUF}/testerr
+./control/strerror-driver > ${SUF}/diff3 2>${SUF}/testerr
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "The \`strerror-driver' test compared equal to its control method" || \
+echo "The strerror-driver test failed" 
+
+
 ./tests/atoi > ${SUF}/diff2 2>${SUF}/testerr
 ./control/atoi > ${SUF}/diff3 2>${SUF}/testerr
 diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \

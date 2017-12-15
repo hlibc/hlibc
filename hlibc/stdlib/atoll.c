@@ -3,9 +3,8 @@
 
 long long atoll(const char *s)
 {
-	size_t i;
-	long long ret;
-	i = ret       = 0;
+	size_t i = 0;
+	long long ret = 0;
 	long long neg = 1;
 
 	if (isspace(s[i])) {
