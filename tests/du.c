@@ -22,11 +22,10 @@ size_t *hashtab[HASH];
 int populatetab(size_t inode)
 {
         size_t *np;
-
-        for ( np = hashtab[hash(inode)] ; np != NULL ; free(np), np = NULL)
+	/* silly reduction of a linked list*/
+        for (np = hashtab[hash(inode)] ; np != NULL ; free(np), np = NULL)
                 if ( inode == *np )
                          return 0;
-
         np = malloc(sizeof(size_t));
         *np = inode;
         hashtab[hash(inode)] = np ;
@@ -43,9 +42,6 @@ void destroytab()
                 ++i;
         }
 }
-
-
-
 
 void cutilerror(char *message, int i)
 {
@@ -195,7 +191,9 @@ int durecurse(char *path, size_t len, int *opt)
 			} 
                         dentry = readdir(dir); 
                 } 
+		if (dir)
                 closedir(dir);
+		if (spath)
 		free(spath);
 
         }

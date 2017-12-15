@@ -17,6 +17,26 @@ printf "==========TEST RESULT START==================================\n"
 
 ./tests/pow_test 
 
+./tests/atoi > ${SUF}/diff2 2>${SUF}/testerr
+./control/atoi > ${SUF}/diff3 2>${SUF}/testerr
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "The \`atoi' test compared equal to its control method" || \
+echo "The atoi test failed" 
+
+
+./tests/atol > ${SUF}/diff2 2>${SUF}/testerr
+./control/atol > ${SUF}/diff3 2>${SUF}/testerr
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "The \`atol' test compared equal to its control method" || \
+echo "The atol test failed" 
+
+
+./tests/atoll > ${SUF}/diff2 2>${SUF}/testerr
+./control/atoll > ${SUF}/diff3 2>${SUF}/testerr
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "The \`atoll' test compared equal to its control method" || \
+echo "The atoll test failed" 
+
 ./tests/cat Makefile > ${SUF}/diff1 2>${SUF}/testerr 
 diff Makefile ${SUF}/diff1 2>&1 > ${SUF}/testerr && \
 echo "The \`cat' utility successfully copied a file" || \
