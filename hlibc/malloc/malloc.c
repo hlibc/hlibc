@@ -80,7 +80,6 @@ object *find_free_object(object **last, size_t size)
 object *morecore(object *last, size_t size)
 {
 	object *o;
-	/* if ((o = sbrk(size + sizeof(object))) == (void *)-1) */
 	if (size < 64)
 		size = 64;
 	if ((o = mmap(o, size * sizeof(object), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0)) == (void *)-1)
