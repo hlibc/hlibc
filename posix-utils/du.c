@@ -8,25 +8,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <limits.h>
-
-/* Copyright 2015-2017, C. Graff  "du" */
-
-struct hold {
-	off_t level[100]; 
-	int depth; 
-	off_t block;
-	size_t lastd; 
-} hold = { {}, 0, 1024, 0};  // this should be 512 for posix compat
+/* Copyright 2015, C. Graff  "du" */ 
 
 #define HASH 10111
-int durecurse(char *, size_t, int *);
 
-void duerror(char *message, int i)
-{
-        fprintf(stderr, "%s", message);
-        if ( i > -1 )
-                exit (i);
-}
 size_t hash(size_t inode)
 {
         return (inode + 31) % HASH;
@@ -37,13 +22,11 @@ size_t *hashtab[HASH];
 int populatetab(size_t inode)
 {
         size_t *np;
-
-        for ( np = hashtab[hash(inode)] ; np != NULL ; free(np), np = NULL)
+	/* silly reduction of a linked list*/
+        for (np = hashtab[hash(inode)] ; np != NULL ; free(np), np = NULL)
                 if ( inode == *np )
                          return 0;
-
-        if (!(np = malloc(sizeof(size_t))))
-		duerror("malloc() failed", 1);
+        np = malloc(sizeof(size_t));
         *np = inode;
         hashtab[hash(inode)] = np ;
         return 1;
@@ -52,7 +35,7 @@ int populatetab(size_t inode)
 void destroytab()
 {
         size_t i = 0;
-        while (i < HASH)
+        while ( i < HASH || hashtab[i] )
         {
                 free(hashtab[i]);
                 hashtab[i] = NULL;
@@ -60,12 +43,32 @@ void destroytab()
         }
 }
 
+void cutilerror(char *message, int i)
+{
+        //if ( i > 0 )
+                //perror("Error: ");
+        fprintf(stderr, "%s", message);
+        if ( i > -1 )
+                exit (i);
+}
+
+struct hold {
+	off_t level[100]; 
+	int depth; 
+	off_t block;
+	size_t lastd; 
+} hold = { {}, 0, 1024, 0};  // this should be 512 for posix compat
+
+
+int durecurse(char *, size_t, int *);
+
+
 int main (int argc, char *argv[]) 
 { 
 
 	int i, opt[7] = { 0, 0, 0, 0, 0, 0, 0}; /* -aHkLsXl */
 	struct stat sb;
-
+	
 	while ((i = getopt (argc, argv, "aHkLsxl")) != -1) 
 		switch (i) {
 			case 'a': 
@@ -91,11 +94,13 @@ int main (int argc, char *argv[])
 				opt[6] = 1; 
 				break; 
 			default: 
-				duerror("Usage: du -aHkLsxl\n", 0);
+				cutilerror("Usage: du -aHkLsxl\n", 0);
 				break;
 		} 
         argv += optind;
-        argc -= optind;
+        argc -= optind; 
+
+
 	
 	while(*argv) 
 	{
@@ -103,9 +108,9 @@ int main (int argc, char *argv[])
 		hold.lastd = sb.st_dev;
 		hold.level[1] = 0;
 
-		if (durecurse(*argv, strlen(*argv), opt)) 
+		if ( durecurse(*argv, strlen(*argv), opt) ) 
 		{
-			printf("%-5zu\t%s\n", hold.level[1] + 4, *argv); 
+			printf("%zu\t%s\n", hold.level[1] + 4, *argv); 
 			destroytab(); 
 		}
 		++argv; 
@@ -120,9 +125,12 @@ int durecurse(char *path, size_t len, int *opt)
 	size_t i = 0;
         DIR *dir;
         struct dirent *dentry; 
-        char *spath = NULL;
+        char *spath = malloc(1);
 	struct stat sb;
 	size_t dlen = 0;
+	
+	if (!(spath))
+		return -1;
        
 	++hold.depth;
 
@@ -132,10 +140,12 @@ int durecurse(char *path, size_t len, int *opt)
                 while ( dentry ) 
                 {
 			dlen = strlen(dentry->d_name);
-			if (!(spath = realloc(spath, dlen + len + 2)))
-				duerror("realloc() failed", 1);
+			spath = realloc(spath, dlen + len + 2);
+			if (!(spath))
+				return -1;
 
-                        len = sprintf(spath, "%s/%s", path, dentry->d_name);
+                        len = sprintf(spath, "%s/%s", path, dentry->d_name); 
+	
 
                         if ( strcmp( ".", dentry->d_name) &&
                             strcmp( "..", dentry->d_name) )
@@ -158,17 +168,16 @@ int durecurse(char *path, size_t len, int *opt)
 					i = ( sb.st_blocks * 512 ) / hold.block; 
 
 					if (opt[0] == 1 && dentry->d_type == DT_REG) // -a 
-						printf("%-5zu\t%s\n", i, spath ); 
+						printf("%zu\t%s\n", i, spath ); 
 					c = 1;
 					while ( c <= 35 ) 
 						hold.level[c++] += i;
                            	}
-				
 				if ( dentry->d_type == DT_DIR )	
 				{ 	
 					if ( opt[4] == 0 ) // -s 
 					{
-                               	         	printf("%-5zu", hold.level[hold.depth]);
+                               	         	printf("%zu", hold.level[hold.depth]);
 						printf("\t%s\n", spath );
 					}
                                	        hold.level[hold.depth] = 0; 
@@ -182,14 +191,16 @@ int durecurse(char *path, size_t len, int *opt)
 			} 
                         dentry = readdir(dir); 
                 } 
+		if (dir)
                 closedir(dir);
+		if (spath)
 		free(spath);
 
         }
         else
 	{ 
 		lstat(path, &sb);
-		printf("%-5zu\t%s\n", (sb.st_blocks * 512 ) /hold.block, path); 
+		printf("%zu\t%s\n", (size_t)(sb.st_blocks * 512 ) /hold.block, path); 
 		return 0;
 	} 
 	
