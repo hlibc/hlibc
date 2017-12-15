@@ -2,7 +2,21 @@
 
 TOOLING=$(pwd)/usr
 
-SUF="$(pwd)/logs"
+SUF="$(pwd)/logs" 
+make clean 
+CC=$2 ./configure --prefix=${TOOLING} 
+mkdir -p ${SUF}
+mkdir -p control
+for i in tests/*.c
+do      ln $i control/$(basename $i)
+done
+printf "The automatic build is being logged to: ${SUF}/buildlog \n\n"
+CC=clang make -j4 > ${SUF}/buildlog 2>&1
+make install
+printf "==========COMPILING TESTS ===================================\n"
+make $1 > ${SUF}/testlog
+printf "=============================================================\n"
+printf "==========TEST RESULT START==================================\n"
 
 ./tests/pow_test 
 

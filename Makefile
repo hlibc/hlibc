@@ -51,18 +51,15 @@ TOOL_LIBS = lib/gcc-wrap.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
 ALL_TOOLS = tools/gcc-wrap
 
-LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
-
 -include config.mak
+
+LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
-install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
+install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
 	-./tools/create_wrappers.sh
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
-
-
-
 
 clean:
 	-rm -f crt/*.o
@@ -78,8 +75,8 @@ clean:
 	-$(MAKE) clean_test 
 	-rm -f test_i386_log test_x86_64_log test_arm_log test_arm_clang_log
 	-rm -f tools/clang-wrap
-
-	
+	-$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
+	-$(RM) -r control
 
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make test' to invoke the suite" ; exit 1 ; }
@@ -119,11 +116,8 @@ $(EMPTY_LIBS):
 lib/%.o: crt/%.o
 	cp $< $@
 
-lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
-
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	printf '#!/bin/sh\nexec gcc -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
@@ -138,43 +132,32 @@ $(DESTDIR)$(libdir)/%: lib/%
 $(DESTDIR)$(includedir)/%: include/%
 	install -D -m 644 $< $@
 
-$(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(syslibdir)
-	ln -sf $(libdir)/libc.so $@ || true
-
 $(DESTDIR)$(syslibdir):
 	install -d -m 755 $(DESTDIR)$(syslibdir)
+
+lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
+	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
+
+$(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(syslibdir)
+	ln -sf $(libdir)/libc.so $@ || true
 
 testing: $(TEST_OBJ)
 
 control: $(CONTROL_OBJ)
 
 gcctests:
-
 	$(MAKE) $(GCC_WRAP) testing
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
-
 clangtests:
-
 	$(MAKE) $(CLANG_WRAP) testing
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
-clean_test:
-
-	$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
-	$(RM) -r control
-
 gcctest:
-
-	./tools/gccbuild.sh
+	./tools/build.sh gcctests gcc
 
 clangtest:
-
-	./tools/clangbuild.sh
-
-web:
-
-	./.tx2html README
+	./tools/build.sh clangtests clang
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
