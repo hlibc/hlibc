@@ -10,21 +10,20 @@ int readdir_r(DIR *dir, struct dirent *buf, struct dirent **result)
 	struct dirent *de;
 	int errno_save = errno;
 	int ret;
-	
+	// locks
 
 	errno = 0;
 	de = readdir(dir);
 	if ((ret = errno)) {
-
+		// unlocks
 		return ret;
 	}
 	errno = errno_save;
 	if (de) memcpy(buf, de, de->d_reclen);
 	else buf = NULL;
-
+	//locks
 
 	*result = buf;
 	return 0;
 }
 
-//_2(readdir_r, readdir64_r);

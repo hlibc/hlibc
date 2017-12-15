@@ -20,10 +20,6 @@ static int start(void *p)
 {
 } 
 
-static void init_file_lock(FILE *f)
-{ 
-}
-
 int pthread_create(pthread_t *res, const pthread_attr_t *attr, void *(*entry)(void *), void *arg)
 { 
 	return 0;
