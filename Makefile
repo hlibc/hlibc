@@ -58,6 +58,7 @@ LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
+	-./tools/create_wrappers.sh
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
 
@@ -165,13 +166,10 @@ clean_test:
 
 test:
 
-	./tools/create_wrappers.sh
-	./tools/build.sh
-
+	./tools/gccbuild.sh
 
 clangtest:
 
-	./tools/create_wrappers.sh
 	./tools/clangbuild.sh
 
 web:
@@ -180,12 +178,8 @@ web:
 
 clang:
 
-	mkdir -p $(PWD)/usr
-
 	CC=clang ./configure --prefix=$(PWD)/usr
-
 	CC=clang make
-
 	make install
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
