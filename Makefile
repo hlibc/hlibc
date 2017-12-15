@@ -75,7 +75,9 @@ clean:
 	-rm -f config.mak
 	-rm -rf usr logs
 	-$(MAKE) clean_test 
-	rm test_i386_log test_x86_64_log test_arm_log test_arm_clang_log
+	-rm test_i386_log test_x86_64_log test_arm_log test_arm_clang_log
+	-rm tools/clang-wrap
+
 	
 
 include/bits:
