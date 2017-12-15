@@ -67,7 +67,7 @@ AUTOMATIC TESTING:
 	Use the following instructions to retrieve, build and run hlibc 
 	and the hlibc test suite.
 
-		git clone https://www.github.com/cmgraff/hlibc
+		git clone https://git.zv.io/me/hlibc.git
 		cd hlibc
 		make gcctest
 
@@ -102,7 +102,7 @@ USING LLVM/CLANG:
 -----------------
 
 	Clang does work with hlibc. However, the wrapper script is still
-	experiemental. It can be automatically tested by running;
+	experimental. It can be automatically tested by running;
 
 		make clangtest
 
@@ -170,5 +170,3 @@ IRC:
 ----
 
 	#hlibc on irc.freenode.net
-
-
