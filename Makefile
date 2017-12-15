@@ -58,7 +58,8 @@ LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%) $(if $(SHARED_LIBS),$(DESTDIR)$(LDSO_PATHNAME),)
-	-cp tools/clang-wrap $(DESTDIR)$(bindir)/
+
+
 
 
 clean:
