@@ -104,8 +104,6 @@ int __libc_sigaction(int, const struct sigaction *, struct sigaction *);
 int __libc_sigprocmask(int, const sigset_t *, sigset_t *);
 void __lock(volatile int *);
 void __unmapself(void *, size_t);
-
-int __timedwait(volatile int *, int, clockid_t, const struct timespec *, void (*)(void *), void *, int);
 void __wait(volatile int *, volatile int *, int, int);
 void __wake(volatile int *, int, int);
 
