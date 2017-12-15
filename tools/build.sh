@@ -4,7 +4,7 @@ TOOLING=$(pwd)/usr
 
 SUF="$(pwd)/logs" 
 make clean 
-./configure --prefix=${TOOLING} 
+./configure --prefix=${TOOLING} --enable-gcc-wrapper
 mkdir -p ${SUF}
 ./tools/symlink_tests.sh
 printf "The automatic build is being logged to: ${SUF}/buildlog \n\n"
