@@ -11,7 +11,7 @@ printf "The automatic build is being logged to: ${SUF}/buildlog \n\n"
 make -j4 > ${SUF}/buildlog 2>&1
 make install
 printf "==========COMPILING TESTS ===================================\n"
-make tests > ${SUF}/testlog
+make gcctests > ${SUF}/testlog
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n" 
 ./tools/buildall.sh

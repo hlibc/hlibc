@@ -148,7 +148,7 @@ testing: $(TEST_OBJ)
 
 control: $(CONTROL_OBJ)
 
-tests:
+gcctests:
 
 	$(MAKE) $(GCC_WRAP) testing
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
@@ -164,7 +164,7 @@ clean_test:
 	$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
 	$(RM) -r control
 
-test:
+gcctest:
 
 	./tools/gccbuild.sh
 
@@ -175,12 +175,6 @@ clangtest:
 web:
 
 	./.tx2html README
-
-clang:
-
-	CC=clang ./configure --prefix=$(PWD)/usr
-	CC=clang make
-	make install
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 

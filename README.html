@@ -70,7 +70,7 @@
 
 		git clone <a href="https://www.github.com/cmgraff/hlibc">https://www.github.com/cmgraff/hlibc</a>
 		cd hlibc
-		make test
+		make gcctest
 
 	If all ran successfully there should be no significant errors and
 	a confirmation notice containing the results of the test suite 
@@ -102,9 +102,10 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>USING LLVM/CLANG:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	Clang does work with hlibc. However, there is no wrapper script for
-	making it work without installing the libc.a to /lib as there is with
-	gcc. Hopefully this changes in the near future.
+	Clang does work with hlibc. However, the wrapper script is still
+	experiemental. It can be automatically tested by running;
+
+		make clangtest
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>ROADMAP:</strong></dl><pre></dl><pre>
