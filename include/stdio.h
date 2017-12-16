@@ -74,6 +74,9 @@ int fclose(FILE *);
 int fflush(FILE *);
 int ferror(FILE *);
 
+/* remove */
+int remove(const char *pathname);
+
 /* opaque objects */
 FILE *stdin;
 FILE *stdout;
