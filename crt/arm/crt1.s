@@ -1,3 +1,4 @@
+/* comments taken from crt/x86_64/crt1.s -cmg */
 .weak _init
 .weak _fini
 .global _start
@@ -10,7 +11,7 @@ _start:
 	str fp,[sp,#-4]!
 	str a1,[sp,#-4]!
 	str a4,[sp,#-4]!
-	ldr a4,=_init
-	ldr a1,=main
-	bl __libc_start_main
+	ldr a4,=_init /* 4th arg: init/ctors function */
+	ldr a1,=main /* 1st arg: application entry ip */
+	bl __libc_start_main /* musl init will run the program */
 1:	b 1b
