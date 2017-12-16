@@ -1,4 +1,4 @@
-COMMAND='rm -rf hlibc ; git clone https://www.github.com/cmgraff/hlibc; cd hlibc ; make test'
+COMMAND='rm -rf hlibc ; git clone https://git.zv.io/me/hlibc/ ; cd hlibc ; make gcctest'
 
 
 test_i386()
