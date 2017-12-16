@@ -10,9 +10,6 @@
 
 void init_ssp(size_t *);
 
-
-
-
 void init_security(size_t *auxv)
 {
 	size_t i, aux[AUX_CNT] = { 0 };
