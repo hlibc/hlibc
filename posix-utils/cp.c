@@ -51,8 +51,7 @@ int main(int argc, char *argv[])
                         case 'P': 
 				glb.op[3] = 0; 
 				break;
-                        case 'p':
-				copy_error("-p not implemented the hlibc version of `cp'\n", "", 0);
+                        case 'p': 
 				glb.op[5] = 1; 
 				break;
                         case 'a': 
@@ -171,8 +170,7 @@ int recursivecp(char *path, size_t len)
                         dentry = readdir(dir);
                 }
 		free(spath);
-		if (dir)
-            	    closedir(dir);
+                closedir(dir);
         } 
 	return 0;
 }
@@ -269,12 +267,12 @@ void copy(char *source, char *dst)
         chown(dst, fst.st_uid, fst.st_gid);
         chmod(dst, fst.st_mode); 
 
-	//if ( glb.op[5] == 1 ) /* -p */
-	//{
-	//	times.actime = fst.st_atime;
-	//	times.modtime = fst.st_mtime;
-	//	utime(dst, &times);
-	//} 
+	if ( glb.op[5] == 1 ) /* -p */
+	{
+		times.actime = fst.st_atime;
+		times.modtime = fst.st_mtime;
+		utime(dst, &times);
+	} 
 
 	close(fd1);
 	close(fd2);
@@ -293,8 +291,8 @@ char *pointtoloc(char *source)
 
 void copy_error(char *message, char *file, int i)
 { 
-        fprintf(stderr, "%s %s\n", message, file);
-	if ( i > -1 )
+        fprintf(stderr, "%s %s\n", message, file); 
+        if ( i > -1 )
         	exit (i); 
 }
 
