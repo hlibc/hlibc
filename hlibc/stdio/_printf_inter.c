@@ -101,7 +101,7 @@ size_t flt2str(char *s, double flt)
 
 	if (imag > 0) {
 		while (imag > 0 && --prec) {
-			imag *= 10;
+			imag *= 10.0;
 			real = imag;
 			imag -= real;
 			s[i++] = convtab[real];
