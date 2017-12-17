@@ -15,13 +15,13 @@ test:TB32:
   image: i386/alpine:$AVER
   script:
   - apk update && apk add clang gcc make musl-dev
-  - $TEST
+  - $(TEST)
 
 test:TB64:
   image: amd64/alpine:$AVER
   script:
   - apk update && apk add clang gcc make musl-dev
-  - $TEST
+  - $(TEST)
 
 # Copy and test on *remote* ARM machine
 test:TBA7:
