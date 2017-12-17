@@ -31,9 +31,7 @@ object *delhead(object *o)
         object *tmp = o->next;
         o->next->prev = NULL;
         munmap(o, o->size);
-	/*
-		"base" must be reset if the head of the list is deleted
-	*/
+	/* "base" must be reset if the head of the list is deleted */
 	base = tmp;
         return tmp;
 }
@@ -46,34 +44,28 @@ object *deltail(object *o)
         return tmp;
 }
 
+object *_traverse_list(object *o)
+{
+	for ( o = base; o ; o = o->next)
+        {
+                if (o->free == 1)
+                {
+                        if (o->next == NULL)
+                                o = deltail(o);
+                        else if (o->prev == NULL)
+                                o = delhead(o);
+                        else o = delmiddle(o);
+                }
+        }
+	return o;
+}
+
 object *find_free_object(object **last, size_t size)
 {
 	object *o;
-	object *p;
-	int set = 0;
-	for ( o = base; o && !(o->free && o->size >= size); o = o->next)
-	{ 
+	o = _traverse_list(o);
+	for ( o = base; o && !(o->free && o->size >= size); o = o->next) 
 		*last = o;
-		set = 1;
-	} 
-	if (set == 1)
-		return o;
-	/* 
-		only munmap in the case that all data chunks are too small to 
-		reuse. Move this code chunk to the top for naive munmap/mmap
-		pairs.
-	*/
-	for ( p = base; p ; p = p->next)
-	{
-		if (p->free == 1)
-		{
-			if (p->next == NULL)
-				p = deltail(p);
-			else if (p->prev == NULL)
-				p = delhead(p);
-			else p = delmiddle(p);
-		}
-        }
 	return o;
 }
 
@@ -85,10 +77,8 @@ object *morecore(object *last, size_t size)
 	if ((o = mmap(o, size * sizeof(object), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0)) == (void *)-1)
 		return NULL;
 	if (last)
-	{
 		last->next = o;
-		o->prev = last;
-	}
+	
 	o->size = size;
 	o->next = NULL;
 	o->prev = last;
@@ -116,7 +106,6 @@ void *malloc(size_t size)
 		else 
 			o->free = 0;
 	}
-
 	return (o + 1);
 }
 
@@ -159,4 +148,12 @@ void *calloc(size_t nelem, size_t elsize)
 		memset(ptr, 0, size);
 
 	return ptr;
+}
+
+void _destroy_malloc()
+{ 
+        object *p = NULL;
+	p = _traverse_list(p);
+	if (base && base->free == 1)
+		munmap(base, base->size);
 }

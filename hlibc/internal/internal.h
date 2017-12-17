@@ -72,4 +72,5 @@ size_t flt2str(char *, double);
 /* safe arithmetic */
 size_t _safe_multiply(size_t, size_t, size_t);
 size_t _safe_division(size_t, size_t);
+
 #endif
