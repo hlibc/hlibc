@@ -20,5 +20,5 @@ void init_ssp(size_t *auxv)
 
 void __stack_chk_fail(void)
 {
-	a_crash();
+	;//a_crash();
 }
