@@ -56,11 +56,22 @@ ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
-all: $(ALL_LIBS) $(ALL_TOOLS)
+
+all: prepare_for_aarch64 $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
 	-./tools/create_wrappers.sh
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
+
+
+prepare_for_aarch64:
+
+ifeq ($(ARCH), aarch64)
+	-rm -f fdlibm/math/acosl.c
+	-rm -f fdlibm/math/asinl.c
+	-rm -f fdlibm/math/atan2l.c
+	-rm -f fdlibm/math/atanl.c
+endif
 
 clean:
 	-rm -f crt/*.o
