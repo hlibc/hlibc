@@ -331,7 +331,7 @@ void prntstats(char *file)
 	octtoperm(sb.st_mode);
 	printf(" "); 
 	if ( global.inode == 1)
-	      printf("%-8ld ", sb.st_ino);
+	      printf("%-8llu ", sb.st_ino);
 	printf("%-3ld ", sb.st_nlink);
 	//if ( global.numer == 1)
 		printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
