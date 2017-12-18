@@ -10,11 +10,13 @@ int _flushbuf(int x, FILE *fp)
 		fp->buf = buffer;
 		fp->lp = fp->rp = fp->buf;
 	}
-	else if (
-		fp->flags & _WRITE
-		&& write(fp->fd, fp->buf, fp->rp - fp->buf) < 0) {
-		fp->flags |= _ERR;
-		return EOF;
+	else if (fp->flags & _WRITE && fp->rp - fp->buf)
+	{
+		if (write(fp->fd, fp->buf, fp->rp - fp->buf) < 0)
+		{
+			fp->flags |= _ERR;
+			return EOF;
+		}
 	}
 
 	fp->rp  = fp->buf;

@@ -259,16 +259,11 @@ int _printf_inter(
 			break;
 		}
 	}
-
 	if (flag > 0) {
 		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
-
 	if (flag == 0) {
 		_flushbuf(EOF, fp);
 	}
-	// fflush(NULL);
-	// fflush(fp);
-
 	return i;
 }

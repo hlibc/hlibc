@@ -15,8 +15,8 @@ void exit(int code)
 	_destroy_malloc(); //-cmg
 	/* Destructor s**t is kept separate from atexit to avoid bloat */
 	if (libc.fini)
-		 libc.fini();
-	if (libc.ldso_fini) 
+		libc.fini();
+	if (libc.ldso_fini)
 		libc.ldso_fini();
 	_Exit(code);
 	for(;;);
