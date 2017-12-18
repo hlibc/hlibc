@@ -1,9 +1,16 @@
 #include "../internal/internal.h"
+#include <stdlib.h>
 
 int _flushbuf(int x, FILE *fp)
 {
 	int bufsize;
-	static char buffer[BUFSIZ] = { 0 };
+	static char *buffer = NULL;
+	if ((buffer == NULL)) {
+		if (!(buffer = malloc(BUFSIZ))) {
+			return EOF;
+		}
+	}
+
 	bufsize			   = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
 
 	if (fp->buf == NULL) {

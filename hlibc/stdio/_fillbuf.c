@@ -1,9 +1,15 @@
 #include "../internal/internal.h"
+#include <stdlib.h>
 
 int _fillbuf(FILE *fp)
 {
 	int bufsize		   = 0;
-	static char buffer[BUFSIZ] = { 0 };
+	static char *buffer = NULL;
+	if ((buffer == NULL)) {
+		if (!(buffer = calloc(1,BUFSIZ))) {
+			return EOF;
+		}
+	}
 
 	if ((fp->flags & (_READ | _EOF | _ERR)) != _READ)
 		return EOF;
