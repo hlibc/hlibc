@@ -14,4 +14,4 @@ int openat(int fd, const char *filename, int flags, ...)
 	return syscall(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
 }
 
-//(openat);
+LFS64(openat);

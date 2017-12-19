@@ -17,4 +17,4 @@ int fcntl(int fd, int cmd, ...)
 	return syscall(SYS_fcntl, fd, cmd, arg);
 }
 
-//(fcntl);
+LFS64(fcntl);

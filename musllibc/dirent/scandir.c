@@ -45,4 +45,4 @@ int scandir(const char *path, struct dirent ***res,
 	return cnt;
 }
 
-//(scandir);
+LFS64(scandir);

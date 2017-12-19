@@ -3,14 +3,13 @@
 #include <elf.h>
 #include "pthread_impl.h"
 #include "atomic.h"
-pthread_t __pthread_self_def(); // -cmg
+
 uintptr_t __stack_chk_guard;
 
-void init_ssp(size_t *auxv)
+void __init_ssp(size_t *auxv)
 {
 	size_t i;
-	//pthread_t self = __pthread_self_init();
-	pthread_t self = __pthread_self_def(); // -cmg
+	pthread_t self = __pthread_self_init();
 	uintptr_t canary;
 	for (i=0; auxv[i] && auxv[i]!=AT_RANDOM; i+=2);
 	if (auxv[i]) memcpy(&canary, (void *)auxv[i+1], sizeof canary);
@@ -20,5 +19,5 @@ void init_ssp(size_t *auxv)
 
 void __stack_chk_fail(void)
 {
-	;//a_crash();
+	a_crash();
 }

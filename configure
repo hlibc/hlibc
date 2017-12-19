@@ -2,7 +2,7 @@
 
 usage () {
 cat <<EOF
-Usage: $0 [OPTION]... [VAR=VALUE]... [BUILDTYPE]
+Usage: $0 [OPTION]... [VAR=VALUE]... [TARGET]
 
 To assign environment variables (e.g., CC, CFLAGS...), specify them as
 VAR=VALUE.  See below for descriptions of some of the useful variables.
@@ -21,12 +21,12 @@ Fine tuning of the installation directories:
 
 System types:
   --target=TARGET         configure to run on target TARGET [detected]
-  --build=BUILD           same as --target
+  --host=HOST             same as --target
 
 Optional features:
   --enable-debug          build with debugging information [disabled]
   --enable-warnings       build with recommended warnings flags [disabled]
-  --enable-gcc-wrapper    build gcc-wrap toolchain wrapper [auto]
+  --enable-gcc-wrapper    build musl-gcc toolchain wrapper [auto]
   --disable-shared        inhibit building shared library [enabled]
   --disable-static        inhibit building static library [enabled]
 
@@ -67,17 +67,34 @@ return 1
 fi
 }
 
+tryldflag () {
+printf "checking whether linker accepts %s... " "$2"
+echo "typedef int x;" > "$tmpc"
+if "$CC" -nostdlib -shared "$2" -o /dev/null "$tmpc" 2>/dev/null ; then
+printf "yes\n"
+eval "$1=\"\${$1} \$2\""
+eval "$1=\${$1# }"
+return 0
+else
+printf "no\n"
+return 1
+fi
+}
+
 
 
 # Beginning of actual script
 
+CFLAGS_C99FSE=
+CFLAGS_AUTO=
+LDFLAGS_AUTO=
 prefix=
 exec_prefix=
 bindir=
 libdir=
 includedir=
 syslibdir=
-build=
+target=
 debug=no
 warnings=
 shared=yes
@@ -102,14 +119,15 @@ case "$arg" in
 --disable-warnings|--enable-warnings=no) warnings=no ;;
 --enable-gcc-wrapper|--enable-gcc-wrapper=yes) wrapper=yes ;;
 --disable-gcc-wrapper|--enable-gcc-wrapper=no) wrapper=no ;;
---enable-*|--disable-*|--with-*|--without-*|--*dir=*|--host=*) ;;
---build=*|--target=*) build=${arg#*=} ;;
+--enable-*|--disable-*|--with-*|--without-*|--*dir=*|--build=*) ;;
+--host=*|--target=*) target=${arg#*=} ;;
 -* ) echo "$0: unknown option $arg" ;;
 CC=*) CC=${arg#*=} ;;
 CFLAGS=*) CFLAGS=${arg#*=} ;;
 CPPFLAGS=*) CPPFLAGS=${arg#*=} ;;
 LDFLAGS=*) LDFLAGS=${arg#*=} ;;
-*) build=$arg ;;
+*=*) ;;
+*) target=$arg ;;
 esac
 done
 
@@ -144,13 +162,13 @@ printf "%s\n" "$CC"
 test -n "$CC" || { echo "$0: cannot find a C compiler" ; exit 1 ; }
 
 #
-# Only build gcc-wrap wrapper if toolchain does not already target musl
+# Only build musl-gcc wrapper if toolchain does not already target musl
 #
 if test -z "$wrapper" ; then
 printf "checking whether compiler is gcc... "
-if fnmatch 'gcc*|GCC*' "$("$CC" --version 2>/dev/null)" ; then
+if fnmatch '*gcc\ version*' "$("$CC" -v 2>&1)" ; then
 echo yes
-printf "checking whether to build gcc-wrap wrapper... "
+printf "checking whether to build musl-gcc wrapper... "
 wrapper=yes
 while read line ; do
 case "$line" in */ld-musl-*) wrapper=no ;; esac
@@ -166,22 +184,22 @@ fi
 
 
 #
-# Find the build architecture
+# Find the target architecture
 #
-printf "checking build system type... "
-test -n "$build" || build=$("$CC" -dumpmachine 2>/dev/null) || build=unknown
-printf "%s\n" "$build"
+printf "checking target system type... "
+test -n "$target" || target=$("$CC" -dumpmachine 2>/dev/null) || target=unknown
+printf "%s\n" "$target"
 
 #
 # Convert to just ARCH
 #
-case "$build" in
+case "$target" in
 arm*) ARCH=arm ;;
-aarch64*) ARCH=aarch64 ;;
 i?86*) ARCH=i386 ;;
 x86_64*) ARCH=x86_64 ;;
-unknown) fail "$0: unable to detect built target; try $0 --build=..." ;;
-*) fail "$0: unknown or unsupported build target \"$build\"" ;;
+mips-*) ARCH=mips ;;
+unknown) fail "$0: unable to detect target arch; try $0 --target=..." ;;
+*) fail "$0: unknown or unsupported target \"$target\"" ;;
 esac
 
 #
@@ -191,37 +209,37 @@ tryflag CFLAGS_C99FSE -std=c99
 tryflag CFLAGS_C99FSE -nostdinc
 tryflag CFLAGS_C99FSE -ffreestanding \
 || tryflag CFLAGS_C99FSE -fno-builtin
-#tryflag CFLAGS_C99FSE -fexcess-precision=standard \
-#|| tryflag CFLAGS_C99FSE -ffloat-store
-#tryflag CFLAGS_C99FSE -frounding-math
+tryflag CFLAGS_C99FSE -fexcess-precision=standard \
+|| { test "$ARCH" = i386 && tryflag CFLAGS_C99FSE -ffloat-store ; }
+tryflag CFLAGS_C99FSE -frounding-math
 
 #
 # Setup basic default CFLAGS: debug, optimization, and -pipe
 #
-#if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then :
-#else
-#tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
-#fi
-#test "x$debug" = xyes && CFLAGS_AUTO="-g"
-#tryflag CFLAGS_AUTO -pipe
+if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then :
+else
+tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
+fi
+test "x$debug" = xyes && CFLAGS_AUTO="-g"
+tryflag CFLAGS_AUTO -pipe
 
 #
 # If debugging is disabled, omit bloated DWARF2 unwind tables & frame ptr
 #
-#if fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS" ; then :
-#else 
-#tryflag CFLAGS_AUTO -fno-unwind-tables
-#tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
-#tryflag CFLAGS_AUTO -fomit-frame-pointer
-#fi
+if fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS" ; then :
+else 
+tryflag CFLAGS_AUTO -fno-unwind-tables
+tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
+tryflag CFLAGS_AUTO -fomit-frame-pointer
+fi
 
 #
 # Some optimization levels add bloated alignment that hurt performance
 #
-#tryflag CFLAGS_AUTO -falign-functions=1
-#tryflag CFLAGS_AUTO -falign-labels=1
-#tryflag CFLAGS_AUTO -falign-loops=1
-#tryflag CFLAGS_AUTO -falign-jumps=1
+tryflag CFLAGS_AUTO -falign-functions=1
+tryflag CFLAGS_AUTO -falign-labels=1
+tryflag CFLAGS_AUTO -falign-loops=1
+tryflag CFLAGS_AUTO -falign-jumps=1
 
 #
 # On x86, make sure we don't have incompatible instruction set
@@ -246,6 +264,22 @@ tryflag CFLAGS_AUTO -Wno-unused-but-set-variable
 tryflag CFLAGS_AUTO -Wno-unknown-pragmas
 fi
 
+# Some patched GCC builds have these defaults messed up...
+tryflag CFLAGS_AUTO -fno-stack-protector
+tryldflag LDFLAGS_AUTO -Wl,--hash-style=sysv
+
+# Disable dynamic linking if ld is broken and can't do -Bsymbolic-functions
+LDFLAGS_DUMMY=
+tryldflag LDFLAGS_DUMMY -Wl,-Bsymbolic-functions || {
+printf "warning: disabling dynamic linking support\n"
+shared=no
+}
+
+test "$ARCH" = "mips" && {
+printf "warning: disabling dynamic linking support on mips (not yet supported)\n"
+shared=no
+}
+
 
 printf "creating config.mak... "
 
@@ -266,7 +300,7 @@ CC = $CC
 CFLAGS= $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
 CPPFLAGS = $CPPFLAGS
-LDFLAGS = $LDFLAGS
+LDFLAGS = $LDFLAGS_AUTO $LDFLAGS
 EOF
 test "x$static" = xno && echo "STATIC_LIBS ="
 test "x$shared" = xno && echo "SHARED_LIBS ="

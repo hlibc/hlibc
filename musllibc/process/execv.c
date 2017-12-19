@@ -1,8 +1,8 @@
 #include <unistd.h>
 
-extern char **environ;
+extern char **__environ;
 
 int execv(const char *path, char *const argv[])
 {
-	return execve(path, argv, environ);
+	return execve(path, argv, __environ);
 }

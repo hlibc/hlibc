@@ -7,4 +7,4 @@ int fstat(int fd, struct stat *buf)
 	return syscall(SYS_fstat, fd, buf);
 }
 
-//(fstat);
+LFS64(fstat);

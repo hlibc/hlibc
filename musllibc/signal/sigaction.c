@@ -11,8 +11,8 @@ int __libc_sigaction(int sig, const struct sigaction *sa, struct sigaction *old)
 	return 0;
 }
 
-int sigaction(int sig, const struct sigaction *sa, struct sigaction *old)
+int __sigaction(int sig, const struct sigaction *sa, struct sigaction *old)
 {
 }
 
-
+weak_alias(__sigaction, sigaction);
