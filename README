@@ -113,36 +113,31 @@ ROADMAP:
 	Write more tests in C, add them to tests/ and script them into build.sh
 	Scripting should be kept dead simple. Utility code can be taken from 
 	arbsh/posix if new unique C code is needed.
-	(easy)
 
-	Remove and rewrite strtok
-	(intermediate)
+	Remove and rewrite strtok.
 
-	Add an fdopen() function and redesign popen() to use it
-	(advanced)
+	Add an fdopen() function and redesign popen() to use it. 
 
 	Redesign the syscall interface to use unique code and start removing the
-	remnants of musllibc/
-	(advanced)
+	remnants of musllibc/.
 
 	Add more string functions, essentially finishing hlibc/string for non-
-	wide character support. strrchr
-	(intermediate)
+	wide character support. 
 
-	Support for properly printing and rounding of floats / doubles.
-		When this is done the printf test in tools/build.sh can be
-		uncommented. In the meantime that test can be used to finish
-		_print_inter
-	(extremely advanced)
+	Support for properly printing and rounding of floats / doubles. When 
+	this is done the printf test in tools/build.sh can be uncommented. In 
+	the meantime that test can be used to finish _print_inter.c.
 
 	Rewrite getopt(), write tests for getopt(). This getopt version was
 	written by Henry Spencer and is not unique to hlibc.
-	(intermediate)
 
 	Address proper switching between unbuffered, line buffered and buffered
 	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
 	and then with the internal atexit-style handlers.
-	(advanced)
+
+	Fix the experimental MIPS port. Popen and stat are not working 
+	correctly.
+	
 
 REVISION CONTROL:
 -----------------
