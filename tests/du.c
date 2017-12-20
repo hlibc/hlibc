@@ -35,7 +35,7 @@ int populatetab(size_t inode)
 void destroytab()
 {
         size_t i = 0;
-        while ( i < HASH || hashtab[i] )
+        while (i < HASH)
         {
                 free(hashtab[i]);
                 hashtab[i] = NULL;
