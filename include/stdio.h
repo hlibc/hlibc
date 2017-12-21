@@ -75,7 +75,10 @@ int fflush(FILE *);
 int ferror(FILE *);
 
 /* remove */
-int remove(const char *pathname);
+int remove(const char *);
+
+/* perror */
+void perror(const char *);
 
 /* opaque objects */
 FILE *stdin;
