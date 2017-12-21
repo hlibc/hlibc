@@ -149,6 +149,20 @@ REVISION CONTROL:
 	https://git.zv.io/me/hlibc
 
 
+DEVELOPERS:
+-----------
+
+	One of the simplest ways to contribute to hlibc is to make patches
+	using `git'. They can be constructed as follows:
+
+		git add hlibc/path/to/work.c
+		git commit -m "something new added"
+		git format-patch -1 --stdout > work.patch
+
+	After the patch is constructed it can be handed over via a pastebin by
+	posting the work on #hlibc on irc.freenode.net.
+
+
 WEB HOME:
 ---------
 
