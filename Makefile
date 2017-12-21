@@ -159,7 +159,7 @@ control: $(CONTROL_OBJ)
 
 gcctests:
 	$(MAKE) $(GCC_WRAP) testing
-	LDLIBS="-lm" $(MAKE) control 2>/dev/null
+	LDLIBS="-lm -lbsd" $(MAKE) control 2>/dev/null
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing
