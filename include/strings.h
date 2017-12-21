@@ -12,5 +12,6 @@ int strncasecmp (const char *, const char *, size_t);
 size_t strlen(const char *s);
 char *strrchr(const char *s, int c);
 char *strchr(const char *s, int c);
+int bcmp(const void *s1, const void *s2, size_t n);
 #endif
 

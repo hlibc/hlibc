@@ -53,17 +53,17 @@ diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
 echo "\`atoll' test compared equal to its control method" || \
 echo "##atoll test failed" 
 
-./tests/strlcpy > ${SUF}/diff2 2>${SUF}/testerr
-./control/strlcpy > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`strlcpy' test compared equal to its control method" || \
-echo "##strlcpy test failed" 
+#./tests/strlcpy > ${SUF}/diff2 2>${SUF}/testerr
+#./control/strlcpy > ${SUF}/diff3 2>${SUF}/testerr
+#diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+#echo "\`strlcpy' test compared equal to its control method" || \
+#echo "##strlcpy test failed" 
 
-./tests/strlcat > ${SUF}/diff2 2>${SUF}/testerr
-./control/strlcat > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`strlcat' test compared equal to its control method" || \
-echo "##strlcat test failed" 
+#./tests/strlcat > ${SUF}/diff2 2>${SUF}/testerr
+#./control/strlcat > ${SUF}/diff3 2>${SUF}/testerr
+#diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+#echo "\`strlcat' test compared equal to its control method" || \
+#echo "##strlcat test failed" 
 
 ./tests/cat Makefile > ${SUF}/diff1 2>${SUF}/testerr 
 diff Makefile ${SUF}/diff1 2>&1 > ${SUF}/testerr && \
