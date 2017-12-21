@@ -106,11 +106,11 @@ diff Makefile ${SUF}/testfile 2>&1 > ${SUF}/testerr && \
 echo "\`printf_driver' test utility successfully created and copied a large file of urandom data" || \
 echo "##printf driver was unable to create and copy a large file of urandom data"
 
-./tests/strsep-driver > ${SUF}/diff2 2>${SUF}/testerr
-./control/strsep-driver > ${SUF}/diff3 2>${SUF}testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr && \
-echo "\`strsep_driver' test compared equal to its control method" || \
-echo "##strsep driver test failed"
+#./tests/strsep-driver > ${SUF}/diff2 2>${SUF}/testerr
+#./control/strsep-driver > ${SUF}/diff3 2>${SUF}testerr
+#diff ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr && \
+#echo "\`strsep_driver' test compared equal to its control method" || \
+#echo "##strsep driver test failed"
 
 printf "============================================================\n"
 
