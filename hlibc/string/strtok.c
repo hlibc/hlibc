@@ -2,51 +2,59 @@
 
 #include <string.h>
 
+static char *saveptr;
+
 char *strtok(char *s, const char *delim)
 {
-	char *token;
-	char *span;
-	static char *last;
+	return strtok_r(s, delim, &saveptr);
+}
 
-	int c;
-	int hold;
+char *strtok_r(char *s, const char *delim, char **saveptr)
+{
+	char *start = NULL;
 
+	// Check if successive call
 	if (s == NULL) {
-		s = last;
-		if (s == NULL) {
+		if (*saveptr == NULL) {
 			return NULL;
 		}
+		
+		s = *saveptr;
 	}
+	
+	// Advance to non-delimiter
+	for (; *s != '\0'; ++s) {
+		// Iterate through delimiter list; advance if delimiter found
+		for (const char *d = delim; *d != '\0'; ++d) {
+			if (*s == *d) {
+				goto advance;
+			}
+		}
 
-	c = *s++;
-
-	for (span = (char *)delim; (hold = *span++) != 0;) {
-		if (c == hold) {
-			c    = *s++;
-			span = (char *)delim;
+		start = s;
+		break;
+	advance:
+		continue;
+	}
+	
+	// Advance to delimiter
+	for (; *s != '\0'; ++s) {
+		// Iterate through delimiter list
+		for (const char *d = delim; *d != '\0'; ++d) {
+			if (*s == *d) {
+				*saveptr = s + 1;
+				
+				*s = '\0';
+				return start;
+			}
 		}
 	}
 
-	if (c == 0) {
-		return (last = NULL);
-	}
-
-	token = s - 1;
-
-	while (1) {
-		c    = *s++;
-		span = (char *)delim;
-		do {
-			if ((hold = *span++) == c) {
-				if (c == 0) {
-					s = NULL;
-				}
-				else {
-					s[-1] = 0;
-				}
-				last = s;
-				return (token);
-			}
-		} while (hold != 0);
-	}
+	// If no delimiter was found, then no successive calls are necessary.
+	*saveptr = NULL;
+	
+	// The first loop will read until a delimiter or '\0'
+	// If it reaches '\0', start remains to be NULL.
+	// And the second loop is not executed, as its condition fails.
+	return start;
 }

@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-char *strpbrk(char *haystack, char *needles)
+char *strpbrk(const char *haystack, const char *needles)
 {
 	if (haystack == NULL || needles == NULL) return NULL;
 
