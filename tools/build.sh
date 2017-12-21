@@ -7,8 +7,13 @@ make clean
 CC=$2 ./configure --prefix=${TOOLING} --enable-gcc-wrapper
 mkdir -p ${SUF}
 mkdir -p control
+mkdir -p posix-utils-control
 for i in tests/*.c
 do ln $i control/$(basename $i)
+done
+
+for i in posix-utils/*.c posix-utils/*.h
+do ln $i posix-utils-control/$(basename $i)
 done
 printf "automatic build is being logged to: ${SUF}/buildlog \n\n"
 CC=clang make -j4 > ${SUF}/buildlog 2>&1

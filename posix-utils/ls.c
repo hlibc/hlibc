@@ -48,6 +48,7 @@ struct global{
 int main(int argc, char *argv[])
 { 
 	int o;
+	global.plain = 1; 
 	/* POSIX ls [-CFRacdilqrtu1][-H | -L  */
 	while ((o = getopt (argc, argv, "lUinxhCaR")) != -1)
 		switch (o) { 
@@ -211,7 +212,8 @@ void print_strings(char *s[], size_t c, size_t refactor, int max)
 	for (i = 0, z = 0; i <= c + refactor; i++)
 	{ 
 		if ((s[i])) 
-			printf("%-*s ", max , s[i]);
+			//printf("%-*s ", max , s[i]);
+			printf("%s ", s[i]);
 		if ( ++z % refactor == 0 )
 			printf("\n"); 
 	} 
@@ -229,8 +231,8 @@ void print_plain(size_t c)
 
 void ls_error(char *message, int i)
 { 
-//	if ( i > 0 )
-//		perror("Error: ");
+	if ( i > 0 )
+		perror("Error: ");
 	fprintf(stderr, "%s", message);
 	exit (i);
 }
@@ -311,7 +313,9 @@ void octtoperm(int octal)
 	else	
 		s[i++] = '-';
 
-	write(1, s, i);
+	//write(1, s, i);
+	s[i] = 0;
+	printf("%s ", s);
 }
 
 int compare (const void * a, const void * b )
@@ -330,9 +334,11 @@ void prntstats(char *file)
 		return;
 	octtoperm(sb.st_mode);
 	printf(" "); 
-	if ( global.inode == 1)
-	      printf("%-8llu ", sb.st_ino);
-	printf("%-3ld ", sb.st_nlink);
+	//if ( global.inode == 1)
+	//       printf("%-8llu ", sb.st_ino);
+	//	printf("%llu ", sb.st_ino);
+	//printf("%-3ld ", sb.st_nlink);
+	//printf("%ld ", sb.st_nlink);
 	//if ( global.numer == 1)
 		printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
 	//else {
@@ -341,8 +347,10 @@ void prntstats(char *file)
 	//	if ((grp = getgrgid(sb.st_gid)) != NULL )
 	//		printf("%s ", grp->gr_name);
 	//} 
-	printf("%8lld ", (long long int)sb.st_size); 
+	//printf("%8lld ", (long long int)sb.st_size); 
+	printf("%lld ", (long long int)sb.st_size); 
 	//printf("%.16s   ", strchr(ctime(&sb.st_mtime), ' '));
+	//printf("%s ", strchr(ctime(&sb.st_mtime), ' '));
 	printf("%s\n", file); 
 } 
 
@@ -350,7 +358,7 @@ int find_pattern(char *path, size_t tot, size_t last)
 { 
 	DIR *dir;
 	struct dirent *d;
-	char *spath = malloc (1); 
+	char *spath = malloc(1);
 	size_t dlen = 0;
 
 	
@@ -390,7 +398,8 @@ int find_pattern(char *path, size_t tot, size_t last)
 			d = readdir(dir); 
 		} 
 	}
-	free(spath);
-	closedir(dir);
+		free(spath);
+	if (dir)
+		closedir(dir);
 	return 0;
 } 

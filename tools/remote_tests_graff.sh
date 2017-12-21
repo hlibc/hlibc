@@ -1,5 +1,5 @@
 COMMAND='rm -rf hlibc ; git clone https://git.zv.io/me/hlibc/ ; cd hlibc ; make gcctest'
-
+MIPSCOMMAND='rm -rf hlibc-mips ; git clone https://git.zv.io/me/hlibc/ hlibc-mips ; cd hlibc-mips ; make gcctest'
 
 test_i386()
 {
@@ -19,11 +19,17 @@ test_arm()
 }
 test_arm > test_arm_log 2>&1
 
+test_mips()
+{
+	ssh cgraff1@gcc22.fsffrance.org -f "$MIPSCOMMAND"
+}
+test_mips > test_mips_log 2>&1
+
 
 LLVMCOMMAND='rm -rf clanghlibc ; git clone https://www.github.com/cmgraff/hlibc clanghlibc; cd clanghlibc ; make clangtest'
 
-test_arm_clang()
+test_x86_64_clang()
 {
-	ssh cgraff1@arm.zv.io -f "$LLVMCOMMAND"
+	ssh cgraff1@gcc75.fsffrance.org -f "$LLVMCOMMAND"
 }
-test_arm_clang > test_arm_clang_log 2>&1
+test_x86_64_clang > test_x86_64_clang_log 2>&1

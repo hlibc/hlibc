@@ -22,7 +22,7 @@ GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static"
 CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
 TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
 TEST_OBJ = $(TEST_SRCS:.c=) 
-CONTROL_SRCS = $(sort $(wildcard control/*.c))
+CONTROL_SRCS = $(sort $(wildcard control/*.c) $(wildcard posix-utils-control/*.c) )
 CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
 LDFLAGS = 
@@ -56,39 +56,27 @@ ALL_TOOLS = tools/gcc-wrap
 
 LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
 
-
-all: prepare_for_aarch64 $(ALL_LIBS) $(ALL_TOOLS)
+all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
 	-./tools/create_wrappers.sh
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
-
-prepare_for_aarch64:
-
-ifeq ($(ARCH), aarch64)
-	-rm -f fdlibm/math/acosl.c
-	-rm -f fdlibm/math/asinl.c
-	-rm -f fdlibm/math/atan2l.c
-	-rm -f fdlibm/math/atanl.c
-endif
-
 clean:
-	-rm -f crt/*.o
-	-rm -f $(OBJS)
-	-rm -f $(LOBJS)
-	-rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
-	-rm -f $(ALL_TOOLS)
-	-rm -f $(GENH) 
-	-rm -f include/bits
-	-make clean_test
-	-rm -f config.mak
-	-rm -rf usr logs
-	-$(MAKE) clean_test 
-	-rm -f test_i386_log test_x86_64_log test_arm_log test_arm_clang_log
-	-rm -f tools/clang-wrap
-	-$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
+	-$(RM) -f crt/*.o
+	-$(RM) -f $(OBJS)
+	-$(RM) -f $(LOBJS)
+	-$(RM) -f $(ALL_LIBS) lib/*.[ao] lib/*.so
+	-$(RM) -f $(ALL_TOOLS)
+	-$(RM) -f $(GENH) 
+	-$(RM) -f include/bits
+	-$(RM) -f config.mak
+	-$(RM) -rf usr logs
+	-$(RM) -f test_*
+	-$(RM) -f tools/clang-wrap
+	-$(RM) -f $(TEST_OBJ) $(CONTROL_OBJ) 
 	-$(RM) -r control
+	-$(RM) -r posix-utils-control
 
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make test' to invoke the suite" ; exit 1 ; }
@@ -117,12 +105,12 @@ lib/libc.so: $(LOBJS)
 	-Wl,-soname=libc.so -o $@ $(LOBJS) -lgcc
 
 lib/libc.a: $(OBJS)
-	rm -f $@
+	$(RM) -f $@
 	$(AR) rc $@ $(OBJS)
 	$(RANLIB) $@
 
 $(EMPTY_LIBS):
-	rm -f $@
+	$(RM) -f $@
 	$(AR) rc $@
 
 lib/%.o: crt/%.o
@@ -159,7 +147,7 @@ control: $(CONTROL_OBJ)
 
 gcctests:
 	$(MAKE) $(GCC_WRAP) testing
-	LDLIBS="-lm" $(MAKE) control 2>/dev/null
+	CFLAGS="-static" LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing
