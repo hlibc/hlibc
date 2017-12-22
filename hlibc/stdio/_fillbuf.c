@@ -8,7 +8,7 @@ int _fillbuf(FILE *fp)
 		return EOF;
 	bufsize = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
 	if (fp->buf == NULL)
-		if ((fp->buf =  calloc(1, bufsize)) == NULL)
+		if ((fp->buf = malloc(bufsize)) == NULL)
 			return EOF;
 	
 	fp->rp = fp->buf;
