@@ -1,5 +1,3 @@
-/* Copyright 2017, Mohammad M. Rakib */
-
 #include <string.h>
 
 char *strstr(const char *haystack, const char *needle)
@@ -8,14 +6,18 @@ char *strstr(const char *haystack, const char *needle)
 	const char *n = needle;
 
 	while (*haystack) {
-		while (*n++ && (*h == *n)) h++;
+		h = haystack;
+		n = needle;
 
+		while (*h != '\0' && *n != '\0' && *h == *n) {
+			++h;
+			++n;
+		}
 		if (!*n) return (char *)haystack;
 
 		haystack++;
-		h = haystack;
-		n = needle;
 	}
 
 	return NULL;
 }
+
