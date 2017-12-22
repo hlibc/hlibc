@@ -1,12 +1,11 @@
 #include "../internal/internal.h"
 #include <stdarg.h>
-#include <string.h> /* only for memset() */
+#include <string.h>
 
-size_t __uint2str(char *s, size_t n, int base, size_t i)
+size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
 	if (n / base) {
-		i = 0;
-		i = __uint2str(s, n / base, base, i);
+		i = __uint2str_inter(s, n / base, base, i);
 	}
 	if (n % base + '0' > '9') {
 		s[i] = (n % base + '0' + 39);
@@ -17,13 +16,10 @@ size_t __uint2str(char *s, size_t n, int base, size_t i)
 	return ++i;
 }
 
-size_t __int2str(char *s, long long n, int base, size_t i)
+size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
-	/* Do these calculations in the negative range */
-	long long val = 0;
 	if (-n / base) {
-		i = 0;
-		i = __int2str(s, n / base, base, i);
+		i = __int2str_inter(s, n / base, base, i);
 	}
 	if (n % base + '0' > '9') {
 		s[i] = (-(n % base) + '0' + 39);
@@ -35,7 +31,7 @@ size_t __int2str(char *s, long long n, int base, size_t i)
 	return ++i;
 }
 
-size_t int2str(char *s, long long n, int base)
+size_t __int2str(char *s, long long n, int base)
 {
 	size_t i = 0;
 	int toggle = 0;
@@ -46,40 +42,16 @@ size_t int2str(char *s, long long n, int base)
 		s[0]   = '-';
 		toggle = 1;
 	}
-	return __int2str(s + toggle, n, base, i) + toggle;
+	return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
-size_t uint2str(char *s, size_t n, int base)
+size_t __uint2str(char *s, size_t n, int base)
 {
-	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 	size_t i = 0;
-	if (n < 10) {
-		s[0] = convtab[n];
-		return 1;
-	}
-	return __uint2str(s, n, base, i);
+	return __uint2str_inter(s, n, base, i);
 }
 
-/*
-
-These are notes taken from dalias, they should be applied to the float
-conversion routine below.  -graff
-
-A:
-10 is 1010 (<<3 | <<1) in binary so it increases the number of bits you'd
-need to preserve the value by 2 each time you do it but a given floating
-point type has fixed width so after a few steps you're throwing away data
-
-B:
-you could use a large array of doubles whose sum is the whole value, and
-multiply by 10 in it but that's less efficient than an array of ints
-since the exponents are redundant ultimately your bignum work should yield
-a nice way to do it what's in musl is just very-special-case bignum without
-generality to do other ops
-
-*/
-
-size_t flt2str(char *s, double flt)
+size_t __flt2str(char *s, double flt)
 {
 	size_t i	= 0;
 	long long real  = flt;
@@ -88,7 +60,7 @@ size_t flt2str(char *s, double flt)
 	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 	if (real != 0) {
-		i = int2str(s, real, 10);
+		i = __int2str(s, real, 10);
 	}
 	else {
 		s[i++] = '0';
@@ -229,20 +201,20 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 			break;
 		integer:
 			memset(converted, 0, 100);
-			convlen = int2str(converted, lval, base);
+			convlen = __int2str(converted, lval, base);
 			for (j = 0; j < convlen; ++j) {
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			base = 10;
 			break;
 		uinteger:
-			convlen = uint2str(converted, zuval, base);
+			convlen = __uint2str(converted, zuval, base);
 			for (j = 0; j < convlen; ++j) {
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			break;
 		floating:
-			convlen = flt2str(converted, fval);
+			convlen = __flt2str(converted, fval);
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {
