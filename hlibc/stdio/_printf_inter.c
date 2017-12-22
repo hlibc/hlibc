@@ -2,12 +2,11 @@
 #include <stdarg.h>
 #include <string.h> /* only for memset() */
 
-size_t __uint2str(char *s, size_t n, int base)
+size_t __uint2str(char *s, size_t n, int base, size_t i)
 {
-	static size_t i = 0;
 	if (n / base) {
 		i = 0;
-		__uint2str(s, n / base, base);
+		i = __uint2str(s, n / base, base, i);
 	}
 	if (n % base + '0' > '9') {
 		s[i] = (n % base + '0' + 39);
@@ -20,12 +19,8 @@ size_t __uint2str(char *s, size_t n, int base)
 
 size_t __int2str(char *s, long long n, int base, size_t i)
 {
-	/*
-	    Do these calculations in the negative range so
-	    that the entire range of LONG_MIN to LONG_MAX
-	    is handled
-	*/
-	long long val   = 0;
+	/* Do these calculations in the negative range */
+	long long val = 0;
 	if (-n / base) {
 		i = 0;
 		i = __int2str(s, n / base, base, i);
@@ -57,11 +52,12 @@ size_t int2str(char *s, long long n, int base)
 size_t uint2str(char *s, size_t n, int base)
 {
 	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+	size_t i = 0;
 	if (n < 10) {
 		s[0] = convtab[n];
 		return 1;
 	}
-	return __uint2str(s, n, base);
+	return __uint2str(s, n, base, i);
 }
 
 /*
@@ -125,28 +121,27 @@ int _populate(int incr, int x, int flag, char *s, FILE *fp)
 	return incr + 1;
 }
 
-int _printf_inter(
-	FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
+int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
 	/* flag == 0 == printf, vprintf, dprintf etc  */
 
 	const char *p = NULL;
-	size_t i      = 0;
-	size_t bound  = BUFSIZ;
-	int base      = 10;
+	size_t i = 0;
+	size_t bound = BUFSIZ;
+	int base = 10;
 
 	/* Hold converted numerical strings */
 	char converted[BUFSIZ] = { 0 };
-	size_t convlen	 = 0;
-	size_t j	       = 0;
+	size_t convlen = 0;
+	size_t j = 0;
 
 	/* data types */
-	int cval	 = 0;
-	char *sval       = NULL;
-	size_t zuval     = 0;
-	long long lval   = 0;
+	int cval = 0;
+	char *sval = NULL;
+	size_t zuval = 0;
+	long long lval = 0;
 	long double fval = 0;
 
 	/* float precision */
@@ -267,3 +262,4 @@ int _printf_inter(
 	}
 	return i;
 }
+
