@@ -26,7 +26,7 @@ test_mips()
 test_mips > test_mips_log 2>&1
 
 
-LLVMCOMMAND='rm -rf clanghlibc ; git clone https://www.github.com/cmgraff/hlibc clanghlibc; cd clanghlibc ; make clangtest'
+LLVMCOMMAND='rm -rf clanghlibc ; git clone https://git.zv.io/me/hlibc/ clanghlibc; cd clanghlibc ; make clangtest'
 
 test_x86_64_clang()
 {

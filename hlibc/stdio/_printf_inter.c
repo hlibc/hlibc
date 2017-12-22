@@ -4,30 +4,22 @@
 
 size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
+	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 	if (n / base) {
 		i = __uint2str_inter(s, n / base, base, i);
 	}
-	if (n % base + '0' > '9') {
-		s[i] = (n % base + '0' + 39);
-	}
-	else {
-		s[i] = (n % base + '0');
-	}
+
+	s[i] = convtab[(n % base)];
 	return ++i;
 }
 
 size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
+	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
 	}
-	if (n % base + '0' > '9') {
-		s[i] = (-(n % base) + '0' + 39);
-	}
-	else {
-		s[i] = (-(n % base) + '0');
-	}
-
+	s[i] = convtab[+(-(n % base))];
 	return ++i;
 }
 
@@ -36,12 +28,12 @@ size_t __int2str(char *s, long long n, int base)
 	size_t i = 0;
 	int toggle = 0;
 	if (n >= 0) {
-		n = -n;
-	}
+	n = -n;
+ 	} 
 	else {
-		s[0]   = '-';
+ 		s[0]   = '-'; 
 		toggle = 1;
-	}
+ 	}
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
