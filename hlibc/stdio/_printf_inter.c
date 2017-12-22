@@ -18,18 +18,17 @@ size_t __uint2str(char *s, size_t n, int base)
 	return ++i;
 }
 
-size_t __int2str(char *s, long long n, int base)
+size_t __int2str(char *s, long long n, int base, size_t i)
 {
 	/*
 	    Do these calculations in the negative range so
 	    that the entire range of LONG_MIN to LONG_MAX
 	    is handled
 	*/
-	static size_t i = 0;
 	long long val   = 0;
 	if (-n / base) {
 		i = 0;
-		__int2str(s, n / base, base);
+		i = __int2str(s, n / base, base, i);
 	}
 	if (n % base + '0' > '9') {
 		s[i] = (-(n % base) + '0' + 39);
@@ -43,15 +42,16 @@ size_t __int2str(char *s, long long n, int base)
 
 size_t int2str(char *s, long long n, int base)
 {
+	size_t i = 0;
 	int toggle = 0;
-	if (n > 0) {
+	if (n >= 0) {
 		n = -n;
 	}
 	else {
 		s[0]   = '-';
 		toggle = 1;
 	}
-	return __int2str(s + toggle, n, base) + toggle;
+	return __int2str(s + toggle, n, base, i) + toggle;
 }
 
 size_t uint2str(char *s, size_t n, int base)
