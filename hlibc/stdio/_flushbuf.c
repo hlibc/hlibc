@@ -21,7 +21,7 @@ int _flushbuf(int x, FILE *fp)
 		}
 	}
 
-	fp->rp  = fp->buf;
+	fp->rp = fp->buf;
 	fp->len = bufsize - 1;
 	if (x != EOF)
 		*fp->rp++ = (char)x;
