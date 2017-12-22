@@ -49,10 +49,12 @@ int main(int argc, char *argv[])
 
 		fprintf(stdout, "decimal value of 987654         %d\n", 987654);
 		fprintf(stdout, "octal value of 987654           %o\n", 987654);
+		fprintf(stdout, "hexadecimal value of 987654     %x\n", 987654);
 		fprintf(stdout, "The string literal \"987654\"     %s\n", "987654");
 		fprintf(stdout, "decimal value of -987654        %d\n", -987654);
 		dprintf(1, "decimal value of 987654         %d\n", 987654);
 		dprintf(1, "octal value of 987654           %o\n", 987654);
+		dprintf(1, "hexadecimal value of 987654     %x\n", 987654);
 		dprintf(1, "The string literal \"987654\"     %s\n", "987654");
 		dprintf(1, "decimal value of -987654        %d\n", -987654);
 

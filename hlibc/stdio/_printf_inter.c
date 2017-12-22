@@ -4,7 +4,7 @@
 
 size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
-	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 	if (n / base) {
 		i = __uint2str_inter(s, n / base, base, i);
 	}
@@ -14,7 +14,7 @@ size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 
 size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
-	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
 	}

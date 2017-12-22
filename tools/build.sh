@@ -121,7 +121,7 @@ echo "##printf driver was unable to create and copy a large file of urandom data
 ./control/printf-driver-integers > ${SUF}/diff3
 diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
 echo "\`printf-driver-integers' compared equal to its control method" || \
-echo "##printf-driver-integers failed to copare equal to its control method"
+echo "##printf-driver-integers failed to compare equal to its control method"
 
 printf "============================================================\n"
 
