@@ -20,7 +20,7 @@ int _fillbuf(FILE *fp)
 		else
 			fp->flags |= _ERR;
 		fp->len = 0;
-		fflush(NULL);
+		fflush(fp);
 		return EOF;
 	}
 
