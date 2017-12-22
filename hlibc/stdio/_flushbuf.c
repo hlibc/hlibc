@@ -3,18 +3,13 @@
 
 int _flushbuf(int x, FILE *fp)
 {
-	int bufsize;
-	static char *buffer = NULL;
-	if ((buffer == NULL)) {
-		if (!(buffer = malloc(BUFSIZ))) {
-			return EOF;
-		}
-	}
-
-	bufsize			   = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
+	int bufsize; 
+	bufsize = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
 
 	if (fp->buf == NULL) {
-		fp->buf = buffer;
+		if ((fp->buf = malloc(bufsize)) == NULL)
+                        return EOF;
+
 		fp->lp = fp->rp = fp->buf;
 	}
 	else if (fp->flags & _WRITE && fp->rp - fp->buf)
