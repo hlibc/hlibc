@@ -8,7 +8,6 @@ size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 	if (n / base) {
 		i = __uint2str_inter(s, n / base, base, i);
 	}
-
 	s[i] = convtab[(n % base)];
 	return ++i;
 }
@@ -28,10 +27,10 @@ size_t __int2str(char *s, long long n, int base)
 	size_t i = 0;
 	int toggle = 0;
 	if (n >= 0) {
-	n = -n;
+		n = -n;
  	} 
 	else {
- 		s[0]   = '-'; 
+ 		s[0] = '-'; 
 		toggle = 1;
  	}
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
