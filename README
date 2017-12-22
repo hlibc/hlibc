@@ -110,6 +110,10 @@ USING LLVM/CLANG:
 ROADMAP:
 --------
 
+	Add new versins of atoi and atol. Using atoll as the driver for them is
+	not working correctly. Compute these in the negative range and flip the
+	values at the end in order to get the entire range.
+
 	Write more tests in C, add them to tests/ and script them into build.sh
 	Scripting should be kept dead simple. Utility code can be taken from 
 	arbsh/posix if new unique C code is needed.
