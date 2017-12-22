@@ -35,7 +35,7 @@ void testgvprintf(char *fmt, ...)
 int main(int argc, char *argv[])
 {
 
-	char string[10] = { 'h', 'e', 'l', 'l', 'o', '\0' };
+	char string[10] = { 's', 't', 'r', 'i', 'n', 'g', 0 };
 	size_t zutest = 1234567;
 	int dtest = -9879871;
 	char string1[1000] = { 0 };

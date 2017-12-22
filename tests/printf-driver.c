@@ -35,7 +35,7 @@ void testgvprintf(char *fmt, ...)
 int main(int argc, char *argv[])
 {
 
-	char string[10] = { 'h', 'e', 'l', 'l', 'o', '\0' };
+	char string[10] = { 's', 't', 'r', 'i', 'n', 'g', 0 };
 	size_t zutest = 1234567;
 	int dtest = -9879871;
 	char string1[1000] = { 0 };
@@ -55,48 +55,30 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "octal value of 987654           %o\n", 987654);
 		fprintf(stdout, "hexadecimal value of 987654     %x\n", 987654);
 		fprintf(stdout, "The string literal \"987654\"     %s\n", "987654");
-		fprintf(stdout, "decimal value of -987654        %d\n", -987654);
-
+		fprintf(stdout, "decimal value of -987654        %d\n", -987654); 
 		
 		dprintf(1, "decimal value of 987654         %d\n", 987654);
 		dprintf(1, "octal value of 987654           %o\n", 987654);
 		dprintf(1, "hexadecimal value of 987654     %x\n", 987654);
 		dprintf(1, "The string literal \"987654\"     %s\n", "987654");
-		dprintf(1, "decimal value of -987654        %d\n", -987654);
+		dprintf(1, "decimal value of -987654        %d\n", -987654); 
 
-
-		//gprintf("gfprintf:\n");
-		//gfprintf(gstderr, format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2);
-
-		//gprintf("gdprintf:\n");
-		//gdprintf(2, format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2);
 		printf("gprintf:\n");
 		printf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2);
 		printf("gsprintf:\n");
 		sprintf(string1, format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2);
 
 		printf("gvprintf:\n");
-		testgvprintf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2);
-
-
+		testgvprintf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2); 
 	
 		printf("%f\n", 43.6565123987324987132479183478173408712409710471249999);
-		printf("%f\n", 21.111111111111111111111111111111111111111111111111111111);
-
-		printf("%f\n", 3.1);
-		//gprintf("%s\n", "a");
-
-		printf("P\n");
-
+		printf("%f\n", 21.111111111111111111111111111111111111111111111111111111); 
+		printf("%f\n", 3.1); 
+		printf("P\n"); 
 		double two = 2;
-		printf("%f\n", two);
-
-
-
-		printf("%zu\n", (size_t)-1);
-
-		size_t t1[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-
+		printf("%f\n", two); 
+		printf("%zu\n", (size_t)-1); 
+		size_t t1[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }; 
 		printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[0], t1[1],t1[2],t1[3],t1[4],t1[5],t1[6],t1[7],t1[8],t1[9],t1[10]);
 		printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[11], t1[12],t1[13],t1[14],t1[15],t1[16],t1[17],t1[18],t1[19],t1[20]);
 
@@ -106,6 +88,7 @@ int main(int argc, char *argv[])
 
 		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t2[0], t2[1],t2[2],t2[3],t2[4],t2[5],t2[6],t2[7],t2[8],t2[9],t2[10]);
 
+		printf("start negatives\n");
 		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[0], t3[1], t3[2],t3[3],t3[4],t3[5],t3[6],t3[7],t3[8],t3[9],t3[10]);
 		printf("%zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]);
 
@@ -141,8 +124,4 @@ int main(int argc, char *argv[])
 	}
 	return 0;
 }
-
-
-
-
 
