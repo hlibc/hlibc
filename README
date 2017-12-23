@@ -12,7 +12,7 @@ DESCRIPTION:
 BUILDING:
 ---------
 
-	hlibc contains a shell wrapper for gcc called gcc-wrap. This allows it 
+	hlibc contains a shell wrapper for gcc called `gcc-wrap`. This allows it 
 	to be easily installed and used from your home directory without the 
 	need for root privilege.
 
@@ -26,10 +26,10 @@ BUILDING:
 		cd /home/$USER/buildarea 
 		./bin/gcc-wrap tests/pow_test.c -static
 
-	Make sure you are using the -static argument whenever you compile
+	Make sure you are using the `-static` argument whenever you compile
 	anything using the gcc wrapper because hlibc only supports static
-	linking at this time. Or delete the libc.so stub in the lib/ directory
-	which will cause the compiler to statically link to the libc.a by
+	linking at this time. Or delete the `libc.so` stub in the `lib/` directory
+	which will cause the compiler to statically link to the `libc.a` by
 	default. 
 
 
@@ -40,7 +40,7 @@ STRUCTURE:
 		Source code original to the musl C library
 
 	hlibc/
-		Source code original to the hlibc C library.
+		Source code original to the hlibc C library
 
 	fdlibm/
 		Source code original to the Sun libm math library
@@ -55,7 +55,7 @@ STRUCTURE:
 		Header files.
 
 	arch/
-		Architecture specific header files.
+		Architecture specific header files
 
 	tools/
 		several tools including the gcc-wrap wrapper script
@@ -75,18 +75,17 @@ AUTOMATIC TESTING:
 	a confirmation notice containing the results of the test suite 
 	will be printed to screen looking something like this:
 
-	==========COMPILING TESTS ===================================
-	=============================================================
-	==========TEST RESULT START==================================
-	This number should be (16.000000): 16.000000    (4^3)
-	This number should be (15.580524): 15.580524    (3.3^2.3)
-	The `cat' utility successfully copied a file
-	The `malloc_driver' test utility successfully iterated through a d ....
-	The `popen_driver' test utility successfully ran `du' on a directo ....
-	The `printf_driver' test utility successfully created and copied a ....
-	The `popen-to-file' driver test utility successfully ran `du' on a ....
-	============================================================
-
+	    ==========COMPILING TESTS ===================================
+	    =============================================================
+	    ==========TEST RESULT START==================================
+	    This number should be (16.000000): 16.000000    (4^3)
+	    This number should be (15.580524): 15.580524    (3.3^2.3)
+	    The `cat' utility successfully copied a file
+	    The `malloc_driver' test utility successfully iterated through a d ....
+	    The `popen_driver' test utility successfully ran `du' on a directo ....
+        The `printf_driver' test utility successfully created and copied a ....
+	    The `popen-to-file' driver test utility successfully ran `du' on a ....
+	    ============================================================
 
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
@@ -110,7 +109,7 @@ USING LLVM/CLANG:
 ROADMAP:
 --------
 
-	Add new versins of atoi and atol. Using atoll as the driver for them is
+	Add new versions of atoi and atol. Using atoll as the driver for them is
 	not working correctly. Compute these in the negative range and flip the
 	values at the end in order to get the entire range.
 
@@ -146,16 +145,16 @@ ROADMAP:
 REVISION CONTROL:
 -----------------
 
-	https://github.com/cmgraff/hlibc
+	https://git.zv.io/me/hlibc        <-- master; hosted by Zach van Rijn
 
-	Or you can use the mirror generously hosted by contributor Zach van Rijn
-
-	https://git.zv.io/me/hlibc
+	https://github.com/cmgraff/hlibc  <-- backup; may be out-of-sync
 
 
 DEVELOPERS:
 -----------
 
+	Important:
+	
 	One of the simplest ways to contribute to hlibc is to make patches
 	using `git'. They can be constructed as follows:
 
@@ -164,7 +163,19 @@ DEVELOPERS:
 		git format-patch -1 --stdout > work.patch
 
 	After the patch is constructed it can be handed over via a pastebin by
-	posting the work on #hlibc on irc.freenode.net.
+	posting the work on `#hlibc` on irc.freenode.net. We recommend `ix.io`.
+	
+	Optional:
+	
+	We provide a style guide, in the form of a file called `.clang-format` found
+	in the project base. This requires a recent version of the utility
+	`clang-format`. If you do not have access to this, please ask for assistance
+	in IRC. You can test (print to stdout) it first by doing:
+	
+	    clang-format --style=<root>/.clang-format my_contribution.c
+	
+	To modify files in-place, append the `-i` flag. Please do not re-format any
+	files that you did not otherwise change.
 
 
 WEB HOME:
