@@ -2,23 +2,23 @@
 #include <stdarg.h>
 #include <string.h>
 
+static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
 size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
-	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 	if (n / base) {
 		i = __uint2str_inter(s, n / base, base, i);
 	}
-	s[i] = convtab[(n % base)];
+	s[i] = __convtab[(n % base)];
 	return ++i;
 }
 
 size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
-	int convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
 	}
-	s[i] = convtab[+(-(n % base))];
+	s[i] = __convtab[+(-(n % base))];
 	return ++i;
 }
 
@@ -34,6 +34,7 @@ size_t __int2str(char *s, long long n, int base)
 		toggle = 1;
  	}
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
+	
 }
 
 size_t __uint2str(char *s, size_t n, int base)
@@ -44,11 +45,10 @@ size_t __uint2str(char *s, size_t n, int base)
 
 size_t __flt2str(char *s, double flt)
 {
-	size_t i	= 0;
-	long long real  = flt;
-	double imag     = flt - real;
-	int prec	= 20;
-	int convtab[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+	size_t i = 0;
+	long long real = flt;
+	double imag = flt - real;
+	int prec = 20;
 
 	if (real != 0) {
 		i = __int2str(s, real, 10);
@@ -63,7 +63,7 @@ size_t __flt2str(char *s, double flt)
 			imag *= 10.0;
 			real = imag;
 			imag -= real;
-			s[i++] = convtab[real];
+			s[i++] = __convtab[real];
 		}
 	}
 	else {
@@ -218,7 +218,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 		}
 	}
 	if (flag > 0) {
-		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
+		 _populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 	if (flag == 0) {
 		_flushbuf(EOF, fp);
