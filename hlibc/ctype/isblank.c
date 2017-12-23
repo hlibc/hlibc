@@ -14,5 +14,5 @@ int isblank(int x)
 		ret = 0;
 		break;
 	}
-	return &ret;
+	return ret;
 }
