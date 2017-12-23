@@ -13,11 +13,12 @@ char *strstr(const char *haystack, const char *needle)
 			++h;
 			++n;
 		}
-		if (!*n) return (char *)haystack;
+		if (!*n) {
+			return (char *)haystack;
+		}
 
 		haystack++;
 	}
 
 	return NULL;
 }
-

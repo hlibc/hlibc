@@ -4,15 +4,16 @@ FILE *fopen(const char *name, const char *mode)
 {
 	int fd = 0;
 	FILE *fp;
-	int perms     = 0666; // not yet used
+	int perms = 0666; // not yet used
 	const char *p = mode;
-	int oflags    = 0;
-	int iflags    = 0;
-	int seek      = -1;
+	int oflags = 0;
+	int iflags = 0;
+	int seek = -1;
 
 	for (fp = _IO_stream; fp < _IO_stream + FOPEN_MAX; fp++) {
-		if ((fp->flags & (_READ | _WRITE)) == 0)
+		if ((fp->flags & (_READ | _WRITE)) == 0) {
 			break;
+		}
 	}
 	if (fp >= _IO_stream + FOPEN_MAX) {
 		return NULL;
@@ -40,7 +41,7 @@ FILE *fopen(const char *name, const char *mode)
 			case '+':
 				oflags = O_RDWR | O_CREAT;
 				iflags = _WRITE;
-				seek   = SEEK_END;
+				seek = SEEK_END;
 				break;
 			default:
 				break;
@@ -76,8 +77,8 @@ FILE *fopen(const char *name, const char *mode)
 
 	fp->len = 0;
 	fp->rp = fp->buf = NULL;
-	fp->flags	= iflags;
-	fp->fd		 = fd;
+	fp->flags = iflags;
+	fp->fd = fd;
 
 	return fp;
 }

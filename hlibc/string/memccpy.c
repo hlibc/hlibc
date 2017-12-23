@@ -3,7 +3,7 @@
 void *memccpy(void *dest, const void *src, int c, size_t n)
 {
 	const char *source = src;
-	char *destination  = dest;
+	char *destination = dest;
 	size_t i;
 
 	for (i = 0; i < n; ++i) {

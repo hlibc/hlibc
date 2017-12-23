@@ -57,8 +57,8 @@ static void _swap(void *string, size_t i, size_t j, size_t width)
 
 	size_t k;
 	for (k = 0; k < width; k++) {
-		t        = *(s+k+i);
-		*(s+k+i) = *(s+k+j);
-		*(s+k+j) = t;
+		t = *(s + k + i);
+		*(s + k + i) = *(s + k + j);
+		*(s + k + j) = t;
 	}
 }

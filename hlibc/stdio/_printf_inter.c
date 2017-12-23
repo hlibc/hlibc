@@ -2,7 +2,8 @@
 #include <stdarg.h>
 #include <string.h>
 
-static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
+			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
@@ -28,13 +29,12 @@ size_t __int2str(char *s, long long n, int base)
 	int toggle = 0;
 	if (n >= 0) {
 		n = -n;
- 	} 
+	}
 	else {
- 		s[0] = '-'; 
+		s[0] = '-';
 		toggle = 1;
- 	}
+	}
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
-	
 }
 
 size_t __uint2str(char *s, size_t n, int base)
@@ -84,7 +84,8 @@ int _populate(int incr, int x, int flag, char *s, FILE *fp)
 	return incr + 1;
 }
 
-int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
+int _printf_inter(
+	FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
@@ -179,8 +180,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 				break;
 			}
 			break;
-		default:
-			;//i = _populate(i, *p, flag, str++, fp);
+		default:; // i = _populate(i, *p, flag, str++, fp);
 			break;
 		string:
 			for (; *sval; sval++) {
@@ -218,11 +218,10 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 		}
 	}
 	if (flag > 0) {
-		 _populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
+		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 	if (flag == 0) {
 		_flushbuf(EOF, fp);
 	}
 	return i;
 }
-

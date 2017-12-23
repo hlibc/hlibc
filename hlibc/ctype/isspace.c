@@ -26,5 +26,5 @@ int isspace(int x)
 		ret = 0;
 		break;
 	}
-	return ret;
+	return &ret;
 }
