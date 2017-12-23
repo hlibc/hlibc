@@ -1,7 +1,7 @@
 #ifndef _INTERNAL_
 #define _INTERNAL_
 
-#define NULL ((void*)0)
+#define NULL ((void *)0)
 #define EOF (-1)
 #undef SEEK_SET
 #undef SEEK_CUR
@@ -20,25 +20,27 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-typedef struct {
-        int fd;
-        char flags;
-        char *buf;
-        char *rp;
-        char *lp;
-        int len;
-        ssize_t pid;
+typedef struct
+{
+	int fd;
+	char flags;
+	char *buf;
+	char *rp;
+	char *lp;
+	int len;
+	ssize_t pid;
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
 
-enum _flags {
-        _READ  = 001,
-        _WRITE = 002,
-        _UNBUF = 004,
-        _LNBUF = 030,
-        _EOF   = 010,
-        _ERR   = 020,
+enum _flags
+{
+	_READ = 001,
+	_WRITE = 002,
+	_UNBUF = 004,
+	_LNBUF = 030,
+	_EOF = 010,
+	_ERR = 020,
 };
 
 extern FILE *stdin;

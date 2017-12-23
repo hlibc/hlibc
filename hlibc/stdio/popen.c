@@ -5,7 +5,7 @@ FILE *popen(const char *command, const char *type)
 {
 	FILE *ret;
 	int pipefd[2] = { 0 };
-	char *argv[]  = { "/bin/sh", "-c", NULL, NULL };
+	char *argv[] = { "/bin/sh", "-c", NULL, NULL };
 
 	if ((ret = fopen(NULL, type)) == NULL) {
 		return NULL;
@@ -16,8 +16,9 @@ FILE *popen(const char *command, const char *type)
 	if ((pipe(pipefd)) == -1) {
 		goto errorplace;
 	}
-	if ((ret->pid = fork()) == -1)
+	if ((ret->pid = fork()) == -1) {
 		goto errorplace;
+	}
 
 	ret->fd = pipefd[0];
 

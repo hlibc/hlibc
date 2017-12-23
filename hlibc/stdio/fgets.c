@@ -2,7 +2,7 @@
 
 char *fgets(char *s, int n, FILE *iop)
 {
-	register int c    = 0;
+	register int c = 0;
 	register char *cs = s;
 
 	while (--n > 0 && (c = getc(iop)) != EOF) {

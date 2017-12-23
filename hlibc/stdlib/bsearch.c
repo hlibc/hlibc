@@ -17,11 +17,11 @@ bsearch(const void *key,
 	const void *ptr;
 	int comparison;
 
-	low  = 0;
+	low = 0;
 	high = nmemb;
 	while (low < high) {
-		mid	= (low + high) / 2;
-		ptr	= (void *)(((const char *)base) + (mid * size));
+		mid = (low + high) / 2;
+		ptr = (void *)(((const char *)base) + (mid * size));
 		comparison = (*compar)(key, ptr);
 		if (comparison < 0)
 			high = mid;

@@ -8,7 +8,7 @@ int strncasecmp(const char *s, const char *t, size_t n)
 {
 	int s_bis = 0;
 	int t_bis = 0;
-	size_t i  = 0;
+	size_t i = 0;
 
 	while (*s && *t && i++ < n) {
 		s_bis = tolower(*s);

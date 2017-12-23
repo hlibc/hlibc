@@ -12,7 +12,7 @@
 #include <string.h>
 #include <unistd.h>
 char *optarg; /* Global argument pointer. */
-int optind	= 0; /* Global argv index. */
+int optind = 0; /* Global argv index. */
 static char *scan = NULL; /* Private scan pointer. */
 int getopt(int argc, char *const argv[], const char *optstring)
 {
@@ -39,7 +39,7 @@ int getopt(int argc, char *const argv[], const char *optstring)
 		optind++;
 	}
 
-	c     = *scan++;
+	c = *scan++;
 	place = strchr(optstring, c);
 
 	if (!place || c == ':') {
@@ -49,7 +49,7 @@ int getopt(int argc, char *const argv[], const char *optstring)
 	if (*place == ':') {
 		if (*scan != '\0') {
 			optarg = scan;
-			scan   = NULL;
+			scan = NULL;
 		}
 		else if (optind < argc) {
 			optarg = argv[optind];

@@ -4,6 +4,10 @@
 
 long labs(long val)
 {
-	if (val < 0) return (-(val));
-	else         return val;
+	if (val < 0) {
+		return (-(val));
+	}
+	else {
+		return val;
+	}
 }

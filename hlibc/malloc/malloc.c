@@ -13,50 +13,52 @@ typedef struct object
 	struct object *next;
 	struct object *prev;
 	int free;
-}object;
+} object;
 
 object *base = NULL;
 
 object *delmiddle(object *o)
 {
-        object *tmp = o->prev;
-        o->prev->next = o->next;
-        o->next->prev = o->prev;
-        munmap(o, o->size);
-        return tmp;
+	object *tmp = o->prev;
+	o->prev->next = o->next;
+	o->next->prev = o->prev;
+	munmap(o, o->size);
+	return tmp;
 }
 
 object *delhead(object *o)
 {
-        object *tmp = o->next;
-        o->next->prev = NULL;
-        munmap(o, o->size);
+	object *tmp = o->next;
+	o->next->prev = NULL;
+	munmap(o, o->size);
 	/* "base" must be reset if the head of the list is deleted */
 	base = tmp;
-        return tmp;
+	return tmp;
 }
 
 object *deltail(object *o)
 {
-        object *tmp = o->prev;
-        o->prev->next = NULL;
-        munmap(o, o->size);
-        return tmp;
+	object *tmp = o->prev;
+	o->prev->next = NULL;
+	munmap(o, o->size);
+	return tmp;
 }
 
 object *_traverse_list(object *o)
 {
-	for ( o = base; o ; o = o->next)
-        {
-                if (o->free == 1)
-                {
-                        if (o->next == NULL)
-                                o = deltail(o);
-                        else if (o->prev == NULL)
-                                o = delhead(o);
-                        else o = delmiddle(o);
-                }
-        }
+	for (o = base; o; o = o->next) {
+		if (o->free == 1) {
+			if (o->next == NULL) {
+				o = deltail(o);
+			}
+			else if (o->prev == NULL) {
+				o = delhead(o);
+			}
+			else {
+				o = delmiddle(o);
+			}
+		}
+	}
 	return o;
 }
 
@@ -64,21 +66,32 @@ object *find_free_object(object **last, size_t size)
 {
 	object *o;
 	o = _traverse_list(o);
-	for ( o = base; o && !(o->free && o->size >= size); o = o->next) 
+	for (o = base; o && !(o->free && o->size >= size); o = o->next) {
 		*last = o;
+	}
 	return o;
 }
 
 object *morecore(object *last, size_t size)
 {
 	object *o = NULL;
-	if (size < 64)
+	if (size < 64) {
 		size = 64;
-	if ((o = mmap(o, size * sizeof(object), PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0)) == (void *)-1)
+	}
+	if ((o
+	     = mmap(o,
+		    size * sizeof(object),
+		    PROT_READ | PROT_WRITE,
+		    MAP_PRIVATE | MAP_ANONYMOUS,
+		    -1,
+		    0))
+	    == (void *)-1) {
 		return NULL;
-	if (last)
+	}
+	if (last) {
 		last->next = o;
-	
+	}
+
 	o->size = size;
 	o->next = NULL;
 	o->prev = last;
@@ -89,22 +102,26 @@ void *malloc(size_t size)
 {
 	object *o;
 	object *last;
-	if (size <= 0)
+	if (size <= 0) {
 		return NULL;
+	}
 
 	if (!base) {
-		if(!(o = morecore(NULL, size)))
+		if (!(o = morecore(NULL, size))) {
 			return NULL;
+		}
 		base = o;
 	}
 	else {
 		last = base;
-		if (!(o = find_free_object(&last, size))){
-			if (!(o = morecore(last, size))) 
+		if (!(o = find_free_object(&last, size))) {
+			if (!(o = morecore(last, size))) {
 				return NULL;
+			}
 		}
-		else 
+		else {
 			o->free = 0;
+		}
 	}
 	return (o + 1);
 }
@@ -112,8 +129,9 @@ void *malloc(size_t size)
 void free(void *ptr)
 {
 	object *o;
-	if (!ptr)
+	if (!ptr) {
 		return;
+	}
 	o = (object *)ptr - 1;
 	o->free = 1;
 }
@@ -122,15 +140,18 @@ void *realloc(void *ptr, size_t size)
 {
 	void *ret;
 	object *o;
-	if (!ptr)
+	if (!ptr) {
 		return malloc(size);
+	}
 
 	o = (object *)ptr - 1;
-	if (o->size >= size)
+	if (o->size >= size) {
 		return ptr;
-	
-	if(!(ret = malloc(size))) 
+	}
+
+	if (!(ret = malloc(size))) {
 		return NULL;
+	}
 
 	memcpy(ret, ptr, o->size);
 	free(ptr);
@@ -142,18 +163,21 @@ void *calloc(size_t nelem, size_t elsize)
 	size_t size = 0;
 	void *ptr;
 	size = _safe_multiply(nelem, elsize, (size_t)-1);
-	if(!(ptr = malloc(size)))
-                return NULL;
-	else
+	if (!(ptr = malloc(size))) {
+		return NULL;
+	}
+	else {
 		memset(ptr, 0, size);
+	}
 
 	return ptr;
 }
 
 void _destroy_malloc()
-{ 
-        object *p = NULL;
+{
+	object *p = NULL;
 	p = _traverse_list(p);
-	if (base && base->free == 1)
+	if (base && base->free == 1) {
 		munmap(base, base->size);
+	}
 }

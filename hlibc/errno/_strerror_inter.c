@@ -28,7 +28,7 @@ char *_messages[150] = {
 	"Too many files open in system.\0", /* ENFILE	23	*/
 	"Too many open files.\0", /* EMFILE	24	*/
 	"Inappropriate I/O control operation.\0", /*ENOTTY	25
-						     */
+						   */
 	"Text file busy.\0", /* ETXTBSY	26	*/
 	"File too large.\0", /* EFBIG	27	*/
 	"No space left on device.\0", /* ENOSPC	28	*/
@@ -37,7 +37,7 @@ char *_messages[150] = {
 	"Too many links.\0", /* EMLINK	31	*/
 	"Broken pipe.\0", /* EPIPE	32	*/
 	"Mathematics argument out of doma.\0", /* EDOM		33
-						  */
+						*/
 	"Result too large.\0", /* ERANGE	34	*/
 	"\0" /* ?		35	*/
 	"Filename too long.\0", /* ENAMETOOLONG	36	*/
@@ -45,7 +45,7 @@ char *_messages[150] = {
 	"Function not supported.\0", /* ENOSYS	38	*/
 	"Directory not empty.\0", /* ENOTEMPTY	39	*/
 	"Too many levels of symbolic links.\0", /* ELOOP	40
-						   */
+						 */
 	"\0", /* ?		41	*/
 	"No message of the desired type.\0", /* ENOMSG	42	*/
 	"Identifier removed.\0", /* EIDRM	43	*/
@@ -92,23 +92,23 @@ char *_messages[150] = {
 	"\0", /* ?		87	*/
 	"Not a socket.\0", /* ENOTSOCK	88	*/
 	"Destination address required.\0", /* EDESTADDRREQ	89
-					      */
+					    */
 	"Message too large.\0", /* EMSGSIZE	90	*/
 	"Protocol wrong type for socket.\0", /* EPROTOTYPE	91
-						*/
+					      */
 	"Protocol not available.\0", /* ENOPROTOOPT	92	*/
 	"Protocol not supported.\0", /* EPROTONOSUPPORT	93	*/
 	"\0", /* ?		94	*/
 	"Operation not supported on socket.\0", /* EOPNOTSUPP	95
-						   */
+						 */
 	"Address family not supported.\0", /* EAFNOSUPPORT	97
-					      */
+					    */
 	"Address in use.\0", /* EADDRINUSE	98	*/
 	"Address not available.\0", /* EADDRNOTAVAIL	99	*/
 	"Network is down.\0", /* ENETDOWN	100	*/
 	"Network unreachable.\0", /* ENETUNREACH	101	*/
 	"Connection aborted by network.\0", /* ENETRESET	102
-					       */
+					     */
 	"Connection aborted.\0", /* ECONNABORTED 103	*/
 	"Connection reset.\0", /* ECONNRESET	104	*/
 	"No buffer space available.\0", /* ENOBUFS	105	*/
@@ -121,7 +121,7 @@ char *_messages[150] = {
 	"\0", /* ?		112	*/
 	"Host is unreachable.\0", /* EHOSTUNREACH	113	*/
 	"Connection already in progress.\0", /* EALREADY	114
-						*/
+					      */
 	"Operation in progress.\0", /* EINPROGRESS	115	*/
 	"Reserved.\0", /* ESTALE	116	*/
 	"\0", /* ?		117	*/
