@@ -180,10 +180,10 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 			}
 			break;
 		default:
-			i = _populate(i, *p, flag, str++, fp);
+			;//i = _populate(i, *p, flag, str++, fp);
 			break;
 		string:
-			for (; *sval; sval++, ++i) {
+			for (; *sval; sval++) {
 				i = _populate(i, *sval, flag, str++, fp);
 			}
 			break;
