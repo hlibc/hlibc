@@ -120,7 +120,8 @@ int _printf_inter(
 			i = _populate(i, *p, flag, str++, fp);
 			continue;
 		}
-		switch (*++p) {
+		++p;
+		switch (*p) {
 		case 'c':
 			cval = va_arg(ap, int);
 			goto character;
@@ -180,7 +181,8 @@ int _printf_inter(
 				break;
 			}
 			break;
-		default:; // i = _populate(i, *p, flag, str++, fp);
+		default:
+			i = _populate(i, *p, flag, str++, fp);
 			break;
 		string:
 			for (; *sval; sval++) {
