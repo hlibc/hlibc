@@ -13,7 +13,7 @@
        main(void)
        {
            ENTRY e, *ep;
-           int i;
+           long i;
 
            hcreate(30);
 
@@ -21,7 +21,7 @@
                e.key = data[i];
                /* data is just an integer, instead of a
                   pointer to something */
-               e.data = (void *) i;
+               e.data = (void*)i;
                ep = hsearch(e, ENTER);
                /* there should be no failures */
                if (ep == NULL) {
@@ -35,8 +35,8 @@
                   show that two are not in the table */
                e.key = data[i];
                ep = hsearch(e, FIND);
-               printf("%s -> %s:%d\n", e.key,
-                      ep ? ep->key : "NULL", ep ? (int)(ep->data) : 0);
+               printf("%s -> %s:%ld\n", e.key,
+                      ep ? ep->key : "NULL", ep ? (long)(ep->data) : 0);
            }
            hdestroy();
            exit(EXIT_SUCCESS);
