@@ -22,7 +22,7 @@ object *delmiddle(object *o)
 	object *tmp = o->prev;
 	o->prev->next = o->next;
 	o->next->prev = o->prev;
-	munmap(o, o->size);
+	munmap(o, o->size + sizeof(object));
 	return tmp;
 }
 
@@ -30,7 +30,7 @@ object *delhead(object *o)
 {
 	object *tmp = o->next;
 	o->next->prev = NULL;
-	munmap(o, o->size);
+	munmap(o, o->size + sizeof(object));
 	/* "base" must be reset if the head of the list is deleted */
 	base = tmp;
 	return tmp;
@@ -40,7 +40,7 @@ object *deltail(object *o)
 {
 	object *tmp = o->prev;
 	o->prev->next = NULL;
-	munmap(o, o->size);
+	munmap(o, o->size + sizeof(object));
 	return tmp;
 }
 
@@ -79,7 +79,7 @@ object *morecore(object *last, size_t size)
 	if (size < 64) {
 		size = 64;
 	}
-	if ((o = mmap(o, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0))
+	if ((o = mmap(o, size + sizeof(object), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0))
 	    == (void *)-1) {
 		return NULL;
 	}
@@ -173,6 +173,6 @@ void _destroy_malloc()
 	object *p = NULL;
 	p = _traverse_list(p);
 	if (base) {
-		munmap(base, base->size);
+		munmap(base, base->size + sizeof(object));
 	}
 }
