@@ -65,10 +65,11 @@ object *_traverse_list(object *o)
 object *find_free_object(object **last, size_t size)
 {
 	object *o;
-	o = _traverse_list(o);
+	
 	for (o = base; o && !(o->free && o->size >= size); o = o->next) {
 		*last = o;
 	}
+	o = _traverse_list(o);
 	return o;
 }
 
@@ -78,13 +79,7 @@ object *morecore(object *last, size_t size)
 	if (size < 64) {
 		size = 64;
 	}
-	if ((o
-	     = mmap(o,
-		    size * sizeof(object),
-		    PROT_READ | PROT_WRITE,
-		    MAP_PRIVATE | MAP_ANONYMOUS,
-		    -1,
-		    0))
+	if ((o = mmap(o, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0))
 	    == (void *)-1) {
 		return NULL;
 	}
@@ -177,7 +172,7 @@ void _destroy_malloc()
 {
 	object *p = NULL;
 	p = _traverse_list(p);
-	if (base && base->free == 1) {
+	if (base) {
 		munmap(base, base->size);
 	}
 }
