@@ -148,7 +148,7 @@ void *realloc(void *ptr, size_t size)
 		return NULL;
 	}
 
-	memcpy(ret, ptr, o->size);
+	memcpy(ret, ptr, o->size + sizeof(object));
 	free(ptr);
 	return ret;
 }
