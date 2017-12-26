@@ -32,11 +32,6 @@ static int start(void *p)
 static const size_t dummyno = 0;
 weak_alias(dummyno, __pthread_tsd_size);
 
-static FILE *const dummy_file = 0;
-weak_alias(dummy_file, __stdin_used);
-weak_alias(dummy_file, __stdout_used);
-weak_alias(dummy_file, __stderr_used);
-
 static void init_file_lock(FILE *f)
 { 
 }
