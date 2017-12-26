@@ -95,7 +95,7 @@ struct __timer {
 	[sizeof(long)==4] = 3UL<<(32*(sizeof(long)>4)) })
 #define SIGTIMER_SET ((sigset_t *)(unsigned long [1+(sizeof(long)==4)]){ \
 	 0x80000000 })
-
+/*
 pthread_t __pthread_self_init(void);
 
 int __clone(int (*)(void *), void *, int, void *, ...);
@@ -111,7 +111,7 @@ void __wake(volatile int *, int, int);
 
 void __synccall_lock();
 void __synccall_unlock();
-
+*/
 #define DEFAULT_STACK_SIZE (16384-PAGE_SIZE)
 #define DEFAULT_GUARD_SIZE PAGE_SIZE
 
