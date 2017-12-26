@@ -231,8 +231,8 @@ void print_plain(size_t c)
 
 void ls_error(char *message, int i)
 { 
-	if ( i > 0 )
-		perror("Error: ");
+	//if ( i > 0 )
+		//perror("Error: ");
 	fprintf(stderr, "%s", message);
 	exit (i);
 }
