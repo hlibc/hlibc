@@ -123,11 +123,11 @@ diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
 echo "\`printf-driver-integers' compared equal to its control method" || \
 echo "##printf-driver-integers failed to compare equal to its control method"
 
-./tests/hcreate-driver > ${SUF}/diff2 2>${SUF}/testerr
-./control/hcreate-driver > ${SUF}/diff3 2>${SUF}testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr && \
-echo "\`hcreate-driver' test compared equal to its control method" || \
-echo "##hcreate-driver test failed"
+./tests/hcreate-driver > ${SUF}/diff2
+./control/hcreate-driver > ${SUF}/diff3
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "\`hcreate-driver' compared equal to its control method" || \
+echo "##hcreate-driver failed to compare equal to its control method"
 
 printf "============================================================\n"
 
