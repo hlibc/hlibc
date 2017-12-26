@@ -13,4 +13,4 @@ void (*signal(int sig, void (*func)(int)))(int)
 	return sa.sa_handler;
 }
 
-weak_alias(signal, bsd_signal);
+
