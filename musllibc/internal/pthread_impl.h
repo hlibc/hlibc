@@ -96,22 +96,6 @@ struct __timer {
 #define SIGTIMER_SET ((sigset_t *)(unsigned long [1+(sizeof(long)==4)]){ \
 	 0x80000000 })
 
-pthread_t __pthread_self_init(void);
-
-int __clone(int (*)(void *), void *, int, void *, ...);
-int __set_thread_area(void *);
-int __libc_sigaction(int, const struct sigaction *, struct sigaction *);
-int __libc_sigprocmask(int, const sigset_t *, sigset_t *);
-void __lock(volatile int *);
-void __unmapself(void *, size_t);
-
-int __timedwait(volatile int *, int, clockid_t, const struct timespec *, void (*)(void *), void *, int);
-void __wait(volatile int *, volatile int *, int, int);
-void __wake(volatile int *, int, int);
-
-void __synccall_lock();
-void __synccall_unlock();
-
 #define DEFAULT_STACK_SIZE (16384-PAGE_SIZE)
 #define DEFAULT_GUARD_SIZE PAGE_SIZE
 
