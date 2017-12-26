@@ -16,7 +16,7 @@ static char *data[] = { "alpha", "bravo", "charlie", "delta",
 int hcreate_test()
 {
 	ENTRY e, *ep;
-	int i;
+	size_t i;
 
 	hcreate(30);
 
@@ -38,8 +38,8 @@ int hcreate_test()
 		  show that two are not in the table */
 	   e.key = data[i];
 	   ep = hsearch(e, FIND);
-	   printf("%s -> %s:%d\n", e.key,
-			  ep ? ep->key : "NULL", ep ? (int)(ep->data) : 0);
+	   printf("%s -> %s:%zu\n", e.key,
+			  ep ? ep->key : "NULL", ep ? (size_t)(ep->data) : 0);
 	}
 	hdestroy();
 	return 0;
@@ -48,7 +48,8 @@ int hcreate_test()
 int reentrant_hcreate_test(void)
 {
 	ENTRY e, *ep;
-	int i, ret;
+	size_t i;
+	int ret;
 
 	struct hsearch_data htab;
 	memset(&htab, 0, sizeof(struct hsearch_data));
@@ -77,8 +78,8 @@ int reentrant_hcreate_test(void)
 		if (ret == 0) {
 			printf("%s -> %s:%d\n", e.key, "NULL", 0);
 		} else {
-			printf("%s -> %s:%d\n", e.key,
-			   ep->key, (int)(ep->data));
+			printf("%s -> %s:%zu\n", e.key,
+			   ep->key, (size_t)(ep->data));
 		}
 	}
 	hdestroy_r(&htab);
