@@ -13,7 +13,7 @@ static void _swap(void *v, size_t i, size_t j, size_t width);
  */
 void qsort(void *base, size_t nel, size_t width, comp fn)
 {
-	unsigned char *b = (void *)base;
+	unsigned char *b = (unsigned char *)base;
 	size_t i, left, last;
 
 	left = 0;

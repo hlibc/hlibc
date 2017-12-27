@@ -7,7 +7,7 @@ long long atoll(const char *s)
 	long long ret = 0;
 	long long neg = -1;
 
-	if (isspace(s[i])) {
+	while (isspace(s[i])) {
 		++i;
 	}
 
@@ -17,7 +17,7 @@ long long atoll(const char *s)
 	}
 
 	for (; s[i] && isdigit(s[i]); ++i) {
-		ret = (10 * ret) - (s[i] - '0');
+		ret = (10 * ret) + (s[i] - '0');
 	}
 
 	return ret * neg;

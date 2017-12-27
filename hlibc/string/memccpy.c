@@ -14,7 +14,7 @@ void *memccpy(void *dest, const void *src, int c, size_t n)
 			break;
 		}
 	}
-	if (n == ++i) {
+	if (n == i) {
 		return NULL;
 	}
 

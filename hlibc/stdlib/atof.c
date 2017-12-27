@@ -8,11 +8,13 @@
 double atof(const char *s)
 {
 	double val, power;
-	static size_t i = 0;
+	size_t i = 0;
 	int sign = 0;
-	if (isspace(*s)) {
-		atof(s + ++i);
+
+	while (isspace(*s)) {
+		++i;
 	}
+
 	sign = (s[i] == '-') ? -1 : 1;
 	if (s[i] == '+' || s[i] == '-') {
 		i++;

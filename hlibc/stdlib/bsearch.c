@@ -20,7 +20,7 @@ bsearch(const void *key,
 	low = 0;
 	high = nmemb;
 	while (low < high) {
-		mid = (low + high) / 2;
+		mid = low + (high - low) / 2;
 		ptr = (void *)(((const char *)base) + (mid * size));
 		comparison = (*compar)(key, ptr);
 		if (comparison < 0)
