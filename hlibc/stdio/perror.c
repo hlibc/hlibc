@@ -7,10 +7,10 @@ void perror(const char *s)
 	char *colon = ": ";
 
 	if (s == NULL || s[0] == '\0')
-		{
-			s = "";
-			colon = "";
-		}
+	{
+		s = "";
+		colon = "";
+	}
 
-	printf("%s %s %s", s, colon, strerror(errno));
+	fprintf(stderr, "%s %s %s", s, colon, strerror(errno));
 }
