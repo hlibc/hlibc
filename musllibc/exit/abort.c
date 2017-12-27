@@ -3,6 +3,6 @@
 
 void abort(void)
 {
-	raise(SIGABRT);
+	//raise(SIGABRT);
 	for (;;);
 }
