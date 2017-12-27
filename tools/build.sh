@@ -129,5 +129,11 @@ diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
 echo "\`hcreate-driver' compared equal to its control method" || \
 echo "##hcreate-driver failed to compare equal to its control method"
 
+./tests/getenv-driver > ${SUF}/diff2
+./control/getenv-driver > ${SUF}/diff3
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "\`getenv-driver' compared equal to its control method" || \
+echo "##getenv-driver failed to compare equal to its control method"
+
 printf "============================================================\n"
 
