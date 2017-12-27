@@ -4,6 +4,12 @@
 
 int main(int argc, char *argv[])
 {
+	char string[1024];
+        sprintf(string, "%ld", LONG_MAX);
+        printf("LONG_MAX = %s\n", string);
+        sprintf(string, "%ld", LONG_MIN);
+        printf("LONG_MIN = %s\n", string);
+	/*
 	printf("123456789 = %ld\n", atol("123456789"));
 	printf("1234567898 = %ld\n", atol("1234567898"));
 	printf("123456789876 = %ld\n", atol("123456789876"));
@@ -12,5 +18,6 @@ int main(int argc, char *argv[])
 	printf("-9223372036854775808 %ld\n", atol("-9223372036854775808"));
 	printf("123456 %ld\n", atol("123456"));
 	printf("-123456 %ld\n", atol("-123456"));
+	*/
 	return 0;
 }
