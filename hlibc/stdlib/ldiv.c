@@ -1,6 +1,8 @@
 #include <stdlib.h>
-
-ldiv_t ldiv(long int numerator, long int denominator)
+/*
+        Copyright 2017 Adrian Parvin D. Ouano
+*/
+ldiv_t ldiv(long numerator, long denominator)
 {
 	ldiv_t ret;
 	lldiv_t ret_ = lldiv(numerator, denominator);

@@ -1,5 +1,7 @@
 #include <stdlib.h>
-
+/*
+	Copyright 2017 Adrian Parvin D. Ouano
+*/
 div_t div(int numerator, int denominator)
 {
 	div_t ret;
