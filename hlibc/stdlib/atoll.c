@@ -11,9 +11,11 @@ long long atoll(const char *s)
 		++i;
 	}
 
-	if (s[i] == '-') {
-		++i;
+	switch (s[i]) {
+	case '-':
 		neg = 1;
+	case '+':
+		++i;
 	}
 
 	for (; s[i] && isdigit(s[i]); ++i) {
