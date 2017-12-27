@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
 	printf("1234567898 = %lld\n", atoll("1234567898"));
 	printf("123456789876 = %lld\n", atoll("123456789876"));
 	printf("12345678987654321 = %lld\n", atoll("12345678987654321"));
+	printf("12345678987654321 = %lld\n", atoll("     12345678987654321"));
 
 	printf("LLONG_MAX = %lld\n", LLONG_MAX);
 	printf("LLONG_MIN = %lld\n", LLONG_MIN);
