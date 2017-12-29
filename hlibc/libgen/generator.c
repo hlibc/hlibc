@@ -19,6 +19,10 @@ char *_generator(char *path, int lever)
 			pathtab[npth] = 0;
 		}
 	}
+
+	if (i == PATH_MAX)
+		return path;
+
 	if (i == 0) {
 		return dot;
 	}
