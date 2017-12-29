@@ -1,4 +1,7 @@
 #include <string.h>
+/*
+	Copyright 2016 Evgeniy Popov
+*/
 
 char *index(const char *s, int c)
 {

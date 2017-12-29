@@ -1,5 +1,9 @@
 #include <unistd.h>
 
+/*
+	Copyright 2016 Evgeniy Popov
+*/
+
 void swab(const void *from, void *to, ssize_t n)
 {
 	ssize_t i = 0;

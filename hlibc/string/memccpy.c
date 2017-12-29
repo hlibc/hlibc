@@ -1,5 +1,7 @@
 #include <string.h>
-
+/*
+	Copyright 2016 Evgeniy Popov
+*/
 void *memccpy(void *dest, const void *src, int c, size_t n)
 {
 	const char *source = src;
