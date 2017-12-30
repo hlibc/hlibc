@@ -75,17 +75,17 @@ AUTOMATIC TESTING:
 	a confirmation notice containing the results of the test suite 
 	will be printed to screen looking something like this:
 
-	    ==========COMPILING TESTS ===================================
-	    =============================================================
-	    ==========TEST RESULT START==================================
-	    This number should be (16.000000): 16.000000    (4^3)
-	    This number should be (15.580524): 15.580524    (3.3^2.3)
-	    The `cat' utility successfully copied a file
-	    The `malloc_driver' test utility successfully iterated through a d ....
-	    The `popen_driver' test utility successfully ran `du' on a directo ....
-        The `printf_driver' test utility successfully created and copied a ....
-	    The `popen-to-file' driver test utility successfully ran `du' on a ....
-	    ============================================================
+		==========COMPILING TESTS ===================================
+		=============================================================
+		==========TEST RESULT START==================================
+		This number should be (16.000000): 16.000000    (4^3)
+		This number should be (15.580524): 15.580524    (3.3^2.3)
+		The `cat' utility successfully copied a file
+		The `malloc_driver' test utility successfully iterated thro ...
+		The `popen_driver' test utility successfully ran `du' on a  ...
+		The `printf_driver' test utility successfully created and c ...
+		The `popen-to-file' driver test utility successfully ran `d ...
+		============================================================
 
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
