@@ -1,4 +1,3 @@
-//#include "stdio_impl.h"
 /*
 	This file is derived from code copyrighted and licensed by Rich Felker
 	See the COPYING file for details on his copyrights and license 
@@ -13,18 +12,14 @@
 #include <stdarg.h>
 #include <string.h>
 #include <inttypes.h>
-#include <wchar.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <errno.h>
-#include <termios.h>
-#include <sys/ioctl.h>
 #include <ctype.h>
-#include <sys/wait.h>
 #include <math.h>
 #include <float.h>
-#include <sys/uio.h>
+
 /* Some useful macros */
 
 #define MAX(a,b) ((a)>(b) ? (a) : (b))
@@ -52,9 +47,6 @@
 #define ODD_TYPES
 #endif
 
-/* State machine to accept length modifiers + conversion specifiers.
- * Result is 0 on failure, or an argument type to pop on success. */
-#define OOB(x) ((unsigned)(x)-'A' > 'z'-'A')
 static void out(FILE *f, const char *s, size_t l)
 {
         //__fwritex((void *)s, l, f);
