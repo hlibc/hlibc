@@ -65,17 +65,30 @@ int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 
 /* internal number conversion */
-size_t uint2str(char *, size_t, int);
-size_t flt2str(char *, double);
-size_t int2str(char *, long long, int);
-size_t int2str_inter(char *, long long, int);
-size_t flt2str(char *, double);
+size_t __uint2str(char *, size_t, int);
+size_t __uint2str_inter(char *, size_t, int, size_t);
+size_t __int2str(char *, long long, int);
+size_t __int2str_inter(char *, long long, int, size_t);
+int fmt_fp(char *, long double, int, int, int, int);
+#define MAX(a,b) ((a)>(b) ? (a) : (b))
+#define MIN(a,b) ((a)<(b) ? (a) : (b))
+#define CONCAT2(x,y) x ## y
+#define CONCAT(x,y) CONCAT2(x,y)
+
+#define ALT_FORM   (1U<<'#'-' ')
+#define ZERO_PAD   (1U<<'0'-' ')
+#define LEFT_ADJ   (1U<<'-'-' ')
+#define PAD_POS    (1U<<' '-' ')
+#define MARK_POS   (1U<<'+'-' ')
+#define GROUPED    (1U<<'\''-' ')
+
+#define FLAGMASK (ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED)
+
 
 /* safe arithmetic */
 size_t _safe_multiply(size_t, size_t, size_t);
 size_t _safe_division(size_t, size_t);
 
 
-//static int fmt_fp(char *, long double, int, int, int, int);
-int fmt_fp(char *, long double, int, int, int, int);
+
 #endif

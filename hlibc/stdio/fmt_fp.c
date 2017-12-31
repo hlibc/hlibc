@@ -2,16 +2,14 @@
 	Copyright 2010 Rich Felker
 	Copyright 2017 Christopher M. Graff
 */
-#include <stdio.h>
+#include "../internal/internal.h"
 #include <stdint.h>
 #include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
 #include <inttypes.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <errno.h>
@@ -19,24 +17,7 @@
 #include <math.h>
 #include <float.h>
 #include <string.h>
-/* Some useful macros */
 
-#define MAX(a,b) ((a)>(b) ? (a) : (b))
-#define MIN(a,b) ((a)<(b) ? (a) : (b))
-#define CONCAT2(x,y) x ## y
-#define CONCAT(x,y) CONCAT2(x,y)
-
-/* Convenient bit representation for modifier flags, which all fall
- * within 31 codepoints of the space character. */
-
-#define ALT_FORM   (1U<<'#'-' ')
-#define ZERO_PAD   (1U<<'0'-' ')
-#define LEFT_ADJ   (1U<<'-'-' ')
-#define PAD_POS    (1U<<' '-' ')
-#define MARK_POS   (1U<<'+'-' ')
-#define GROUPED    (1U<<'\''-' ')
-
-#define FLAGMASK (ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED)
 static size_t __last = 0;
 
 static void out(char *f, const char *s, size_t l)
@@ -56,9 +37,6 @@ static void pad(char *f, char c, int w, int l, int fl)
 	out(f, pad, l);
 }
 
-static const char xdigits[16] = {
-	"0123456789ABCDEF"
-};
 static char *fmt_u(uintmax_t x, char *s)
 {
 	unsigned long y;
@@ -77,7 +55,6 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	char buf[9+LDBL_MANT_DIG/4], *s;
 	const char *prefix="-0X+0X 0X-0x+0x 0x";
 	int pl;
-	char ebuf0[3*sizeof(int)], *ebuf=&ebuf0[3*sizeof(int)], *estr;
 
 	pl=1;
 	if (y<0 || 1/y<0) {
