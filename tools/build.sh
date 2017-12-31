@@ -88,11 +88,11 @@ echo "\`popen_driver' test utility successfully ran \`du' on a directory and com
 echo "##popen driver failed" 
 
 #fix float rounding and add this back
-#./control/printf-driver >${SUF}/diff2 2>${SUF}/testerr 
-#./tests/printf-driver >${SUF}/diff3 2>${SUF}/testerr 
-#diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-#echo "\`printf_driver' test utility successfully compared equal to its control method" || \
-#echo "printf driver had a float rounding error "
+./control/printf-driver >${SUF}/diff2 2>${SUF}/testerr 
+./tests/printf-driver >${SUF}/diff3 2>${SUF}/testerr 
+diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
+echo "\`printf_driver' test utility successfully compared equal to its control method" || \
+echo "printf driver had a float rounding error "
 
 ./tests/printf-driver Makefile ${SUF}/testfile
 diff Makefile ${SUF}/testfile 2>&1 > ${SUF}/testerr && \

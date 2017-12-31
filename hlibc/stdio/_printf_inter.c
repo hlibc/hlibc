@@ -207,7 +207,9 @@ int _printf_inter(
 			}
 			break;
 		floating:
-			convlen = __flt2str(converted, fval);
+			//convlen = __flt2str(converted, fval);
+			// len = fmt_fp(s, 1234.5678, 10, 6, 10, 'f');
+			convlen = fmt_fp(converted, fval, 10, 6, 10, 'f');
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {

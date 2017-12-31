@@ -75,4 +75,7 @@ size_t flt2str(char *, double);
 size_t _safe_multiply(size_t, size_t, size_t);
 size_t _safe_division(size_t, size_t);
 
+
+//static int fmt_fp(char *, long double, int, int, int, int);
+int fmt_fp(char *, long double, int, int, int, int);
 #endif

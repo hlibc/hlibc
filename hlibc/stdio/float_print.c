@@ -1,7 +1,6 @@
 /*
-	This file is derived from code copyrighted and licensed by Rich Felker
-	See the COPYING file for details on his copyrights and license 
-	requirements.
+	Copyright 2010 Rich Felker
+	Copyright 2017 Christopher M. Graff
 */
 #include <stdio.h>
 #include <stdint.h>
@@ -19,7 +18,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <float.h>
-
+#include <string.h>
 /* Some useful macros */
 
 #define MAX(a,b) ((a)>(b) ? (a) : (b))
@@ -38,22 +37,15 @@
 #define GROUPED    (1U<<'\''-' ')
 
 #define FLAGMASK (ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED)
+static size_t __last = 0;
 
-#if UINT_MAX == ULONG_MAX
-#define LONG_IS_INT
-#endif
-
-#if SIZE_MAX != ULONG_MAX || UINTMAX_MAX != ULLONG_MAX
-#define ODD_TYPES
-#endif
-
-static void out(FILE *f, const char *s, size_t l)
+static void out(char *f, const char *s, size_t l)
 {
-        //__fwritex((void *)s, l, f);
-        write(1, s, l);
+	memcpy(f + __last, s, l);
+	__last += l;
 }
 
-static void pad(FILE *f, char c, int w, int l, int fl)
+static void pad(char *f, char c, int w, int l, int fl)
 {
 	char pad[256];
 	if (fl & (LEFT_ADJ | ZERO_PAD) || l >= w) return;
@@ -75,8 +67,10 @@ static char *fmt_u(uintmax_t x, char *s)
 	return s;
 }
 
-static int fmt_fp(FILE *f, long double y, int w, int p, int fl, int t)
+//static int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
+int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 {
+	__last = 0;
 	uint32_t big[(LDBL_MAX_EXP+LDBL_MANT_DIG)/9+1];
 	uint32_t *a, *d, *r, *z;
 	int e2=0, e, i, j, l;
@@ -107,56 +101,6 @@ static int fmt_fp(FILE *f, long double y, int w, int p, int fl, int t)
 	y = frexpl(y, &e2) * 2;
 	if (y) e2--;
 
-	if ((t|32)=='a') {
-		long double round = 8.0;
-		int re;
-
-		if (t&32) prefix += 9;
-		pl += 2;
-
-		if (p<0 || p>=LDBL_MANT_DIG/4-1) re=0;
-		else re=LDBL_MANT_DIG/4-1-p;
-
-		if (re) {
-			while (re--) round*=16;
-			if (*prefix=='-') {
-				y=-y;
-				y-=round;
-				y+=round;
-				y=-y;
-			} else {
-				y+=round;
-				y-=round;
-			}
-		}
-
-		estr=fmt_u(e2<0 ? -e2 : e2, ebuf);
-		if (estr==ebuf) *--estr='0';
-		*--estr = (e2<0 ? '-' : '+');
-		*--estr = t+('p'-'a');
-
-		s=buf;
-		do {
-			int x=y;
-			*s++=xdigits[x]|(t&32);
-			y=16*(y-x);
-			if (s-buf==1 && (y||p>0||(fl&ALT_FORM))) *s++='.';
-		} while (y);
-
-		if (p && s-buf-2 < p)
-			l = (p+2) + (ebuf-estr);
-		else
-			l = (s-buf) + (ebuf-estr);
-
-		pad(f, ' ', w, pl+l, fl);
-		out(f, prefix, pl);
-		pad(f, '0', w, pl+l, fl^ZERO_PAD);
-		out(f, buf, s-buf);
-		pad(f, '0', l-(ebuf-estr)-(s-buf), 0, 0);
-		out(f, estr, ebuf-estr);
-		pad(f, ' ', w, pl+l, fl^LEFT_ADJ);
-		return MAX(w, pl+l);
-	}
 	if (p<0) p=6;
 
 	if (y) y *= 0x1p28, e2-=28;
@@ -235,37 +179,12 @@ static int fmt_fp(FILE *f, long double y, int w, int p, int fl, int t)
 		for (; !z[-1] && z>a; z--);
 	}
 	
-	if ((t|32)=='g') {
-		if (!p) p++;
-		if (p>e && e>=-4) {
-			t--;
-			p-=e+1;
-		} else {
-			t-=2;
-			p--;
-		}
-		if (!(fl&ALT_FORM)) {
-			/* Count trailing zeros in last place */
-			if (z>a && z[-1]) for (i=10, j=0; z[-1]%i==0; i*=10, j++);
-			else j=9;
-			if ((t|32)=='f')
-				p = MIN(p,MAX(0,9*(z-r-1)-j));
-			else
-				p = MIN(p,MAX(0,9*(z-r-1)+e-j));
-		}
-	}
 	l = 1 + p + (p || (fl&ALT_FORM));
 	if ((t|32)=='f') {
 		if (e>0) l+=e;
-	} else {
-		estr=fmt_u(e<0 ? -e : e, ebuf);
-		while(ebuf-estr<2) *--estr='0';
-		*--estr = (e<0 ? '-' : '+');
-		*--estr = t;
-		l += ebuf-estr;
-	}
+	} 
 
-	pad(f, ' ', w, pl+l, fl);
+	//pad(f, ' ', w, pl+l, fl);
 	out(f, prefix, pl);
 	pad(f, '0', w, pl+l, fl^ZERO_PAD);
 
@@ -284,25 +203,25 @@ static int fmt_fp(FILE *f, long double y, int w, int p, int fl, int t)
 			out(f, s, MIN(9,p));
 		}
 		pad(f, '0', p+9, 9, 0);
-	} else {
-		if (z<=a) z=a+1;
-		for (d=a; d<z && p>=0; d++) {
-			char *s = fmt_u(*d, buf+9);
-			if (s==buf+9) *--s='0';
-			if (d!=a) while (s>buf) *--s='0';
-			else {
-				out(f, s++, 1);
-				if (p>0||(fl&ALT_FORM)) out(f, ".", 1);
-			}
-			out(f, s, MIN(buf+9-s, p));
-			p -= buf+9-s;
-		}
-		pad(f, '0', p+18, 18, 0);
-		out(f, estr, ebuf-estr);
-	}
-
-	pad(f, ' ', w, pl+l, fl^LEFT_ADJ);
+	} 
+	//pad(f, ' ', w, pl+l, fl^LEFT_ADJ);
 
 	return MAX(w, pl+l);
 }
-
+/*
+int main(int argc, char *argv[])
+{ 
+	char s[2000] = { 0 };
+	size_t len = 0;
+	len = fmt_fp(s, FLT_MAX , 10, 6, 1000, 'f');
+	s[len] = 0;
+	write(1, s, len);
+	write(1, "\n", 1);
+	len = fmt_fp(s, 1234.5678, 10, 6, 10, 'f');
+	s[len] = 0;
+	write(1, s, len);
+	write(1, "\n", 1);
+	
+	return 0;
+}
+*/
