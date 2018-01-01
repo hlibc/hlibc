@@ -74,21 +74,15 @@ int fmt_fp(char *, long double, int, int, int, int);
 #define MIN(a,b) ((a)<(b) ? (a) : (b))
 #define CONCAT2(x,y) x ## y
 #define CONCAT(x,y) CONCAT2(x,y)
-
 #define ALT_FORM   (1U<<'#'-' ')
 #define ZERO_PAD   (1U<<'0'-' ')
 #define LEFT_ADJ   (1U<<'-'-' ')
 #define PAD_POS    (1U<<' '-' ')
 #define MARK_POS   (1U<<'+'-' ')
 #define GROUPED    (1U<<'\''-' ')
-
 #define FLAGMASK (ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED)
-
 
 /* safe arithmetic */
 size_t _safe_multiply(size_t, size_t, size_t);
 size_t _safe_division(size_t, size_t);
-
-
-
 #endif

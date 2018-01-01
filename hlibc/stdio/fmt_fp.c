@@ -45,7 +45,6 @@ static char *fmt_u(uintmax_t x, char *s)
 	return s;
 }
 
-//static int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 {
 	__last = 0;
@@ -67,7 +66,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 
 	if (!isfinite(y)) {
 		char *s = (t&32)?"inf":"INF";
-		if (y!=y) s=(t&32)?"nan":"NAN", pl=0;
+		if (y!=y)
+			s=(t&32)?"nan":"NAN", pl=0;
 		pad(f, ' ', w, 3+pl, fl&~ZERO_PAD);
 		out(f, prefix, pl);
 		out(f, s, 3);
@@ -76,14 +76,19 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	}
 
 	y = frexpl(y, &e2) * 2;
-	if (y) e2--;
+	if (y)
+		e2--;
+	
+	if (p<0)
+		p=6;
 
-	if (p<0) p=6;
+	if (y)
+		y *= 0x1p28, e2-=28;
 
-	if (y) y *= 0x1p28, e2-=28;
-
-	if (e2<0) a=r=z=big;
-	else a=r=z=big+sizeof(big)/sizeof(*big) - LDBL_MANT_DIG - 1;
+	if (e2<0)
+		a = r = z = big;
+	else
+		a = r = z = big+sizeof(big)/sizeof(*big) - LDBL_MANT_DIG - 1;
 
 	do {
 		*z = y;
@@ -98,8 +103,10 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			*d = x % 1000000000;
 			carry = x / 1000000000;
 		}
-		if (!z[-1] && z>a) z--;
-		if (carry) *--a = carry;
+		if (!z[-1] && z>a)
+			z--;
+		if (carry)
+			*--a = carry;
 		e2-=sh;
 	}
 	while (e2<0) {
@@ -110,16 +117,20 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			*d = (*d>>sh) + carry;
 			carry = (1000000000>>sh) * rm;
 		}
-		if (!*a) a++;
-		if (carry) *z++ = carry;
+		if (!*a)
+			a++;
+		if (carry)
+			*z++ = carry;
 		/* Avoid (slow!) computation past requested precision */
 		z2 = ((t|32)=='f' ? r : a) + 2 + p/9;
 		z = MIN(z, z2);
 		e2+=sh;
 	}
 
-	if (a<z) for (i=10, e=9*(r-a); *a>=i; i*=10, e++);
-	else e=0;
+	if (a<z)
+		for (i=10, e=9*(r-a); *a>=i; i*=10, e++);
+	else
+		e=0;
 
 	/* Perform rounding: j is precision after the radix (possibly neg) */
 	j = p - ((t|32)!='f')*e - ((t|32)=='g' && p);
@@ -137,9 +148,12 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			long double small;
 			if (*d/i & 1) round += 2;
 			if (x<i/2) small=0x0.8p0;
-			else if (x==i/2 && d+1==z) small=0x1.0p0;
-			else small=0x1.8p0;
-			if (pl && *prefix=='-') round*=-1, small*=-1;
+			else if (x==i/2 && d+1==z)
+				small=0x1.0p0;
+			else
+				small=0x1.8p0;
+			if (pl && *prefix=='-')
+				round*=-1, small*=-1;
 			*d -= x;
 			/* Decide whether to round by probing round+small */
 			if (round+small != round) {
@@ -148,7 +162,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 					*d--=0;
 					(*d)++;
 				}
-				if (d<a) a=d;
+				if (d<a)
+					a=d;
 				for (i=10, e=9*(r-a); *a>=i; i*=10, e++);
 			}
 		}
@@ -161,44 +176,33 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		if (e>0) l+=e;
 	} 
 
-	//pad(f, ' ', w, pl+l, fl);
+	pad(f, ' ', w, pl+l, fl);
 	out(f, prefix, pl);
 	pad(f, '0', w, pl+l, fl^ZERO_PAD);
 
-	if ((t|32)=='f') {
-		if (a>r) a=r;
-		for (d=a; d<=r; d++) {
-			char *s = fmt_u(*d, buf+9);
-			if (d!=a) while (s>buf) *--s='0';
-			else if (s==buf+9) *--s='0';
-			out(f, s, buf+9-s);
-		}
-		if (p || (fl&ALT_FORM)) out(f, ".", 1);
-		for (; d<z && p>0; d++, p-=9) {
-			char *s = fmt_u(*d, buf+9);
-			while (s>buf) *--s='0';
-			out(f, s, MIN(9,p));
-		}
-		pad(f, '0', p+9, 9, 0);
-	} 
-	//pad(f, ' ', w, pl+l, fl^LEFT_ADJ);
+
+	if (a>r)
+		a=r;
+	for (d=a; d<=r; d++) {
+		char *s = fmt_u(*d, buf+9);
+		if (d!=a) while (s>buf)
+			*--s='0';
+		else if (s==buf+9)
+			*--s='0';
+		out(f, s, buf+9-s);
+	}
+	if (p || (fl&ALT_FORM))
+		out(f, ".", 1);
+	for (; d<z && p>0; d++, p-=9) {
+		char *s = fmt_u(*d, buf+9);
+		while (s>buf)
+			*--s='0';
+		out(f, s, MIN(9,p));
+	}
+	pad(f, '0', p+9, 9, 0);
+	
+	pad(f, ' ', w, pl+l, fl^LEFT_ADJ);
 
 	return MAX(w, pl+l);
 }
-/*
-int main(int argc, char *argv[])
-{ 
-	char s[2000] = { 0 };
-	size_t len = 0;
-	len = fmt_fp(s, FLT_MAX , 10, 6, 1000, 'f');
-	s[len] = 0;
-	write(1, s, len);
-	write(1, "\n", 1);
-	len = fmt_fp(s, 1234.5678, 10, 6, 10, 'f');
-	s[len] = 0;
-	write(1, s, len);
-	write(1, "\n", 1);
-	
-	return 0;
-}
-*/
+

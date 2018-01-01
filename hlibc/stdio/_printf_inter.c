@@ -43,36 +43,6 @@ size_t __uint2str(char *s, size_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
-size_t __flt2str(char *s, double flt)
-{
-	size_t i = 0;
-	long long real = flt;
-	double imag = flt - real;
-	int prec = 20;
-
-	if (real != 0) {
-		i = __int2str(s, real, 10);
-	}
-	else {
-		s[i++] = '0';
-	}
-	s[i++] = '.';
-
-	if (imag > 0) {
-		while (imag > 0 && --prec) {
-			imag *= 10.0;
-			real = imag;
-			imag -= real;
-			s[i++] = __convtab[real];
-		}
-	}
-	else {
-		memset(s + i, '0', 20);
-		i += 20;
-	}
-	return i;
-}
-
 int _populate(int incr, int x, int flag, char *s, FILE *fp)
 {
 	if (flag > 0) {
@@ -207,9 +177,8 @@ int _printf_inter(
 			}
 			break;
 		floating:
-			//convlen = __flt2str(converted, fval);
-			// len = fmt_fp(s, 1234.5678, 10, 6, 10, 'f');
-			convlen = fmt_fp(converted, fval, 10, 6, 10, 'f');
+			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
+			convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {
@@ -218,6 +187,7 @@ int _printf_inter(
 				}
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
+			
 			break;
 		}
 	}
