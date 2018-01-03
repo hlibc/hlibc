@@ -194,6 +194,17 @@ IRC:
 	#hlibc on irc.freenode.net
 
 
+RELEASES:
+--------
+
+	Releases are informal as of this time. However, for some purposes it may be
+	preferable to use a "release" tarball which is known to build.
+
+		http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz
+
+		http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz
+
+
 REFERENCES:
 -----------
 
