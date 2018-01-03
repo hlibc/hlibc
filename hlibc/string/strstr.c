@@ -1,6 +1,9 @@
 #include <string.h>
 
-/* Copyright 2017 Adrian Parvin D. Ouano */
+/* 
+	Copyright 2017 Adrian Parvin D. Ouano
+	`strstr.c' Using the Rabin-Karp algorithm
+*/
 
 static inline long long unsigned int hash(long unsigned n)
 {
