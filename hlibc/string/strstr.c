@@ -38,7 +38,7 @@ char *strstr(const char *haystack, const char *needle)
 				break;
 		}
 		if (*n_ == '\0')
-			return haystack;
+			return (char*)haystack;
 	}
 	return NULL;
 }

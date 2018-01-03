@@ -16,7 +16,7 @@ for i in posix-utils/*.c posix-utils/*.h
 do ln $i posix-utils-control/$(basename $i)
 done
 printf "automatic build is being logged to: ${SUF}/buildlog \n\n"
-CC=clang make -j4 > ${SUF}/buildlog 2>&1
+CC=clang make -j4 > ${SUF}/buildlog #2>&1
 make install
 printf "==========COMPILING TESTS ===================================\n"
 make $1 > ${SUF}/testlog
