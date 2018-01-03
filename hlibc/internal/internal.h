@@ -1,7 +1,7 @@
 #ifndef _INTERNAL_
 #define _INTERNAL_
 
-#define NULL ((void *)0)
+#define NULL ((void*)0)
 #define EOF (-1)
 #undef SEEK_SET
 #undef SEEK_CUR
