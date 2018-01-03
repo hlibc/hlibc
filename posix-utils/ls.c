@@ -333,24 +333,11 @@ void prntstats(char *file)
 	if ( lstat(file, &sb) != 0 )
 		return;
 	octtoperm(sb.st_mode);
-	printf(" "); 
-	//if ( global.inode == 1)
-	//       printf("%-8llu ", sb.st_ino);
-	//	printf("%llu ", sb.st_ino);
-	//printf("%-3ld ", sb.st_nlink);
-	//printf("%ld ", sb.st_nlink);
-	//if ( global.numer == 1)
-		printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
-	//else {
-	//	if ((pwd = getpwuid(sb.st_uid)) != NULL )
-	//		printf("%s ", pwd->pw_name);
-	//	if ((grp = getgrgid(sb.st_gid)) != NULL )
-	//		printf("%s ", grp->gr_name);
-	//} 
-	//printf("%8lld ", (long long int)sb.st_size); 
-	printf("%lld ", (long long int)sb.st_size); 
-	//printf("%.16s   ", strchr(ctime(&sb.st_mtime), ' '));
-	//printf("%s ", strchr(ctime(&sb.st_mtime), ' '));
+	printf(" ");
+	printf("%ld ", sb.st_nlink);
+	printf("%ld ", sb.st_nlink);
+	printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
+	printf("%lld ", (long long int)sb.st_size);
 	printf("%s\n", file); 
 } 
 
