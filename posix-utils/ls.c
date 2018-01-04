@@ -11,8 +11,6 @@
 #include <pwd.h>
 #include <grp.h>
 
-
-
 /* 
 	Copyright 2015-2017, C. Graff "ls"
 */ 
@@ -96,7 +94,6 @@ int main(int argc, char *argv[])
 
 	if (argc == 0 ) 
 	{
-		//global.path = *argv;
 		global.path = ".";
 		if ( global.recur == 0 )
 			list_dirs(".");
@@ -127,16 +124,13 @@ void list_dirs(char *argvv)
 	size_t hold = 1; 
 	int c, factor, refactor, z, i;
 
-
-	c = factor = refactor = z = i = 0; 
-	int wasin = 0;
+	c = factor = refactor = z = i = 0;
 	
 	/* Discover and count directory entries */
 	if ((a = opendir(argvv)))
 	{
 		while ((b = readdir(a)))
-		{ 
-			++wasin;
+		{
 			if (( global.hiddn != 1 && b->d_name[0] == '.' ))
 				continue; 
 			global.strings[c] = b->d_name;
@@ -208,7 +202,7 @@ void shift_alpha(int c, int refactor)
 void print_strings(char *s[], size_t c, size_t refactor, int max)
 {
 	size_t i, z;
-
+	(void)max;
 	for (i = 0, z = 0; i <= c + refactor; i++)
 	{ 
 		if ((s[i])) 
@@ -325,11 +319,7 @@ int compare (const void * a, const void * b )
 
 void prntstats(char *file)
 {
-	struct stat sb; 
-	struct group *grp;
-	struct passwd *pwd;
-
-	//memset(&sb, 0, sizeof(struct stat)); 
+	struct stat sb = { 0 };
 	if ( lstat(file, &sb) != 0 )
 		return;
 	octtoperm(sb.st_mode);

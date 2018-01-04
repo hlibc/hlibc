@@ -5,14 +5,13 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <sys/types.h> 
-#include "cutils.h"
+#include <sys/types.h>
 
 /* Copyright 2015, C. Graff  "mkdir" */ 
 
 void mkdir_verbose(char *, mode_t, int);
 void drmake(char *, mode_t, int, int);
-
+void mkdirerror(char *, int);
 int main (int argc, char *argv[]) 
 { 
 
@@ -23,7 +22,7 @@ int main (int argc, char *argv[])
 	while ((i = getopt (argc, argv, "hvpm:")) != -1) 
 		switch (i) {
 			case 'm': 
-				mode = atol(optarg);
+				mode = atoll(optarg);
 				break;
 			case 'p': 
 				k = 1; 
@@ -32,14 +31,14 @@ int main (int argc, char *argv[])
 				j = 1;
 				break;
 			case 'h': 
-				cutilerror("Usage mkdir -pvm:\n", 0); 
+				mkdirerror("Usage mkdir -pvm:\n", 0); 
 				break; 
 			default: 
 				break;
 		}
 
-        argv += optind;
-        argc -= optind;
+	argv += optind;
+	argc -= optind;
 
 	while ( *(argv) )
 		drmake(*argv++, mode, j, k);
@@ -50,32 +49,40 @@ int main (int argc, char *argv[])
 void drmake(char *array, mode_t mode, int verbose, int parents)
 {
 	size_t len, index = 0; 
-        len = index = strlen(array);
-        if ( parents == 0 )
-        { 
-                mkdir_verbose(array, mode, verbose); 
-              	return;
-        }
+	len = index = strlen(array);
+	if ( parents == 0 )
+	{ 
+		mkdir_verbose(array, mode, verbose); 
+	      	return;
+	}
 
-        while (--index - 1) 
-                if ( array[index] == '/' )
-                        array[index] = '\0'; 
+	while (--index - 1) 
+		if ( array[index] == '/' )
+			array[index] = '\0'; 
 
-        for ( ;--len - 1 ; index++)
-        {
-                if ( array[index] == '\0' )
-                { 
-                        mkdir_verbose(array, mode, verbose);
+	for ( ;--len - 1 ; index++)
+	{
+		if ( array[index] == '\0' )
+		{ 
+			mkdir_verbose(array, mode, verbose);
 			while ( array[index] == '\0' ) 
-                       		 array[index++] = '/'; 
-                } 
-        }
+		       		 array[index++] = '/'; 
+		} 
+	}
 }
 
 void mkdir_verbose(char *string, mode_t mode, int verbose)
 {
 	mkdir(string, mode);
-        if ( verbose == 1 )
-                printf("Making directory: %s  mode: %o\n", string, mode);
+	if ( verbose == 1 )
+		printf("Making directory: %s mode: %o\n", string, mode);
 }
+
+void mkdirerror(char *message, int i)
+{
+	fprintf(stderr, "%s", message);
+	if ( i > -1 )
+		exit (i);
+}
+
 

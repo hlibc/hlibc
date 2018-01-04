@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	if (argc == 1) 
 		if (concatenate(0, 0) == -1)
 			return 1;
-        while  (*++argv) 
+	while  (*++argv) 
 		if (concatenate(open(*argv, O_RDONLY), 1) == -1)
 			return 1;
 	return 0; 
@@ -22,20 +22,20 @@ int main(int argc, char *argv[])
 
 int concatenate(int source, int opened)
 {
-        ssize_t n = 0;
-        char buf[4096];
+	ssize_t n = 0;
+	char buf[4096];
 
-        if (source == -1)
-                return -1;
+	if (source == -1)
+		return -1;
 
-        while ((n = read(source, buf, 4096)) > 0)
-                write(1, buf, n);
+	while ((n = read(source, buf, 4096)) > 0)
+		write(1, buf, n);
 	
 	if (n == -1)
 		return -1;
 
 	if (opened)
-        	close(source);
+		close(source);
 
 	return 1;
 }

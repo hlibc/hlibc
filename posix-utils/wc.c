@@ -25,29 +25,29 @@ int main(int argc, char *argv[])
 	int opt[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
 	
 	++argv;
-        --argc;
+	--argc;
 
-        while ( *argv && **argv == '-'  )
-        {
-                while (*(*argv + 1 ) != '\0')
-                {
-                        if ( *(*argv  + 1) == 'l' ) 
+	while ( *argv && **argv == '-'  )
+	{
+		while (*(*argv + 1 ) != '\0')
+		{
+			if ( *(*argv  + 1) == 'l' ) 
 				*(opt) = *(opt+1) = 1;
-                        else if ( *(*argv + 1) == 'w' ) 
+			else if ( *(*argv + 1) == 'w' ) 
 				*(opt) = *(opt+2) = 1;
-                        else if ( *(*argv + 1) == 'c' ) 
+			else if ( *(*argv + 1) == 'c' ) 
 				*(opt) = *(opt+3) = 1;
-                        else if ( *(*argv + 1) == 'm' ) 
+			else if ( *(*argv + 1) == 'm' ) 
 			{
 				*(opt) = *(opt+4) = *(opt+9) = 1; 
 			}
-                        else
-                                return 0;
-                        ++*argv;
-                }
-                ++argv;
-                --argc;
-        } 
+			else
+				return 0;
+			++*argv;
+		}
+		++argv;
+		--argc;
+	} 
 
 	if ( argc == 0 ) 
 	{
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 		wc_print(opt);
 		printf("\n");
 	}
-        while  (*(argv)) 
+	while  (*(argv)) 
 	{
 		countsyms(open(*argv,O_RDONLY), opt); 
 		wc_print(opt);
@@ -72,12 +72,12 @@ int main(int argc, char *argv[])
 void countsyms(int source, int *opt)
 { 
 	if ( source == -1 )
-                return;
+		return;
 
 	*(opt+5) = *(opt+6) = *(opt+7) = *(opt+8) = 0;
 
 	size_t i, j, k; 
-        i = j = k = 0; 
+	i = j = k = 0; 
 	char buf[BUFSIZ];
 
 	while ((i = read(source, buf, BUFSIZ)) > 0) 
@@ -143,13 +143,13 @@ void wc_print(int *opt)
 void wc_total(int *opt)
 {
 	if ( *(opt) == 0 || *(opt+1) == 1 )
-                printf("%6d  ", hd.nl );
-        if ( *(opt) == 0 || *(opt+2) == 1 )
-                printf("%6d  ", hd.nw );
-        if ( *(opt) == 0 || *(opt+3) == 1 )
-                printf("%6d  ", hd.nc );
-        if ( *(opt) == 1 && *(opt+9) == 1 )
-                printf("%6d  ", hd.nb );
+		printf("%6d  ", hd.nl );
+	if ( *(opt) == 0 || *(opt+2) == 1 )
+		printf("%6d  ", hd.nw );
+	if ( *(opt) == 0 || *(opt+3) == 1 )
+		printf("%6d  ", hd.nc );
+	if ( *(opt) == 1 && *(opt+9) == 1 )
+		printf("%6d  ", hd.nb );
 	printf("total\n");
 }
 

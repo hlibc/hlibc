@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
        	}
 		
 	hold[i] = '\n';
-        write(1, hold, i + 1);
+	write(1, hold, i + 1);
 
 	return 0;
 }

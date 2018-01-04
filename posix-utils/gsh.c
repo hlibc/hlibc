@@ -82,18 +82,18 @@ int main(int argc, char **argv)
 	char *l;
 
 	while ((o = getopt (argc, argv, "ct")) != -1)
-                switch (o) {
-                        case 'c': 
+		switch (o) {
+			case 'c': 
 				glb.cmode = 1;
 				break;
 			case 't':
-                                glb.testparse = 1;
-                                break;
+				glb.testparse = 1;
+				break;
 			default:
 				break;
 		}
 	argv += optind;
-        argc -= optind;
+	argc -= optind;
 
 	if (!(cmds = malloc(sizeof(struct commands) * 1)))
 		return 1;
@@ -173,11 +173,11 @@ int destroy(int exitno, char *message, char *l)
 
 int exitsh(char *string)
 {
-        int ret = 0;
-        if ( string != NULL )
-                if ( (ret = atoi(string)) > -1 )
-                        return ret;
-        return 1;
+	int ret = 0;
+	if ( string != NULL )
+		if ( (ret = atoi(string)) > -1 )
+			return ret;
+	return 1;
 }
 
 
@@ -216,47 +216,47 @@ int execute()
 		if ( cmds[k].infp != NULL ) 
 		{
 			if( (cmds[k].in = open(cmds[k].infp, O_RDONLY) ) == -1 )
-                	{
-                        	//fprintf(stderr,"'%s' File not found.\n", cmds[k].infp);
+			{
+				//fprintf(stderr,"'%s' File not found.\n", cmds[k].infp);
 				write(2, "'", 1);
 				write(2, cmds[k].infp, strlen(cmds[k].infp));
 				write(2, " ' File not found.\n", 19); 
-                        	return 0;
-                	} 
+				return 0;
+			} 
 		}
 
 		/* >, >> */
 		if ( cmds[k].outfp != NULL ) 
 		{ 
 			if((cmds[k].out = open(cmds[k].outfp, cmds[k].outflags, mode)) == -1)
-                	{
+			{
 				write(2, " Permission denied?\n", 20);
-                        	return 0;
-                	} 
+				return 0;
+			} 
 		} 
 
 		/* | */
 		if ( cmds[k].piped == 1 && k < glb.count - 1)
 		{ 
-                        if ( pipe(fildes) == -1 )
-                                return 0; 
+			if ( pipe(fildes) == -1 )
+				return 0; 
 			cmds[k + 1].in = fildes[0];
-                        cmds[k].out = fildes[1];
-                }
+			cmds[k].out = fildes[1];
+		}
 		
 		/* builtins */
 		/*----------*/
 		if ( cmds[k].argv[0] )
-                {
+		{
 			if (strcmp (cmds[k].argv[0], "cd") == 0 )
 			{ 
 				cmds[k].err = cd(cmds[k].argv[1]);
 				continue; 
 			} 
 			else if (strcmp (cmds[k].argv[0], "exit") == 0 )
-  	              	{ 
+  		      	{ 
 				return exitsh(cmds[k].argv[1]); 
-                	} 
+			} 
 		}
 	
 
@@ -265,7 +265,7 @@ int execute()
 		cmds[k].pids = fork();
 
 		if (cmds[k].pids < 0)
-        		return 0; 
+			return 0; 
 		/* parent */
 		else if (cmds[k].pids  > 0)
 		{ 
@@ -282,11 +282,11 @@ int execute()
 			if ( cmds[k].argv[0] )
 			{
 				execvp(cmds[k].argv[0], cmds[k].argv);
-               			write(2, "gsh: ", 6);
+	       			write(2, "gsh: ", 6);
 				write(2, cmds[k].argv[0], strlen(cmds[k].argv[0]));
 				write(2, " not found\n", 11);
 			} 
-                        _exit(1); 
+			_exit(1); 
 		} 
 		
 		
@@ -294,10 +294,10 @@ int execute()
 		{ 
 			waitpid(cmds[k].pids, &cmds[k].err, 0); 
 			
-                	if( cmds[k].out != -1 )
-                        	close(cmds[k].out); 
-                	if( cmds[k].in != -1 )
-                        	close(cmds[k].in); 
+			if( cmds[k].out != -1 )
+				close(cmds[k].out); 
+			if( cmds[k].in != -1 )
+				close(cmds[k].in); 
 		}
 		else
 		{ 
@@ -310,29 +310,29 @@ int execute()
 
 void verbosity(void)
 {
-        size_t i = 0;
-        size_t j = 0;
+	size_t i = 0;
+	size_t j = 0;
 
 	fprintf(stderr, "Total command vectors: %zu \n",glb.count);
-        
-        for (i = 0; i < glb.count ;i++)
-        {
+	
+	for (i = 0; i < glb.count ;i++)
+	{
 		fprintf(stderr, "\n");
 		
-                for ( j = 0; j <= cmds[i].argc ; ++j) 
-                        fprintf(stderr, "%s\t\targv           %zu\n", cmds[i].argv[j], j); 
-                if ( cmds[i].infp != NULL )
-                        fprintf(stderr, "%s\t\tin  <   vector %zu\n", cmds[i].infp, i);
-                if ( cmds[i].outfp != NULL ) 
-                        fprintf(stderr, "%s\t\tout >   vector %zu\n", cmds[i].outfp, i); 
-        }
+		for ( j = 0; j <= cmds[i].argc ; ++j) 
+			fprintf(stderr, "%s\t\targv	   %zu\n", cmds[i].argv[j], j); 
+		if ( cmds[i].infp != NULL )
+			fprintf(stderr, "%s\t\tin  <   vector %zu\n", cmds[i].infp, i);
+		if ( cmds[i].outfp != NULL ) 
+			fprintf(stderr, "%s\t\tout >   vector %zu\n", cmds[i].outfp, i); 
+	}
 	if ( glb.inascript)
 		exit(1);
 }
 
 static void initialize(size_t i)
 {
-        if (!(cmds = realloc(cmds, sizeof(struct commands) * (i + 1))))
+	if (!(cmds = realloc(cmds, sizeof(struct commands) * (i + 1))))
 	{
 		//perror(" realloc()" );
 		exit(1);
@@ -342,15 +342,15 @@ static void initialize(size_t i)
 	cmds[i].argc = 0; 
 
 	cmds[i].outflags = O_APPEND|O_RDWR|O_CREAT;
-        cmds[i].outfp = NULL;
-        cmds[i].infp = NULL;
-        cmds[i].in = -1;
-        cmds[i].out = -1;
-        
-        cmds[i].bg = 0;
-        cmds[i].piped = 0;
-        cmds[i].err = 0;
-        cmds[i].boole = -1;
+	cmds[i].outfp = NULL;
+	cmds[i].infp = NULL;
+	cmds[i].in = -1;
+	cmds[i].out = -1;
+	
+	cmds[i].bg = 0;
+	cmds[i].piped = 0;
+	cmds[i].err = 0;
+	cmds[i].boole = -1;
 
 	cmds[i].ifa = -1;
 	cmds[i].thena = -1;
@@ -374,13 +374,13 @@ int parse(char *l)
 	
 	/* intialialize a data structure member and the pointer to input */
 	initialize(c);
-        last = l;
+	last = l;
 
 	/* discover tokens and commands */
-        while ( *l )
-        {
+	while ( *l )
+	{
 		if (*l == '"')
-                { 
+		{ 
 			*l = '\0';
 			last = ( l + 1);
 			/* routing switch for quotes */
@@ -390,23 +390,23 @@ int parse(char *l)
 				aquote = 0;
 		}
 		if (*l == ';')
-                {
-                        *l = '\0';
-                        initialize(++c);
-                        last = ( l + 1 ); 
+		{
+			*l = '\0';
+			initialize(++c);
+			last = ( l + 1 ); 
 			atoken = 1;
 			awhite = 0;
 			aredir = 0;
-                }
+		}
 		else if (*l == '\n' && *(l + 1) != '\n')
-                { 
-                        *l = '\0'; 
-                       	initialize(++c);
-                        last = ( l + 1); 
+		{ 
+			*l = '\0'; 
+		       	initialize(++c);
+			last = ( l + 1); 
 			atoken = 1;
-                        awhite = 0;
+			awhite = 0;
 			aredir = 0;
-                }
+		}
 		else if (*l == '\n')
 		{
 			*l = '\0';
@@ -414,84 +414,84 @@ int parse(char *l)
 			awhite = 0;
 			aredir = 0;
 		}
-                else if ( *l == '|' && *(l + 1) == '|' )
-                {
-                        cmds[c].boole = 1;
-                        *l = '\0';
-                        ++l;
-                        *l = '\0';
-                        initialize(++c);
-                        last = ( l + 1 ); 
+		else if ( *l == '|' && *(l + 1) == '|' )
+		{
+			cmds[c].boole = 1;
+			*l = '\0';
+			++l;
+			*l = '\0';
+			initialize(++c);
+			last = ( l + 1 ); 
 			atoken = 1;
 			awhite = 0;
 			aredir = 0;
-                }
-                else if (*l == '|')
-                {
-                        cmds[c].piped = 1;
-                        *l = '\0';
-                        initialize(++c);
-                        last = (l + 1); 
-			atoken = 1;
-                        awhite = 0;
-			aredir = 0;
-                }
-                else if (*l == '&' && *(l + 1)  == '&')
-                {
-                        cmds[c].boole = 0;
-                        *l = '\0';
-                        ++l;
-                        *l = '\0';
-                        initialize(++c);
-                        last = (l + 1); 
+		}
+		else if (*l == '|')
+		{
+			cmds[c].piped = 1;
+			*l = '\0';
+			initialize(++c);
+			last = (l + 1); 
 			atoken = 1;
 			awhite = 0;
 			aredir = 0;
-                }
-                else if (*l == '&')
-                {
-                        cmds[c].bg = 1;
-                        *l = '\0';
-                        initialize(++c);
-                        last = ( l + 1 ); 
+		}
+		else if (*l == '&' && *(l + 1)  == '&')
+		{
+			cmds[c].boole = 0;
+			*l = '\0';
+			++l;
+			*l = '\0';
+			initialize(++c);
+			last = (l + 1); 
 			atoken = 1;
 			awhite = 0;
 			aredir = 0;
-                }
-                else if (*l == '>' && *(l + 1) == '>')
-                {
-                        *l = '\0';
-                        ++l;
-                        *l = '\0';
-                        cmds[c].outflags = O_APPEND|O_RDWR|O_CREAT;
-			while ( *( l + 1 ) == ' ') /* strip whitespace */
-                                *l++ = '\0';
-                        cmds[c].outfp = ( l + 1 );
+		}
+		else if (*l == '&')
+		{
+			cmds[c].bg = 1;
+			*l = '\0';
+			initialize(++c);
+			last = ( l + 1 ); 
 			atoken = 1;
 			awhite = 0;
-			aredir = 1;
-                }
-                else if (*l == '>')
-                {
-                        *l = '\0';
-                        cmds[c].outflags = O_TRUNC|O_RDWR|O_CREAT;
+			aredir = 0;
+		}
+		else if (*l == '>' && *(l + 1) == '>')
+		{
+			*l = '\0';
+			++l;
+			*l = '\0';
+			cmds[c].outflags = O_APPEND|O_RDWR|O_CREAT;
 			while ( *( l + 1 ) == ' ') /* strip whitespace */
 				*l++ = '\0';
-                        cmds[c].outfp = ( l + 1 );
+			cmds[c].outfp = ( l + 1 );
 			atoken = 1;
 			awhite = 0;
 			aredir = 1;
-                }
-                else if (*l == '<')
-                {
-                        *l = '\0';
+		}
+		else if (*l == '>')
+		{
+			*l = '\0';
+			cmds[c].outflags = O_TRUNC|O_RDWR|O_CREAT;
 			while ( *( l + 1 ) == ' ') /* strip whitespace */
-                                *l++ = '\0'; 
-                        cmds[c].infp = ( l + 1 ); 
+				*l++ = '\0';
+			cmds[c].outfp = ( l + 1 );
 			atoken = 1;
 			awhite = 0;
 			aredir = 1;
-                }
+		}
+		else if (*l == '<')
+		{
+			*l = '\0';
+			while ( *( l + 1 ) == ' ') /* strip whitespace */
+				*l++ = '\0'; 
+			cmds[c].infp = ( l + 1 ); 
+			atoken = 1;
+			awhite = 0;
+			aredir = 1;
+		}
 		else if ( *l != ' ' && *l != '\t' )
 		{
 			if (aredir == 0 )
@@ -503,20 +503,20 @@ int parse(char *l)
 			atoken = 0; 
 		}
 		else if ( *l == ' ' || *l == '\t' )
-                { 
+		{ 
 			if ( atoken == 0 && awhite == 0 && aredir == 0 && aquote == 0)
 				cmds[c].argc++;
 			
 			if (aquote == 0)
 			{
 				awhite = 1;
-                        	*l = '\0';
+				*l = '\0';
 				last = ( l + 1 );
 			}
 			//last = ( l + 1 );
-                }
-                ++l;
-        }
+		}
+		++l;
+	}
 	glb.count += c;
 
 	/* An exception could be added here to check for NULL ultimate args */
@@ -527,7 +527,7 @@ int parse(char *l)
 	if ( glb.testparse )
 		verbosity();
 	
-        return 0; 
+	return 0; 
 }
 
 

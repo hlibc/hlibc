@@ -12,8 +12,8 @@ int main (int argc, char *argv[])
 	int o, all; 
 	all = 0;
 	while ((o = getopt (argc, argv, "ah")) != -1)
-                switch (o) {
-                        case 'a':
+		switch (o) {
+			case 'a':
 				all = 1;
 				break;
 			case 'h':
@@ -21,10 +21,10 @@ int main (int argc, char *argv[])
 				break;
 			default:
 				break;
-                }
+		}
 
 	argv += optind;
-        argc -= optind;
+	argc -= optind;
 
 	while ( *argv ) 
 		which(*argv++, all); 
@@ -34,21 +34,21 @@ int main (int argc, char *argv[])
 
 void which(char *argv, int all)
 {
-        char word[(PATH_MAX + 1) * 2];
-        char *token;
+	char word[(PATH_MAX + 1) * 2];
+	char *token;
 
-        token = strtok(getenv("PATH"), ":");
+	token = strtok(getenv("PATH"), ":");
 
-        while ( token != NULL )
-        {
-                sprintf(word, "%s/%s",token, argv);
-                if ( access(word, X_OK) == 0 )
-                {
-                        printf("%s\n", word);
-                        if ( all != 1 )
-                                break;
-                }
-                token = strtok(NULL, ":");
-        }
+	while ( token != NULL )
+	{
+		sprintf(word, "%s/%s",token, argv);
+		if ( access(word, X_OK) == 0 )
+		{
+			printf("%s\n", word);
+			if ( all != 1 )
+				break;
+		}
+		token = strtok(NULL, ":");
+	}
 }
 

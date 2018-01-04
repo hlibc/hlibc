@@ -34,58 +34,58 @@ int main(int argc, char *argv[])
 		if ( opt[2] == 0 )
 		{
 			while ( **argv)
-                            --*argv; 
+			    --*argv; 
 			++*argv;
 			break; 
 		}
 	} 
-          
+	  
 	while ( *argv ) 
 	{ 
 		while ( **argv != '\0' )
 		{ 
 			if ( **argv  == '\\' && opt[0] == 1)
-                        {
-                                switch (*(*argv +1) ){
-                             		case 'a' :
-                                                printf("\a");
-                                      		++*argv;
-                                                break;
-                                        case 'b' :
-                                                printf("\b");
-                                       		++*argv;
-                                                break;
-                                        case 'c' :
-                                                return 0;
-                                        	++*argv;
-                                                break;
-                                        case 'f' :
-                                                printf("\f");
-                                         	++*argv;
-                                                break;
-                                        case 'n' :
-                                                printf("\n");
-                                          	++*argv;
-                                                break;
-                                        case 'r' :
-                                                printf("\r");
-                                           	++*argv;
-                                                break;
-                                        case 't' :
-                                                printf("\t");
-                                            	++*argv;
-                                                break;
-                                        case 'v' :
-                                                printf("\v");
-                                             	++*argv;
-                                                break;
-                                        case '\\' :
-                                                printf("\\");
-                                              	++*argv;
-                                                break; 
+			{
+				switch (*(*argv +1) ){
+			     		case 'a' :
+						printf("\a");
+				      		++*argv;
+						break;
+					case 'b' :
+						printf("\b");
+				       		++*argv;
+						break;
+					case 'c' :
+						return 0;
+						++*argv;
+						break;
+					case 'f' :
+						printf("\f");
+					 	++*argv;
+						break;
+					case 'n' :
+						printf("\n");
+					  	++*argv;
+						break;
+					case 'r' :
+						printf("\r");
+					   	++*argv;
+						break;
+					case 't' :
+						printf("\t");
+					    	++*argv;
+						break;
+					case 'v' :
+						printf("\v");
+					     	++*argv;
+						break;
+					case '\\' :
+						printf("\\");
+					      	++*argv;
+						break; 
 					case '0' : 
 						prtoctesc(argv, opt);
-                                                break;
+						break;
 					default:
 						break;
 				}
