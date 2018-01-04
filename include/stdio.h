@@ -77,6 +77,9 @@ int ferror(FILE *);
 /* remove */
 int remove(const char *);
 
+/* rename */
+int rename(const char *, const char *);
+
 /* perror */
 void perror(const char *);
 
