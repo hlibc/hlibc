@@ -111,6 +111,14 @@ diff Makefile ${SUF}/testfile 2>&1 > ${SUF}/testerr && \
 echo "\`printf_driver' test utility successfully created and copied a large file of urandom data" || \
 echo "##printf driver was unable to create and copy a large file of urandom data"
 
+dd if=/dev/urandom of=${SUF}/diff2 bs=1M count=1 2>${SUF}/testerr
+cp ${SUF}/diff2 ${SUF}/diff3
+mv ${SUF}/diff2 ${SUF}/diff4
+./tests/rename-driver ${SUF}/diff3 ${SUF}/diff5 2>${SUF}/testerr
+diff ${SUF}/diff4 ${SUF}/diff5 2>&1 > ${SUF}/testerr && \
+echo "\`rename-driver' test utility successfully renamed a small file of urandom data" || \
+echo "##rename-driver was unable to rename a small file of urandom data"
+
 #./tests/strsep-driver > ${SUF}/diff2 2>${SUF}/testerr
 #./control/strsep-driver > ${SUF}/diff3 2>${SUF}testerr
 #diff ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr && \
