@@ -112,6 +112,9 @@ int _printf_inter(
 		case 'f':
 			fval = va_arg(ap, double);
 			goto floating;
+		case 'g':
+			fval = va_arg(ap, double);
+			goto floating;
 		case 'L':
 			switch (*++p) {
 			case 'f':
