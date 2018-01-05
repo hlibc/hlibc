@@ -3,7 +3,16 @@
 
 BASIC_TYPE="	atoi \
 		atol \
-		atoll
+		atoll \
+		environ \
+		getenv-driver \
+		hcreate-driver \
+		printf-driver \
+		printf-driver-integers \
+		strstr-driver \
+		strstr-effectiveness2 \
+		strstr-effectiveness3
+		
 "
 
 TOOLING=$(pwd)/usr
@@ -33,7 +42,7 @@ for i in $BASIC_TYPE
 do	
 	"./tests/${i}" > "${SUF}/diff2"
 	"./control/${i}" > "${SUF}/diff3"
-	if [ ! -s "${SUF}/diff2" -a ! -s "${SUF}/diff3" ]
+	if [ ! -s "${SUF}/diff2" ]
 	then	printf "%s\n" "empty test file, something went wrong!!"
 	fi
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
