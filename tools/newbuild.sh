@@ -1,18 +1,19 @@
 #!/bin/sh
 
 
-BASIC_TYPE="	atoi \
-		atol \
-		atoll \
-		environ \
-		getenv-driver \
-		hcreate-driver \
-		printf-driver \
-		printf-driver-integers \
-		strstr-driver \
-		strstr-effectiveness2 \
+BASIC_TYPE="	atoi 
+		atol
+		atoll 
+		environ 
+		getenv-driver
+		hcreate-driver
+		printf-driver
+		printf-driver-integers
+		strstr-driver
+		strstr-effectiveness2
 		strstr-effectiveness3
-		
+		malloc-driver /usr
+		popen-driver du /usr
 "
 
 TOOLING=$(pwd)/usr
@@ -38,10 +39,10 @@ make $1 > ${SUF}/testlog
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n"
 
-for i in $BASIC_TYPE
+printf "%s" "$BASIC_TYPE" | while read -r i
 do	
-	"./tests/${i}" > "${SUF}/diff2"
-	"./control/${i}" > "${SUF}/diff3"
+	./tests/${i} > "${SUF}/diff2"
+	./control/${i} > "${SUF}/diff3"
 	if [ ! -s "${SUF}/diff2" ]
 	then	printf "%s\n" "empty test file, something went wrong!!"
 	fi
@@ -49,6 +50,6 @@ do
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 	fi
-done
+done 
 
 
