@@ -5,13 +5,13 @@ int main(int argc, char *argv[])
 	FILE *fp;
 	int status;
 	char path[4096];
-	char argstring[PATH_MAX] = { 0 };
+	char argstring[PATH_MAX*2] = { 0 };
 	size_t len = 0;
 	
 	while (--argc > 0) 
 		len += sprintf(argstring + len, "%s ", *++argv);
 
-	if (( fp = popen(argstring, "r")) == NULL)
+	if ((fp = popen(argstring, "r")) == NULL)
 		return 1;
 
 	while (fgets(path, 4096, fp) != NULL)

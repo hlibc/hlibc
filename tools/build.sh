@@ -1,10 +1,12 @@
 #!/bin/sh
 
 
-BASIC_TYPE="	atoi 
+BASIC_TYPE="	malloc-unique-pointer
+		getline-driver
+		atoi
 		atol
-		atoll 
-		environ 
+		atoll
+		environ
 		getenv-driver
 		hcreate-driver
 		printf-driver
@@ -49,7 +51,7 @@ printf "==========TEST RESULT START==================================\n"
 
 printf "%s" "$BASIC_TYPE" | while read -r i
 do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i} 
-	./control/${i} > "${SUF}/diff3"	# 
+	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
 	if [ ! -s "${SUF}/diff2" ]
 	then	printf "%s\n" "empty test file, something went wrong!!"
 	fi
@@ -60,7 +62,6 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 done 
 
 # unique tests that don't work as BASIC_TESTs
-
 ./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
 ./tests/popen-to-file "du /usr" "${SUF}/diff3" 2>"${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]

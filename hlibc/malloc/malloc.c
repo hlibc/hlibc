@@ -93,9 +93,9 @@ void *malloc(size_t size)
 {
 	object *o;
 	object *last;
-	if (size <= 0) {
-		return NULL;
-	}
+	//if (size <= 0) {
+	//	return NULL;
+	//}
 
 	if (!base) {
 		if (!(o = morecore(NULL, size))) {
