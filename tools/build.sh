@@ -98,5 +98,25 @@ then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small f
 else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
 fi
 
+./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2>"${SUF}/testerr"
+./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2>"${SUF}/testerr"
+if [ ! -s "${SUF}/diff2" ]
+then	printf "%s\n" "empty test file, something went wrong!!"
+fi
+if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+then	printf "%s\n" "\`ftw-driver compared equal to its control method"
+else	printf "%s\n" "##ftw-driver failed to output to a file" 
+fi
+
+./control/nftw-driver /tmp dmcp | sort > "${SUF}/diff2" 2>"${SUF}/testerr"
+./tests/nftw-driver /tmp dmcp | sort > "${SUF}/diff3" 2>"${SUF}/testerr"
+if [ ! -s "${SUF}/diff2" ]
+then	printf "%s\n" "empty test file, something went wrong!!"
+fi
+if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+then	printf "%s\n" "\`nftw-driver compared equal to its control method"
+else	printf "%s\n" "##nftw-driver failed to output to a file" 
+fi
+
 printf "============================================================\n"
 
