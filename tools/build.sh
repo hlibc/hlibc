@@ -118,5 +118,17 @@ then	printf "%s\n" "\`nftw-driver compared equal to its control method"
 else	printf "%s\n" "##nftw-driver failed to output to a file" 
 fi
 
+for i in `seq 1 256`; do echo -n "ABCD" >> /tmp/test.txt; done
+echo -n "EEEE" >> /tmp/test.txt
+./control/getline-driver /tmp/test.txt > "${SUF}/diff2" 2>"${SUF}/testerr"
+./tests/getline-driver /tmp/test.txt > "${SUF}/diff3" 2>"${SUF}/testerr"
+if [ ! -s "${SUF}/diff2" ]
+then	printf "%s\n" "empty test file, something went wrong!!"
+fi
+if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+then	printf "%s\n" "\`getline-driver compared equal to its control method"
+else	printf "%s\n" "##getline-driver failed to read lines from file" 
+fi
+
 printf "============================================================\n"
 
