@@ -25,7 +25,7 @@ int _fillbuf(FILE *fp)
 			fp->flags |= _ERR;
 		}
 		fp->len = 0;
-		fflush(fp);
+		//fflush(fp);
 		return EOF;
 	}
 
