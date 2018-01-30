@@ -10,10 +10,9 @@ int _flushbuf(int x, FILE *fp)
 		if ((fp->buf = malloc(bufsize)) == NULL) {
 			return EOF;
 		}
-
 		fp->lp = fp->rp = fp->buf;
 	}
-	else if (fp->flags & _WRITE && fp->rp - fp->buf) {
+	else if (fp->flags & _WRITE) {
 		if (write(fp->fd, fp->buf, fp->rp - fp->buf) < 0) {
 			fp->flags |= _ERR;
 			return EOF;
@@ -27,3 +26,4 @@ int _flushbuf(int x, FILE *fp)
 	}
 	return x;
 }
+
