@@ -67,7 +67,7 @@ AUTOMATIC TESTING:
 	Use the following instructions to retrieve, build and run hlibc 
 	and the hlibc test suite.
 
-		git clone https://git.zv.io/me/hlibc.git
+		git clone https://git.zv.io/r/hlibc.git
 		cd hlibc
 		make gcctest
 
@@ -144,7 +144,7 @@ REVISION CONTROL:
 -----------------
 
 	master; hosted by Zach van Rijn
-		https://git.zv.io/me/hlibc
+		https://git.zv.io/r/hlibc
 
 	backup; graff's original repo, may be out-of-sync
 		https://github.com/cmgraff/hlibc
