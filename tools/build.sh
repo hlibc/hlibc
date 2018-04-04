@@ -66,7 +66,7 @@ done
 if [ ! -s "${SUF}/diff2" ]
 then	printf "%s\n" "empty test file, something went wrong!!"
 fi
-if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file and compared equal to its control method"
 else	printf "%s\n" "##popen-to-file driver failed to output to a file" 
 fi
@@ -76,15 +76,15 @@ dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=50 2>"${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]
 then	printf "%s\n" "empty test file, something went wrong!!"
 fi
-if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`printf_driver' test utility successfully created and copied a large file of urandom data"
 else	printf "%s\n" "##printf driver was unable to create and copy a large file of urandom data"
 fi
 
-dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2>"${SUF}/testerr"
+dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2> "${SUF}/testerr"
 cp "${SUF}/diff2" "${SUF}/diff3"
 mv "${SUF}/diff2" "${SUF}/diff4"
-./tests/rename-driver ${SUF}/diff3 ${SUF}/diff5 2>"${SUF}/testerr"
+./tests/rename-driver "${SUF}/diff3" "${SUF}/diff"5 2> "${SUF}/testerr"
 if [ ! -s "${SUF}/diff4" ]
 then	printf "%s\n" "empty test file, something went wrong!!"
 fi
@@ -93,34 +93,36 @@ then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small f
 else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
 fi
 
-./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2>"${SUF}/testerr"
-./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2>"${SUF}/testerr"
+./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
+./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]
 then	printf "%s\n" "empty test file, something went wrong!!"
 fi
-if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`ftw-driver compared equal to its control method"
 else	printf "%s\n" "##ftw-driver failed to output to a file" 
 fi
 
-./control/nftw-driver /tmp dmcp | sort > "${SUF}/diff2" 2>"${SUF}/testerr"
-./tests/nftw-driver /tmp dmcp | sort > "${SUF}/diff3" 2>"${SUF}/testerr"
+./control/nftw-driver /tmp dmcp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
+./tests/nftw-driver /tmp dmcp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]
 then	printf "%s\n" "empty test file, something went wrong!!"
 fi
-if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`nftw-driver compared equal to its control method"
 else	printf "%s\n" "##nftw-driver failed to output to a file" 
 fi
 
-for i in `seq 1 256`; do printf "%s" "ABCD" >> /tmp/test.txt; done
-printf "%s" "EEEE" >> /tmp/test.txt
-./control/getline-driver /tmp/test.txt > "${SUF}/diff2" 2>"${SUF}/testerr"
-./tests/getline-driver /tmp/test.txt > "${SUF}/diff3" 2>"${SUF}/testerr"
+for i in `seq 1 256`
+do	printf "%s" "ABCD" >> "${SUF}/test.txt"
+done
+printf "%s" "EEEE" >> "${SUF}/test.txt"
+./control/getline-driver "${SUF}/test.txt" > "${SUF}/diff2" 2> "${SUF}/testerr"
+./tests/getline-driver "${SUF}/test.txt" > "${SUF}/diff3" 2> "${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]
 then	printf "%s\n" "empty test file, something went wrong!!"
 fi
-if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`getline-driver compared equal to its control method"
 else	printf "%s\n" "##getline-driver failed to read lines from file" 
 fi
