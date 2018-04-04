@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 BASIC_TYPE="	malloc-unique-pointer
 		getline-driver
 		atoi
@@ -20,11 +19,11 @@ BASIC_TYPE="	malloc-unique-pointer
 		pow_test
 "
 
-
 TOOLING="$(pwd)/usr"
+SUF="$(pwd)/logs"
 
-SUF="$(pwd)/logs" 
-make clean 
+make clean
+
 CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper
 
 mkdir -p "${SUF}"
@@ -72,8 +71,6 @@ then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file a
 else	printf "%s\n" "##popen-to-file driver failed to output to a file" 
 fi
 
-
-
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=50 2>"${SUF}/testerr"
 ./tests/printf-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]
@@ -83,8 +80,6 @@ if diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr
 then	printf "%s\n" "\`printf_driver' test utility successfully created and copied a large file of urandom data"
 else	printf "%s\n" "##printf driver was unable to create and copy a large file of urandom data"
 fi
-
-
 
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2>"${SUF}/testerr"
 cp "${SUF}/diff2" "${SUF}/diff3"
@@ -118,8 +113,8 @@ then	printf "%s\n" "\`nftw-driver compared equal to its control method"
 else	printf "%s\n" "##nftw-driver failed to output to a file" 
 fi
 
-for i in `seq 1 256`; do echo -n "ABCD" >> /tmp/test.txt; done
-echo -n "EEEE" >> /tmp/test.txt
+for i in `seq 1 256`; do printf "%s" "ABCD" >> /tmp/test.txt; done
+printf "%s" "EEEE" >> /tmp/test.txt
 ./control/getline-driver /tmp/test.txt > "${SUF}/diff2" 2>"${SUF}/testerr"
 ./tests/getline-driver /tmp/test.txt > "${SUF}/diff3" 2>"${SUF}/testerr"
 if [ ! -s "${SUF}/diff2" ]
