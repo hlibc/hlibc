@@ -18,7 +18,8 @@ GENH = include/bits/alltypes.h
 #IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 IMPH = musllibc/internal/libc.h
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector" 
+#GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector" 
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static" 
 CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
 TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
 TEST_OBJ = $(TEST_SRCS:.c=) 
@@ -117,7 +118,8 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	#printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	printf '#!/bin/sh\nexec gcc -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
@@ -147,10 +149,10 @@ control: $(CONTROL_OBJ)
 
 gcctests:
 
-	$(MAKE) CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	make CFLAGS="-static" LDLIBS="-lm" control 2>/dev/null
-	#LDLIBS="-lm" $(MAKE) $(GCC_WRAP) testing
-	#CFLAGS="-static" LDLIBS="-lm" $(MAKE) control 2>/dev/null
+	#$(MAKE) CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
+	#make CFLAGS="-static" LDLIBS="-lm" control 2>/dev/null
+	LDLIBS="-lm" $(MAKE) $(GCC_WRAP) testing
+	CFLAGS="-static" LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing
