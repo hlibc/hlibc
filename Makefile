@@ -79,7 +79,7 @@ clean:
 	-$(RM) -r posix-utils-control
 
 include/bits:
-	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make [gcc|clang]test' to invoke the suite" ; exit 1 ; }
+	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
 	ln -sf ../arch/$(ARCH)/bits $@
 
 include/bits/alltypes.h.sh: include/bits
