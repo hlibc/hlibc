@@ -19,7 +19,7 @@
 #include "futex.h"
 
 #define pthread __pthread
-
+/*
 struct pthread {
 	struct pthread *self;
 	void *dtv, *unused1, *unused2;
@@ -27,7 +27,7 @@ struct pthread {
 	uintptr_t canary;
 	pid_t tid, pid;
 	int tsd_used, errno_val, *errno_ptr;
-	/* All cancellation-related fields must remain together, in order */
+	// All cancellation-related fields must remain together, in order 
 	volatile uintptr_t cp_sp, cp_ip;
 	volatile int cancel, canceldisable, cancelasync;
 	unsigned char *map_base;
@@ -51,7 +51,7 @@ struct pthread {
 	locale_t locale;
 	int killlock;
 };
-
+*/
 struct __timer {
 	int timerid;
 	pthread_t thread;
