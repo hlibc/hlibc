@@ -1,5 +1,11 @@
 #include <gerrno.h>
 
+/*
+	We are currently using the error message system inside of musllibc/
+	however this was the priginal error message stub for graflibc/hlibc.
+	It should be completed and used or deleted
+*/
+
 /* x86 */
 char *_messages[150] = {
 	"Unknown error code\0", /* (not used)	0	*/
