@@ -76,7 +76,7 @@ int __libc_start_main(
 	libc.ldso_fini = ldso_fini;
 	libc.fini = fini;
 
-	__init_security((void *)auxv);
+	//__init_security((void *)auxv);
 
 	/* Execute constructors (static) linked into the application */
 	if (init) init(argc, argv, envp);
