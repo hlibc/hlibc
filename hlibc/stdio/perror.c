@@ -16,5 +16,5 @@ void perror(const char *s)
 		colon = "";
 	}
 
-	fprintf(stderr, "%s %s %s", s, colon, strerror(errno));
+	fprintf(stderr, "%s%s%s\n", s, colon, strerror(errno));
 }
