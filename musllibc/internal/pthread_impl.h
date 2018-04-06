@@ -56,7 +56,7 @@ struct __timer {
 	int timerid;
 	pthread_t thread;
 };
-
+/*
 #define __SU (sizeof(size_t)/sizeof(int))
 
 #define _a_stacksize __u.__s[0]
@@ -84,7 +84,7 @@ struct __timer {
 #define _b_count __u.__i[3]
 #define _b_waiters2 __u.__i[4]
 #define _b_inst __u.__p[4]
-
+*/
 #include "pthread_arch.h"
 
 #define SIGTIMER 32
