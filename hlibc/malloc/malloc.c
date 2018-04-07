@@ -76,12 +76,15 @@ object *find_free_object(object **last, size_t size)
 object *morecore(object *last, size_t size)
 {
 	object *o = NULL;
-	if (_safe_addition(size, sizeof(object), SIZE_MAX) == 0) {
+	int pt = PROT_READ | PROT_WRITE;
+	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
+	size_t sum = 0;
+
+	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
 		goto error;
 	}
 
-	if ((o = mmap(o, size + sizeof(object), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0))
-	    == (void *)-1){
+	if ((o = mmap(o, sum, pt, fs, -1, 0)) == (void *)-1) {
 		goto error;
 	}
 
@@ -94,10 +97,11 @@ object *morecore(object *last, size_t size)
 	o->free = 0;
 	return o;
 
-error:
+	error:
 	errno = ENOMEM;
 	return NULL;
 }
+
 void *malloc(size_t size)
 {
 	object *o;
@@ -105,7 +109,6 @@ void *malloc(size_t size)
 
 	if (!base) {
 		if (!(o = morecore(NULL, size))) {
-			
 			return NULL;
 		}
 		base = o;
