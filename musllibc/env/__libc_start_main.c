@@ -7,6 +7,7 @@ int __libc_start_main(
 {
 	char **envp = argv+argc+1, **auxv = envp;
 
+	/* assign the environment from envp */
 	__environ = envp;
 	do auxv++; while (*auxv);
 	libc.auxv = (void *)++auxv;
@@ -22,3 +23,4 @@ int __libc_start_main(
 	exit(main(argc, argv, envp));
 	return 0;
 }
+

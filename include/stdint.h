@@ -78,7 +78,7 @@ typedef unsigned long long uintmax_t;
 #define WINT_MIN INT32_MIN
 #define WINT_MAX INT32_MAX
 
-#include <bits/wchar.h>
+//#include <bits/wchar.h>
 #include <bits/stdint.h>
 
 #endif
