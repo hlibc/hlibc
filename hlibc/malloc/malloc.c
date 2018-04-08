@@ -167,10 +167,7 @@ void *calloc(size_t nelem, size_t elsize)
 	if (!(ptr = malloc(size))) {
 		return NULL;
 	}
-	else {
-		memset(ptr, 0, size);
-	}
-
+	memset(ptr, 0, size);
 	return ptr;
 }
 
