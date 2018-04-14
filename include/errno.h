@@ -11,5 +11,7 @@ extern int errno;
 
 #ifdef __cplusplus
 }
+
+#endif
 #endif
 
