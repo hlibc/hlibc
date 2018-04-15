@@ -6,7 +6,7 @@
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
 
-prefix = /usr/local/musl
+prefix = /usr/local/hlibc
 includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
@@ -54,7 +54,7 @@ ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
 
-LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
+LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 

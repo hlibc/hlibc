@@ -10,7 +10,7 @@ VAR=VALUE.  See below for descriptions of some of the useful variables.
 Defaults for the options are specified in brackets.
 
 Installation directories:
-  --prefix=PREFIX         main installation prefix [/usr/local/musl]
+  --prefix=PREFIX         main installation prefix [/usr/local/hlibc]
   --exec-prefix=EPREFIX   installation prefix for executable files [PREFIX]
 
 Fine tuning of the installation directories:
@@ -26,7 +26,7 @@ System types:
 Optional features:
   --enable-debug          build with debugging information [disabled]
   --enable-warnings       build with recommended warnings flags [disabled]
-  --enable-gcc-wrapper    build musl-gcc toolchain wrapper [auto]
+  --enable-gcc-wrapper    build gcc-wrap toolchain wrapper [auto]
   --disable-shared        inhibit building shared library [enabled]
   --disable-static        inhibit building static library [enabled]
 
@@ -131,7 +131,7 @@ LDFLAGS=*) LDFLAGS=${arg#*=} ;;
 esac
 done
 
-setdir prefix /usr/local/musl
+setdir prefix /usr/local/hlibc
 setdir exec_prefix '$(prefix)'
 setdir bindir '$(exec_prefix)/bin'
 setdir libdir '$(prefix)/lib'
@@ -162,16 +162,16 @@ printf "%s\n" "$CC"
 test -n "$CC" || { echo "$0: cannot find a C compiler" ; exit 1 ; }
 
 #
-# Only build musl-gcc wrapper if toolchain does not already target musl
+# Only build gcc-wrap wrapper if toolchain does not already target hlibc
 #
 if test -z "$wrapper" ; then
 printf "checking whether compiler is gcc... "
 if fnmatch '*gcc\ version*' "$("$CC" -v 2>&1)" ; then
 echo yes
-printf "checking whether to build musl-gcc wrapper... "
+printf "checking whether to build gcc-wrap wrapper... "
 wrapper=yes
 while read line ; do
-case "$line" in */ld-musl-*) wrapper=no ;; esac
+case "$line" in */ld-hlibc-*) wrapper=no ;; esac
 done <<EOF
 $($CC -dumpspecs)
 EOF

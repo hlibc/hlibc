@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "../internal/internal.h"
-#include "../../musllibc/internal/syscall.h"
+#include <stdint.h>
 #include <sys/mman.h>
 #include <errno.h>
 

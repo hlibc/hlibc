@@ -1,20 +1,20 @@
 #
-# musl config.mak template (original in dist/config.mak)
+# hlibc config.mak template (original in dist/config.mak)
 #
 
 # Target CPU architecture. Supported values: i386, x86_64
 ARCH = i386
 
 # Installation prefix. DO NOT use /, /usr, or /usr/local !
-prefix = /usr/local/musl
+prefix = /usr/local/hlibc
 
 # Installation prefix for gcc-wrap compiler wrapper.
 exec_prefix = /usr/local
 
-# Location for the dynamic linker ld-musl-$(ARCH).so.1
+# Location for the dynamic linker ld-hlibc-$(ARCH).so.1
 syslibdir = /lib
 
-# Uncomment if you want to build i386 musl on a 64-bit host
+# Uncomment if you want to build i386 hlibc on a 64-bit host
 #CFLAGS += -m32
 
 # Uncomment to fix broken distro-patched toolchains where hash-style=gnu(only)
