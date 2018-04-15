@@ -16,10 +16,7 @@
 #include <stdint.h>
 #include <float.h>
 #include <math.h>
-#include <complex.h>
-
 #include "longdbl.h"
-
 #include "libc.h"
 
 union fshape {
@@ -169,22 +166,6 @@ long double __p1evll(long double, const long double *, int);
 #else
 #define STRICT_ASSIGN(type, lval, rval) ((lval) = (type)(rval))
 #endif
-
-
-/* complex */
-
-union dcomplex {
-	double complex z;
-	double a[2];
-};
-union fcomplex {
-	float complex z;
-	float a[2];
-};
-union lcomplex {
-	long double complex z;
-	long double a[2];
-};
 
 /* x + y*I is not supported properly by gcc */
 #define cpack(x,y) ((union dcomplex){.a={(x),(y)}}.z)
