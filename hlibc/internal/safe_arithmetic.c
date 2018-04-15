@@ -1,5 +1,12 @@
 #include "internal.h"
 
+size_t _safe_subtraction(size_t a, size_t b)
+{
+	if (a >= b)
+		return a - b;
+	return 0;
+}
+
 size_t _safe_addition(size_t a, size_t b, size_t lim)
 {
 	if (lim - a >= b)
