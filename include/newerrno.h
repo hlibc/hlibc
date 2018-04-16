@@ -1,45 +1,57 @@
-char *__errno_table = {
+char *__errno_table[] = {
     "No such file or directory.", // ENOENT	2
+    "Interrupted function.", // EINTR	4
     "Argument list too long.", // E2BIG	7
     "Bad file descriptor.", // EBADF	9
+    "No child processes.", // ECHILD		10
     "Resource unavailable, try again.", // EAGAIN	11
     "Permission denied.", // EACCES	13
+    "Bad address.", // EFAULT	14
+    "Device or resource busy.", // EBUSY	16
+    "File exists.", // EEXIST	17
+    "Is a directory.", // EISDIR	21
+    "Invalid argument.", // EINVAL	22
+    "File descriptor value too large.", // EMFILE	23
+    "File too large.", // EFBIG	27
+    "Too many links.", // EMLINK	31
+    "Mathematics argument out of domain of function.", // EDOM	33
+    "Resource deadlock would occur.", // EDEADLK	35
+    "Too many levels of symbolic links.", // ELOOP	40
+    "Identifier removed.", // EIDRM	43
     "Bad message.", // EBADMSG	74
+    "Illegal byte sequence.", // EILSEQ		84
+    "Destination address required.", // EDESTADDRREQ	89
     "Address family not supported.", // EAFNOSUPPORT	97
     "Address in use.", // EADDRINUSE	98
-    "Address not available.",  // EADDRNOTAVAIL	99
+    "Address not available.",  // EADDRNOTAVAIL	99 
+    "Connection already in progress.", // EALREADY	114 
 
-    
-    "Connection already in progress.", // EALREADY	114
-
-
-    "Device or resource busy.", // EBUSY	16
     "Operation canceled.", // ECANCELED		125
-    "No child processes.", // ECHILD		10
+
     "Connection aborted.", // ECONNABORTED	103
     "Connection refused.", // ECONNREFUSED	111
     "Connection reset.", // ECONNRESET		104
-    "Resource deadlock would occur.", // EDEADLK	35
-    "Destination address required.", // EDESTADDRREQ	89
-    "Mathematics argument out of domain of function.", // EDOM	33
+
+
+
     "Reserved.", // EDQUOT	122
-    "File exists.", // EEXIST	17
-    "Bad address.", // EFAULT	14
-    "File too large.", // EFBIG	27
+
+
+
     "Host is unreachable.", // EHOSTUNREACH	113
-    "Identifier removed.", // EIDRM
-    "Illegal byte sequence.", // EILSEQ
-    "Operation in progress.", // EINPROGRESS
-    "Interrupted function.", // EINTR
-    "Invalid argument.", // EINVAL
-    "I/O error.", // EIO
-    "Socket is connected.", // EISCONN
-    "Is a directory.", // EISDIR
-    "Too many levels of symbolic links.", // ELOOP
-    "File descriptor value too large.", // EMFILE
-    "Too many links.", // EMLINK
-    "Message too large.", // EMSGSIZE
-    "Reserved.", // EMULTIHOP
+
+
+    "Operation in progress.", // EINPROGRESS	115
+
+
+    "I/O error.", // EIO	121
+    "Socket is connected.", // EISCONN	104
+
+
+
+
+    "Message too large.", // EMSGSIZE	90
+    "Reserved.", // EMULTIHOP	72
     "Filename too long.", // ENAMETOOLONG
     "Network is down.", // ENETDOWN
     "Connection aborted by network.", // ENETRESET
@@ -48,7 +60,6 @@ char *__errno_table = {
     "No buffer space available.", // ENOBUFS
     "No message is available on the STREAM head read queue.", // ENODATA
     "No such device.", // ENODEV
-
     "Executable file format error.", // ENOEXEC
     "No locks available.", // ENOLCK
     "Reserved.", // ENOLINK
