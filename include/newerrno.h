@@ -49,67 +49,36 @@ char *__errno_table[] = {
     "Reserved.", // [ENOLINK]
     "Not enough space.", // [ENOMEM]
     "No message of the desired type.", // [ENOMSG]
- // [ENOPROTOOPT]
-    "Protocol not available.",
- // [ENOSPC]
-    "No space left on device.",
- // [ENOSR]
-    "No STREAM resources.",
- // [ENOSTR]
-    "Not a STREAM.",
- // [ENOSYS]
-    "Functionality not supported.",
- // [ENOTCONN]
-    "The socket is not connected.",
- // [ENOTDIR]
-    "Not a directory or a symbolic link to a directory.",
- // [ENOTEMPTY]
-    "Directory not empty.",
- // [ENOTRECOVERABLE]
-    "State not recoverable.",
- // [ENOTSOCK]
-    "Not a socket.",
- // [ENOTSUP]
-    "Not supported (may be the same value as // [EOPNOTSUPP]).",
- // [ENOTTY]
-    "Inappropriate I/O control operation.",
- // [ENXIO]
-    "No such device or address.",
- // [EOPNOTSUPP]
-    "Operation not supported on socket (may be the same value as // [ENOTSUP]).",
- // [EOVERFLOW]
-    "Value too large to be stored in data type.",
- // [EOWNERDEAD]
-    "Previous owner died.",
- // [EPERM]
-    "Operation not permitted.",
- // [EPIPE]
-    "Broken pipe.",
- // [EPROTO]
-    "Protocol error.",
- // [EPROTONOSUPPORT]
-    "Protocol not supported.",
- // [EPROTOTYPE]
-    "Protocol wrong type for socket.",
- // [ERANGE]
-    "Result too large.",
- // [EROFS]
-    "Read-only file system.",
- // [ESPIPE]
-    "Invalid seek.",
- // [ESRCH]
-    "No such process.",
- // [ESTALE]
-    "Reserved.",
- // [ETIME]
-    "Stream ioctl() timeout.",
- // [ETIMEDOUT]
-    "Connection timed out.",
- // [ETXTBSY]
-    "Text file busy.",
- // [EWOULDBLOCK]
-    "Operation would block (may be the same value as // [EAGAIN]).",
- // [EXDEV]
-    "Cross-device link.", 
+    "Protocol not available.", // [ENOPROTOOPT]
+    "No space left on device.", // [ENOSPC]
+    "No STREAM resources.", // [ENOSR]
+    "Not a STREAM.", // [ENOSTR]
+    "Functionality not supported.", // [ENOSYS]
+    "The socket is not connected.", // [ENOTCONN]
+    "Not a directory or a symbolic link to a directory.", // [ENOTDIR]
+    "Directory not empty.", // [ENOTEMPTY]
+    "State not recoverable.", // [ENOTRECOVERABLE]
+    "Not a socket.", // [ENOTSOCK]
+    "Not supported (may be the same value as // [EOPNOTSUPP]).", // [ENOTSUP]
+    "Inappropriate I/O control operation.", // [ENOTTY]
+    "No such device or address.", // [ENXIO]
+    "Operation not supported on socket (may be the same value as // [ENOTSUP]).", // [EOPNOTSUPP]
+    "Value too large to be stored in data type.", // [EOVERFLOW]
+    "Previous owner died.", // [EOWNERDEAD]
+    "Operation not permitted.", // [EPERM]
+    "Broken pipe.", // [EPIPE]
+    "Protocol error.", // [EPROTO]
+    "Protocol not supported.", // [EPROTONOSUPPORT]
+    "Protocol wrong type for socket.", // [EPROTOTYPE]
+    "Result too large.", // [ERANGE]
+    "Read-only file system.", // [EROFS]
+    "Invalid seek.", // [ESPIPE]
+    "No such process.", // [ESRCH]
+    "Reserved.", // [ESTALE]
+    "Stream ioctl() timeout.", // [ETIME]
+    "Connection timed out.", // [ETIMEDOUT]
+    "Text file busy.", // [ETXTBSY]
+    "Operation would block (may be the same value as // [EAGAIN]).", // [EWOULDBLOCK]
+    "Cross-device link.",  // [EXDEV]
     "" };
 
