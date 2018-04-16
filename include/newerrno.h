@@ -1,13 +1,18 @@
 char *__errno_table[] = {
-    "Argument list too long.", // [E2BIG]
-    "Permission denied.", // [EACCES]
-    "Address in use.", // [EADDRINUSE]
-    "Address not available.",  // [EADDRNOTAVAIL]
-    "Address family not supported.", // [EAFNOSUPPORT]
-    "Resource unavailable, try again (may be the same value as // [EWOULDBLOCK]).", // [EAGAIN]
-    "Connection already in progress.", // [EALREADY]
-    "Bad file descriptor.", // [EBADF]
-    "Bad message.", // [EBADMSG]
+    "No such file or directory.", // [ENOENT]	2
+    "Argument list too long.", // [E2BIG]	7
+    "Bad file descriptor.", // [EBADF]	9
+    "Resource unavailable, try again (may be the same value as // [EWOULDBLOCK]).", // [EAGAIN]	11
+    "Permission denied.", // [EACCES]	13
+    "Bad message.", // [EBADMSG]	74
+    "Address family not supported.", // [EAFNOSUPPORT]	97
+    "Address in use.", // [EADDRINUSE]	98
+    "Address not available.",  // [EADDRNOTAVAIL]	99
+
+    
+    "Connection already in progress.", // [EALREADY]	114
+
+
     "Device or resource busy.", // [EBUSY]
     "Operation canceled.", // [ECANCELED]
     "No child processes.", // [ECHILD]
@@ -43,7 +48,7 @@ char *__errno_table[] = {
     "No buffer space available.", // [ENOBUFS]
     "No message is available on the STREAM head read queue.", // [ENODATA]
     "No such device.", // [ENODEV]
-    "No such file or directory.", // [ENOENT]
+
     "Executable file format error.", // [ENOEXEC]
     "No locks available.", // [ENOLCK]
     "Reserved.", // [ENOLINK]
