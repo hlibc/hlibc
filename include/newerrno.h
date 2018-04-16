@@ -1,165 +1,115 @@
 char *__errno_table[] = {
-// [E2BIG]
-    "Argument list too long.",
-// [EACCES]
-    "Permission denied.",
-// [EADDRINUSE]
-    "Address in use.",
-// [EADDRNOTAVAIL]
-    "Address not available.",
-// [EAFNOSUPPORT]
-    "Address family not supported.",
-// [EAGAIN]
-    "Resource unavailable, try again (may be the same value as // [EWOULDBLOCK]).",
-// [EALREADY]
-    "Connection already in progress.",
-// [EBADF]
-    "Bad file descriptor.",
-// [EBADMSG]
-    "Bad message.",
-// [EBUSY]
-    "Device or resource busy.",
-// [ECANCELED]
-    "Operation canceled.",
-// [ECHILD]
-    "No child processes.",
-// [ECONNABORTED]
-    "Connection aborted.",
-// [ECONNREFUSED]
-    "Connection refused.",
-// [ECONNRESET]
-    "Connection reset.",
-// [EDEADLK]
-    "Resource deadlock would occur.",
-// [EDESTADDRREQ]
-    "Destination address required.",
-// [EDOM]
-    "Mathematics argument out of domain of function.",
-// [EDQUOT]
-    "Reserved.",
-// [EEXIST]
-    "File exists.",
-// [EFAULT]
-    "Bad address.",
-// [EFBIG]
-    "File too large.",
-// [EHOSTUNREACH]
-    "Host is unreachable.",
-// [EIDRM]
-    "Identifier removed.",
-// [EILSEQ]
-    "Illegal byte sequence.",
-// [EINPROGRESS]
-    "Operation in progress.",
-// [EINTR]
-    "Interrupted function.",
-// [EINVAL]
-    "Invalid argument.",
-// [EIO]
-    "I/O error.",
-// [EISCONN]
-    "Socket is connected.",
-// [EISDIR]
-    "Is a directory.",
-// [ELOOP]
-    "Too many levels of symbolic links.",
-// [EMFILE]
-    "File descriptor value too large.",
-// [EMLINK]
-    "Too many links.",
-// [EMSGSIZE]
-    "Message too large.",
-// [EMULTIHOP]
-    "Reserved.",
-// [ENAMETOOLONG]
-    "Filename too long.",
-// [ENETDOWN]
-    "Network is down.",
-// [ENETRESET]
-    "Connection aborted by network.",
-// [ENETUNREACH]
-    "Network unreachable.",
-// [ENFILE]
-    "Too many files open in system.",
-// [ENOBUFS]
-    "No buffer space available.",
-// [ENODATA]
-    "No message is available on the STREAM head read queue.",
-// [ENODEV]
-    "No such device.",
-// [ENOENT]
-    "No such file or directory.",
-// [ENOEXEC]
-    "Executable file format error.",
-// [ENOLCK]
-    "No locks available.",
-// [ENOLINK]
-    "Reserved.",
-// [ENOMEM]
-    "Not enough space.",
-// [ENOMSG]
-    "No message of the desired type.",
-// [ENOPROTOOPT]
+    "Argument list too long.", // [E2BIG]
+    "Permission denied.", // [EACCES]
+    "Address in use.", // [EADDRINUSE]
+    "Address not available.",  // [EADDRNOTAVAIL]
+    "Address family not supported.", // [EAFNOSUPPORT]
+    "Resource unavailable, try again (may be the same value as // [EWOULDBLOCK]).", // [EAGAIN]
+    "Connection already in progress.", // [EALREADY]
+    "Bad file descriptor.", // [EBADF]
+    "Bad message.", // [EBADMSG]
+    "Device or resource busy.", // [EBUSY]
+    "Operation canceled.", // [ECANCELED]
+    "No child processes.", // [ECHILD]
+    "Connection aborted.", // [ECONNABORTED]
+    "Connection refused.", // [ECONNREFUSED]
+    "Connection reset.", // [ECONNRESET]
+    "Resource deadlock would occur.", // [EDEADLK]
+    "Destination address required.", // [EDESTADDRREQ]
+    "Mathematics argument out of domain of function.", // [EDOM]
+    "Reserved.", // [EDQUOT]
+    "File exists.", // [EEXIST]
+    "Bad address.", // [EFAULT]
+    "File too large.", // [EFBIG]
+    "Host is unreachable.", // [EHOSTUNREACH]
+    "Identifier removed.", // [EIDRM]
+    "Illegal byte sequence.", // [EILSEQ]
+    "Operation in progress.", // [EINPROGRESS]
+    "Interrupted function.", // [EINTR]
+    "Invalid argument.", // [EINVAL]
+    "I/O error.", // [EIO]
+    "Socket is connected.", // [EISCONN]
+    "Is a directory.", // [EISDIR]
+    "Too many levels of symbolic links.", // [ELOOP]
+    "File descriptor value too large.", // [EMFILE]
+    "Too many links.", // [EMLINK]
+    "Message too large.", // [EMSGSIZE]
+    "Reserved.", // [EMULTIHOP]
+    "Filename too long.", // [ENAMETOOLONG]
+    "Network is down.", // [ENETDOWN]
+    "Connection aborted by network.", // [ENETRESET]
+    "Network unreachable.", // [ENETUNREACH]
+    "Too many files open in system.", // [ENFILE]
+    "No buffer space available.", // [ENOBUFS]
+    "No message is available on the STREAM head read queue.", // [ENODATA]
+    "No such device.", // [ENODEV]
+    "No such file or directory.", // [ENOENT]
+    "Executable file format error.", // [ENOEXEC]
+    "No locks available.", // [ENOLCK]
+    "Reserved.", // [ENOLINK]
+    "Not enough space.", // [ENOMEM]
+    "No message of the desired type.", // [ENOMSG]
+ // [ENOPROTOOPT]
     "Protocol not available.",
-// [ENOSPC]
+ // [ENOSPC]
     "No space left on device.",
-// [ENOSR]
+ // [ENOSR]
     "No STREAM resources.",
-// [ENOSTR]
+ // [ENOSTR]
     "Not a STREAM.",
-// [ENOSYS]
+ // [ENOSYS]
     "Functionality not supported.",
-// [ENOTCONN]
+ // [ENOTCONN]
     "The socket is not connected.",
-// [ENOTDIR]
+ // [ENOTDIR]
     "Not a directory or a symbolic link to a directory.",
-// [ENOTEMPTY]
+ // [ENOTEMPTY]
     "Directory not empty.",
-// [ENOTRECOVERABLE]
+ // [ENOTRECOVERABLE]
     "State not recoverable.",
-// [ENOTSOCK]
+ // [ENOTSOCK]
     "Not a socket.",
-// [ENOTSUP]
+ // [ENOTSUP]
     "Not supported (may be the same value as // [EOPNOTSUPP]).",
-// [ENOTTY]
+ // [ENOTTY]
     "Inappropriate I/O control operation.",
-// [ENXIO]
+ // [ENXIO]
     "No such device or address.",
-// [EOPNOTSUPP]
+ // [EOPNOTSUPP]
     "Operation not supported on socket (may be the same value as // [ENOTSUP]).",
-// [EOVERFLOW]
+ // [EOVERFLOW]
     "Value too large to be stored in data type.",
-// [EOWNERDEAD]
+ // [EOWNERDEAD]
     "Previous owner died.",
-// [EPERM]
+ // [EPERM]
     "Operation not permitted.",
-// [EPIPE]
+ // [EPIPE]
     "Broken pipe.",
-// [EPROTO]
+ // [EPROTO]
     "Protocol error.",
-// [EPROTONOSUPPORT]
+ // [EPROTONOSUPPORT]
     "Protocol not supported.",
-// [EPROTOTYPE]
+ // [EPROTOTYPE]
     "Protocol wrong type for socket.",
-// [ERANGE]
+ // [ERANGE]
     "Result too large.",
-// [EROFS]
+ // [EROFS]
     "Read-only file system.",
-// [ESPIPE]
+ // [ESPIPE]
     "Invalid seek.",
-// [ESRCH]
+ // [ESRCH]
     "No such process.",
-// [ESTALE]
+ // [ESTALE]
     "Reserved.",
-// [ETIME]
+ // [ETIME]
     "Stream ioctl() timeout.",
-// [ETIMEDOUT]
+ // [ETIMEDOUT]
     "Connection timed out.",
-// [ETXTBSY]
+ // [ETXTBSY]
     "Text file busy.",
-// [EWOULDBLOCK]
+ // [EWOULDBLOCK]
     "Operation would block (may be the same value as // [EAGAIN]).",
-// [EXDEV]
+ // [EXDEV]
     "Cross-device link.", 
     "" };
 
