@@ -46,9 +46,9 @@ char *__errno_table[] = {
 	"", // ECHRNG					44
 	"", // EL2NSYNC					45
 	"", // EL3HLT					46
-	"", //						47
-	"", //						48
-	"", //						49
+	"", // EL3RST					47
+	"", // ELNRNG					48
+	"", // EUNATCH					49
 	"", //						50
 	"", //						51
 	"", //						52
