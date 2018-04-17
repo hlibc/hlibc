@@ -14,7 +14,7 @@ char *__errno_table[] = {
 	"Not enough space", // ENOMEM			12
 	"Permission denied", // EACCES			13
 	"Bad address", // EFAULT			14
-	"", //						15
+	"", // ENOTBLK					15
 	"Device or resource busy", // EBUSY		16
 	"File exists", // EEXIST			17
 	"Cross-device link",  // EXDEV			18
@@ -43,9 +43,9 @@ char *__errno_table[] = {
 	"", //						41
 	"No message of the desired type", // ENOMSG	42
 	"Identifier removed", // EIDRM			43
-	"", //						44
-	"", //						45
-	"", //						46
+	"", // ECHRNG					44
+	"", // EL2NSYNC					45
+	"", // EL3HLT					46
 	"", //						47
 	"", //						48
 	"", //						49
