@@ -1,7 +1,8 @@
 char *__errno_table[] = {
-    "No such file or directory.", // ENOENT	2
+    "No such file or directory.", // ENOENT	2 
     "Interrupted function.", // EINTR	4
     "Argument list too long.", // E2BIG	7
+    "Executable file format error.", // ENOEXEC	8
     "Bad file descriptor.", // EBADF	9
     "No child processes.", // ECHILD		10
     "Resource unavailable, try again.", // EAGAIN	11
@@ -25,42 +26,26 @@ char *__errno_table[] = {
     "Address in use.", // EADDRINUSE	98
     "Address not available.",  // EADDRNOTAVAIL	99 
     "Connection already in progress.", // EALREADY	114 
-
-    "Operation canceled.", // ECANCELED		125
-
-    "Connection aborted.", // ECONNABORTED	103
+    "Connection aborted.", // ECONNABORTED	103 
+    "Connection reset.", // ECONNRESET		104 
     "Connection refused.", // ECONNREFUSED	111
-    "Connection reset.", // ECONNRESET		104
-
-
-
-    "Reserved.", // EDQUOT	122
-
-
-
     "Host is unreachable.", // EHOSTUNREACH	113
-
-
     "Operation in progress.", // EINPROGRESS	115
-
-
+    "Reserved.", // EDQUOT	122
+    "Operation canceled.", // ECANCELED		125 
     "I/O error.", // EIO	121
-    "Socket is connected.", // EISCONN	104
-
-
-
-
+    "Socket is connected.", // EISCONN	104 
     "Message too large.", // EMSGSIZE	90
     "Reserved.", // EMULTIHOP	72
-    "Filename too long.", // ENAMETOOLONG
-    "Network is down.", // ENETDOWN
-    "Connection aborted by network.", // ENETRESET
-    "Network unreachable.", // ENETUNREACH
-    "Too many files open in system.", // ENFILE
-    "No buffer space available.", // ENOBUFS
-    "No message is available on the STREAM head read queue.", // ENODATA
-    "No such device.", // ENODEV
-    "Executable file format error.", // ENOEXEC
+    "Filename too long.", // ENAMETOOLONG	36
+    "Network is down.", // ENETDOWN	100
+    "Connection aborted by network.", // ENETRESET	102
+    "Network unreachable.", // ENETUNREACH	101
+    "Too many files open in system.", // ENFILE		23
+    "No buffer space available.", // ENOBUFS	105
+    "No message is available on the STREAM head read queue.", // ENODATA 61
+    "No such device.", // ENODEV	19
+
     "No locks available.", // ENOLCK
     "Reserved.", // ENOLINK
     "Not enough space.", // ENOMEM
