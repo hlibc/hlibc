@@ -60,26 +60,26 @@ char *__errno_table[] = {
     "Directory not empty.", // ENOTEMPTY	39
     "State not recoverable.", // ENOTRECOVERABLE	131
     "Not a socket.", // ENOTSOCK	88
-    "Not supported.", // ENOTSUP
+    "Not supported.", // ENOTSUP	95
     "Inappropriate I/O control operation.", // ENOTTY
     "No such device or address.", // ENXIO
-    "Operation not supported on socket.", // EOPNOTSUPP
-    "Value too large to be stored in data type.", // EOVERFLOW
-    "Previous owner died.", // EOWNERDEAD
-    "Operation not permitted.", // EPERM
-    "Broken pipe.", // EPIPE
-    "Protocol error.", // EPROTO
-    "Protocol not supported.", // EPROTONOSUPPORT
-    "Protocol wrong type for socket.", // EPROTOTYPE
-    "Result too large.", // ERANGE
-    "Read-only file system.", // EROFS
-    "Invalid seek.", // ESPIPE
-    "No such process.", // ESRCH
-    "Reserved.", // ESTALE
-    "Stream ioctl() timeout.", // ETIME
-    "Connection timed out.", // ETIMEDOUT
-    "Text file busy.", // ETXTBSY
-    "Operation would block.", // EWOULDBLOCK
-    "Cross-device link.",  // EXDEV
+    "Operation not supported on socket.", // EOPNOTSUPP		95
+    "Value too large to be stored in data type.", // EOVERFLOW	75
+    "Previous owner died.", // EOWNERDEAD	130
+    "Operation not permitted.", // EPERM	1
+    "Broken pipe.", // EPIPE	32
+    "Protocol error.", // EPROTO	71
+    "Protocol not supported.", // EPROTONOSUPPORT	93
+    "Protocol wrong type for socket.", // EPROTOTYPE	91
+    "Result too large.", // ERANGE	34
+    "Read-only file system.", // EROFS	30
+    "Invalid seek.", // ESPIPE	29
+    "No such process.", // ESRCH	3
+    "Reserved.", // ESTALE	116
+    "Stream ioctl() timeout.", // ETIME	62
+    "Connection timed out.", // ETIMEDOUT	110
+    "Text file busy.", // ETXTBSY	26
+    "Operation would block.", // EWOULDBLOCK	EAGAIN
+    "Cross-device link.",  // EXDEV	18
     "" };
 
