@@ -136,5 +136,5 @@ char *__errno_table[] = {
 	"", //						132
 	"" //						133
 	 };
-  //  "Operation would block.", // EWOULDBLOCK	EAGAIN
+//      "Operation would block.", // EWOULDBLOCK	EAGAIN
 //	"Not supported.", // ENOTSUP	95 (duplicate )
