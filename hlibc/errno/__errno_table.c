@@ -1,4 +1,5 @@
 char *__errno_table[] = {
+	"", // 0
 	"Operation not permitted.", // EPERM	1
 	"No such file or directory.", // ENOENT	2 
 	"No such process.", // ESRCH	3
