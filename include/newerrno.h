@@ -46,20 +46,20 @@ char *__errno_table[] = {
     "No message is available on the STREAM head read queue.", // ENODATA 61
     "No such device.", // ENODEV	19
 
-    "No locks available.", // ENOLCK
-    "Reserved.", // ENOLINK
-    "Not enough space.", // ENOMEM
-    "No message of the desired type.", // ENOMSG
-    "Protocol not available.", // ENOPROTOOPT
-    "No space left on device.", // ENOSPC
-    "No STREAM resources.", // ENOSR
-    "Not a STREAM.", // ENOSTR
-    "Functionality not supported.", // ENOSYS
-    "The socket is not connected.", // ENOTCONN
-    "Not a directory or a symbolic link to a directory.", // ENOTDIR
-    "Directory not empty.", // ENOTEMPTY
-    "State not recoverable.", // ENOTRECOVERABLE
-    "Not a socket.", // ENOTSOCK
+    "No locks available.", // ENOLCK	37
+    "Reserved.", // ENOLINK	67
+    "Not enough space.", // ENOMEM	12
+    "No message of the desired type.", // ENOMSG	42
+    "Protocol not available.", // ENOPROTOOPT	92
+    "No space left on device.", // ENOSPC	28
+    "No STREAM resources.", // ENOSR	63
+    "Not a STREAM.", // ENOSTR	60
+    "Functionality not supported.", // ENOSYS	38
+    "The socket is not connected.", // ENOTCONN	107
+    "Not a directory or a symbolic link to a directory.", // ENOTDIR	20
+    "Directory not empty.", // ENOTEMPTY	39
+    "State not recoverable.", // ENOTRECOVERABLE	131
+    "Not a socket.", // ENOTSOCK	88
     "Not supported.", // ENOTSUP
     "Inappropriate I/O control operation.", // ENOTTY
     "No such device or address.", // ENXIO
