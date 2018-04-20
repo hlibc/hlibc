@@ -159,16 +159,15 @@ void *realloc(void *ptr, size_t size)
 	return ret;
 }
 
-void *calloc(size_t nelem, size_t elsize)
+void *calloc(size_t nmemb, size_t size)
 {
-	size_t size = 0;
-	void *ptr;
-	size = _safe_multiply(nelem, elsize, (size_t)-1);
-	if (!(ptr = malloc(size))) {
+	void *o;
+	size = _safe_multiply(nmemb, size, (size_t)-1);
+	if (!(o = malloc(size))) {
 		return NULL;
 	}
-	memset(ptr, 0, size);
-	return ptr;
+	memset(o, 0, size);
+	return o;
 }
 
 void _destroy_malloc()
