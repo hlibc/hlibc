@@ -195,6 +195,7 @@ printf "%s\n" "$target"
 #
 case "$target" in
 arm*) ARCH=arm ;;
+aarch64*) ARCH=aarch64 ;;
 i?86*) ARCH=i386 ;;
 x86_64*) ARCH=x86_64 ;;
 mips-*) ARCH=mips ;;
