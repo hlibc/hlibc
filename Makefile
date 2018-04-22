@@ -59,7 +59,7 @@ LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh
+	-./tools/create_wrappers.sh $(prefix)
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
 clean:
