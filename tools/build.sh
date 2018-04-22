@@ -59,7 +59,7 @@ printf "==========TEST RESULT START==================================\n"
 printf "%s" "$BASIC_TYPE" | while read -r i
 do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i} 
 	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
-	checkifempty() "${SUF}/diff2"
+	checkifempty "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
