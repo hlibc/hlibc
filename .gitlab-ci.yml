@@ -1,5 +1,6 @@
 variables:
   AVER: "3.7"         # Alpine version (must exist on Docker Hub)
+  DVER: "8"           # Debian version (must exist on Docker Hub)
   TB32:  "i386.zv.io" # unused; runs on Host (Docker)
   TB64: "amd64.zv.io" # unused; runs on Host (Docker)
   TBA7:   "arm.zv.io" #         runs on Host (native)
@@ -26,14 +27,14 @@ test:TB64-alpine:
   - make clangtest
   
 test:TB32-debian:
-  image: i386/debian:$AVER
+  image: i386/debian:$DVER
   script:
   - apt-get update && apt-get -y install clang gcc make
   - make gcctest
   - make clangtest
 
 test:TB64-debian:
-  image: amd64/debian:$AVER
+  image: amd64/debian:$DVER
   script:
   - apt-get update && apt-get -y install clang gcc make
   - make gcctest
