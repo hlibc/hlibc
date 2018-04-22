@@ -19,7 +19,7 @@ IMPH = musllibc/internal/libc.h
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c) $(wildcard posix-utils-control/*.c) )
