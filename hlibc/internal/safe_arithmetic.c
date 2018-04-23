@@ -33,3 +33,12 @@ size_t _safe_multiply(size_t i, size_t x, size_t lim)
 	}
 	return lim;
 }
+
+size_t _safe_upow(size_t i, size_t j)
+{
+	size_t t = 1;
+	while (j--)
+		t += _safe_multiply(t, i, ((size_t)-1));
+	return t;
+}
+
