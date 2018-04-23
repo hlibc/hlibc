@@ -19,7 +19,7 @@ IMPH = musllibc/internal/libc.h
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
 TEST_OBJ = $(TEST_SRCS:.c=) 
 CONTROL_SRCS = $(sort $(wildcard control/*.c) $(wildcard posix-utils-control/*.c) )
@@ -59,7 +59,7 @@ LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh
+	-./tools/create_wrappers.sh $(prefix)
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
 clean:
