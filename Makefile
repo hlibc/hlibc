@@ -147,7 +147,7 @@ control: $(CONTROL_OBJ)
 
 gcctests:
 	$(MAKE) CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	make CFLAGS="-static" LDLIBS="-lm" control 2>/dev/null
+	make LDLIBS="-lm" control 2>/dev/null
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing

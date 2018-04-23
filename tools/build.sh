@@ -50,7 +50,6 @@ printf "automatic build is being logged to: ${SUF}/buildlog \n\n"
 CC="$2" make -j4 > "${SUF}/buildlog"
 
 make install
-make gcctests
 
 printf "==========COMPILING TESTS ===================================\n"
 make "$1" > "${SUF}/testlog"
