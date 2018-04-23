@@ -2,7 +2,7 @@ variables:
   AVER: "3.7"         # Alpine version (must exist on Docker Hub)
   DVER: "8"           # Debian version (must exist on Docker Hub)
   TB32:  "i386.zv.io" # unused; runs on Host (Docker)
-  TB64: "amd64.zv.io" # unused; runs on Host (Docker)
+  TB64: "    c.zv.io" #         runs on Host (native)
   TBA7:   "arm.zv.io" #         runs on Host (native)
   TBA8:    "v8.zv.io" #         runs on Host (native)
   USER: "robot"       # should be unprivileged dummy account
