@@ -151,7 +151,7 @@ gcctests:
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing
-	$(MAKE) LDLIBS="-lm" control 2>/dev/null
+	$(MAKE) LDLIBS="-lc -lm" control 2>/dev/null
 
 gcctest:
 	./tools/build.sh gcctests gcc
