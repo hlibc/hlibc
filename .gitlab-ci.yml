@@ -65,3 +65,16 @@ test:TBA8:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$TBA8:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA8 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && make clangtest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
+
+  # Copy and test on *remote* x86_64 machine
+test:TB64:
+  image: alpine:$AVER # Host environment
+  script:
+  - apk update && apk add bash openssh-client rsync
+  - mkdir ~/.ssh
+  - chmod 700 ~/.ssh
+  - eval $(ssh-agent)
+  - bash -c 'ssh-add <(echo "$ID_RSA")'
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - rsync -r . $USER@$TB64:/home/$USER/$CI_COMMIT_SHA
+  - ssh $USER@$TB64 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && make clangtest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
