@@ -18,7 +18,7 @@
 #include <float.h>
 #include <string.h>
 
-static size_t __p(size_t i, size_t j)
+static size_t __upow(size_t i, size_t j)
 {
 	size_t t = 1;
 	while (j--)
@@ -107,8 +107,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		uint32_t carry=0;
 		int sh=MIN(29,e2);
 		for (d=z-1; d>=a; d--) {
-			//uint64_t x = ((uint64_t)*d<<sh)+carry;
-			uint64_t x = ((uint64_t)*d * __p(2, sh))+carry;
+			uint64_t x = ((uint64_t)*d * __upow(2, sh))+carry;
 			*d = x % 1000000000;
 			carry = x / 1000000000;
 		}
@@ -122,11 +121,9 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		uint32_t carry=0, *z2;
 		int sh=MIN(9,-e2);
 		for (d=a; d<z; d++) {
-			uint32_t rm = *d & (1* __p(2, sh))-1;
-			//*d = (*d>>sh) + carry;
-			*d = (*d/__p(2, sh)) + carry;
-			//carry = (1000000000>>sh) * rm;
-			carry = (1000000000 / __p(2, sh)) * rm;
+			uint32_t rm = *d & (1 * __upow(2, sh))-1;
+			*d = (*d / __upow(2, sh)) + carry;
+			carry = (1000000000 / __upow(2, sh)) * rm;
 		}
 		if (!*a)
 			a++;
