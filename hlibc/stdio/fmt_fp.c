@@ -107,7 +107,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		uint32_t carry=0;
 		int sh=MIN(29,e2);
 		for (d=z-1; d>=a; d--) {
-			uint64_t x = ((uint64_t)*d<<sh)+carry;
+			//uint64_t x = ((uint64_t)*d<<sh)+carry;
+			uint64_t x = ((uint64_t)*d * __p(2, sh))+carry;
 			*d = x % 1000000000;
 			carry = x / 1000000000;
 		}
