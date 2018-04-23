@@ -25,7 +25,17 @@ int __safe_add(size_t a, size_t b, size_t *c, size_t lim)
 
 int __safe_div(size_t a, size_t b, size_t *c)
 {
-	return -1;
+	if (b == 0){
+		/* divide by zero */
+		*c = 0;
+		return 0;
+	} else if ( a < b )
+	{
+		*c = 0;
+		return 0;
+	}
+	*c = a / b;
+	return 0;
 }
 
 int __safe_mul(size_t a, size_t b, size_t *c, size_t lim)
