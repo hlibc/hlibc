@@ -154,10 +154,10 @@ clangtests:
 	LDLIBS="-lm" $(MAKE) control 2>/dev/null
 
 gcctest:
-	./tools/build.sh gcctests gcc
+	./tools/build.sh gcctests gcc || exit 1
 
 clangtest:
-	./tools/build.sh clangtests clang
+	./tools/build.sh clangtests clang || exit 1
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 

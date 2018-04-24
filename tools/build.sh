@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -e
+
+
 BASIC_TYPE="	malloc-unique-pointer
 		getline-driver
 		atoi
@@ -93,6 +96,7 @@ then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small f
 else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
 fi
 
+set +e
 ./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
 ./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
 checkifempty() "${SUF}/diff2"
