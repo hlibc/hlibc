@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+
 
 
 BASIC_TYPE="	malloc-unique-pointer
@@ -54,6 +54,8 @@ CC="$2" make -j4 > "${SUF}/buildlog"
 
 make install
 
+RETVAL="0"
+
 printf "==========COMPILING TESTS ===================================\n"
 make "$1" > "${SUF}/testlog"
 printf "=============================================================\n"
@@ -66,6 +68,7 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
+		RETVAL="1"
 	fi
 done 
 
@@ -76,6 +79,7 @@ checkifempty() "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file and compared equal to its control method"
 else	printf "%s\n" "##popen-to-file driver failed to output to a file" 
+	RETVAL="1"
 fi
 
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=50 2>"${SUF}/testerr"
@@ -84,6 +88,7 @@ checkifempty() "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`printf_driver' test utility successfully created and copied a large file of urandom data"
 else	printf "%s\n" "##printf driver was unable to create and copy a large file of urandom data"
+	RETVAL="1"
 fi
 
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2> "${SUF}/testerr"
@@ -94,15 +99,17 @@ checkifempty() "${SUF}/diff4"
 if diff "${SUF}/diff4" "${SUF}/diff5" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small file of urandom data"
 else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
+	RETVAL="1"
 fi
 
-set +e
+
 ./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
 ./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
 checkifempty() "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`ftw-driver compared equal to its control method"
 else	printf "%s\n" "##ftw-driver failed to output to a file" 
+	RETVAL="1"
 fi
 
 ./control/nftw-driver /tmp dmcp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
@@ -111,6 +118,7 @@ checkifempty() "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`nftw-driver compared equal to its control method"
 else	printf "%s\n" "##nftw-driver failed to output to a file" 
+	RETVAL="1"
 fi
 
 for i in `seq 1 256`
@@ -123,7 +131,9 @@ checkifempty() "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`getline-driver compared equal to its control method"
 else	printf "%s\n" "##getline-driver failed to read lines from file" 
+	RETVAL="1"
 fi
 
 printf "============================================================\n"
 
+exit "$RETVAL"
