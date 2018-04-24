@@ -72,6 +72,7 @@ test:TBA7-gcc:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$TBA7:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA7 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
+
 test:TBA7-clang:
   image: alpine:$AVER # Host environment
   script:
