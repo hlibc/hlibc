@@ -147,4 +147,4 @@ test:NODe64-gcc:
   - bash -c 'ssh-add <(echo "$ID_RSA")'
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$NODe:/home/$USER/$CI_COMMIT_SHA
-  - echo "cd /home/$USER/$CI_COMMIT_SHA && nix build && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA" | ssh $USER@$NODe
+  - echo "cd /home/$USER/$CI_COMMIT_SHA && nix-build && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA" | ssh $USER@$NODe
