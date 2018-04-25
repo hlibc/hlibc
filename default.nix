@@ -10,11 +10,9 @@ stdenv.mkDerivation rec {
   src = ./.;
 
   phases = [ "unpackPhase" "checkPhase" "configurePhase" "installPhase" ];
-  preCheckPhase = ''
-    export ARCH=${pkgs.stdenv.targetPlatform.platform.kernelArch}
-  '';
   checkPhase = ''
     make gcctest
+    make -B include/bits # Workaround for nix on debian
   '';
 
   doCheck = true;
