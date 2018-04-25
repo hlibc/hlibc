@@ -21,7 +21,7 @@ test:TB32-alpine-gcc:
 test:TB32-alpine-clang:
   image: i386/alpine:$AVER
   script:
-  - apk update && apk add make musl-dev clang 
+  - apk update && apk add make musl-dev clang binutils
   - make clangtest
   
 test:TB64-alpine-gcc:
@@ -33,7 +33,7 @@ test:TB64-alpine-gcc:
 test:TB64-alpine-clang:
   image: amd64/alpine:$AVER
   script:
-  - apk update && apk add make musl-dev clang 
+  - apk update && apk add make musl-dev clang binutils
   - make clangtest
   
 test:TB32-debian-gcc:
@@ -45,7 +45,7 @@ test:TB32-debian-gcc:
 test:TB32-debian-clang:
   image: i386/debian:$DVER
   script:
-  - apt-get update && apt-get -y install make clang
+  - apt-get update && apt-get -y install make clang binutils
   - make clangtest
   
 test:TB64-debian-gcc:
@@ -57,7 +57,7 @@ test:TB64-debian-gcc:
 test:TB64-debian-clang:
   image: amd64/debian:$DVER
   script:
-  - apt-get update && apt-get -y install make clang
+  - apt-get update && apt-get -y install make clang binutils
   - make clangtest
 
 # Copy and test on *remote* ARMv7 machine
