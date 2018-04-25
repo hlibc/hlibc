@@ -9,14 +9,15 @@ stdenv.mkDerivation rec {
 
   src = ./.;
 
-  phases = [ "unpackPhase" "checkPhase" "configurePhase" "installPhase" ];
+  phases = [ "unpackPhase" "patchPhase" "checkPhase" "configurePhase" "installPhase" ];
   checkPhase = ''
     make gcctest
     make -B include/bits # Workaround for nix on debian
   '';
 
-  doCheck = true;
+  patches = [ ./0001-ln-to-cp.patch ];
 
+  doCheck = true;
 
   hardeningDisable = ["all"];
 
