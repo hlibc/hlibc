@@ -25,13 +25,13 @@ test:TB32-alpine-clang:
   - make clangtest
   
 test:TB64-alpine-gcc:
-  image: x86_64/alpine:$AVER
+  image: amd64/alpine:$AVER
   script:
   - apk update && apk add make musl-dev gcc 
   - make gcctest
 
 test:TB64-alpine-clang:
-  image: x86_64/alpine:$AVER
+  image: amd64/alpine:$AVER
   script:
   - apk update && apk add make musl-dev clang 
   - make clangtest
@@ -49,13 +49,13 @@ test:TB32-debian-clang:
   - make clangtest
   
 test:TB64-debian-gcc:
-  image: x86_64/debian:$DVER
+  image: amd64/debian:$DVER
   script:
   - apt-get update && apt-get -y install make gcc
   - make gcctest
 
 test:TB64-debian-clang:
-  image: x86_64/debian:$DVER
+  image: amd64/debian:$DVER
   script:
   - apt-get update && apt-get -y install make clang
   - make clangtest
@@ -72,6 +72,7 @@ test:TBA7-gcc:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$TBA7:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA7 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
+
 test:TBA7-clang:
   image: alpine:$AVER # Host environment
   script:
