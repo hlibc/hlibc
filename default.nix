@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  ARCH=nixpkgs.stdenv.targetPlatform.platform.kernelArch;
+
   hardeningDisable = ["all"];
 
   buildInputs = [ gnumake ];
