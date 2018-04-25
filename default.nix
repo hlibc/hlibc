@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  ARCH=nixpkgs.stdenv.targetPlatform.platform.kernelArch;
+  ARCH=pkgs.stdenv.targetPlatform.platform.kernelArch;
 
   hardeningDisable = ["all"];
 
