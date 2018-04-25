@@ -147,11 +147,11 @@ control: $(CONTROL_OBJ)
 
 gcctests:
 	$(MAKE) CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	make CFLAGS="-static" LDLIBS="-lm" control 2>/dev/null
+	$(MAKE) LDLIBS="-lm" control 2>/dev/null
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing
-	LDLIBS="-lm" $(MAKE) control 2>/dev/null
+	$(MAKE) LDLIBS="-lc -lm" control 2>/dev/null
 
 gcctest:
 	./tools/build.sh gcctests gcc || exit 1
