@@ -1,0 +1,25 @@
+From 73cdb242ead2ab607bd9cd302212654faddd1d6c Mon Sep 17 00:00:00 2001
+From: "Adrian Parvin D. Ouano" <adrianparvino@gmail.com>
+Date: Wed, 25 Apr 2018 11:04:55 +0800
+Subject: [PATCH] Temporary
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 21e4761..680a516 100644
+--- a/Makefile
++++ b/Makefile
+@@ -80,7 +80,7 @@ clean:
+ 
+ include/bits:
+ 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
+-	ln -sf ../arch/$(ARCH)/bits $@
++	cp -r ./arch/$(ARCH)/bits $@
+ 
+ include/bits/alltypes.h.sh: include/bits
+ 
+-- 
+2.16.2
+
