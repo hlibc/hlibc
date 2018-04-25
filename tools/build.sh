@@ -21,6 +21,7 @@ BASIC_TYPE="	malloc-unique-pointer
 
 TOOLING="$(pwd)/usr"
 SUF="$(pwd)/logs"
+RETVAL="0"
 
 checkifempty()
 {
@@ -49,8 +50,6 @@ printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
 CC="$2" make -j4 > "${SUF}/buildlog"
 
 make install
-
-RETVAL="0"
 
 printf "==========COMPILING TESTS ===================================\n"
 make "$1" > "${SUF}/testlog"
@@ -82,8 +81,17 @@ dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=50 2>"${SUF}/testerr"
 ./tests/printf-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty() "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`printf_driver' test utility successfully created and copied a large file of urandom data"
-else	printf "%s\n" "##printf driver was unable to create and copy a large file of urandom data"
+then	printf "%s\n" "\`printf-driver' test utility successfully created and copied a large file of urandom data"
+else	printf "%s\n" "##printf-driver was unable to create and copy a large file of urandom data"
+	RETVAL="1"
+fi
+
+dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=12 2>"${SUF}/testerr"
+./tests/putc-driver "${SUF}/diff2" > "${SUF}/diff3" 2>"${SUF}/testerr"
+checkifempty() "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`putc-driver' test utility successfully created and copied a large file of urandom data"
+else	printf "%s\n" "##putc-driver was unable to create and copy a large file of urandom data"
 	RETVAL="1"
 fi
 
@@ -97,7 +105,6 @@ then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small f
 else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
 	RETVAL="1"
 fi
-
 
 ./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
 ./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
