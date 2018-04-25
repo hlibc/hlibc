@@ -10,13 +10,15 @@ stdenv.mkDerivation rec {
   src = ./.;
 
   phases = [ "unpackPhase" "checkPhase" "configurePhase" "installPhase" ];
+  preCheckPhase = ''
+    export ARCH=${pkgs.stdenv.targetPlatform.platform.kernelArch}
+  '';
   checkPhase = ''
     make gcctest
   '';
 
   doCheck = true;
 
-  ARCH=pkgs.stdenv.targetPlatform.platform.kernelArch;
 
   hardeningDisable = ["all"];
 
