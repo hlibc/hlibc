@@ -4,8 +4,7 @@
 void ctype_driver(char *m1, size_t n, int (*f)(int), char *data)
 { 
 	size_t passes = 0;
-	for (passes = 0;f(*data++);++passes)
-	{
+	for (passes = 0;f(*data++);++passes) {
 		printf("%s pass = %zu\n", m1, passes);
 	}
 	printf("%s should have %zu passes and it has %zu\n", m1, n, passes);
@@ -20,10 +19,11 @@ int main(void)
 	char *punct = "!@#$%^&*()_+,./<>?;':\"[]\\{}|`~-    ";
 	char *upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    ";
 	char *lower = "abcdefghijklmnopqrstuvwxyz    ";
-	char cntrlarr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 
+	char cntrlarr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
 			18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 'p', 'a', 'd', 'd' };
 	char *cntrl = cntrlarr;
 	char *xdigit = "abcdefABCDEF    ";
+	char *blank = "\t padd";
 	size_t passes = 0;
 
 	ctype_driver("isspace", 6, isspace, white);
@@ -35,6 +35,6 @@ int main(void)
 	ctype_driver("isupper", 26, isupper, upper);
 	ctype_driver("iscntrl", 32, iscntrl, cntrl);
 	ctype_driver("isxdigit", 12, isxdigit, xdigit);
-
+	ctype_driver("isblank", 2, isblank, blank);
 	return 0;
 }
