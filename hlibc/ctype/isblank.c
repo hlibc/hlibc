@@ -2,17 +2,11 @@
 
 int isblank(int x)
 {
-	int ret = 1;
 	switch (x) {
 	case ' ':
-		return ret;
-		break;
 	case '\t':
-		return ret;
-		break;
+		return 1;
 	default:
-		ret = 0;
-		break;
+		return 0;
 	}
-	return ret;
 }
