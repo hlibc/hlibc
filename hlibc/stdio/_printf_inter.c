@@ -65,7 +65,6 @@ int _printf_inter(
 	const char *p = NULL;
 	size_t i = 0;
 	size_t bound = BUFSIZ;
-	int base = 10;
 
 	/* Hold converted numerical strings */
 	char converted[BUFSIZ] = { 0 };
@@ -79,20 +78,33 @@ int _printf_inter(
 	long long lval = 0;
 	long double fval = 0;
 
-	/* float precision */
-	size_t precision = 6;
-	char long_count = 0;
-
 	if (flag == 2) { /* snprintf */
 		bound = lim;
 	}
 
 	for (p = fmt; *p && i < bound; p++) {
+		int long_count = 0;
+		int base = 10;
+	
+		size_t field_width = 6;
+		size_t precision = 6;
+		
 		if (*p != '%') {
 			i = _populate(i, *p, flag, str++, fp);
 			continue;
 		}
 		++p;
+
+		if (isdigit(*p))
+			{
+				field_width = strtol(p, &p, 10);
+			}
+		if (*p == '.') // Handle precision
+			{
+				precision = strtol(++p, &p, 10);
+			}
+
+
 		do { // Allocate a new loop-block in order to allow re-entry to the switch-case using `continue`
 			// Handle long count
 			switch (*p) {
@@ -181,8 +193,6 @@ int _printf_inter(
 			}
 			break;
 		} while (1);
-		long_count = 0;
-		base = 10;
 	}
 	if (flag > 0) {
 		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
