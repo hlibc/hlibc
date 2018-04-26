@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	malloc-unique-pointer
+BASIC_TYPE="	ctype
+		malloc-unique-pointer
 		getline-driver
 		atoi
 		atol
