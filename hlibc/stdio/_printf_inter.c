@@ -115,24 +115,6 @@ int _printf_inter(
                                      : long_count == 1 ? va_arg(ap, long)
 				     :                   va_arg(ap, long long);
 				goto integer;
-			
-				// Handle characters
-			case 'c':
-				cval = va_arg(ap, int);
-				goto character;
-			
-				// Handle strings
-			case 's':
-				sval = va_arg(ap, char *);
-				goto string;
-			
-				// Handle floating point
-			case 'f':
-			case 'g':
-				fval = long_count < 2 ? va_arg(ap, double)
-					              : va_arg(ap, long double) ;
-				goto floating;
-				break;
 			case 'z':
 				switch (*++p) {
 				case 'u':
@@ -146,32 +128,26 @@ int _printf_inter(
 					break;
 				}
 				break;
-			default:
-				i = _populate(i, *p, flag, str++, fp);
+			
+				// Handle characters
+			case 'c':
+				cval = va_arg(ap, int);
+				i = _populate(i, cval, flag, str++, fp);
 				break;
-			string:
+			
+				// Handle strings
+			case 's':
+				sval = va_arg(ap, char *);
 				for (; *sval; sval++) {
 					i = _populate(i, *sval, flag, str++, fp);
 				}
-				goto done;
-			character:
-				i = _populate(i, cval, flag, str++, fp);
-				goto done;
-			integer:
-				memset(converted, 0, 100);
-				convlen = __int2str(converted, lval, base);
-				for (j = 0; j < convlen; ++j) {
-					i = _populate(i, converted[j], flag, str++, fp);
-				}
-				base = 10;
-				goto done;
-			uinteger:
-				convlen = __uint2str(converted, zuval, base);
-				for (j = 0; j < convlen; ++j) {
-					i = _populate(i, converted[j], flag, str++, fp);
-				}
-				goto done;
-			floating:
+				break;
+			
+				// Handle floating point
+			case 'f':
+			case 'g':
+				fval = long_count < 2 ? va_arg(ap, double)
+					              : va_arg(ap, long double) ;
 				// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
 				convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
 				for (j = 0; convlen--; ++j) {
@@ -182,11 +158,29 @@ int _printf_inter(
 					}
 					i = _populate(i, converted[j], flag, str++, fp);
 				}
-			
-				goto done;
+				break;
+				
+			default:
+				i = _populate(i, *p, flag, str++, fp);
+				break;
+				
+			integer:
+				memset(converted, 0, 100);
+				convlen = __int2str(converted, lval, base);
+				for (j = 0; j < convlen; ++j) {
+					i = _populate(i, converted[j], flag, str++, fp);
+				}
+				base = 10;
+				break;
+			uinteger:
+				convlen = __uint2str(converted, zuval, base);
+				for (j = 0; j < convlen; ++j) {
+					i = _populate(i, converted[j], flag, str++, fp);
+				}
+				break;
 			}
+			break;
 		} while (1);
-	done:
 		long_count = 0;
 		base = 10;
 	}
