@@ -140,11 +140,9 @@ test:TB64-clang:
 test:NODe64-gcc:
   image: alpine:$AVER # Host environment
   script:
-  - apk update && apk add bash openssh-client rsync
+  - apk update && apk add bash openssh-client
   - mkdir ~/.ssh
   - chmod 700 ~/.ssh
   - eval $(ssh-agent)
   - bash -c 'ssh-add <(echo "$ID_RSA")'
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - rsync -r . $USER@$NODe:/home/$USER/$CI_COMMIT_SHA
-  - echo "cd /home/$USER/$CI_COMMIT_SHA && nix-build && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA" | ssh $USER@$NODe
+  - ssh $USER@$NODe $CI_COMMIT_SHA
