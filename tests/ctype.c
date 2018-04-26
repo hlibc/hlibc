@@ -4,11 +4,13 @@
 
 int main(void)
 {
-	char *white = "\t\n\f\v\r 1111"; // tack on failures when possible to improve accuracy
-	char *digit = "0123456789aaaa";
-	char *alpha = "abcdefghijklmnopqrstuvwxyz1111";
-	char *alnum = "0123456789abcdefghijklmnopqrstuvwxyz    ";
-	char *punct = "!@#$%^&*()_+,./<>?;':\"[]\\{}|`~-  012";
+	char *white = "\t\n\f\v\r padd"; // tack on 4 failure bytes to each test
+	char *digit = "0123456789    ";
+	char *alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ    ";
+	char *alnum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ    ";
+	char *punct = "!@#$%^&*()_+,./<>?;':\"[]\\{}|`~-    ";
+	char *upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ    ";
+	char *lower = "abcdefghijklmnopqrstuvwxyz    ";
 	size_t passes = 0;
 
 
@@ -28,19 +30,31 @@ int main(void)
 	{
 		printf("isalpha pass = %zu\n", passes);
 	}
-	printf("isalpha should have 26 passes and it has %zu\n", passes);
+	printf("isalpha should have 52 passes and it has %zu\n", passes);
 	
 	for (passes = 0;isalnum(*alnum++);++passes)
 	{
 		printf("isalnum pass = %zu\n", passes);
 	}
-	printf("isalnum should have 36 passes and it has %zu\n", passes);
+	printf("isalnum should have 62 passes and it has %zu\n", passes);
 
 	for (passes = 0;ispunct(*punct++);++passes)
 	{
 		printf("ispunct pass = %zu\n", passes);
 	}
 	printf("ispunct should have 31 passes and it has %zu\n", passes);
+
+	for (passes = 0;islower(*lower++);++passes)
+	{
+		printf("islower pass = %zu\n", passes);
+	}
+	printf("islower should have 26 passes and it has %zu\n", passes);
+
+	for (passes = 0;isupper(*upper++);++passes)
+	{
+		printf("isupper pass = %zu\n", passes);
+	}
+	printf("isupper should have 26 passes and it has %zu\n", passes);
 
 	return 0;
 }
