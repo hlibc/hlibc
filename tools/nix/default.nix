@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "hlibc";
   version = "0.0.1";
 
-  src = ./.;
+  src = ./../..;
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "configurePhase" "installPhase" ];
   checkPhase = ''
