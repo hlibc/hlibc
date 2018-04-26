@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <ctype.h>
 
+void ctype_driver(char *m1, size_t n, int (*f)(int), char *data)
+{ 
+	size_t passes = 0;
+	for (passes = 0;f(*data++);++passes)
+	{
+		printf("%s pass = %zu\n", m1, passes);
+	}
+	printf("%s should have %zu passes and it has %zu\n", m1, n, passes);
+}
 
 int main(void)
 {
@@ -17,61 +26,15 @@ int main(void)
 	char *xdigit = "abcdefABCDEF    ";
 	size_t passes = 0;
 
-
-	for (passes = 0;isspace(*white++);++passes)
-	{
-		printf("isspace pass = %zu\n", passes);
-	}
-	printf("isspace should have 6 passes and it has %zu\n", passes);
-	
-	for (passes = 0;isdigit(*digit++);++passes)
-	{
-		printf("isdigit pass = %zu\n", passes);
-	}
-	printf("isdigit should have 10 passes and it has %zu\n", passes);
-
-	for (passes = 0;isalpha(*alpha++);++passes)
-	{
-		printf("isalpha pass = %zu\n", passes);
-	}
-	printf("isalpha should have 52 passes and it has %zu\n", passes);
-	
-	for (passes = 0;isalnum(*alnum++);++passes)
-	{
-		printf("isalnum pass = %zu\n", passes);
-	}
-	printf("isalnum should have 62 passes and it has %zu\n", passes);
-
-	for (passes = 0;ispunct(*punct++);++passes)
-	{
-		printf("ispunct pass = %zu\n", passes);
-	}
-	printf("ispunct should have 31 passes and it has %zu\n", passes);
-
-	for (passes = 0;islower(*lower++);++passes)
-	{
-		printf("islower pass = %zu\n", passes);
-	}
-	printf("islower should have 26 passes and it has %zu\n", passes);
-
-	for (passes = 0;isupper(*upper++);++passes)
-	{
-		printf("isupper pass = %zu\n", passes);
-	}
-	printf("isupper should have 26 passes and it has %zu\n", passes);
-	
-	for (passes = 0;iscntrl(*cntrl++);++passes)
-	{
-		printf("iscntrl pass = %zu\n", passes);
-	}
-	printf("iscntrl should have 32 passes and it has %zu\n", passes);
-
-	for (passes = 0;isxdigit(*xdigit++);++passes)
-	{
-		printf("isxdigit pass = %zu\n", passes);
-	}
-	printf("isxdigit should have 12 passes and it has %zu\n", passes);
-
+	ctype_driver("isspace", 6, isspace, white);
+	ctype_driver("isdigit", 10, isdigit, digit);
+	ctype_driver("isalpha", 52, isalpha, alpha);
+	ctype_driver("isalnum", 62, isalnum, alnum);
+	ctype_driver("ispunct", 31, ispunct, punct);
+	ctype_driver("islower", 26, islower, lower);
+	ctype_driver("isupper", 26, isupper, upper);
+	ctype_driver("iscntrl", 32, iscntrl, cntrl);
+	ctype_driver("isxdigit", 12, isxdigit, xdigit);
 
 	return 0;
 }
