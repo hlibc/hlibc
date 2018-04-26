@@ -20,6 +20,7 @@ BASIC_TYPE="	malloc-unique-pointer
 "
 
 DISPLAYDIFF="1"
+JOBS="1"
 TOOLING="$(pwd)/usr"
 SUF="$(pwd)/logs"
 RETVAL="0"
@@ -55,13 +56,15 @@ for i in posix-utils/*.c
 do ln "$i" "posix-utils-control/$(basename "$i")"
 done
 
-printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
-CC="$2" make -j4 > "${SUF}/buildlog"
+# printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
+#  > "${SUF}/buildlog"
+CC="$2" make "-j${JOBS}"
 
 make install
 
 printf "==========COMPILING TESTS ===================================\n"
-make "$1" > "${SUF}/testlog"
+#  > "${SUF}/testlog"
+make "$1"
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n"
 
