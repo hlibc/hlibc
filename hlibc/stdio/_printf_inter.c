@@ -19,7 +19,6 @@ size_t __int2str_inter(char *s, long long n, int base, size_t i)
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
 	}
-	
 	s[i] = __convtab[+(-(n % base))];
 	return ++i;
 }
