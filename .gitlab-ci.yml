@@ -145,4 +145,5 @@ test:NODe64-gcc:
   - chmod 700 ~/.ssh
   - eval $(ssh-agent)
   - bash -c 'ssh-add <(echo "$ID_RSA")'
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - ssh $USER@$NODe $CI_COMMIT_SHA
