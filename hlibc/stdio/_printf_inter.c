@@ -80,7 +80,6 @@ int _printf_inter(
 	const char *p = NULL;
 	size_t i = 0;
 	size_t bound = BUFSIZ;
-	int base = 10;
 
 	/* Hold converted numerical strings */
 	char converted[BUFSIZ] = { 0 };
@@ -94,20 +93,33 @@ int _printf_inter(
 	long long lval = 0;
 	long double fval = 0;
 
-	/* float precision */
-	size_t precision = 6;
-	char long_count = 0;
-
 	if (flag == 2) { /* snprintf */
 		bound = lim;
 	}
 
 	for (p = fmt; *p && i < bound; p++) {
+		int long_count = 0;
+		int base = 10;
+	
+		size_t field_width = 6;
+		size_t precision = 6;
+		
 		if (*p != '%') {
 			i = _populate(i, *p, flag, str++, fp);
 			continue;
 		}
 		++p;
+
+		if (isdigit(*p))
+			{
+				field_width = strtol(p, &p, 10);
+			}
+		if (*p == '.') // Handle precision
+			{
+				precision = strtol(++p, &p, 10);
+			}
+
+
 		do { // Allocate a new loop-block in order to allow re-entry to the switch-case using `continue`
 			// Handle long count
 			switch (*p) {
@@ -130,24 +142,6 @@ int _printf_inter(
 				     : long_count == 1 ? va_arg(ap, long)
 				     :		   va_arg(ap, long long);
 				goto integer;
-			
-				// Handle characters
-			case 'c':
-				cval = va_arg(ap, int);
-				goto character;
-			
-				// Handle strings
-			case 's':
-				sval = va_arg(ap, char *);
-				goto string;
-			
-				// Handle floating point
-			case 'f':
-			case 'g':
-				fval = long_count < 2 ? va_arg(ap, double)
-						      : va_arg(ap, long double) ;
-				goto floating;
-				break;
 			case 'z':
 				switch (*++p) {
 				case 'u':
@@ -161,32 +155,26 @@ int _printf_inter(
 					break;
 				}
 				break;
-			default:
-				i = _populate(i, *p, flag, str++, fp);
+			
+				// Handle characters
+			case 'c':
+				cval = va_arg(ap, int);
+				i = _populate(i, cval, flag, str++, fp);
 				break;
-			string:
+			
+				// Handle strings
+			case 's':
+				sval = va_arg(ap, char *);
 				for (; *sval; sval++) {
 					i = _populate(i, *sval, flag, str++, fp);
 				}
-				goto done;
-			character:
-				i = _populate(i, cval, flag, str++, fp);
-				goto done;
-			integer:
-				memset(converted, 0, 100);
-				convlen = __int2str(converted, lval, base);
-				for (j = 0; j < convlen; ++j) {
-					i = _populate(i, converted[j], flag, str++, fp);
-				}
-				base = 10;
-				goto done;
-			uinteger:
-				convlen = __uint2str(converted, zuval, base);
-				for (j = 0; j < convlen; ++j) {
-					i = _populate(i, converted[j], flag, str++, fp);
-				}
-				goto done;
-			floating:
+				break;
+			
+				// Handle floating point
+			case 'f':
+			case 'g':
+				fval = long_count < 2 ? va_arg(ap, double)
+					              : va_arg(ap, long double) ;
 				// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
 				convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
 				for (j = 0; convlen--; ++j) {
@@ -197,13 +185,29 @@ int _printf_inter(
 					}
 					i = _populate(i, converted[j], flag, str++, fp);
 				}
-			
-				goto done;
+				break;
+				
+			default:
+				i = _populate(i, *p, flag, str++, fp);
+				break;
+				
+			integer:
+				memset(converted, 0, 100);
+				convlen = __int2str(converted, lval, base);
+				for (j = 0; j < convlen; ++j) {
+					i = _populate(i, converted[j], flag, str++, fp);
+				}
+				base = 10;
+				break;
+			uinteger:
+				convlen = __uint2str(converted, zuval, base);
+				for (j = 0; j < convlen; ++j) {
+					i = _populate(i, converted[j], flag, str++, fp);
+				}
+				break;
 			}
+			break;
 		} while (1);
-	done:
-		long_count = 0;
-		base = 10;
 	}
 	if (flag >= 10) {
 		dprintf_buffer(-1, flag);
