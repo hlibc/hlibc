@@ -16,8 +16,8 @@ int fflush(FILE *fp)
 		ret = _flushbuf(EOF, fp);
 	}
 
-	fp->rp = fp->buf;
+	//fp->rp = fp->buf;
 	fp->len = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
-	fp->buf = NULL;
+	//fp->buf = NULL;
 	return ret;
 }

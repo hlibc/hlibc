@@ -43,9 +43,24 @@ size_t __uint2str(char *s, size_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
+static void dprintf_buffer(int x, int fd)
+{
+	static char b[BUFSIZ];
+	static size_t i = 0;
+	if (x > -1)
+		b[i++] = x;
+	if (i == BUFSIZ || x == -1)
+	{
+		write(fd - 10, b, i);
+		i = 0;
+	}
+}
+
 int _populate(int incr, int x, int flag, char *s, FILE *fp)
 {
-	if (flag > 0) {
+	if (flag >= 10) {
+		dprintf_buffer(x, flag);
+	} else if (flag > 0) {
 		*s = x;
 	}
 	else {
@@ -59,7 +74,8 @@ int _printf_inter(
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
-	/* flag == 0 == printf, vprintf, dprintf etc  */
+	/* flag == 0 == printf, vprintf  */
+	/* flag >= 10 == dprintf where the fd is flag -10 */
 
 	const char *p = NULL;
 	size_t i = 0;
@@ -108,11 +124,11 @@ int _printf_inter(
 			case 'o':
 			case 'x':
 				base = *p == 'o' ? 8
-				                 : 16;
+						 : 16;
 			case 'd':
 				lval = long_count == 0 ? va_arg(ap, int) 
-                                     : long_count == 1 ? va_arg(ap, long)
-				     :                   va_arg(ap, long long);
+				     : long_count == 1 ? va_arg(ap, long)
+				     :		   va_arg(ap, long long);
 				goto integer;
 			
 				// Handle characters
@@ -129,7 +145,7 @@ int _printf_inter(
 			case 'f':
 			case 'g':
 				fval = long_count < 2 ? va_arg(ap, double)
-					              : va_arg(ap, long double) ;
+						      : va_arg(ap, long double) ;
 				goto floating;
 				break;
 			case 'z':
@@ -188,6 +204,10 @@ int _printf_inter(
 	done:
 		long_count = 0;
 		base = 10;
+	}
+	if (flag >= 10) {
+		dprintf_buffer(-1, flag);
+		return i;
 	}
 	if (flag > 0) {
 		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
