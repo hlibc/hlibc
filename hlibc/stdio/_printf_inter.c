@@ -43,7 +43,7 @@ size_t __uint2str(char *s, size_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
-static void dprintf_buffer(int x, int fd)
+static void _dprintf_buffer(int x, FILE *f)
 {
 	static char b[BUFSIZ];
 	static size_t i = 0;
@@ -51,15 +51,15 @@ static void dprintf_buffer(int x, int fd)
 		b[i++] = x;
 	if (i == BUFSIZ || x == -1)
 	{
-		write(fd - 10, b, i);
+		write(f - stdout, b, i);
 		i = 0;
 	}
 }
 
 int _populate(int incr, int x, int flag, char *s, FILE *fp)
 {
-	if (flag >= 10) {
-		dprintf_buffer(x, flag);
+	if (flag == 3) {
+		_dprintf_buffer(x, fp);
 	} else if (flag > 0) {
 		*s = x;
 	}
@@ -75,7 +75,7 @@ int _printf_inter(
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
 	/* flag == 0 == printf, vprintf  */
-	/* flag >= 10 == dprintf where the fd is flag -10 */
+	/* flag == 3 == dprintf, vdprintf */
 
 	const char *p = NULL;
 	size_t i = 0;
@@ -209,8 +209,8 @@ int _printf_inter(
 			break;
 		} while (1);
 	}
-	if (flag >= 10) {
-		dprintf_buffer(-1, flag);
+	if (flag == 3) {
+		_dprintf_buffer(-1, fp);
 		return i;
 	}
 	if (flag > 0) {
