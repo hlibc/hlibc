@@ -4,15 +4,6 @@
 #include <stdarg.h>
 #include <float.h>
 
-void simplecat(char *file)
-{
-	int c = 0;
-	FILE *fp = fopen(file, "r");
-	while ((c = getc(fp)) != EOF)
-		putc(c, stdout);
-	fclose(fp);
-}
-
 void testgvprintf(char *fmt, ...)
 {
 	va_list args;
