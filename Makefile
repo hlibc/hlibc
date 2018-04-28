@@ -140,7 +140,7 @@ gcctests:
 
 clangtests:
 	$(MAKE) $(CLANG_WRAP) testing
-	$(MAKE) LDLIBS="-lc -lm" control 2>/dev/null
+	$(MAKE) LDFLAGS="" CFLAGS="-static" LDLIBS="-lc -lm" control 2>/dev/null
 
 gcctest:
 	./tools/build.sh gcctests gcc || exit 1
