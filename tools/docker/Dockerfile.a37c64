@@ -1,0 +1,2 @@
+FROM amd64/alpine:3.7
+RUN apk update && apk add make musl-dev clang binutils
