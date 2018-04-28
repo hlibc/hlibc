@@ -28,14 +28,14 @@ CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 LDFLAGS = 
 CPPFLAGS =
 #CFLAGS = -Os -pipe
-CFLAGS =
+CFLAGS = -Wall -Wextra
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
 
 CFLAGS_ALL = $(CFLAGS_C99FSE)
 CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./fdlibm/internal -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
-CFLAGS_ALL_SHARED = $(CFLAGS_ALL) -fPIC -DSHARED -O3
+#CFLAGS_ALL_SHARED = $(CFLAGS_ALL) -fPIC -DSHARED -O3
 
 AR      = $(CROSS_COMPILE)ar
 RANLIB  = $(CROSS_COMPILE)ranlib
@@ -47,12 +47,15 @@ EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 #CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
-SHARED_LIBS = lib/libc.so
+#SHARED_LIBS = lib/libc.so
 TOOL_LIBS = lib/gcc-wrap.specs
-ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+#ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
 ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
+
+CFLAGS += -Wall -Wextra
 
 LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 
@@ -93,16 +96,16 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 %.o: %.c $(GENH) $(IMPH)
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
-%.lo: $(ARCH)/%.s
-	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
+#%.lo: $(ARCH)/%.s
+#	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
 
-%.lo: %.c $(GENH) $(IMPH)
-	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
+#%.lo: %.c $(GENH) $(IMPH)
+#	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
 
-lib/libc.so: $(LOBJS)
-	$(CC) $(CFLAGS_ALL_SHARED) $(LDFLAGS) -nostdlib -shared \
-	-Wl,-e,_start -Wl,-Bsymbolic-functions \
-	-Wl,-soname=libc.so -o $@ $(LOBJS) -lgcc
+#lib/libc.so: $(LOBJS)
+#	$(CC) $(CFLAGS_ALL_SHARED) $(LDFLAGS) -nostdlib -shared \
+#	-Wl,-e,_start -Wl,-Bsymbolic-functions \
+#	-Wl,-soname=libc.so -o $@ $(LOBJS) -lgcc
 
 lib/libc.a: $(OBJS)
 	$(RM) -f $@
