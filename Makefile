@@ -51,7 +51,7 @@ ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
 
-CFLAGS += -Wall -Wextra
+CFLAGS += -Wall -Wextra -fno-stack-protector
 
 LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 
