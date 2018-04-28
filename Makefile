@@ -135,12 +135,12 @@ testing: $(TEST_OBJ)
 control: $(CONTROL_OBJ)
 
 gcctests:
-	$(MAKE) CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	$(MAKE) LDLIBS="-lm" control 2>/dev/null
+	LDFLAGS="" CFLAGS="" LDLIBS="" make CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
+	LDFLAGS="" CFLAGS="" LDLIBS="" make LDLIBS="-lm" control 2>/dev/null
 
 clangtests:
-	$(MAKE) $(CLANG_WRAP) testing
-	$(MAKE) LDFLAGS="" CFLAGS="-static" LDLIBS="-lc -lm" control 2>/dev/null
+	LDFLAGS="" CFLAGS="" LDLIBS="" make $(CLANG_WRAP) testing
+	LDFLAGS="" CFLAGS="" LDLIBS="" make LDFLAGS="" CFLAGS="-static" LDLIBS="-lc -lm" control 2>/dev/null
 
 gcctest:
 	./tools/build.sh gcctests gcc || exit 1
