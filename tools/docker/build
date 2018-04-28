@@ -8,11 +8,11 @@ REPO=hlibc
 PFIX=build
 TODO=$(find . -type f -name "Dockerfile.*")
 
-docker login -u ${REPO}
+#docker login -u ${REPO}
 
 build ()
 {
-    x=${1}/${2}:$(basename ${3});
+    x=${1}/${2}:$(echo ${3} | sed -e 's/\.\/Dockerfile\.//');
     docker build . -f ${3} -t ${x};
     docker push ${x};
 }
