@@ -8,7 +8,7 @@ REPO=hlibc
 PFIX=build
 TODO=$(find . -type f -name "Dockerfile.*")
 
-#docker login -u ${REPO}
+docker login -u ${REPO}
 
 build ()
 {
