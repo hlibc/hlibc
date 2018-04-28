@@ -208,5 +208,8 @@ REFERENCES:
 
 	https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
 
-        https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Warning-Options
+    https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Warning-Options
 
+    http://lolengine.net/blog/2011/12/21/better-function-approximations
+    
+    http://lolengine.net/blog/2011/9/17/playing-with-the-cpu-pipeline
