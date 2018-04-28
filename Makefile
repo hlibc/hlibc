@@ -5,7 +5,6 @@
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
-
 prefix = /usr/local/hlibc
 includedir = $(prefix)/include
 libdir = $(prefix)/lib
@@ -25,23 +24,18 @@ TEST_OBJ = $(TEST_SRCS:.c=)
 CONTROL_SRCS = $(sort $(wildcard control/*.c) $(wildcard posix-utils-control/*.c) )
 CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
-LDFLAGS = 
+LDFLAGS =
 CPPFLAGS =
-#CFLAGS = -Os -pipe
-CFLAGS = -Wall -Wextra
-CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
-
+CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
 CFLAGS_ALL = $(CFLAGS_C99FSE)
 CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./fdlibm/internal -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
-
 AR      = $(CROSS_COMPILE)ar
 RANLIB  = $(CROSS_COMPILE)ranlib
-
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
-
-EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl ssp ssp_nonshared
+EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
+#EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl ssp ssp_nonshared
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
@@ -52,8 +46,6 @@ ALL_TOOLS = tools/gcc-wrap
 -include config.mak
 
 CFLAGS += -Wall -Wextra -fno-stack-protector
-
-LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
@@ -92,7 +84,6 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 %.o: %.c $(GENH) $(IMPH)
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
-
 lib/libc.a: $(OBJS)
 	$(RM) -f $@
 	$(AR) rc $@ $(OBJS)
@@ -125,10 +116,7 @@ $(DESTDIR)$(syslibdir):
 	install -d -m 755 $(DESTDIR)$(syslibdir)
 
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
-
-$(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(syslibdir)
-	ln -sf $(libdir)/libc.so $@ || true
+	sh $< "$(includedir)" "$(libdir)"  > $@
 
 testing: $(TEST_OBJ)
 
