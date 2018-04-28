@@ -42,7 +42,7 @@ RANLIB  = $(CROSS_COMPILE)ranlib
 
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
 
-EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
+EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl ssp ssp_nonshared
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 #CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
