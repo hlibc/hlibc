@@ -114,7 +114,7 @@ fi
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2> "${SUF}/testerr"
 cp "${SUF}/diff2" "${SUF}/diff3"
 mv "${SUF}/diff2" "${SUF}/diff4"
-./tests/rename-driver "${SUF}/diff3" "${SUF}/diff"5 2> "${SUF}/testerr"
+./tests/rename-driver "${SUF}/diff3" "${SUF}/diff5" 2> "${SUF}/testerr"
 checkifempty "${SUF}/diff4"
 if diff "${SUF}/diff4" "${SUF}/diff5" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small file of urandom data"
@@ -157,5 +157,7 @@ else	printf "%s\n" "##getline-driver failed to read lines from file"
 fi
 
 printf "============================================================\n"
+
+./tests/ctype
 
 exit "$RETVAL"
