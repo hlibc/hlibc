@@ -1,8 +1,0 @@
-The image is called 'build' and has several tags,
-
-(e.g., 'a37g64'):
-        || ||
-        || |`- bits (32- or 64-)
-        || `-- gcc or clang ('g' or 'c')
-        |`---- version (37 for Alpine 3.7, 80 for Debian 8.0)
-        `----- Alpine or Debian ('a' or 'd')

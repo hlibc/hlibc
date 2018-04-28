@@ -1,2 +1,0 @@
-FROM i386/alpine:3.7
-RUN apk update && apk add make musl-dev gcc
