@@ -12,17 +12,12 @@ syslibdir = /lib
 
 SRCS = $(sort $(wildcard musllibc/*/*.c hlibc/*/*.c fdlibm/*/*.c))
 OBJS = $(SRCS:.c=.o)
-LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
 IMPH = musllibc/internal/libc.h
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
-TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
-TEST_OBJ = $(TEST_SRCS:.c=) 
-CONTROL_SRCS = $(sort $(wildcard control/*.c) $(wildcard posix-utils-control/*.c) )
-CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
 LDFLAGS =
 CPPFLAGS =
@@ -45,8 +40,6 @@ ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
 
-#CFLAGS += -Wall -Wextra -fno-stack-protector
-
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
@@ -65,13 +58,13 @@ clean:
 	-$(RM) -rf usr logs
 	-$(RM) -f test_*
 	-$(RM) -f tools/clang-wrap
-	-$(RM) -f $(TEST_OBJ) $(CONTROL_OBJ) 
 	-$(RM) -r control
 	-$(RM) -r posix-utils-control
+	-$(MAKE) cleantest
 
 cleantest:
-
-	rm -rf $(TEST_OBJ) $(CONTROL_OBJ) control/Makefile posix-utils-control/Makefile
+	cd tests/ && make clean
+	cd posix-utils/ && make clean
 
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
@@ -124,18 +117,17 @@ $(DESTDIR)$(syslibdir):
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
-testing: $(TEST_OBJ)
-
-control: $(CONTROL_OBJ)
-
 gcctests:
-	LDFLAGS="" CFLAGS="" LDLIBS="" make CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	#MAKEFLAGS="" LDFLAGS="" CFLAGS="" LDLIBS="" make LDLIBS="-lm" control 2>/dev/null
+	cd posix-utils/ && $(GCC_WRAP) make
+	cd posix-utils-control/ && make
+	cd tests/ && $(GCC_WRAP) make
 	cd control && make
 
 clangtests:
-	LDFLAGS="" CFLAGS="" LDLIBS="" make $(CLANG_WRAP) testing
-	LDFLAGS="" CFLAGS="" LDLIBS="" make LDFLAGS="" CFLAGS="-static" LDLIBS="-lc -lm" control 2>/dev/null
+	cd posix-utils/ && $(CLANG_WRAP) make
+	cd posix-utils-control/ && make
+	cd tests/ && $(CLANG_WRAP) make
+	cd control && make
 
 gcctest:
 	./tools/build.sh gcctests gcc || exit 1
