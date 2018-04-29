@@ -4,7 +4,7 @@ DESCRIPTION:
 ------------
 
 	hlibc is an experimental libc targeted at the linux kernel's syscall
-	ABI. It is a standalone libc which supports i386, x86_64 and arm 
+	ABI. It is a standalone libc which supports the i386, x86_64 and arm 
 	architectures. hlibc can be compiled with either gcc or the llvm
 	clang compiler.
 
@@ -24,13 +24,9 @@ BUILDING:
 	Test the installation:
 
 		cd /home/$USER/buildarea 
-		./bin/gcc-wrap tests/pow_test.c -static
+		./bin/gcc-wrap tests/pow_test.c
 
-	Make sure you are using the `-static` argument whenever you compile
-	anything using the gcc wrapper because hlibc only supports static
-	linking at this time. Or delete the `libc.so` stub in the `lib/` directory
-	which will cause the compiler to statically link to the `libc.a` by
-	default. 
+	hlibc only supports static linking at this time.
 
 
 STRUCTURE:
@@ -91,10 +87,21 @@ AUTOMATIC TESTING:
 	has changed and likely regressed or otherwise lost a functionality.
 
 	If you wish to add a new test to the test suite simply put the program
-	under tests/ and it will be compiled along with the other tests. There
-	are no automatic mechanisms for running supplied tests. As of this time
-	each actual test (and diff if required) must be scripted into 
-	tools/build.sh.
+	under tests/ and it will be compiled along with the other tests. To
+	have the test automatically ran with the hlibc testsuite then add the
+	title of its binary to BASIC_TESTS= at the top of tools/build.sh. This
+	method is for tests that produce output to stdout and are then compared
+	with the output of the same test compiled against the host. If the test
+	does not use stdout or is unsuitable for running against the host as a
+	control medium then it must be scripted into ./tools/build.sh by hand.
+
+	Two duplicate test directories are created with the test suite, These
+	duplicate test directories are compiled against the default host libc
+	and used as control mediums to diff the output of the same tests
+	compiled against hlibc:
+
+		control/ (links to tests/*.c)
+		posix-utils-control/ (linked to posix-utils/)
 
 
 USING LLVM/CLANG:
@@ -109,32 +116,19 @@ USING LLVM/CLANG:
 ROADMAP:
 --------
 
-	Add new versions of atoi and atol. Using atoll as the driver for them is
-	not working correctly. Compute these in the negative range and flip the
-	values at the end in order to get the entire range.
-
 	Write more tests in C, add them to tests/ and script them into build.sh
-	Scripting should be kept dead simple. Utility code can be taken from 
-	arbsh/posix if new unique C code is needed.
 
 	Add an fdopen() function and redesign popen() to use it. 
 
 	Redesign the syscall interface to use unique code and start removing the
 	remnants of musllibc/.
 
-	Add more string functions, essentially finishing hlibc/string for non-
-	wide character support. 
-
-	Support for properly printing and rounding of floats / doubles. When 
-	this is done the printf test in tools/build.sh can be uncommented. In 
-	the meantime that test can be used to finish _print_inter.c.
-
 	Rewrite getopt(), write tests for getopt(). This getopt version was
 	written by Henry Spencer and is not unique to hlibc.
 
 	Address proper switching between unbuffered, line buffered and buffered
 	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
-	and then with the internal atexit-style handlers.
+	and then with the internal exit() function.
 
 	Fix the experimental MIPS port. Popen and stat are not working 
 	correctly.
@@ -194,6 +188,7 @@ IRC:
 ----
 
 	#hlibc on irc.freenode.net
+
 
 RELEASES:
 ---------
