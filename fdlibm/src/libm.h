@@ -18,7 +18,7 @@
 #include <math.h>
 #include <complex.h>
 #include "longdbl.h"
-#include "libc.h"
+//#include "libc.h"
 
 union fshape {
 	float value;
@@ -133,23 +133,23 @@ do {                                                            \
 int    __rem_pio2_large(double*,double*,int,int,int);
 
 int    __rem_pio2(double,double*);
-double __sin(double,double,int);
-double __cos(double,double);
-double __tan(double,double,int);
+double __sin_kernel(double,double,int);
+double __cos_kernel(double,double);
+double __tan_kernel(double,double,int);
 double __expo2(double);
 double complex __ldexp_cexp(double complex,int);
 
 int    __rem_pio2f(float,double*);
-float  __sindf(double);
-float  __cosdf(double);
-float  __tandf(double,int);
+float  __sin_kerneldf(double);
+float  __cos_kerneldf(double);
+float  __tan_kerneldf(double,int);
 float  __expo2f(float);
 float complex __ldexp_cexpf(float complex,int);
 
 int __rem_pio2l(long double, long double *);
-long double __sinl(long double, long double, int);
-long double __cosl(long double, long double);
-long double __tanl(long double, long double, int);
+long double __sin_kernell(long double, long double, int);
+long double __cos_kernell(long double, long double);
+long double __tan_kernell_kernel(long double, long double, int);
 
 /* polynomial evaluation */
 long double __polevll(long double, const long double *, int);

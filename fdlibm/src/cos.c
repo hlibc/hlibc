@@ -13,8 +13,8 @@
  * Return cosine function of x.
  *
  * kernel function:
- *      __sin           ... sine function on [-pi/4,pi/4]
- *      __cos           ... cosine function on [-pi/4,pi/4]
+ *      __sin_kernel           ... sine function on [-pi/4,pi/4]
+ *      __cos_kernel           ... cosine function on [-pi/4,pi/4]
  *      __rem_pio2      ... argument reduction routine
  *
  * Method.
@@ -56,7 +56,7 @@ double cos(double x)
 			/* raise inexact if x != 0 */
 			if ((int)x == 0)
 				return 1.0;
-		return __cos(x, z);
+		return __cos_kernel(x, z);
 	}
 
 	/* cos(Inf or NaN) is NaN */
@@ -66,10 +66,10 @@ double cos(double x)
 	/* argument reduction needed */
 	n = __rem_pio2(x, y);
 	switch (n&3) {
-	case 0: return  __cos(y[0], y[1]);
-	case 1: return -__sin(y[0], y[1], 1);
-	case 2: return -__cos(y[0], y[1]);
+	case 0: return  __cos_kernel(y[0], y[1]);
+	case 1: return -__sin_kernel(y[0], y[1], 1);
+	case 2: return -__cos_kernel(y[0], y[1]);
 	default:
-		return  __sin(y[0], y[1], 1);
+		return  __sin_kernel(y[0], y[1], 1);
 	}
 }
