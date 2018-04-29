@@ -1,4 +1,4 @@
-#ll Use gmake
+# Use gmake
 # Use config.mak to override any of the following variables.
 # Do not make changes here.
 #
@@ -39,8 +39,6 @@ ALL_TOOLS = tools/gcc-wrap tools/gcc-wrap-uninstalled
 
 -include config.mak
 
-CFLAGS += -fPIC
-
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
@@ -68,8 +66,9 @@ cleantest:
 	cd posix-utils/ && make clean
 
 include/bits:
-	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
-	#ln -sf ../arch/$(ARCH)/bits $@
+	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
+	@test "$(ARCH)" || echo "\tor use the ./configure script."
+	@test "$(ARCH)" || { echo "\tRun 'make gcctest|clangtest' to invoke the test suite\n\n" ; exit 1 ; }
 	cp -r arch/$(ARCH)/bits include/
 	
 
