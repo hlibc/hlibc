@@ -15,11 +15,9 @@ stdenv.mkDerivation rec {
     make gcctest
   '';
 
-  patches = [ ./0001-ln-to-cp.patch ./0002-hardeningDisable-for-gcc-wrap.patch ];
-
   postInstall = ''
     ln -s $out/bin/gcc-wrap $out/bin/cc
-    substituteInPlace $out/bin/gcc-wrap --replace 'exec gcc' 'exec ${gcc}/bin/gcc'
+    substituteInPlace $out/bin/gcc-wrap --replace 'exec gcc' 'hardeningDisable=all exec ${gcc}/bin/gcc'
   '';
 
   doCheck = true;

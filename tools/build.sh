@@ -36,8 +36,8 @@ checkifempty()
 displaydiff()
 {
 	if [ "$DISPLAYDIFF" = "1" ]
-	then	grep '<' "${SUF}/testerr" | tail
-		grep '>' "${SUF}/testerr" | tail
+	then	grep '^<' "${SUF}/testerr" | tail
+		grep '^>' "${SUF}/testerr" | tail
 	fi
 }
 
