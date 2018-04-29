@@ -39,6 +39,8 @@ ALL_TOOLS = tools/gcc-wrap tools/gcc-wrap-uninstalled
 
 -include config.mak
 
+CFLAGS += -fPIC
+
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)

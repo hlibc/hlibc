@@ -44,7 +44,7 @@ displaydiff()
 
 make clean
 
-CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper
+CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper --disable-shared
 
 mkdir -p "${SUF}"
 mkdir -p control
