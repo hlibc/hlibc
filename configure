@@ -91,34 +91,34 @@ shared=yes
 static=yes
 
 for arg ; do
-case "$arg" in
---help) usage ;;
---prefix=*) prefix=${arg#*=} ;;
---exec-prefix=*) exec_prefix=${arg#*=} ;;
---bindir=*) bindir=${arg#*=} ;;
---libdir=*) libdir=${arg#*=} ;;
---includedir=*) includedir=${arg#*=} ;;
---syslibdir=*) syslibdir=${arg#*=} ;;
---enable-shared|--enable-shared=yes) shared=yes ;;
---disable-shared|--enable-shared=no) shared=no ;;
---enable-static|--enable-static=yes) static=yes ;;
---disable-static|--enable-static=no) static=no ;;
---enable-debug|--enable-debug=yes) debug=yes ;;
---disable-debug|--enable-debug=no) debug=no ;;
---enable-warnings|--enable-warnings=yes) warnings=yes ;;
---disable-warnings|--enable-warnings=no) warnings=no ;;
---enable-gcc-wrapper|--enable-gcc-wrapper=yes) wrapper=yes ;;
---disable-gcc-wrapper|--enable-gcc-wrapper=no) wrapper=no ;;
---enable-*|--disable-*|--with-*|--without-*|--*dir=*|--build=*) ;;
---host=*|--target=*) target=${arg#*=} ;;
--* ) echo "$0: unknown option $arg" ;;
-CC=*) CC=${arg#*=} ;;
-CFLAGS=*) CFLAGS=${arg#*=} ;;
-CPPFLAGS=*) CPPFLAGS=${arg#*=} ;;
-LDFLAGS=*) LDFLAGS=${arg#*=} ;;
-*=*) ;;
-*) target=$arg ;;
-esac
+	case "$arg" in
+		--help) usage ;;
+		--prefix=*) prefix=${arg#*=} ;;
+		--exec-prefix=*) exec_prefix=${arg#*=} ;;
+		--bindir=*) bindir=${arg#*=} ;;
+		--libdir=*) libdir=${arg#*=} ;;
+		--includedir=*) includedir=${arg#*=} ;;
+		--syslibdir=*) syslibdir=${arg#*=} ;;
+		--enable-shared|--enable-shared=yes) shared=yes ;;
+		--disable-shared|--enable-shared=no) shared=no ;;
+		--enable-static|--enable-static=yes) static=yes ;;
+		--disable-static|--enable-static=no) static=no ;;
+		--enable-debug|--enable-debug=yes) debug=yes ;;
+		--disable-debug|--enable-debug=no) debug=no ;;
+		--enable-warnings|--enable-warnings=yes) warnings=yes ;;
+		--disable-warnings|--enable-warnings=no) warnings=no ;;
+		--enable-gcc-wrapper|--enable-gcc-wrapper=yes) wrapper=yes ;;
+		--disable-gcc-wrapper|--enable-gcc-wrapper=no) wrapper=no ;;
+		--enable-*|--disable-*|--with-*|--without-*|--*dir=*|--build=*) ;;
+		--host=*|--target=*) target=${arg#*=} ;;
+		-* ) echo "$0: unknown option $arg" ;;
+		CC=*) CC=${arg#*=} ;;
+		CFLAGS=*) CFLAGS=${arg#*=} ;;
+		CPPFLAGS=*) CPPFLAGS=${arg#*=} ;;
+		LDFLAGS=*) LDFLAGS=${arg#*=} ;;
+		*=*) ;;
+		*) target=$arg ;;
+	esac
 done
 
 setdir prefix /usr/local/hlibc
@@ -133,10 +133,11 @@ setdir syslibdir '/lib'
 #
 i=0
 set -C
-while : ; do i=$(($i+1))
-tmpc="./conf$$-$PPID-$i.c"
-2>/dev/null > "$tmpc" && break
-test "$i" -gt 50 && fail "$0: cannot create temporary file $tmpc"
+while :
+do	i=$(($i+1))
+	tmpc="./conf$$-$PPID-$i.c"
+	2>/dev/null > "$tmpc" && break
+	test "$i" -gt 50 && fail "$0: cannot create temporary file $tmpc"
 done
 set +C
 trap 'rm "$tmpc"' EXIT INT QUIT TERM HUP
@@ -162,13 +163,13 @@ printf "%s\n" "$target"
 # Convert to just ARCH
 #
 case "$target" in
-arm*) ARCH=arm ;;
-aarch64*) ARCH=aarch64 ;;
-i?86*) ARCH=i386 ;;
-x86_64*) ARCH=x86_64 ;;
-mips-*) ARCH=mips ;;
-unknown) fail "$0: unable to detect target arch; try $0 --target=..." ;;
-*) fail "$0: unknown or unsupported target \"$target\"" ;;
+	arm*) ARCH=arm ;;
+	aarch64*) ARCH=aarch64 ;;
+	i?86*) ARCH=i386 ;;
+	x86_64*) ARCH=x86_64 ;;
+	mips-*) ARCH=mips ;;
+	unknown) fail "$0: unable to detect target arch; try $0 --target=..." ;;
+	*) fail "$0: unknown or unsupported target \"$target\"" ;;
 esac
 
 #
@@ -238,13 +239,13 @@ tryldflag LDFLAGS_AUTO -Wl,--hash-style=sysv
 # Disable dynamic linking if ld is broken and can't do -Bsymbolic-functions
 LDFLAGS_DUMMY=
 tryldflag LDFLAGS_DUMMY -Wl,-Bsymbolic-functions || {
-printf "warning: disabling dynamic linking support\n"
-shared=no
+	printf "warning: disabling dynamic linking support\n"
+	shared=no
 }
 
 test "$ARCH" = "mips" && {
-printf "warning: disabling dynamic linking support on mips (not yet supported)\n"
-shared=no
+	printf "warning: disabling dynamic linking support on mips (not yet supported)\n"
+	shared=no
 }
 
 
