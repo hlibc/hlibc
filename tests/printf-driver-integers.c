@@ -12,7 +12,7 @@ void testgvprintf(char *fmt, ...)
 	va_end(args);
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
 	char string[10] = { 's', 't', 'r', 'i', 'n', 'g', 0 };
 	size_t zutest = 1234567;

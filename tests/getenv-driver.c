@@ -2,11 +2,19 @@
 #include <string.h>
 #include <stdlib.h>
 
-int main (int argc, char *argv[], char *envp[])
-{ 
-	char *some = getenv("PATH");
-	if (some)
-		printf("%s\n", some);
+static void displayenv(char *envt)
+{
+	char *t = getenv(envt);
+	if (t)
+		printf("%s:\n%s\n", envt, t);
+}
 
+int main (void)
+{
+	displayenv("PATH");
+	displayenv("USER");
+	displayenv("HOME");
+	displayenv("PWD");
+	displayenv("DISPLAY");
 	return 0;
 }
