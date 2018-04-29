@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <limits.h>
 
-int main(void);
+int main(void)
 {
 	char string[1024];
         sprintf(string, "%ld", LONG_MAX);
