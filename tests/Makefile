@@ -1,32 +1,11 @@
-.PHONY: uninstall
-
-PREFIX ?= /bin/
-
-DESTDIR ?= ../
-
 CFLAGS += -Wall -Wextra
-
-OBJ = $(shell for i in *.c; do printf "%s\n" $${i%%.c} ; done)
-
-OBJ_TARG =  $(shell for i in *.c; do printf "%s\n" $(DESTDIR)/$(PREFIX)/$${i%%.c} ; done)
-
+SRCS = $(sort $(wildcard *.c))
+OBJ = $(SRCS:.c=.o)
 LDLIBS = -lm
 
 all: $(OBJ)
 
-install:
-
-	-@mkdir -p $(DESTDIR)/$(PREFIX)/
-	-@cp -a $(OBJ) $(DESTDIR)/$(PREFIX)/
-	-printf "%s\n" "rm $(OBJ_TARG)" > uninstall
-
-uninstall:
-
-	-chmod +x uninstall
-	-./uninstall
-
 clean:
 
-	$(RM) $(OBJ)
-	$(RM) uninstall
+	$(RM) $(OBJ) 
 
