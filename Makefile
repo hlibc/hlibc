@@ -23,14 +23,13 @@ LDFLAGS =
 CPPFLAGS =
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
 CFLAGS_ALL = $(CFLAGS_C99FSE)
-CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./fdlibm/internal -I./include -I./arch/$(ARCH)
+CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
 AR      = $(CROSS_COMPILE)ar
 RANLIB  = $(CROSS_COMPILE)ranlib
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
-EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
-#EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl ssp ssp_nonshared
+EMPTY_LIB_NAMES = m
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
