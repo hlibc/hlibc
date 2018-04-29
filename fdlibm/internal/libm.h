@@ -17,9 +17,7 @@
 #include <float.h>
 #include <math.h>
 #include <complex.h>
-
 #include "longdbl.h"
-
 #include "libc.h"
 
 union fshape {
