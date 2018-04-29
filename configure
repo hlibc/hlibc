@@ -21,14 +21,6 @@ Fine tuning of the installation directories:
 
 System types:
   --target=TARGET         configure to run on target TARGET [detected]
-  --host=HOST             same as --target
-
-Optional features:
-  --enable-debug          build with debugging information [disabled]
-  --enable-warnings       build with recommended warnings flags [disabled]
-  --enable-gcc-wrapper    build gcc-wrap toolchain wrapper [auto]
-  --disable-shared        inhibit building shared library [enabled]
-  --disable-static        inhibit building static library [enabled]
 
 Some influential environment variables:
   CC                      C compiler command [detected]
