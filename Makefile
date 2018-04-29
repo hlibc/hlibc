@@ -45,7 +45,7 @@ ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
 
-CFLAGS += -Wall -Wextra -fno-stack-protector
+#CFLAGS += -Wall -Wextra -fno-stack-protector
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
@@ -60,7 +60,7 @@ clean:
 	-$(RM) -f $(ALL_LIBS) lib/*.[ao] lib/*.so
 	-$(RM) -f $(ALL_TOOLS)
 	-$(RM) -f $(GENH) 
-	-$(RM) -f include/bits
+	-$(RM) -rf include/bits
 	-$(RM) -f config.mak
 	-$(RM) -rf usr logs
 	-$(RM) -f test_*
@@ -71,7 +71,9 @@ clean:
 
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
-	ln -sf ../arch/$(ARCH)/bits $@
+	#ln -sf ../arch/$(ARCH)/bits $@
+	cp -r arch/$(ARCH)/bits include/
+	
 
 include/bits/alltypes.h.sh: include/bits
 
