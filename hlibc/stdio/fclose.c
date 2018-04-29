@@ -8,7 +8,9 @@ int fclose(FILE *fp)
 		fp->len = 0;
 		fp->flags &= ~(_READ | _WRITE);
 		if (fp->pid == 0) {
-			close(fp->fd);
+			if (!(close(fp->fd))){
+				ret = EOF;
+			}
 		}
 		fp->pid = 0;
 	}

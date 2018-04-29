@@ -5,7 +5,6 @@
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
-
 prefix = /usr/local/hlibc
 includedir = $(prefix)/include
 libdir = $(prefix)/lib
@@ -13,48 +12,33 @@ syslibdir = /lib
 
 SRCS = $(sort $(wildcard musllibc/*/*.c hlibc/*/*.c fdlibm/*/*.c))
 OBJS = $(SRCS:.c=.o)
-LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
 IMPH = musllibc/internal/libc.h
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
-TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
-TEST_OBJ = $(TEST_SRCS:.c=) 
-CONTROL_SRCS = $(sort $(wildcard control/*.c) $(wildcard posix-utils-control/*.c) )
-CONTROL_OBJ = $(CONTROL_SRCS:.c=)
 
-LDFLAGS = 
+LDFLAGS =
 CPPFLAGS =
-#CFLAGS = -Os -pipe
-CFLAGS =
-CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
-
+CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
 CFLAGS_ALL = $(CFLAGS_C99FSE)
 CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./fdlibm/internal -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
-CFLAGS_ALL_SHARED = $(CFLAGS_ALL) -fPIC -DSHARED -O3
-
 AR      = $(CROSS_COMPILE)ar
 RANLIB  = $(CROSS_COMPILE)ranlib
-
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
-
 EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
+#EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl ssp ssp_nonshared
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
-#CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
-SHARED_LIBS = lib/libc.so
 TOOL_LIBS = lib/gcc-wrap.specs
-ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
 ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
-
-LDSO_PATHNAME = $(syslibdir)/ld-hlibc-$(ARCH).so.1
 
 all: $(ALL_LIBS) $(ALL_TOOLS)
 
@@ -69,18 +53,24 @@ clean:
 	-$(RM) -f $(ALL_LIBS) lib/*.[ao] lib/*.so
 	-$(RM) -f $(ALL_TOOLS)
 	-$(RM) -f $(GENH) 
-	-$(RM) -f include/bits
+	-$(RM) -rf include/bits
 	-$(RM) -f config.mak
 	-$(RM) -rf usr logs
 	-$(RM) -f test_*
 	-$(RM) -f tools/clang-wrap
-	-$(RM) -f $(TEST_OBJ) $(CONTROL_OBJ) 
 	-$(RM) -r control
 	-$(RM) -r posix-utils-control
+	-$(MAKE) cleantest
+
+cleantest:
+	cd tests/ && make clean
+	cd posix-utils/ && make clean
 
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
-	ln -sf ../arch/$(ARCH)/bits $@
+	#ln -sf ../arch/$(ARCH)/bits $@
+	cp -r arch/$(ARCH)/bits include/
+	
 
 include/bits/alltypes.h.sh: include/bits
 
@@ -92,17 +82,6 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 
 %.o: %.c $(GENH) $(IMPH)
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
-
-%.lo: $(ARCH)/%.s
-	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
-
-%.lo: %.c $(GENH) $(IMPH)
-	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
-
-lib/libc.so: $(LOBJS)
-	$(CC) $(CFLAGS_ALL_SHARED) $(LDFLAGS) -nostdlib -shared \
-	-Wl,-e,_start -Wl,-Bsymbolic-functions \
-	-Wl,-soname=libc.so -o $@ $(LOBJS) -lgcc
 
 lib/libc.a: $(OBJS)
 	$(RM) -f $@
@@ -136,22 +115,19 @@ $(DESTDIR)$(syslibdir):
 	install -d -m 755 $(DESTDIR)$(syslibdir)
 
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
-
-$(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(syslibdir)
-	ln -sf $(libdir)/libc.so $@ || true
-
-testing: $(TEST_OBJ)
-
-control: $(CONTROL_OBJ)
+	sh $< "$(includedir)" "$(libdir)"  > $@
 
 gcctests:
-	$(MAKE) CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	$(MAKE) LDLIBS="-lm" control 2>/dev/null
+	cd posix-utils/ && $(GCC_WRAP) make
+	cd posix-utils-control/ && make
+	cd tests/ && $(GCC_WRAP) make
+	cd control && make
 
 clangtests:
-	$(MAKE) $(CLANG_WRAP) testing
-	$(MAKE) LDLIBS="-lc -lm" control 2>/dev/null
+	cd posix-utils/ && $(CLANG_WRAP) make
+	cd posix-utils-control/ && make
+	cd tests/ && $(CLANG_WRAP) make
+	cd control && make
 
 gcctest:
 	./tools/build.sh gcctests gcc || exit 1
