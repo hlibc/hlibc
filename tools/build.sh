@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	ctype
+BASIC_TYPE="	malloc-huge
+		ctype
 		malloc-unique-pointer
 		getline-driver
 		atoi
@@ -53,9 +54,12 @@ for i in tests/*.c
 do ln "$i" "control/$(basename "$i")"
 done
 
+ln tests/Makefile control/Makefile
+
 for i in posix-utils/*.c
 do ln "$i" "posix-utils-control/$(basename "$i")"
 done
+ln posix-utils/Makefile posix-utils-control/Makefile
 
 # printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
 #  > "${SUF}/buildlog"

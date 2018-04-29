@@ -69,6 +69,10 @@ clean:
 	-$(RM) -r control
 	-$(RM) -r posix-utils-control
 
+cleantest:
+
+	rm -rf $(TEST_OBJ) $(CONTROL_OBJ) control/Makefile posix-utils-control/Makefile
+
 include/bits:
 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make gcctest|clangtest' to invoke the test suite" ; exit 1 ; }
 	#ln -sf ../arch/$(ARCH)/bits $@
@@ -126,7 +130,8 @@ control: $(CONTROL_OBJ)
 
 gcctests:
 	LDFLAGS="" CFLAGS="" LDLIBS="" make CC="" LDFLAGS="" CFLAGS="-static" LDLIBS="-lm" $(GCC_WRAP) testing
-	LDFLAGS="" CFLAGS="" LDLIBS="" make LDLIBS="-lm" control 2>/dev/null
+	#MAKEFLAGS="" LDFLAGS="" CFLAGS="" LDLIBS="" make LDLIBS="-lm" control 2>/dev/null
+	cd control && make
 
 clangtests:
 	LDFLAGS="" CFLAGS="" LDLIBS="" make $(CLANG_WRAP) testing
