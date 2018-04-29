@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     make -B include/bits # Workaround for nix on debian
   '';
 
-  patches = [ ./0001-ln-to-cp.patch ];
-
   doCheck = true;
 
   hardeningDisable = ["all"];

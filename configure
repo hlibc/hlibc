@@ -152,28 +152,6 @@ printf "%s\n" "$CC"
 test -n "$CC" || { echo "$0: cannot find a C compiler" ; exit 1 ; }
 
 #
-# Only build gcc-wrap wrapper if toolchain does not already target hlibc
-#
-if test -z "$wrapper" ; then
-printf "checking whether compiler is gcc... "
-if fnmatch '*gcc\ version*' "$("$CC" -v 2>&1)" ; then
-echo yes
-printf "checking whether to build gcc-wrap wrapper... "
-wrapper=yes
-while read line ; do
-case "$line" in */ld-hlibc-*) wrapper=no ;; esac
-done <<EOF
-$($CC -dumpspecs)
-EOF
-echo $wrapper
-else
-echo no
-fi
-fi
-
-
-
-#
 # Find the target architecture
 #
 printf "checking target system type... "
@@ -207,9 +185,8 @@ tryflag CFLAGS_C99FSE -frounding-math
 #
 # Setup basic default CFLAGS: debug, optimization, and -pipe
 #
-if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then :
-else
-tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
+if ! fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS"
+then	tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
 fi
 test "x$debug" = xyes && CFLAGS_AUTO="-g"
 tryflag CFLAGS_AUTO -pipe
@@ -217,11 +194,10 @@ tryflag CFLAGS_AUTO -pipe
 #
 # If debugging is disabled, omit bloated DWARF2 unwind tables & frame ptr
 #
-if fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS" ; then :
-else 
-tryflag CFLAGS_AUTO -fno-unwind-tables
-tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
-tryflag CFLAGS_AUTO -fomit-frame-pointer
+if ! fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS"
+then	tryflag CFLAGS_AUTO -fno-unwind-tables
+	tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
+	tryflag CFLAGS_AUTO -fomit-frame-pointer
 fi
 
 #
@@ -238,21 +214,21 @@ tryflag CFLAGS_AUTO -falign-jumps=1
 # We cheat and use i486 rather than i386 because i386 really does not
 # work anyway (issues with atomic ops).
 #
-if test "$ARCH" = "i386" ; then
-fnmatch '-march=*|*\ -march=*' "$CFLAGS" || tryflag CFLAGS_AUTO -march=i486
-fnmatch '-mtune=*|*\ -mtune=*' "$CFLAGS" || tryflag CFLAGS_AUTO -mtune=generic
+if test "$ARCH" = "i386"
+then	fnmatch '-march=*|*\ -march=*' "$CFLAGS" || tryflag CFLAGS_AUTO -march=i486
+	fnmatch '-mtune=*|*\ -mtune=*' "$CFLAGS" || tryflag CFLAGS_AUTO -mtune=generic
 fi
 
-if test "x$warnings" = xyes ; then
-tryflag CFLAGS_AUTO -Wall
-tryflag CFLAGS_AUTO -Wpointer-arith
-tryflag CFLAGS_AUTO -Wcast-align
-tryflag CFLAGS_AUTO -Wno-parentheses
-tryflag CFLAGS_AUTO -Wno-uninitialized
-tryflag CFLAGS_AUTO -Wno-missing-braces
-tryflag CFLAGS_AUTO -Wno-unused-value
-tryflag CFLAGS_AUTO -Wno-unused-but-set-variable
-tryflag CFLAGS_AUTO -Wno-unknown-pragmas
+if test "x$warnings" = xyes
+then	tryflag CFLAGS_AUTO -Wall
+	tryflag CFLAGS_AUTO -Wpointer-arith
+	tryflag CFLAGS_AUTO -Wcast-align
+	tryflag CFLAGS_AUTO -Wno-parentheses
+	tryflag CFLAGS_AUTO -Wno-uninitialized
+	tryflag CFLAGS_AUTO -Wno-missing-braces
+	tryflag CFLAGS_AUTO -Wno-unused-value
+	tryflag CFLAGS_AUTO -Wno-unused-but-set-variable
+	tryflag CFLAGS_AUTO -Wno-unknown-pragmas
 fi
 
 # Some patched GCC builds have these defaults messed up...
