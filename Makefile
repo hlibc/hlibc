@@ -16,8 +16,8 @@ GENH = include/bits/alltypes.h
 IMPH = musllibc/internal/libc.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
 
 LDFLAGS =
 CPPFLAGS =
