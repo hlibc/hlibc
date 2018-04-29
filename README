@@ -213,3 +213,7 @@ REFERENCES:
 	http://lolengine.net/blog/2011/12/21/better-function-approximations
     
 	http://lolengine.net/blog/2011/9/17/playing-with-the-cpu-pipeline
+
+	Russ Cox does really nice research on regular expressions:
+	https://swtch.com/~rsc/regexp/regexp1.html
+
