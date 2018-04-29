@@ -1,11 +1,6 @@
 #include <stdio.h>
-#include <limits.h>
-#include <stdint.h>
-#include <stdarg.h>
-#include <float.h>
 
-
-int main(int argc, char *argv[])
+int main(void)
 {
 	int c = 0;
 

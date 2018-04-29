@@ -7,11 +7,8 @@
 
 int main(void)
 {
-	void *a;
-	errno = ENOMEM;
 	char *s;
-	s = strerror(errno);
+	s = strerror(ENOMEM);
 	printf("%s\n", s);
-	
 	return 0;
 }

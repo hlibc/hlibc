@@ -39,7 +39,17 @@ int __safe_div(size_t a, size_t b, size_t *c)
 }
 
 int __safe_mul(size_t a, size_t b, size_t *c, size_t lim)
-{
+{ 
+	size_t tmp = 0;
+	__safe_div(lim, a, &tmp);
+	if (tmp >= b) {
+		*c = a * b;
+		return 0;
+	}
+	else if (tmp == 0) {
+		*c = 0;
+		return 0;
+	}
 	return -1;
 }
 

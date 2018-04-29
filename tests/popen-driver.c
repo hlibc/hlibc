@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <limits.h>
+
 int main(int argc, char *argv[])
 {
 	FILE *fp;
-	int status;
 	char path[4096];
 	char argstring[PATH_MAX*2] = { 0 };
 	size_t len = 0;

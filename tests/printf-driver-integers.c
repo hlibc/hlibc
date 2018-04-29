@@ -26,7 +26,7 @@ int main(void)
 	ssize_t t2[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
 	ssize_t t3[22] = {-0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20 };
 	double two = 2;
-	int arg = 5;
+
 	len = printf("This is a string containing only text to help debug the ret val of printf\n");
 	printf("%zu was the length of the last test\n", len);
 
@@ -45,9 +45,9 @@ int main(void)
 	len += printf("length of all strings so far %zu\n", len);
 	fflush(stdout);
 	
-	printf("gprintf:\n", arg);
+	printf("printf:\n");
 	printf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest);
-	printf("gsprintf:\n", arg);
+	printf("sprintf:\n");
 	len = sprintf(string1, format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest);
 	printf("%zu len of last sprintf\n", len);
 	len += sprintf(string1 + len, "decimal value of 987654	 %d\n", 987654);
@@ -61,7 +61,7 @@ int main(void)
 	len += sprintf(string1 + len, "The string literal \"987654\"     %s\n", "987654");
 	len += sprintf(string1 + len, "decimal value of -987654	%d\n", -987654);
 	printf("%zu len of last few sprintfs\n", len);
-	printf("gvprintf:\n");
+	printf("vprintf:\n");
 	testgvprintf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest);
 	printf("%f\n", 3.1); 
 	printf("P\n"); 
