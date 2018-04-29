@@ -107,9 +107,6 @@ tools/gcc-wrap-uninstalled: config.mak
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
 
-$(DESTDIR)$(libdir)/%.so: lib/%.so
-	install -D -m 755 $< $@
-
 $(DESTDIR)$(libdir)/%: lib/%
 	install -D -m 644 $< $@
 
