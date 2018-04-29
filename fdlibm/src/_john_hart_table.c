@@ -12,7 +12,7 @@ const double __john_hart_table[] = {
 
 double __h_cos(double x)
 {
-	/* from cos_121s */
+	/* 12.1 dec dig over [0, pi/2]. */
 	const double *c = __john_hart_table;
 	x *= x;
 	return (c[1] + x*(c[2]+ x*(c[3] + x*(c[4] + x*(c[5] + x*(c[6] + c[7]*x))))));
