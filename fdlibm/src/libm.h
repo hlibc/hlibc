@@ -127,29 +127,10 @@ do {                                                            \
   (d) = __u.value;                                              \
 } while (0)
 
-/* fdlibm kernel functions */
-
-int    __rem_pio2_large(double*,double*,int,int,int);
-
-int    __rem_pio2(double,double*);
+/* fdlibm kernel functions */ 
 double __sin_kernel(double,double,int);
 double __cos_kernel(double,double);
 double __tan_kernel(double,double,int);
-double __expo2(double);
-double complex __ldexp_cexp(double complex,int);
-
-int    __rem_pio2f(float,double*);
-float  __sin_kerneldf(double);
-float  __cos_kerneldf(double);
-float  __tan_kerneldf(double,int);
-float  __expo2f(float);
-float complex __ldexp_cexpf(float complex,int);
-
-int __rem_pio2l(long double, long double *);
-long double __sin_kernell(long double, long double, int);
-long double __cos_kernell(long double, long double);
-long double __tan_kernell_kernel(long double, long double, int);
-
 /* polynomial evaluation */
 long double __polevll(long double, const long double *, int);
 long double __p1evll(long double, const long double *, int);
@@ -166,22 +147,6 @@ long double __p1evll(long double, const long double *, int);
 #else
 #define STRICT_ASSIGN(type, lval, rval) ((lval) = (type)(rval))
 #endif
-
-
-/* complex */
-
-union dcomplex {
-	double complex z;
-	double a[2];
-};
-union fcomplex {
-	float complex z;
-	float a[2];
-};
-union lcomplex {
-	long double complex z;
-	long double a[2];
-};
 
 /* x + y*I is not supported properly by gcc */
 #define cpack(x,y) ((union dcomplex){.a={(x),(y)}}.z)
