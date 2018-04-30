@@ -92,8 +92,13 @@ $(EMPTY_LIBS):
 	$(RM) -f $@
 	$(AR) rc $@
 
+ifeq ($(ARCH),"aarch64")
 lib/%.o: crt/%.o
 	cp $< $@
+else
+lib/%.o: crt/aarch64-internal/%.o
+	cp $< $@
+endif
 
 tools/gcc-wrap: config.mak
 	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
