@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
-#include <fnmatch.h>
 #include <string.h>
-#include <getopt.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <pwd.h>
 #include <grp.h>
 
 int find_pattern(char *, size_t, size_t);

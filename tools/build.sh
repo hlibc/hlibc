@@ -1,6 +1,8 @@
 #!/bin/sh
 
-BASIC_TYPE="	malloc-unique-pointer
+BASIC_TYPE="	malloc-huge
+		ctype
+		malloc-unique-pointer
 		getline-driver
 		atoi
 		atol
@@ -52,9 +54,12 @@ for i in tests/*.c
 do ln "$i" "control/$(basename "$i")"
 done
 
+ln tests/Makefile control/Makefile
+
 for i in posix-utils/*.c
 do ln "$i" "posix-utils-control/$(basename "$i")"
 done
+ln posix-utils/Makefile posix-utils-control/Makefile
 
 # printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
 #  > "${SUF}/buildlog"
@@ -113,7 +118,7 @@ fi
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2> "${SUF}/testerr"
 cp "${SUF}/diff2" "${SUF}/diff3"
 mv "${SUF}/diff2" "${SUF}/diff4"
-./tests/rename-driver "${SUF}/diff3" "${SUF}/diff"5 2> "${SUF}/testerr"
+./tests/rename-driver "${SUF}/diff3" "${SUF}/diff5" 2> "${SUF}/testerr"
 checkifempty "${SUF}/diff4"
 if diff "${SUF}/diff4" "${SUF}/diff5" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small file of urandom data"

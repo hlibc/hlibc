@@ -14,7 +14,6 @@ static struct fl
 	void *a[COUNT];
 } builtin, *head;
 
-static int lock[2];
 
 void __funcs_on_exit()
 {
@@ -34,7 +33,7 @@ void __funcs_on_exit()
 	}
 }
 
-int __cxa_atexit(void (*func)(void *), void *arg, void *dso)
+int __cxa_atexit(void (*func)(void *), void *arg)
 {
 	int i;
 	/* Defer initialization of head so it can be in BSS */
@@ -66,5 +65,5 @@ static void call(void *p)
 
 int atexit(void (*func)(void))
 {
-	return __cxa_atexit(call, (void *)(uintptr_t)func, 0);
+	return __cxa_atexit(call, (void *)(uintptr_t)func);
 }

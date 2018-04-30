@@ -1,4 +1,8 @@
+#---------------------------------------------------------------
+# Configuration.
+
 variables:
+  REPO: hlibc/build   # (public) Docker image to use for testing
   AVER: "3.7"         # Alpine version (must exist on Docker Hub)
   DVER: "8"           # Debian version (must exist on Docker Hub)
   TB32:  "i386.zv.io" # unused; runs on Host (Docker)
@@ -13,56 +17,71 @@ variables:
 #    paths:
 #      - posix-utils/
 
-test:TB32-alpine-gcc:
-  image: i386/alpine:$AVER
+#---------------------------------------------------------------
+# 32-bit Alpine (Docker).
+
+TB32-alpine-gcc:
+  image: $REPO:a37g32
   script:
   - apk update && apk add make musl-dev gcc 
   - make gcctest
 
-test:TB32-alpine-clang:
-  image: i386/alpine:$AVER
+TB32-alpine-clang:
+  image: $REPO:a37c32
   script:
   - apk update && apk add make musl-dev clang binutils
   - make clangtest
-  
-test:TB64-alpine-gcc:
-  image: amd64/alpine:$AVER
+
+#---------------------------------------------------------------
+# 64-bit Alpine (Docker).
+
+TB64-alpine-gcc:
+  image: $REPO:a37g64
   script:
   - apk update && apk add make musl-dev gcc 
   - make gcctest
 
-test:TB64-alpine-clang:
-  image: amd64/alpine:$AVER
+TB64-alpine-clang:
+  image: $REPO:a37c64
   script:
   - apk update && apk add make musl-dev clang binutils
   - make clangtest
-  
-test:TB32-debian-gcc:
-  image: i386/debian:$DVER
+
+#---------------------------------------------------------------
+# 32-bit Debian (Docker).
+
+TB32-debian-gcc:
+  image: $REPO:d80g32
   script:
   - apt-get update && apt-get -y install make gcc
   - make gcctest
 
-test:TB32-debian-clang:
-  image: i386/debian:$DVER
+TB32-debian-clang:
+  image: $REPO:d80c32
   script:
   - apt-get update && apt-get -y install make clang binutils
   - make clangtest
-  
-test:TB64-debian-gcc:
-  image: amd64/debian:$DVER
+
+#---------------------------------------------------------------
+# 64-bit Debian (Docker).
+
+TB64-debian-gcc:
+  image: $REPO:d80g64
   script:
   - apt-get update && apt-get -y install make gcc
   - make gcctest
 
-test:TB64-debian-clang:
-  image: amd64/debian:$DVER
+TB64-debian-clang:
+  image: $REPO:d80c64
   script:
   - apt-get update && apt-get -y install make clang binutils
   - make clangtest
+
+#---------------------------------------------------------------
+# ARMv7 (Native).
 
 # Copy and test on *remote* ARMv7 machine
-test:TBA7-gcc:
+TBA7-gcc:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client rsync
@@ -74,7 +93,7 @@ test:TBA7-gcc:
   - rsync -r . $USER@$TBA7:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA7 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
 
-test:TBA7-clang:
+TBA7-clang:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client rsync
@@ -85,9 +104,12 @@ test:TBA7-clang:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$TBA7:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA7 "cd /home/$USER/$CI_COMMIT_SHA && make clangtest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
-  
+
+#---------------------------------------------------------------
+# ARMv8 (Native).
+
 # Copy and test on *remote* ARMv8 machine
-test:TBA8-gcc:
+TBA8-gcc:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client rsync
@@ -99,7 +121,7 @@ test:TBA8-gcc:
   - rsync -r . $USER@$TBA8:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA8 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
 
-test:TBA8-clang:
+TBA8-clang:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client rsync
@@ -110,9 +132,12 @@ test:TBA8-clang:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$TBA8:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TBA8 "cd /home/$USER/$CI_COMMIT_SHA && make clangtest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
-  
+
+#---------------------------------------------------------------
+# x86_64 [EPYC] (Native).
+
 # Copy and test on *remote* x86_64 machine
-test:TB64-gcc:
+TB64-gcc:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client rsync
@@ -124,7 +149,7 @@ test:TB64-gcc:
   - rsync -r . $USER@$TB64:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TB64 "cd /home/$USER/$CI_COMMIT_SHA && make gcctest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
   
-test:TB64-clang:
+TB64-clang:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client rsync
@@ -135,9 +160,12 @@ test:TB64-clang:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -r . $USER@$TB64:/home/$USER/$CI_COMMIT_SHA
   - ssh $USER@$TB64 "cd /home/$USER/$CI_COMMIT_SHA && make clangtest && cd - && rm -fr /home/$USER/$CI_COMMIT_SHA"
-  
+
+#---------------------------------------------------------------
+# 64-bit Nix (Emulated).
+
 # Copy and test on *remote* NODe machine
-test:NODe64-gcc:
+NODe64-gcc:
   image: alpine:$AVER # Host environment
   script:
   - apk update && apk add bash openssh-client
