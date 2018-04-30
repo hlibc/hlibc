@@ -56,17 +56,20 @@ static void _dprintf_buffer(int x, FILE *f)
 	}
 }
 
-int _populate(int incr, int x, int flag, char *s, FILE *fp)
+int _populate(size_t *incr, int x, int flag, char **s, FILE *fp)
 {
+	(*incr)++;
+
 	if (flag == 3) {
 		_dprintf_buffer(x, fp);
 	} else if (flag > 0) {
-		*s = x;
+		**s = x;
+		(*s)++;
 	}
 	else {
-		putc(x, fp);
+		return putc(x, fp);
 	}
-	return incr + 1;
+	return 0;
 }
 
 int _printf_inter(
@@ -105,7 +108,7 @@ int _printf_inter(
 		size_t precision = 6;
 		
 		if (*p != '%') {
-			i = _populate(i, *p, flag, str++, fp);
+			_populate(&i, *p, flag, &str, fp);
 			continue;
 		}
 		++p;
@@ -159,14 +162,14 @@ int _printf_inter(
 				// Handle characters
 			case 'c':
 				cval = va_arg(ap, int);
-				i = _populate(i, cval, flag, str++, fp);
+				_populate(&i, cval, flag, &str, fp);
 				break;
 			
 				// Handle strings
 			case 's':
 				sval = va_arg(ap, char *);
 				for (; *sval; sval++) {
-					i = _populate(i, *sval, flag, str++, fp);
+					_populate(&i, *sval, flag, &str, fp);
 				}
 				break;
 			
@@ -183,26 +186,26 @@ int _printf_inter(
 							convlen = precision;
 						}
 					}
-					i = _populate(i, converted[j], flag, str++, fp);
+					_populate(&i, converted[j], flag, &str, fp);
 				}
 				break;
 				
 			default:
-				i = _populate(i, *p, flag, str++, fp);
+				_populate(&i, *p, flag, &str, fp);
 				break;
 				
 			integer:
 				memset(converted, 0, 100);
 				convlen = __int2str(converted, lval, base);
 				for (j = 0; j < convlen; ++j) {
-					i = _populate(i, converted[j], flag, str++, fp);
+					_populate(&i, converted[j], flag, &str, fp);
 				}
 				base = 10;
 				break;
 			uinteger:
 				convlen = __uint2str(converted, zuval, base);
 				for (j = 0; j < convlen; ++j) {
-					i = _populate(i, converted[j], flag, str++, fp);
+					_populate(&i, converted[j], flag, &str, fp);
 				}
 				break;
 			}
@@ -214,7 +217,8 @@ int _printf_inter(
 		return i;
 	}
 	if (flag > 0) {
-		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
+		--i;
+		_populate(&i, '\0', flag, &str, fp); /* don't incr for '\0' */
 	}
 	if (flag == 0) {
 		_flushbuf(EOF, fp);
