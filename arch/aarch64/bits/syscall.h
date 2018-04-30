@@ -71,6 +71,19 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
         __asm_syscall("r"(x8), "0"(x0), "r"(x1), "r"(x2), "r"(x3), "r"(x4), "r"(x5));
 }
 
+/*
+static inline long __syscall5(long n, long a, long b, long c, long d, long e)
+{
+        long r2 = (__syscall)(n, a, b, c, d, e); 
+        return r2;
+}
+
+static inline long __syscall6(long n, long a, long b, long c, long d, long e, long f)
+{
+        long r2 = (__syscall)(n, a, b, c, d, e, f); 
+        return r2;
+}
+*/
 #define VDSO_USEFUL
 #define VDSO_CGT_SYM "__kernel_clock_gettime"
 #define VDSO_CGT_VER "LINUX_2.6.39"
@@ -701,7 +714,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_sendfile	187
 #define SYS_vfork	190
 #define SYS_ugetrlimit	191
-#define SYS_mmap2	192
+// #define SYS_mmap2	192 // undefine this to force aarch64 to use mmap
 #define SYS_truncate64	193
 #define SYS_ftruncate64	194
 #define SYS_stat64	195
