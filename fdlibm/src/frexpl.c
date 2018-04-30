@@ -28,7 +28,10 @@ long double frexpl(long double x, int *e)
 }
 
 #else
-
+double frexp(double x, int e)
+{
+	return x;
+}
 long double frexpl(long double x, int *e)
 {
 	return frexp(x, e);
