@@ -1,44 +1,142 @@
+long (__syscall)(long, ...);
+#define SYS_stat                    4106
+#define SYS_lstat                   4107
+#define SYS_fstat                   4108
+#define SYS_fstatat                 4293
 #define __SYSCALL_LL_E(x) \
 ((union { long long ll; long l[2]; }){ .ll = x }).l[0], \
 ((union { long long ll; long l[2]; }){ .ll = x }).l[1]
 #define __SYSCALL_LL_O(x) 0, __SYSCALL_LL_E((x))
 
+__attribute__((visibility("hidden")))
 long (__syscall)(long, ...);
+
+#define SYSCALL_RLIM_INFINITY (-1UL/2)
+
+#if _MIPSEL || __MIPSEL || __MIPSEL__
+#define __stat_fix(st) ((st),(void)0)
+#else
+#include <sys/stat.h>
+static inline void __stat_fix(long p)
+{
+	struct stat *st = (struct stat *)p;
+	st->st_dev >>= 32;
+	st->st_rdev >>= 32;
+}
+#endif
+
 
 static inline long __syscall0(long n)
 {
-	return (__syscall)(n);
+	register long r7 __asm__("$7");
+	register long r2 __asm__("$2");
+	__asm__ __volatile__ (
+		"addu $2,$0,%2 ; syscall"
+		: "=&r"(r2), "=r"(r7) : "ir"(n), "0"(r2), "1"(r7)
+		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+	return r7 ? -r2 : r2;
 }
 
 static inline long __syscall1(long n, long a)
 {
-	return (__syscall)(n, a);
+	register long r4 __asm__("$4") = a;
+	register long r7 __asm__("$7");
+	register long r2 __asm__("$2");
+	__asm__ __volatile__ (
+		"addu $2,$0,%2 ; syscall"
+		: "=&r"(r2), "=r"(r7) : "ir"(n), "0"(r2), "1"(r7),
+		  "r"(r4)
+		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+	return r7 ? -r2 : r2;
 }
 
 static inline long __syscall2(long n, long a, long b)
 {
-	return (__syscall)(n, a, b);
+	register long r4 __asm__("$4") = a;
+	register long r5 __asm__("$5") = b;
+	register long r7 __asm__("$7");
+	register long r2 __asm__("$2");
+	__asm__ __volatile__ (
+		"addu $2,$0,%2 ; syscall"
+		: "=&r"(r2), "=r"(r7) : "ir"(n), "0"(r2), "1"(r7),
+		  "r"(r4), "r"(r5)
+		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+	if (r7) return -r2;
+	long ret = r2;
+	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
+	return ret;
 }
 
 static inline long __syscall3(long n, long a, long b, long c)
 {
-	return (__syscall)(n, a, b, c);
+	register long r4 __asm__("$4") = a;
+	register long r5 __asm__("$5") = b;
+	register long r6 __asm__("$6") = c;
+	register long r7 __asm__("$7");
+	register long r2 __asm__("$2");
+	__asm__ __volatile__ (
+		"addu $2,$0,%2 ; syscall"
+		: "=&r"(r2), "=r"(r7) : "ir"(n), "0"(r2), "1"(r7),
+		  "r"(r4), "r"(r5), "r"(r6)
+		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+	if (r7) return -r2;
+	long ret = r2;
+	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
+	return ret;
 }
 
 static inline long __syscall4(long n, long a, long b, long c, long d)
 {
-	return (__syscall)(n, a, b, c, d);
+	register long r4 __asm__("$4") = a;
+	register long r5 __asm__("$5") = b;
+	register long r6 __asm__("$6") = c;
+	register long r7 __asm__("$7") = d;
+	register long r2 __asm__("$2");
+	__asm__ __volatile__ (
+		"addu $2,$0,%2 ; syscall"
+		: "=&r"(r2), "=r"(r7) : "ir"(n), "0"(r2), "1"(r7),
+		  "r"(r4), "r"(r5), "r"(r6)
+		: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+		  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+	if (r7) return -r2;
+	long ret = r2;
+	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
+	if (n == SYS_fstatat) __stat_fix(c);
+	return ret;
 }
 
 static inline long __syscall5(long n, long a, long b, long c, long d, long e)
 {
-	return (__syscall)(n, a, b, c, d, e);
+	//long r2 = (__syscall)(n, a, b, c, d, e);
+	long r2 = 0;
+	if (r2 > -4096UL) return r2;
+	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
+	if (n == SYS_fstatat) __stat_fix(c);
+	return r2;
 }
 
 static inline long __syscall6(long n, long a, long b, long c, long d, long e, long f)
 {
-	return (__syscall)(n, a, b, c, d, e, f);
+	//long r2 = (__syscall)(n, a, b, c, d, e, f);
+	long r2 = 0;
+	if (r2 > -4096UL) return r2;
+	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
+	if (n == SYS_fstatat) __stat_fix(c);
+	return r2;
 }
+long (__syscall)(long, ...);
+#define __SYSCALL_LL_E(x) \
+((union { long long ll; long l[2]; }){ .ll = x }).l[0], \
+((union { long long ll; long l[2]; }){ .ll = x }).l[1]
+#define __SYSCALL_LL_O(x) 0, __SYSCALL_LL_E((x))
+
+#define VDSO_USEFUL
+#define VDSO_CGT_SYM "__vdso_clock_gettime"
+#define VDSO_CGT_VER "LINUX_2.6"
 
 #define __socketcall(nm,a,b,c,d,e,f) syscall(SYS_##nm, a, b, c, d, e, f)
 #define __socketcall_cp(nm,a,b,c,d,e,f) syscall_cp(SYS_##nm, a, b, c, d, e, f)
@@ -107,7 +205,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_chroot                  4061
 #define __NR_ustat                   4062
 #define __NR_dup2                    4063
-#define __NR_getppid                 4064
+#define __NR_getppid                 40
 #define __NR_getpgrp                 4065
 #define __NR_setsid                  4066
 #define __NR_sigaction               4067
@@ -207,7 +305,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_sched_getscheduler      4161
 #define __NR_sched_yield             4162
 #define __NR_sched_get_priority_max  4163
-#define __NR_sched_get_priority_min  4164
+#define __NR_sched_get_priority_min  41
 #define __NR_sched_rr_get_interval   4165
 #define __NR_nanosleep               4166
 #define __NR_mremap                  4167
@@ -254,16 +352,16 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_getpmsg                 4208
 #define __NR_putpmsg                 4209
 #define __NR_mmap2                   4210
-#define __NR_truncate64              4211
-#define __NR_ftruncate64             4212
-#define __NR_stat64                  4213
-#define __NR_lstat64                 4214
-#define __NR_fstat64                 4215
+#define __NR_truncate              4211
+#define __NR_ftruncate             4212
+#define __NR_stat                  4213
+#define __NR_lstat                 4214
+#define __NR_fstat                 4215
 #define __NR_pivot_root              4216
 #define __NR_mincore                 4217
 #define __NR_madvise                 4218
-#define __NR_getdents64              4219
-#define __NR_fcntl64                 4220
+#define __NR_getdents              4219
+#define __NR_fcntl                 4220
 #define __NR_reserved221             4221
 #define __NR_gettid                  4222
 #define __NR_readahead               4223
@@ -280,7 +378,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_lremovexattr            4234
 #define __NR_fremovexattr            4235
 #define __NR_tkill                   4236
-#define __NR_sendfile64              4237
+#define __NR_sendfile              4237
 #define __NR_futex                   4238
 #define __NR_sched_setaffinity       4239
 #define __NR_sched_getaffinity       4240
@@ -298,8 +396,8 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_set_tid_address         4252
 #define __NR_restart_syscall         4253
 #define __NR_fadvise                 4254
-#define __NR_statfs64                4255
-#define __NR_fstatfs64               4256
+#define __NR_statfs                4255
+#define __NR_fstatfs               4256
 #define __NR_timer_create            4257
 #define __NR_timer_settime           4258
 #define __NR_timer_gettime           4259
@@ -307,7 +405,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_timer_delete            4261
 #define __NR_clock_settime           4262
 #define __NR_clock_gettime           4263
-#define __NR_clock_getres            4264
+#define __NR_clock_getres            42
 #define __NR_clock_nanosleep         4265
 #define __NR_tgkill                  4266
 #define __NR_utimes                  4267
@@ -381,7 +479,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_recvmmsg                4335
 #define __NR_fanotify_init           4336
 #define __NR_fanotify_mark           4337
-#define __NR_prlimit64               4338
+#define __NR_prlimit               4338
 #define __NR_name_to_handle_at       4339
 #define __NR_open_by_handle_at       4340
 #define __NR_clock_adjtime           4341
@@ -404,7 +502,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_recvmmsg                4335
 #define __NR_fanotify_init           4336
 #define __NR_fanotify_mark           4337
-#define __NR_prlimit64               4338
+#define __NR_prlimit               4338
 #define __NR_name_to_handle_at       4339
 #define __NR_open_by_handle_at       4340
 #define __NR_clock_adjtime           4341
@@ -414,7 +512,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define __NR_process_vm_readv        4345
 #define __NR_process_vm_writev       4346
 
-/* fixup legacy 32-bit-vs-lfs64 junk */
+/* fixup legacy 32-bit-vs-lfs junk */
 #undef __NR_fcntl
 #undef __NR_getdents
 #undef __NR_ftruncate
@@ -424,15 +522,15 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #undef __NR_lstat
 #undef __NR_statfs
 #undef __NR_fstatfs
-#define __NR_fcntl __NR_fcntl64
-#define __NR_getdents __NR_getdents64
-#define __NR_ftruncate __NR_ftruncate64
-#define __NR_truncate __NR_truncate64
-#define __NR_stat __NR_stat64
-#define __NR_fstat __NR_fstat64
-#define __NR_lstat __NR_lstat64
-#define __NR_statfs __NR_statfs64
-#define __NR_fstatfs __NR_fstatfs64
+#define __NR_fcntl __NR_fcntl
+#define __NR_getdents __NR_getdents
+#define __NR_ftruncate __NR_ftruncate
+#define __NR_truncate __NR_truncate
+#define __NR_stat __NR_stat
+#define __NR_fstat __NR_fstat
+#define __NR_lstat __NR_lstat
+#define __NR_statfs __NR_statfs
+#define __NR_fstatfs __NR_fstatfs
 
 
 /* Repeated with SYS_ prefix */
@@ -500,7 +598,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_chroot                  4061
 #define SYS_ustat                   4062
 #define SYS_dup2                    4063
-#define SYS_getppid                 4064
+#define SYS_getppid                 40
 #define SYS_getpgrp                 4065
 #define SYS_setsid                  4066
 #define SYS_sigaction               4067
@@ -600,7 +698,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_sched_getscheduler      4161
 #define SYS_sched_yield             4162
 #define SYS_sched_get_priority_max  4163
-#define SYS_sched_get_priority_min  4164
+#define SYS_sched_get_priority_min  41
 #define SYS_sched_rr_get_interval   4165
 #define SYS_nanosleep               4166
 #define SYS_mremap                  4167
@@ -647,16 +745,16 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_getpmsg                 4208
 #define SYS_putpmsg                 4209
 #define SYS_mmap2                   4210
-#define SYS_truncate64              4211
-#define SYS_ftruncate64             4212
-#define SYS_stat64                  4213
-#define SYS_lstat64                 4214
-#define SYS_fstat64                 4215
+#define SYS_truncate              4211
+#define SYS_ftruncate             4212
+#define SYS_stat                  4213
+#define SYS_lstat                 4214
+#define SYS_fstat                 4215
 #define SYS_pivot_root              4216
 #define SYS_mincore                 4217
 #define SYS_madvise                 4218
-#define SYS_getdents64              4219
-#define SYS_fcntl64                 4220
+#define SYS_getdents              4219
+#define SYS_fcntl                 4220
 #define SYS_reserved221             4221
 #define SYS_gettid                  4222
 #define SYS_readahead               4223
@@ -673,7 +771,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_lremovexattr            4234
 #define SYS_fremovexattr            4235
 #define SYS_tkill                   4236
-#define SYS_sendfile64              4237
+#define SYS_sendfile              4237
 #define SYS_futex                   4238
 #define SYS_sched_setaffinity       4239
 #define SYS_sched_getaffinity       4240
@@ -691,8 +789,8 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_set_tid_address         4252
 #define SYS_restart_syscall         4253
 #define SYS_fadvise                 4254
-#define SYS_statfs64                4255
-#define SYS_fstatfs64               4256
+#define SYS_statfs                4255
+#define SYS_fstatfs               4256
 #define SYS_timer_create            4257
 #define SYS_timer_settime           4258
 #define SYS_timer_gettime           4259
@@ -700,7 +798,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_timer_delete            4261
 #define SYS_clock_settime           4262
 #define SYS_clock_gettime           4263
-#define SYS_clock_getres            4264
+#define SYS_clock_getres            42
 #define SYS_clock_nanosleep         4265
 #define SYS_tgkill                  4266
 #define SYS_utimes                  4267
@@ -774,7 +872,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_recvmmsg                4335
 #define SYS_fanotify_init           4336
 #define SYS_fanotify_mark           4337
-#define SYS_prlimit64               4338
+#define SYS_prlimit               4338
 #define SYS_name_to_handle_at       4339
 #define SYS_open_by_handle_at       4340
 #define SYS_clock_adjtime           4341
@@ -797,7 +895,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_recvmmsg                4335
 #define SYS_fanotify_init           4336
 #define SYS_fanotify_mark           4337
-#define SYS_prlimit64               4338
+#define SYS_prlimit               4338
 #define SYS_name_to_handle_at       4339
 #define SYS_open_by_handle_at       4340
 #define SYS_clock_adjtime           4341
@@ -807,7 +905,8 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_process_vm_readv        4345
 #define SYS_process_vm_writev       4346
 
-/* fixup legacy 32-bit-vs-lfs64 junk */
+/* fixup legacy 32-bit-vs-lfs junk */
+/*
 #undef SYS_fcntl
 #undef SYS_getdents
 #undef SYS_ftruncate
@@ -817,12 +916,16 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #undef SYS_lstat
 #undef SYS_statfs
 #undef SYS_fstatfs
-#define SYS_fcntl SYS_fcntl64
-#define SYS_getdents SYS_getdents64
-#define SYS_ftruncate SYS_ftruncate64
-#define SYS_truncate SYS_truncate64
-#define SYS_stat SYS_stat64
-#define SYS_fstat SYS_fstat64
-#define SYS_lstat SYS_lstat64
-#define SYS_statfs SYS_statfs64
-#define SYS_fstatfs SYS_fstatfs64
+#define SYS_fcntl SYS_fcntl
+#define SYS_getdents SYS_getdents
+#define SYS_ftruncate SYS_ftruncate
+#define SYS_truncate SYS_truncate
+#define SYS_stat SYS_stat
+#define SYS_fstat SYS_fstat
+#define SYS_lstat SYS_lstat
+#define SYS_statfs SYS_statfs
+#define SYS_fstatfs SYS_fstatfs
+
+*/
+
+long (__syscall)(long, ...);
