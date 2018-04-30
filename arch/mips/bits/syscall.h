@@ -108,11 +108,13 @@ static inline long __syscall4(long n, long a, long b, long c, long d)
 	if (n == SYS_fstatat) __stat_fix(c);
 	return ret;
 }
+/*
+	syscall5 and syscall6 both depend on assembly.s for now
+*/
 
 static inline long __syscall5(long n, long a, long b, long c, long d, long e)
-{
-	//long r2 = (__syscall)(n, a, b, c, d, e);
-	long r2 = 0;
+{ 
+	long r2 = (__syscall)(n, a, b, c, d, e);
 	if (r2 > -4096UL) return r2;
 	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
 	if (n == SYS_fstatat) __stat_fix(c);
@@ -120,9 +122,8 @@ static inline long __syscall5(long n, long a, long b, long c, long d, long e)
 }
 
 static inline long __syscall6(long n, long a, long b, long c, long d, long e, long f)
-{
-	//long r2 = (__syscall)(n, a, b, c, d, e, f);
-	long r2 = 0;
+{ 
+	long r2 = (__syscall)(n, a, b, c, d, e, f);
 	if (r2 > -4096UL) return r2;
 	if (n == SYS_stat || n == SYS_fstat || n == SYS_lstat) __stat_fix(b);
 	if (n == SYS_fstatat) __stat_fix(c);
