@@ -1,8 +1,20 @@
 
+__asm__(
+".text \n"
+".global " "_start" "\n"
+".type " "_start" ",%function\n"
+"_start" ":\n"
+"       mov x29, #0\n"
+"       mov x30, #0\n"
+"       mov x0, sp\n"
+".weak _DYNAMIC\n"
+".hidden _DYNAMIC\n"
+"       adrp x1, _DYNAMIC\n"
+"       add x1, x1, #:lo12:_DYNAMIC\n"
+"       and sp, x0, #-16\n"
+"       b " "_start" "_c\n"
+);
 
-#define START "_start"
-
-#include "crt_arch.h"
 
 int main();
 void _init() __attribute__((weak));
