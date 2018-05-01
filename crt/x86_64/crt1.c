@@ -3,12 +3,12 @@ void __attribute__((weak)) _fini(void);
 
 void _start()
 {
-	int (*__main)(int, char **, char **);
-	long __argc;
-	char **__argv;
-	int (*__init)(int, char **, char **);
-	void (*__fini)(void);
-	void (*__ldso_fini)(void);
+	register int (*__main)(int, char **, char **) __asm__("rdi");
+	register long __argc                          __asm__("rsi");
+	register char **__argv                        __asm__("rdx");
+	register int (*__init)(int, char **, char **) __asm__("rcx");
+	register void (*__fini)(void)                 __asm__("r8");
+	register void (*__ldso_fini)(void)            __asm__("r9");
 	
 	__asm__ __volatile__
 		("xor  %%rbp , %%rbp \n" /* rbp:undefined -> mark as zero 0 (ABI) */
@@ -24,6 +24,9 @@ void _start()
 		   "=r" (__argv),
 		   "=r" (__init),
 		   "=r" (__fini),
-		   "=r" (__ldso_fini));
+		   "=r" (__ldso_fini)
+		 );
 	__libc_start_main(__main, __argc, __argv, __init, __fini, __ldso_fini);
+
+	for(;;);
 }
