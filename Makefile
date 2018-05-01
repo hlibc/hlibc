@@ -77,6 +77,9 @@ include/bits/alltypes.h.sh: include/bits
 include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
 
+%.o: $(ARCH)/%.c
+	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
+
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
