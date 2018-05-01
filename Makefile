@@ -92,11 +92,11 @@ $(EMPTY_LIBS):
 	$(RM) -f $@
 	$(AR) rc $@
 
-ifeq ($(ARCH),"aarch64")
-lib/%.o: crt/%.o
+ifeq ($(ARCH),aarch64)
+lib/%.o: crt/aarch64-internal/%.o
 	cp $< $@
 else
-lib/%.o: crt/aarch64-internal/%.o
+lib/%.o: crt/%.o
 	cp $< $@
 endif
 

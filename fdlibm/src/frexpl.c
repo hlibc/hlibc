@@ -8,6 +8,10 @@
 
 long double frexpl(long double x, int *e)
 {
+	/*
+		aarch64 defines LDBL_MANT_DIG 113 ergo does not use frexpl().
+		It instead uses frexp() in place of it. -cmg
+	*/
 	union { long double ld; uint16_t hw[5]; } y = { x };
 	int ee = y.hw[4]&0x7fff;
 
@@ -28,13 +32,8 @@ long double frexpl(long double x, int *e)
 }
 
 #else
-double frexp(double x, int e)
-{
-	return x;
-}
 long double frexpl(long double x, int *e)
 {
 	return frexp(x, e);
 }
-
 #endif
