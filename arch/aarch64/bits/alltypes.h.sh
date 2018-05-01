@@ -19,7 +19,7 @@ union \1 \2;\
 //TYPEDEF unsigned size_t;
 //TYPEDEF int ssize_t;
 //TYPEDEF long ptrdiff_t;
-TYPEDEF unsiged long long size_t
+TYPEDEF unsigned long long size_t
 TYPEDEF long ssize_t
 TYPEDEF long long ptrdiff_t;
 
