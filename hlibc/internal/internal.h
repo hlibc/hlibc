@@ -85,4 +85,8 @@ int fmt_fp(char *, long double, int, int, int, int);
 /* safe arithmetic */
 size_t _safe_multiply(size_t, size_t, size_t);
 size_t _safe_division(size_t, size_t);
+size_t _safe_addition(size_t, size_t, size_t);
+size_t _safe_upow(size_t, size_t);
+/* internal __errno_table */
+extern char *__errno_table[];
 #endif

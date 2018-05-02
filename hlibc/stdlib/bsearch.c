@@ -1,8 +1,8 @@
-#include <glimits.h>
-#include <gstddef.h>
-#include <gstddef.h>
-#include <gstdlib.h>
-#include <gstring.h>
+#include <limits.h>
+#include <stddef.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* Copyright (c) 2017, Iain Hill */
 

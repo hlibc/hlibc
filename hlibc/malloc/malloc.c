@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "../internal/internal.h"
-#include "../../musllibc/internal/syscall.h"
+#include <stdint.h>
 #include <sys/mman.h>
 #include <errno.h>
 
@@ -76,10 +76,18 @@ object *find_free_object(object **last, size_t size)
 object *morecore(object *last, size_t size)
 {
 	object *o = NULL;
-	if ((o = mmap(o, size + sizeof(object), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0))
-	    == (void *)-1) {
-		return NULL;
+	int pt = PROT_READ | PROT_WRITE;
+	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
+	size_t sum = 0;
+
+	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
+		goto error;
 	}
+
+	if ((o = mmap(o, sum, pt, fs, -1, 0)) == (void *)-1) {
+		goto error;
+	}
+
 	if (last) {
 		last->next = o;
 	}
@@ -88,14 +96,16 @@ object *morecore(object *last, size_t size)
 	o->prev = last;
 	o->free = 0;
 	return o;
+
+	error:
+	errno = ENOMEM;
+	return NULL;
 }
+
 void *malloc(size_t size)
 {
 	object *o;
 	object *last;
-	//if (size <= 0) {
-	//	return NULL;
-	//}
 
 	if (!base) {
 		if (!(o = morecore(NULL, size))) {
@@ -149,19 +159,15 @@ void *realloc(void *ptr, size_t size)
 	return ret;
 }
 
-void *calloc(size_t nelem, size_t elsize)
+void *calloc(size_t nmemb, size_t size)
 {
-	size_t size = 0;
-	void *ptr;
-	size = _safe_multiply(nelem, elsize, (size_t)-1);
-	if (!(ptr = malloc(size))) {
+	void *o;
+	size = _safe_multiply(nmemb, size, (size_t)-1);
+	if (!(o = malloc(size))) {
 		return NULL;
 	}
-	else {
-		memset(ptr, 0, size);
-	}
-
-	return ptr;
+	memset(o, 0, size);
+	return o;
 }
 
 void _destroy_malloc()

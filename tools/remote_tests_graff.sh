@@ -1,5 +1,5 @@
-COMMAND='rm -rf hlibc ; git clone https://git.zv.io/me/hlibc/ ; cd hlibc ; make gcctest'
-MIPSCOMMAND='rm -rf hlibc-mips ; git clone https://git.zv.io/me/hlibc/ hlibc-mips ; cd hlibc-mips ; make gcctest'
+COMMAND='rm -rf hlibc ; git clone https://git.zv.io/r/hlibc/ ; cd hlibc ; make gcctest'
+MIPSCOMMAND='rm -rf hlibc-mips ; git clone https://git.zv.io/r/hlibc/ hlibc-mips ; cd hlibc-mips ; make gcctest'
 
 test_i386()
 {

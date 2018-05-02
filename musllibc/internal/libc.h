@@ -4,18 +4,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct __libc {
-	void *main_thread;
-	int threaded;
-	int secure;
+struct __libc { 
 	size_t *auxv;
 	int (*atexit)(void (*)(void));
 	void (*fini)(void);
 	void (*ldso_fini)(void);
-	volatile int threads_minus_1;
-	int canceldisable;
-	FILE *ofl_head;
-	int ofl_lock[2];
 };
 
 
@@ -40,20 +33,7 @@ extern struct __libc __libc ATTR_LIBC_VISIBILITY;
 extern struct __libc *__libc_loc(void) __attribute__((const));
 #define libc (*__libc_loc())
 
-#endif
-
-
-/* Designed to avoid any overhead in non-threaded processes */
-void __lock(volatile int *);
-void __unlock(volatile int *);
-int __lockfile(FILE *);
-void __unlockfile(FILE *);
-#define LOCK(x) (libc.threads_minus_1 ? (__lock(x),1) : ((void)(x),1))
-#define UNLOCK(x) (libc.threads_minus_1 ? (__unlock(x),1) : ((void)(x),1))
-
-void __synccall(void (*)(void *), void *);
-void __synccall_wait(void);
-int __setxid(int, int, int, int);
+#endif 
 
 extern char **__environ;
 #define environ __environ

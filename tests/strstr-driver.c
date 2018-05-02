@@ -34,4 +34,5 @@ int main(void)
 	parseurl(string1);
 	parseurl(string2);
 	parseurl(string3);
+	return 0;
 }

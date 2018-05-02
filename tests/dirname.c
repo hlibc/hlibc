@@ -3,7 +3,12 @@
 
 int main(int argc, char *argv[])
 {
-	char *str = dirname(argv[1]);
+	char *str;
+	if (argc < 2) { 
+		fprintf(stderr, "%s needs an argument\n", argv[0]);
+		return 1;
+	}
+	str = dirname(argv[1]);
 	printf("%s\n", str);
 	return 0;
 }

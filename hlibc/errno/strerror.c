@@ -1,9 +1,11 @@
-#include <gerrno.h>
-#include <gstring.h>
+#include <errno.h>
+#include <string.h>
+#include "../internal/internal.h"
 
-char *gstrerror(int errnum)
+char *strerror(int m)
 {
-	if (errnum > 0 && errnum < 128)
-		return _messages[errnum];
-	return _messages[0];
+	if (m < 133 && m > 0)
+		return __errno_table[m];
+	else
+		return "Error not known by hlibc";
 }
