@@ -1,19 +1,4 @@
-#include <errno.h>
-#include <fcntl.h>
-
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <sys/ioctl.h>
-#include <sys/resource.h>
-#include <sys/time.h>
-#include <sys/uio.h>
-#include <sys/utsname.h>
-#include <termios.h>
-#include <unistd.h>
-
+#include <stdarg.h>
 #include "syscall.h"
 #include "libc.h"
 #undef syscall

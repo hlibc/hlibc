@@ -29,7 +29,6 @@
 #include <time.h>
 #include <unistd.h>
 
-
 int access(const char *filename, int amode)
 {
 #ifdef	SYS_access
