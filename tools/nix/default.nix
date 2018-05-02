@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "configurePhase" "installPhase" ];
   checkPhase = ''
-    export CFLAGS="-g"
     make gcctest -j1
   '';
 
