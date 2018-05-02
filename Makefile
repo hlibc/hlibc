@@ -78,7 +78,7 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
 
 %.o: $(ARCH)/%.c
-	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
+	$(CC) $(CFLAGS_ALL_STATIC) -O2 -mpreferred-stack-boundary=3 -c -o $@ $<
 
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
