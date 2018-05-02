@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "configurePhase" "installPhase" ];
   checkPhase = ''
-    make gcctest
-    make -B include/bits # Workaround for nix on debian
+    export CFLAGS="-g"
+    make gcctest -j1
   '';
 
   doCheck = true;

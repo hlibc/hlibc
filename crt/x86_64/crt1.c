@@ -1,7 +1,12 @@
 void __attribute__((weak)) _init(int, char **, char **);
 void __attribute__((weak)) _fini(void);
 
-void _start()
+int __libc_start_main(
+	int (*main)(int, char **, char **), int argc, char **argv,
+	int (*init)(int, char **, char **), void (*fini)(void),
+	void (*ldso_fini)(void));
+
+void _start(void)
 {
 	register int (*__main)(int, char **, char **) __asm__("rdi");
 	register long __argc                          __asm__("rsi");
