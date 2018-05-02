@@ -63,9 +63,9 @@ int main(void)
 	printf("%zu len of last few sprintfs\n", len);
 	printf("vprintf:\n");
 	testgvprintf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest);
-	printf("%f\n", 3.1); 
-	printf("P\n"); 
-	printf("%f\n", two);
+
+
+
 	len += printf("%zu\n", (size_t)-1); 
 	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[0], t1[1],t1[2],t1[3],t1[4],t1[5],t1[6],t1[7],t1[8],t1[9],t1[10]);
 	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[11], t1[12],t1[13],t1[14],t1[15],t1[16],t1[17],t1[18],t1[19],t1[20]); 
