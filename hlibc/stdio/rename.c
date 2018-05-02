@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "syscall.h"
+#include <fcntl.h>
 
 int rename(const char *o, const char *n)
 {
