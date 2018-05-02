@@ -6,12 +6,17 @@
 
 int open(const char *filename, int flags, ...)
 {
+
 	mode_t mode;
 	va_list ap;
 	va_start(ap, flags);
 	mode = va_arg(ap, mode_t);
 	va_end(ap);
+#ifdef SYS_open
 	return syscall(SYS_open, filename, flags|O_LARGEFILE, mode);
-}
+#else
+	return syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
+#endif
 
+}
 
