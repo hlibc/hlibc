@@ -514,7 +514,7 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 #define SYS_fork	2
 #define SYS_read	3
 #define SYS_write	4
-#define SYS_open	5
+//#define SYS_open	5
 #define SYS_close	6
 #define SYS_creat	8
 #define SYS_link	9
