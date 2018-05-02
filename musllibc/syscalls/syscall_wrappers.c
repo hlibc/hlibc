@@ -1,18 +1,3 @@
-#include <errno.h>
-#include <fcntl.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <sys/resource.h>
-#include <sys/time.h>
-#include <sys/uio.h>
-#include <sys/utsname.h>
-#include <termios.h>
-#include <unistd.h>
-#include "libc.h"
-#include "syscall.h"
 #include <dirent.h>
 #include "__dirent.h"
 #include <errno.h>
@@ -43,6 +28,7 @@
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
+
 
 int access(const char *filename, int amode)
 {
@@ -298,19 +284,7 @@ int truncate(const char *path, off_t length)
 {
 	return syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
 }
-/*
-#define _GNU_SOURCE
 
-unsigned ualarm(unsigned value, unsigned interval)
-{
-	struct itimerval it = {
-		.it_interval.tv_usec = interval,
-		.it_value.tv_usec = value
-	};
-	setitimer(ITIMER_REAL, &it, &it);
-	return it.it_value.tv_sec*1000000 + it.it_value.tv_usec;
-}
-*/
 int unlinkat(int fd, const char *path, int flag)
 {
 	return syscall(SYS_unlinkat, fd, path, flag);
@@ -346,8 +320,6 @@ int getdents(int fd, struct dirent *buf, size_t len)
 {
 	return syscall(SYS_getdents, fd, buf, len);
 }
-
-//#define _GNU_SOURCE
 
 DIR *opendir(const char *name)
 {
@@ -551,7 +523,6 @@ void __assert_fail(const char *expr, const char *file, int line, const char *fun
 	abort();
 }
 
-/* Ensure that at least 32 atexit handlers can be registered without malloc */
 #define COUNT 32
 
 static struct fl
@@ -620,11 +591,8 @@ void exit(int code)
 {
 	__funcs_on_exit();
 	fflush(NULL);
-
-	/* Destructor s**t is kept separate from atexit to avoid bloat */
 	if (libc.fini) libc.fini();
 	if (libc.ldso_fini) libc.ldso_fini();
-
 	_Exit(code);
 	for(;;);
 }
@@ -691,8 +659,6 @@ int feholdexcept(fenv_t *envp)
 	return 0;
 }
 
-/* Dummy functions for archs lacking fenv implementation */
-
 int feclearexcept(int mask)
 {
 	return 0;
@@ -743,7 +709,6 @@ int feupdateenv(const fenv_t *envp)
 	return 0;
 }
 
-/* stub for archs that lack dynamic linker support */
 /*
 void _start()
 {
@@ -771,8 +736,6 @@ void *sbrk(intptr_t inc)
 	if (inc && syscall(SYS_brk, cur+inc) != cur+inc) return (void *)-1;
 	return (void *)cur;
 }
-
-//#undef syscall
 
 pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
 {
@@ -822,13 +785,11 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	if (sizeof(off_t) > sizeof(long))
 		if (((long)off & 0xfff) | ((long)((unsigned long long)off>>(12 + 8*(sizeof(off_t)-sizeof(long))))))
 			start = (void *)-1;
-	// locking mechanism was here -cmg
 #ifdef SYS_mmap2
 	ret = (void *)syscall(SYS_mmap2, start, len, prot, flags, fd, off>>12);
 #else
 	ret = (void *)syscall(SYS_mmap, start, len, prot, flags, fd, off);
 #endif
-	// locking mechanism was here -cmg
 	return ret;
 }
 
@@ -940,7 +901,6 @@ int execv(const char *path, char *const argv[])
 
 int execve(const char *path, char *const argv[], char *const envp[])
 {
-	/* do we need to use environ if envp is null? */
 	return syscall(SYS_execve, path, argv, envp);
 }
 
