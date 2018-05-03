@@ -13,7 +13,7 @@ syslibdir = /lib
 SRCS = $(sort $(wildcard musllibc/*/*.c hlibc/*/*.c fdlibm/*/*.c))
 OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
-IMPH = musllibc/internal/libc.h
+
 
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
@@ -80,7 +80,7 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
-%.o: %.c $(GENH) $(IMPH)
+%.o: %.c $(GENH)
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
 lib/libc.a: $(OBJS)

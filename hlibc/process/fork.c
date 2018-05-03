@@ -1,14 +1,13 @@
-#include <unistd.h>
-#include "syscall.h"
-#include "libc.h"
-
+#include <unistd.h> 
+#include <signal.h>
+#include <syscall.h>
 pid_t fork(void)
 {
         pid_t ret;
 #ifdef SYS_fork
-        ret = __syscall(SYS_fork);
+        ret = syscall(SYS_fork);
 #else
-        ret = __syscall(SYS_clone, SIGCHLD, 0);
+        ret = syscall(SYS_clone, SIGCHLD, 0);
 #endif
 	return ret;
 }
