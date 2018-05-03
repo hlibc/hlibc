@@ -1,5 +1,4 @@
 #include <stdarg.h>
-#include "syscall.h"
 #include "libc.h"
 #undef syscall
 long syscall(long n, ...)

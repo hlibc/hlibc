@@ -1,5 +1,4 @@
 #include <dirent.h>
-#include "__dirent.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <fenv.h>
@@ -13,7 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "syscall.h"
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/mount.h>
@@ -28,6 +26,16 @@
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
+
+struct __DIR_s
+{
+        int fd;
+        off_t tell;
+        int buf_pos;
+        int buf_end;
+        int lock[2];
+        char buf[2048];
+};
 
 int access(const char *filename, int amode)
 {
