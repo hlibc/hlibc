@@ -3,6 +3,8 @@
 # Do not make changes here.
 #
 
+RELEASE = hlibc-0.1b
+
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
 prefix = /usr/local/hlibc
@@ -138,6 +140,18 @@ gcctest:
 
 clangtest:
 	./tools/build.sh clangtests clang || exit 1
+
+release:
+	cd ../ && cp -r hlibc $(RELEASE) 
+	cd ../ && rm -rf $(RELEASE)/.git
+	cd ../ && tar -cf $(RELEASE).tar.gz $(RELEASE) 
+	cd ../ && scp $(RELEASE).tar.gz cgraff1@shaula.csit.parkland.edu:public_html
+	printf "\t%s\n" "http://www.csit.parkland.edu/~cgraff1/$(RELEASE).tar.gz" >> README
+	./tools/text2html.sh README
+	git add README Makefile README.html
+	git commit -m "release $(RELEASE)"
+	git push origin master
+
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
