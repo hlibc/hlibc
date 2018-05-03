@@ -32,21 +32,18 @@ int populatetab(size_t inode)
 	return 1;
 }
 
-void destroytab()
+void destroytab(void)
 {
 	size_t i = 0;
-	while (i < HASH)
-	{
+	for (i = 0; i < HASH ; ++i) { 
 		free(hashtab[i]);
-		hashtab[i] = NULL;
-		++i;
 	}
 }
 
 void cutilerror(char *message, int i)
 {
-	//if ( i > 0 )
-		//perror("Error: ");
+	if ( i > 0 )
+		perror("Error: ");
 	fprintf(stderr, "%s", message);
 	if ( i > -1 )
 		exit (i);
