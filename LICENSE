@@ -1,8 +1,7 @@
-hlibc (hlibc/)
---------------
 hlibc is copyrighted under Copyright © 2016-2018 CM Graff et al and 
 licensed under the MIT license. All files without copyright comments in 
-this area are original works by CM Graff.
+this area are original works by CM Graff, the others are copyrighted by
+author, except for detailed below. 
 
 	Contributors to hlibc
 	---------------------
@@ -15,34 +14,32 @@ this area are original works by CM Graff.
 	Evgeniy Popov
 
 
-posix-utils (posix-utils/)
+hbox hbox/
 -----------
-Posix-utils is copyrighted Copyright © 2015-2018 CM Graff and MIT
+hbox is copyrighted Copyright © 2015-2018 CM Graff and MIT
 Licensed.
 
 
-Musl libc (muslibc/) 
---------------------
-musl as a whole is Copyright © 2005-2012 Rich Felker licensed under the  
-MIT license . All files in this area which have no copyright comments 
+musl libc   (src/syscalls/ and src/arch_needs_asm/)
+-------------------------------------------------
+The remmants of musl are Copyright © 2005-2012 Rich Felker licensed under
+the MIT license. All files in this area which have no copyright comments 
 are original works Copyright © 2005-2012 Rich Felker, 
 
 	Contributors to musllibc
 	------------------------
 	Rich Felker
-	Nicholas J. Kain (musllibc/*/x86_64/)
+	Nicholas J. Kain (x86_64 assembly)
 
 
-Mathematics Library (fdlibm/)
+Mathematics Library (src/libm/)
 -----------------------------
 The mathematics library was written at Sun laboratories and is licensed 
 with the MIT licence.
 
 	Contributors to Sun's fdlibm
 	----------------------------
-	Copyright © 1993,2004 Sun Microsystems or
-	Copyright © 2003-2011 David Schultz or
-	Copyright © 2003-2009 Steven G. Kargl or
+	Copyright © 1993,2004 Sun Microsystems
 	Copyright © 2003-2009 Bruce D. Evans
 
 

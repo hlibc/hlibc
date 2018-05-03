@@ -48,7 +48,7 @@ CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper --disable-shared
 
 mkdir -p "${SUF}"
 mkdir -p control
-mkdir -p posix-utils-control
+mkdir -p hbox-control
 
 for i in tests/*.c
 do ln "$i" "control/$(basename "$i")"
@@ -56,10 +56,10 @@ done
 
 ln tests/Makefile control/Makefile
 
-for i in posix-utils/*.c
-do ln "$i" "posix-utils-control/$(basename "$i")"
+for i in hbox/*.c
+do ln "$i" "hbox-control/$(basename "$i")"
 done
-ln posix-utils/Makefile posix-utils-control/Makefile
+ln hbox/Makefile hbox-control/Makefile
 
 # printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
 #  > "${SUF}/buildlog"

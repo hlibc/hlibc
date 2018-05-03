@@ -29,32 +29,11 @@ BUILDING:
 	hlibc only supports static linking at this time.
 
 
-STRUCTURE:
-----------
+		hbox/
+			A small busybox like set of POSIX utilities.
 
-	musllibc/
-		Source code original to the musl C library
-
-	hlibc/
-		Source code original to the hlibc C library
-
-	fdlibm/
-		Source code original to the Sun libm math library
-
-	tests/
-		Various test binaries
-
-	crt/
-		Crt stuff startup assembly code
-
-	include/
-		Header files.
-
-	arch/
-		Architecture specific header files
-
-	tools/
-		several tools including the gcc-wrap wrapper script
+		tests/
+			A set of C run time tests.
 
 
 AUTOMATIC TESTING:

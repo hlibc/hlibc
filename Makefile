@@ -10,7 +10,7 @@ includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
 
-SRCS = $(sort $(wildcard musllibc/*/*.c hlibc/*/*.c fdlibm/*/*.c))
+SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
@@ -58,12 +58,12 @@ clean:
 	-$(RM) -f test_*
 	-$(RM) -f tools/clang-wrap
 	-$(RM) -r control
-	-$(RM) -r posix-utils-control
+	-$(RM) -r hbox-control
 	-$(MAKE) cleantest
 
 cleantest:
 	cd tests/ && make clean
-	cd posix-utils/ && make clean
+	cd hbox/ && make clean
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
@@ -122,14 +122,14 @@ lib/gcc-wrap-uninstalled.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(PWD)/include" "$(PWD)/lib/"  > $@
 
 gcctests:
-	cd posix-utils/ && $(GCC_WRAP) make
-	cd posix-utils-control/ && make
+	cd hbox && $(GCC_WRAP) make
+	cd hbox-control/ && make
 	cd tests/ && $(GCC_WRAP) make
 	cd control && make
 
 clangtests:
-	cd posix-utils/ && $(CLANG_WRAP) make
-	cd posix-utils-control/ && make
+	cd hbox/ && $(CLANG_WRAP) make
+	cd hbox-control/ && make
 	cd tests/ && $(CLANG_WRAP) make
 	cd control && make
 
