@@ -26,6 +26,9 @@
 #include <time.h>
 #include <unistd.h>
 
+long __syscall_ret(unsigned long);
+
+
 #ifndef LIBC_H
 #define LIBC_H
 
