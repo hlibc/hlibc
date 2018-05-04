@@ -26,7 +26,7 @@
 #include <time.h>
 #include <unistd.h>
 
-long __syscall_ret(unsigned long);
+long syscall_ret(unsigned long);
 
 
 #ifndef LIBC_H
@@ -146,16 +146,16 @@ int dup2(int old, int new)
 {
 	int r;
 #ifdef SYS_dup2
-	while ((r=__syscall(SYS_dup2, old, new))==-EBUSY);
+	while ((r=syscall(SYS_dup2, old, new))==-EBUSY);
 #else
 	if (old==new) {
-		r = __syscall(SYS_fcntl, old, F_GETFD);
+		r = syscall(SYS_fcntl, old, F_GETFD);
 		if (r >= 0) return old;
 	} else {
-		while ((r=__syscall(SYS_dup3, old, new, 0))==-EBUSY);
+		while ((r=syscall(SYS_dup3, old, new, 0))==-EBUSY);
 	}
 #endif
-	return __syscall_ret(r);
+	return syscall_ret(r);
 }
 
 int dup(int fd)
@@ -701,7 +701,7 @@ int fcntl(int fd, int cmd, ...)
 	va_end(ap);
 	if (cmd == F_SETFL) arg |= O_LARGEFILE;
 	if (cmd == F_SETLKW) return syscall(SYS_fcntl, fd, cmd, arg);
-	if (cmd == F_GETOWN) return __syscall(SYS_fcntl, fd, cmd, arg);
+	if (cmd == F_GETOWN) return syscall(SYS_fcntl, fd, cmd, arg);
 	return syscall(SYS_fcntl, fd, cmd, arg);
 }
 
