@@ -3,7 +3,8 @@
 
 RELENG ?= hlibc-0.1b
 RELENG_MIR ?= http://www.csit.parkland.edu/~cgraff1/
-RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu:public_html
+RELENG_DIR ?= public_html
+RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
@@ -147,7 +148,8 @@ release:
 	cd ../ && cp -r hlibc $(RELENG) 
 	cd ../ && rm -rf $(RELENG)/.git
 	cd ../ && tar -cf $(RELENG).tar.gz $(RELENG) 
-	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH)
+	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH):$(RELENG_DIR)
+	ssh $(RELENG_SSH) -f 'cd $(RELENG_DIR) && md5sum $(RELENG).tar.gz >> CHECKSUMS'
 	git add README Makefile README.html
 	git commit -m "release $(RELENG)"
 	git push origin master

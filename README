@@ -178,6 +178,7 @@ RELENG:
 
 		make release RELENG="hlibc-0.1x" \
 		RELENG_MIR="http://mirror/" \
+		RELENG_DIR="public_html/"
 		RELENG_SSH="user@host:www"
 
 
