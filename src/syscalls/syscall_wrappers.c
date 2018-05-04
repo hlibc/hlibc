@@ -26,7 +26,7 @@
 #include <time.h>
 #include <unistd.h>
 
-long syscall_ret(unsigned long);
+long __syscall_ret(unsigned long);
 
 
 #ifndef LIBC_H
@@ -155,7 +155,7 @@ int dup2(int old, int new)
 		while ((r=syscall(SYS_dup3, old, new, 0))==-EBUSY);
 	}
 #endif
-	return syscall_ret(r);
+	return __syscall_ret(r);
 }
 
 int dup(int fd)
