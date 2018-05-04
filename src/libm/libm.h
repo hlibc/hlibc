@@ -156,5 +156,6 @@ long double __p1evll(long double, const long double *, int);
 int __rem_pio2_large(double *, double *, int, int, int);
 int __rem_pio2(double, double *);
 double floor(double);
-
+#define _HAS_HLIBC_MATH
+double h_cos(double);
 #endif
