@@ -153,4 +153,8 @@ long double __p1evll(long double, const long double *, int);
 #define cpackf(x,y) ((union fcomplex){.a={(x),(y)}}.z)
 #define cpackl(x,y) ((union lcomplex){.a={(x),(y)}}.z)
 
+int __rem_pio2_large(double *, double *, int, int, int);
+int __rem_pio2(double, double *);
+double floor(double);
+
 #endif

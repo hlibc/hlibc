@@ -26,15 +26,20 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/syscall.h>
+#include <sys/types.h>
+#include <sys/wait.h> 
+#include <stdint.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 long __syscall_ret(unsigned long);
 
-
-#ifndef LIBC_H
-#define LIBC_H
-
-#include <stdlib.h>
-#include <stdio.h>
+int brk(void *);
+void *sbrk(intptr_t);
 
 struct __libc {
         size_t *auxv;
@@ -43,7 +48,8 @@ struct __libc {
         void (*ldso_fini)(void);
 };
 
-
+#ifndef LIBC_H
+#define LIBC_H
 #if !defined(__PIC__) || 100*__GNUC__+__GNUC_MINOR__ >= 303 || defined(__PCC__) || defined(__TINYC__)
 
 #ifdef __PIC__
@@ -54,30 +60,19 @@ struct __libc {
 #else
 #define ATTR_LIBC_VISIBILITY
 #endif
-
 extern struct __libc __libc ATTR_LIBC_VISIBILITY;
 #define libc __libc
-
 #else
-
 #define USE_LIBC_ACCESSOR
 #define ATTR_LIBC_VISIBILITY
 extern struct __libc *__libc_loc(void) __attribute__((const));
 #define libc (*__libc_loc())
-
 #endif
-
 extern char **__environ;
 #define environ __environ
-
 #endif
-
-
 #ifndef _SYSCALL_H
 #define _SYSCALL_H
-
-
-
 #ifdef USE_LIBC_ACCESSOR
 struct __libc *__libc_loc()
 {
@@ -87,21 +82,10 @@ struct __libc *__libc_loc()
 #else
 struct __libc __libc;
 #endif
-
 #ifdef BROKEN_VISIBILITY
 __asm__(".hidden __libc");
 #endif
-
-/* This header is mostly useless leftover wrapper cruft */
-#include <sys/types.h>
-#include <sys/wait.h>
-
-#include <stdint.h>
-int brk(void *);
-void *sbrk(intptr_t);
-
 #define socketcall __socketcall
-
 #endif
 
 
@@ -1185,5 +1169,31 @@ int tcsetattr(int fd, int act, const struct termios *tio)
 int nanosleep(const struct timespec *req, struct timespec *rem)
 {
 	return __syscall(SYS_nanosleep, req, rem);
+}
+
+
+long __syscall_ret(unsigned long r)
+{
+        if (r > -4096UL) {
+                errno = -r;
+                return -1;
+        }
+        return r;
+}
+
+#undef syscall
+long syscall(long n, ...)
+{
+        va_list ap;
+        long a, b, c, d, e, f;
+        va_start(ap, n);
+        a=va_arg(ap, long);
+        b=va_arg(ap, long);
+        c=va_arg(ap, long);
+        d=va_arg(ap, long);
+        e=va_arg(ap, long);
+        f=va_arg(ap, long);
+        va_end(ap);
+        return __syscall_ret(syscall(n, a, b, c, d, e, f));
 }
 
