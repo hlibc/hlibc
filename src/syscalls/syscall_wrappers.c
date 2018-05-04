@@ -25,6 +25,7 @@
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/syscall.h>
 
 long __syscall_ret(unsigned long);
 
