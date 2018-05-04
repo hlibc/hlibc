@@ -25,7 +25,7 @@
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
-#include <sys/syscall.h>
+#include <sys/__syscall.h>
 
 long __syscall_ret(unsigned long);
 
@@ -95,7 +95,7 @@ __asm__(".hidden __libc");
 /* This header is mostly useless leftover wrapper cruft */
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/syscall.h>
+#include <sys/__syscall.h>
 #include <stdint.h>
 int brk(void *);
 void *sbrk(intptr_t);
@@ -118,42 +118,42 @@ struct __DIR_s
 int access(const char *filename, int amode)
 {
 #ifdef	SYS_access
-	return syscall(SYS_access, filename, amode);
+	return __syscall(SYS_access, filename, amode);
 #else
-	return syscall(SYS_faccessat, AT_FDCWD, filename, amode, 0);
+	return __syscall(SYS_faccessat, AT_FDCWD, filename, amode, 0);
 #endif
 }
 
 int chdir(const char *path)
 {
-	return syscall(SYS_chdir, path);
+	return __syscall(SYS_chdir, path);
 }
 
 int chown(const char *path, uid_t uid, gid_t gid)
 {
 #ifdef	SYS_chown
-	return syscall(SYS_chown, path, uid, gid);
+	return __syscall(SYS_chown, path, uid, gid);
 #else
-	return syscall(SYS_fchownat, AT_FDCWD, path, uid, gid, 0);
+	return __syscall(SYS_fchownat, AT_FDCWD, path, uid, gid, 0);
 #endif
 }
 
 int close(int fd)
 {
-	return syscall(SYS_close, fd);
+	return __syscall(SYS_close, fd);
 }
 
 int dup2(int old, int new)
 {
 	int r;
 #ifdef SYS_dup2
-	while ((r=syscall(SYS_dup2, old, new))==-EBUSY);
+	while ((r=__syscall(SYS_dup2, old, new))==-EBUSY);
 #else
 	if (old==new) {
-		r = syscall(SYS_fcntl, old, F_GETFD);
+		r = __syscall(SYS_fcntl, old, F_GETFD);
 		if (r >= 0) return old;
 	} else {
-		while ((r=syscall(SYS_dup3, old, new, 0))==-EBUSY);
+		while ((r=__syscall(SYS_dup3, old, new, 0))==-EBUSY);
 	}
 #endif
 	return __syscall_ret(r);
@@ -161,7 +161,7 @@ int dup2(int old, int new)
 
 int dup(int fd)
 {
-	return syscall(SYS_dup, fd);
+	return __syscall(SYS_dup, fd);
 }
 
 void _exit(int status)
@@ -171,35 +171,35 @@ void _exit(int status)
 
 int ftruncate(int fd, off_t length)
 {
-	return syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
+	return __syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
 }
 
 char *getcwd(char *buf, size_t size)
 {
 	char tmp[PATH_MAX];
 	if (!buf) buf = tmp, size = PATH_MAX;
-	if (syscall(SYS_getcwd, buf, size) < 0) return 0;
+	if (__syscall(SYS_getcwd, buf, size) < 0) return 0;
 	return buf == tmp ? strdup(buf) : buf;
 }
 
 gid_t getegid(void)
 {
-	return syscall(SYS_getegid);
+	return __syscall(SYS_getegid);
 }
 
 uid_t geteuid(void)
 {
-	return syscall(SYS_geteuid);
+	return __syscall(SYS_geteuid);
 }
 
 gid_t getgid(void)
 {
-	return syscall(SYS_getgid);
+	return __syscall(SYS_getgid);
 }
 
 int getgroups(int count, gid_t list[])
 {
-	return syscall(SYS_getgroups, count, list);
+	return __syscall(SYS_getgroups, count, list);
 }
 
 int gethostname(char *name, size_t len)
@@ -220,49 +220,49 @@ char *getlogin(void)
 
 pid_t getpgid(pid_t pid)
 {
-	return syscall(SYS_getpgid, pid);
+	return __syscall(SYS_getpgid, pid);
 }
 
 pid_t getpgrp(void)
 {
 #ifdef	SYS_getpgrp
-	return syscall(SYS_getpgrp);
+	return __syscall(SYS_getpgrp);
 #else
-	return syscall(SYS_getpgid, 0);
+	return __syscall(SYS_getpgid, 0);
 #endif
 }
 
 pid_t getpid(void)
 {
-	return syscall(SYS_getpid);
+	return __syscall(SYS_getpid);
 }
 
 pid_t getppid(void)
 {
-	return syscall(SYS_getppid);
+	return __syscall(SYS_getppid);
 }
 
 pid_t getsid(pid_t pid)
 {
-	return syscall(SYS_getsid, pid);
+	return __syscall(SYS_getsid, pid);
 }
 
 uid_t getuid(void)
 {
-	return syscall(SYS_getuid);
+	return __syscall(SYS_getuid);
 }
 
 int linkat(int fd1, const char *existing, int fd2, const char *new, int flag)
 {
-	return syscall(SYS_linkat, fd1, existing, fd2, new, flag);
+	return __syscall(SYS_linkat, fd1, existing, fd2, new, flag);
 }
 
 int link(const char *existing, const char *new)
 {
 #ifdef	SYS_link
-	return syscall(SYS_link, existing, new);
+	return __syscall(SYS_link, existing, new);
 #else
-	return syscall(SYS_linkat, AT_FDCWD, existing, new);
+	return __syscall(SYS_linkat, AT_FDCWD, existing, new);
 #endif
 }
 
@@ -270,16 +270,16 @@ off_t lseek(int fd, off_t offset, int whence)
 {
 #ifdef SYS__llseek
 	off_t result;
-	return syscall(SYS__llseek, fd, offset>>32, offset, &result, whence) ? -1 : result;
+	return __syscall(SYS__llseek, fd, offset>>32, offset, &result, whence) ? -1 : result;
 #else
-	return syscall(SYS_lseek, fd, offset, whence);
+	return __syscall(SYS_lseek, fd, offset, whence);
 #endif
 }
 
 int nice(int inc)
 {
 #ifdef SYS_nice
-	return syscall(SYS_nice, inc);
+	return __syscall(SYS_nice, inc);
 #else
 	return setpriority(PRIO_PROCESS, 0, getpriority(PRIO_PROCESS, 0)+inc);
 #endif
@@ -288,67 +288,67 @@ int nice(int inc)
 int pipe(int fd[2])
 {
 #ifdef	SYS_pipe
-	return syscall(SYS_pipe, fd);
+	return __syscall(SYS_pipe, fd);
 #else
-	return syscall(SYS_pipe2, fd, 0);
+	return __syscall(SYS_pipe2, fd, 0);
 #endif
 }
 
 ssize_t read(int fd, void *buf, size_t count)
 {
-	return syscall(SYS_read, fd, buf, count);
+	return __syscall(SYS_read, fd, buf, count);
 }
 
 ssize_t readlinkat(int fd, const char *path, char *buf, size_t bufsize)
 {
-	return syscall(SYS_readlinkat, fd, path, buf, bufsize);
+	return __syscall(SYS_readlinkat, fd, path, buf, bufsize);
 }
 
 ssize_t readlink(const char *restrict path, char *restrict buf, size_t bufsize)
 {
 #ifdef SYS_readlink
-	return syscall(SYS_readlink, path, buf, bufsize);
+	return __syscall(SYS_readlink, path, buf, bufsize);
 #else
-	return syscall(SYS_readlinkat, AT_FDCWD, path, buf, bufsize);
+	return __syscall(SYS_readlinkat, AT_FDCWD, path, buf, bufsize);
 #endif
 }
 
 ssize_t readv(int fd, const struct iovec *iov, int count)
 {
-	return syscall(SYS_readv, fd, iov, count);
+	return __syscall(SYS_readv, fd, iov, count);
 }
 
 int renameat(int oldfd, const char *old, int newfd, const char *new)
 {
-	return syscall(SYS_renameat, oldfd, old, newfd, new);
+	return __syscall(SYS_renameat, oldfd, old, newfd, new);
 }
 
 int rmdir(const char *path)
 {
 #ifdef SYS_rmdir
-	return syscall(SYS_rmdir, path);
+	return __syscall(SYS_rmdir, path);
 #else
-	return syscall(SYS_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
+	return __syscall(SYS_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
 #endif
 }
 
 int symlinkat(const char *existing, int fd, const char *new)
 {
-	return syscall(SYS_symlinkat, existing, fd, new);
+	return __syscall(SYS_symlinkat, existing, fd, new);
 }
 
 int symlink(const char *existing, const char *new)
 {
 #ifdef SYS_symlink
-	return syscall(SYS_symlink, existing, new);
+	return __syscall(SYS_symlink, existing, new);
 #else
-	return syscall(SYS_symlinkat, existing, AT_FDCWD, new);
+	return __syscall(SYS_symlinkat, existing, AT_FDCWD, new);
 #endif
 }
 
 void sync(void)
 {
-	syscall(SYS_sync);
+	__syscall(SYS_sync);
 }
 
 pid_t tcgetpgrp(int fd)
@@ -367,31 +367,31 @@ int tcsetpgrp(int fd, pid_t pgrp)
 
 int truncate(const char *path, off_t length)
 {
-	return syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
+	return __syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
 }
 
 int unlinkat(int fd, const char *path, int flag)
 {
-	return syscall(SYS_unlinkat, fd, path, flag);
+	return __syscall(SYS_unlinkat, fd, path, flag);
 }
 
 int unlink(const char *path)
 {
 #ifdef SYS_unlink
-	return syscall(SYS_unlink, path);
+	return __syscall(SYS_unlink, path);
 #else
-	return syscall(SYS_unlinkat, AT_FDCWD, path, 0);
+	return __syscall(SYS_unlinkat, AT_FDCWD, path, 0);
 #endif
 }
 
 ssize_t write(int fd, const void *buf, size_t count)
 {
-	return syscall(SYS_write, fd, buf, count);
+	return __syscall(SYS_write, fd, buf, count);
 }
 
 ssize_t writev(int fd, const struct iovec *iov, int count)
 {
-	return syscall(SYS_writev, fd, iov, count);
+	return __syscall(SYS_writev, fd, iov, count);
 }
 
 int closedir(DIR *dir)
@@ -403,7 +403,7 @@ int closedir(DIR *dir)
 
 int getdents(int fd, struct dirent *buf, size_t len)
 {
-	return syscall(SYS_getdents, fd, buf, len);
+	return __syscall(SYS_getdents, fd, buf, len);
 }
 
 DIR *opendir(const char *name)
@@ -414,7 +414,7 @@ DIR *opendir(const char *name)
 	if ((fd = open(name, O_RDONLY|O_DIRECTORY|O_CLOEXEC)) < 0)
 		return 0;
 	if (!(dir = calloc(1, sizeof *dir))) {
-		syscall(SYS_close, fd);
+		__syscall(SYS_close, fd);
 		return 0;
 	}
 	dir->fd = fd;
@@ -684,8 +684,8 @@ void exit(int code)
 
 void _Exit(int ec)
 {
-	syscall(SYS_exit_group, ec);
-	syscall(SYS_exit, ec);
+	__syscall(SYS_exit_group, ec);
+	__syscall(SYS_exit, ec);
 }
 
 int raise(int sig)
@@ -701,9 +701,9 @@ int fcntl(int fd, int cmd, ...)
 	arg = va_arg(ap, long);
 	va_end(ap);
 	if (cmd == F_SETFL) arg |= O_LARGEFILE;
-	if (cmd == F_SETLKW) return syscall(SYS_fcntl, fd, cmd, arg);
-	if (cmd == F_GETOWN) return syscall(SYS_fcntl, fd, cmd, arg);
-	return syscall(SYS_fcntl, fd, cmd, arg);
+	if (cmd == F_SETLKW) return __syscall(SYS_fcntl, fd, cmd, arg);
+	if (cmd == F_GETOWN) return __syscall(SYS_fcntl, fd, cmd, arg);
+	return __syscall(SYS_fcntl, fd, cmd, arg);
 }
 
 int openat(int fd, const char *filename, int flags, ...)
@@ -713,7 +713,7 @@ int openat(int fd, const char *filename, int flags, ...)
 	va_start(ap, flags);
 	mode = va_arg(ap, mode_t);
 	va_end(ap);
-	return syscall(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
+	return __syscall(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
 }
 
 int open(const char *filename, int flags, ...)
@@ -725,9 +725,9 @@ int open(const char *filename, int flags, ...)
 	mode = va_arg(ap, mode_t);
 	va_end(ap);
 #ifdef SYS_open
-	return syscall(SYS_open, filename, flags|O_LARGEFILE, mode);
+	return __syscall(SYS_open, filename, flags|O_LARGEFILE, mode);
 #else
-	return syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
+	return __syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
 #endif
 
 }
@@ -802,34 +802,34 @@ void _start()
 */
 int brk(void *end)
 {
-	return -(syscall(SYS_brk, end) != (unsigned long)end);
+	return -(__syscall(SYS_brk, end) != (unsigned long)end);
 }
 
 int chroot(const char *path)
 {
-	return syscall(SYS_chroot, path);
+	return __syscall(SYS_chroot, path);
 }
 
 int mount(const char *special, const char *dir, const char *fstype, unsigned long flags, const void *data)
 {
-	return syscall(SYS_mount, special, dir, fstype, flags, data);
+	return __syscall(SYS_mount, special, dir, fstype, flags, data);
 }
 
 void *sbrk(intptr_t inc)
 {
-	unsigned long cur = syscall(SYS_brk, 0);
-	if (inc && syscall(SYS_brk, cur+inc) != cur+inc) return (void *)-1;
+	unsigned long cur = __syscall(SYS_brk, 0);
+	if (inc && __syscall(SYS_brk, cur+inc) != cur+inc) return (void *)-1;
 	return (void *)cur;
 }
 
 pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
 {
-	return syscall(SYS_wait4, pid, status, options, usage);
+	return __syscall(SYS_wait4, pid, status, options, usage);
 }
 
 int getpriority(int which, id_t who)
 {
-	int ret = syscall(SYS_getpriority, which, who);
+	int ret = __syscall(SYS_getpriority, which, who);
 	if (ret < 0) return ret;
 	return 20-ret;
 }
@@ -841,27 +841,27 @@ int ioctl(int fd, int req, ...)
 	va_start(ap, req);
 	arg = va_arg(ap, void *);
 	va_end(ap);
-	return syscall(SYS_ioctl, fd, req, arg);
+	return __syscall(SYS_ioctl, fd, req, arg);
 }
 
 int setpriority(int which, id_t who, int prio)
 {
-	return syscall(SYS_getpriority, which, who, prio);
+	return __syscall(SYS_getpriority, which, who, prio);
 }
 
 int uname(struct utsname *uts)
 {
-	return syscall(SYS_uname, uts);
+	return __syscall(SYS_uname, uts);
 }
 
 int mlockall(int flags)
 {
-	return syscall(SYS_mlockall, flags);
+	return __syscall(SYS_mlockall, flags);
 }
 
 int mlock(const void *addr, size_t len)
 {
-	return syscall(SYS_mlock, addr, len);
+	return __syscall(SYS_mlock, addr, len);
 }
 
 void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
@@ -871,9 +871,9 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 		if (((long)off & 0xfff) | ((long)((unsigned long long)off>>(12 + 8*(sizeof(off_t)-sizeof(long))))))
 			start = (void *)-1;
 #ifdef SYS_mmap2
-	ret = (void *)syscall(SYS_mmap2, start, len, prot, flags, fd, off>>12);
+	ret = (void *)__syscall(SYS_mmap2, start, len, prot, flags, fd, off>>12);
 #else
-	ret = (void *)syscall(SYS_mmap, start, len, prot, flags, fd, off);
+	ret = (void *)__syscall(SYS_mmap, start, len, prot, flags, fd, off);
 #endif
 	return ret;
 }
@@ -883,28 +883,28 @@ int mprotect(void *addr, size_t len, int prot)
 	size_t start, end;
 	start = (size_t)addr & -PAGE_SIZE;
 	end = (size_t)((char *)addr + len + PAGE_SIZE-1) & -PAGE_SIZE;
-	return syscall(SYS_mprotect, start, end-start, prot);
+	return __syscall(SYS_mprotect, start, end-start, prot);
 }
 
 int msync(void *start, size_t len, int flags)
 {
-	return syscall(SYS_msync, start, len, flags);
+	return __syscall(SYS_msync, start, len, flags);
 }
 
 int munlockall(void)
 {
-	return syscall(SYS_munlockall);
+	return __syscall(SYS_munlockall);
 }
 
 int munlock(const void *addr, size_t len)
 {
-	return syscall(SYS_munlock, addr, len);
+	return __syscall(SYS_munlock, addr, len);
 }
 
 int munmap(void *start, size_t len)
 {
 	int ret;
-	ret = syscall(SYS_munmap, start, len);
+	ret = __syscall(SYS_munmap, start, len);
 	return ret;
 }
 
@@ -986,7 +986,7 @@ int execv(const char *path, char *const argv[])
 
 int execve(const char *path, char *const argv[], char *const envp[])
 {
-	return syscall(SYS_execve, path, argv, envp);
+	return __syscall(SYS_execve, path, argv, envp);
 }
 
 int execvp(const char *file, char *const argv[])
@@ -1043,20 +1043,20 @@ pid_t wait(int *status)
 
 int waitid(idtype_t type, id_t id, siginfo_t *info, int options)
 {
-	return syscall(SYS_waitid, type, id, info, options, 0);
+	return __syscall(SYS_waitid, type, id, info, options, 0);
 }
 
 pid_t waitpid(pid_t pid, int *status, int options)
 {
-	return syscall(SYS_wait4, pid, status, options, 0);
+	return __syscall(SYS_wait4, pid, status, options, 0);
 }
 
 int poll(struct pollfd *fds, nfds_t n, int timeout)
 {
 #ifdef SYS_poll
-	return syscall(SYS_poll, fds, n, timeout);
+	return __syscall(SYS_poll, fds, n, timeout);
 #else
-	return syscall(SYS_ppoll, fds, n, timeout>=0 ?
+	return __syscall(SYS_ppoll, fds, n, timeout>=0 ?
 		&((struct timespec){ .tv_sec = timeout/1000,
 		.tv_nsec = timeout%1000*1000000 }) : 0, 0, _NSIG/8);
 #endif
@@ -1067,45 +1067,45 @@ int pselect(int n, fd_set *rfds, fd_set *wfds, fd_set *efds, const struct timesp
 	long data[2] = { (long)mask, 8 };
 	struct timespec ts_tmp;
 	if (ts) ts_tmp = *ts;
-	return syscall(SYS_pselect6, n, rfds, wfds, efds, ts ? &ts_tmp : 0, data);
+	return __syscall(SYS_pselect6, n, rfds, wfds, efds, ts ? &ts_tmp : 0, data);
 }
 
 int select(int n, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *tv)
 {
-	return syscall(SYS_select, n, rfds, wfds, efds, tv);
+	return __syscall(SYS_select, n, rfds, wfds, efds, tv);
 }
 
 int chmod(const char *path, mode_t mode)
 { 
 #ifdef SYS_chmod
-	return syscall(SYS_chmod, path, mode);
+	return __syscall(SYS_chmod, path, mode);
 #else
-	return syscall(SYS_fchmodat, AT_FDCWD, path, mode);
+	return __syscall(SYS_fchmodat, AT_FDCWD, path, mode);
 #endif
 }
 
 int fchmodat(int fd, const char *path, mode_t mode, int flag)
 {
-	return syscall(SYS_fchmodat, fd, path, mode, flag);
+	return __syscall(SYS_fchmodat, fd, path, mode, flag);
 }
 
 int fchmod(int fd, mode_t mode)
 {
-	return syscall(SYS_fchmod, fd, mode);
+	return __syscall(SYS_fchmod, fd, mode);
 }
 
 int fstatat(int fd, const char *path, struct stat *buf, int flag)
 {
 #ifdef SYS_fstatat
-	return syscall(SYS_fstatat, fd, path, buf, flag);
+	return __syscall(SYS_fstatat, fd, path, buf, flag);
 #else
-	return syscall(SYS_newfstatat, fd, path, buf, flag);
+	return __syscall(SYS_newfstatat, fd, path, buf, flag);
 #endif
 }
 
 int fstat(int fd, struct stat *buf)
 {
-	return syscall(SYS_fstat, fd, buf);
+	return __syscall(SYS_fstat, fd, buf);
 }
 
 int futimens(int fd, const struct timespec times[2])
@@ -1121,15 +1121,15 @@ int lchmod(const char *path, mode_t mode)
 int lstat(const char *restrict path, struct stat *restrict buf)
 {
 #ifdef SYS_lstat
-        return syscall(SYS_lstat, path, buf);
+        return __syscall(SYS_lstat, path, buf);
 #else
-        return syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
+        return __syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
 #endif
 }
 
 int mkdirat(int fd, const char *path, mode_t mode)
 {
-	return syscall(SYS_mkdirat, fd, path, mode);
+	return __syscall(SYS_mkdirat, fd, path, mode);
 }
 
 int mkfifoat(int fd, const char *path, mode_t mode)
@@ -1144,26 +1144,26 @@ int mkfifo(const char *path, mode_t mode)
 
 int mknodat(int fd, const char *path, mode_t mode, dev_t dev)
 {
-	return syscall(SYS_mknodat, fd, path, mode, dev & 0xffff);
+	return __syscall(SYS_mknodat, fd, path, mode, dev & 0xffff);
 }
 
 int stat(const char *restrict path, struct stat *restrict buf)
 {
 #ifdef	SYS_stat
-	return syscall(SYS_stat, path, buf);
+	return __syscall(SYS_stat, path, buf);
 #else
-	return syscall(SYS_fstatat, AT_FDCWD, path, buf, 0);
+	return __syscall(SYS_fstatat, AT_FDCWD, path, buf, 0);
 #endif
 }
 
 mode_t umask(mode_t mode)
 {
-	return syscall(SYS_umask, mode);
+	return __syscall(SYS_umask, mode);
 }
 
 int utimensat(int fd, const char *path, const struct timespec times[2], int flags)
 {
-	return syscall(SYS_utimensat, fd, path, times, flags);
+	return __syscall(SYS_utimensat, fd, path, times, flags);
 }
 
 int tcgetattr(int fd, struct termios *tio)
@@ -1184,6 +1184,6 @@ int tcsetattr(int fd, int act, const struct termios *tio)
 
 int nanosleep(const struct timespec *req, struct timespec *rem)
 {
-	return syscall(SYS_nanosleep, req, rem);
+	return __syscall(SYS_nanosleep, req, rem);
 }
 
