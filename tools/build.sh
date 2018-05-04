@@ -31,7 +31,10 @@ checkifempty()
 {
 	if [ ! -s "$1" ]
 	then    printf "%s\n" "empty test file, something went wrong!!"
+		printf "%s\n" "Returning failure for the entire test suite!!"
+		RETVAL=1
 	fi
+	RETVAL=0
 }
 
 displaydiff()
@@ -61,14 +64,11 @@ do ln "$i" "hbox-control/$(basename "$i")"
 done
 ln hbox/Makefile hbox-control/Makefile
 
-# printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
-#  > "${SUF}/buildlog"
 CC="$2" make "-j${JOBS}"
 
 make install
 
 printf "==========COMPILING TESTS ===================================\n"
-#  > "${SUF}/testlog"
 make "$1"
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n"

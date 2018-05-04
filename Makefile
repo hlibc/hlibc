@@ -17,7 +17,6 @@ SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
-
 # test suite
 GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
 CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
@@ -137,10 +136,10 @@ clangtests:
 	cd control && make
 
 gcctest:
-	./tools/build.sh gcctests gcc || exit 1
+	./tools/build.sh gcctests gcc
 
 clangtest:
-	./tools/build.sh clangtests clang || exit 1
+	./tools/build.sh clangtests clang
 
 release:
 	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
@@ -153,7 +152,6 @@ release:
 	git add README Makefile README.html
 	git commit -m "release $(RELENG)"
 	git push origin master
-
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
