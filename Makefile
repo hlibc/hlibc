@@ -18,8 +18,8 @@ OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 
 LDFLAGS =
 CPPFLAGS =
