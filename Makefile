@@ -1,9 +1,9 @@
-# Use gmake
-# Use config.mak to override any of the following variables.
-# Do not make changes here.
-#
+# configure outputs to config.mak and this Makefile uses config.mak so
+# changes here may be lost. use GNU make
 
-RELEASE = hlibc-0.1b
+RELENG ?= hlibc-0.1b
+RELENG_MIR ?= http://www.csit.parkland.edu/~cgraff1/
+RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu:public_html
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
@@ -142,14 +142,14 @@ clangtest:
 	./tools/build.sh clangtests clang || exit 1
 
 release:
-	printf "\t%s\n" "http://www.csit.parkland.edu/~cgraff1/$(RELEASE).tar.gz" >> README
+	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
 	./tools/text2html.sh README
-	cd ../ && cp -r hlibc $(RELEASE) 
-	cd ../ && rm -rf $(RELEASE)/.git
-	cd ../ && tar -cf $(RELEASE).tar.gz $(RELEASE) 
-	cd ../ && scp $(RELEASE).tar.gz cgraff1@shaula.csit.parkland.edu:public_html
+	cd ../ && cp -r hlibc $(RELENG) 
+	cd ../ && rm -rf $(RELENG)/.git
+	cd ../ && tar -cf $(RELENG).tar.gz $(RELENG) 
+	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH)
 	git add README Makefile README.html
-	git commit -m "release $(RELEASE)"
+	git commit -m "release $(RELENG)"
 	git push origin master
 
 

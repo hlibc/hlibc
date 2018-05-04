@@ -80,8 +80,8 @@
 	and used as control mediums to diff the output of the same tests
 	compiled against hlibc:
 
-		control/ (links to tests/*.c)
-		posix-utils-control/ (linked to posix-utils/)
+		control/*.c (links to tests/*.c)
+		hbox-control/*.c (links to hbox/*.c/)
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>USING LLVM/CLANG:</strong></dl><pre></dl><pre>
@@ -134,7 +134,7 @@
 	One of the simplest ways to contribute to hlibc is to make patches
 	using `git'. They can be constructed as follows:
 
-		git add hlibc/path/to/work.c
+		git add src/path/to/work.c
 		git commit -m "something new added"
 		git format-patch -1 --stdout > work.patch
 
@@ -172,6 +172,16 @@
 	#hlibc on irc.freenode.net
 
 
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>RELENG:</strong></dl><pre></dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	A release can be engineered by running:
+
+		make release RELENG="hlibc-0.1x" \
+		RELENG_MIR="<a href="http://mirror/" \">http://mirror/" \</a>
+		RELENG_SSH="<a href="mailto:user@host:www"">user@host:www"</a>
+
+
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>REFERENCES:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
@@ -195,4 +205,5 @@
 	<a href="http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz">http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz</a>
 
 	<a href="http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz">http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz</a>
+
 </pre>
