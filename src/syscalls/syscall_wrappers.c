@@ -25,7 +25,7 @@
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
-#include <sys/__syscall.h>
+#include <sys/syscall.h>
 
 long __syscall_ret(unsigned long);
 
@@ -95,7 +95,7 @@ __asm__(".hidden __libc");
 /* This header is mostly useless leftover wrapper cruft */
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/__syscall.h>
+
 #include <stdint.h>
 int brk(void *);
 void *sbrk(intptr_t);
