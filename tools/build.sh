@@ -34,7 +34,6 @@ checkifempty()
 		printf "%s\n" "Returning failure for the entire test suite!!"
 		RETVAL=1
 	fi
-	RETVAL=0
 }
 
 displaydiff()

@@ -136,10 +136,10 @@ clangtests:
 	cd control && make
 
 gcctest:
-	./tools/build.sh gcctests gcc || exit 1
+	./tools/build.sh gcctests gcc
 
 clangtest:
-	./tools/build.sh clangtests clang || exit 1
+	./tools/build.sh clangtests clang
 
 release:
 	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
