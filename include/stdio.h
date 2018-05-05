@@ -75,7 +75,13 @@ int fflush(FILE *);
 int ferror(FILE *);
 
 /* remove */
-int remove(const char *pathname);
+int remove(const char *);
+
+/* rename */
+int rename(const char *, const char *);
+
+/* perror */
+void perror(const char *);
 
 /* opaque objects */
 FILE *stdin;

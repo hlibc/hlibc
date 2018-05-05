@@ -1,142 +1,115 @@
-# Use gmake
-# Use config.mak to override any of the following variables.
-# Do not make changes here.
-#
+# configure outputs to config.mak and this Makefile uses config.mak so
+# changes here may be lost. use GNU make
+
+RELENG ?= hlibc-0.1b
+RELENG_MIR ?= http://www.csit.parkland.edu/~cgraff1/
+RELENG_DIR ?= public_html
+RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
-
-prefix = /usr/local/musl
+prefix = /usr/local/hlibc
 includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
 
-SRCS = $(sort $(wildcard musllibc/*/*.c hlibc/*/*.c fdlibm/*/*.c))
+SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
-LOBJS = $(OBJS:.o=.lo)
 GENH = include/bits/alltypes.h
-IMPH = musllibc/internal/pthread_impl.h musllibc/internal/libc.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static" 
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
-TEST_SRCS = $(sort $(wildcard tests/*.c) $(wildcard posix-utils/*.c) )
-TEST_OBJ = $(TEST_SRCS:.c=) 
-CONTROL_SRCS = $(sort $(wildcard control/*.c))
-CONTROL_OBJ = $(CONTROL_SRCS:.c=)
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 
-LDFLAGS = 
+LDFLAGS =
 CPPFLAGS =
-#CFLAGS = -Os -pipe
-CFLAGS =
-CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc 
-
+CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
 CFLAGS_ALL = $(CFLAGS_C99FSE)
-CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./fdlibm/internal -I./include -I./arch/$(ARCH)
+CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
-CFLAGS_ALL_SHARED = $(CFLAGS_ALL) -fPIC -DSHARED -O3
-
 AR      = $(CROSS_COMPILE)ar
 RANLIB  = $(CROSS_COMPILE)ranlib
-
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
-
-EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
+EMPTY_LIB_NAMES = m
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
-#CRT_LIBS = lib/crt1.o lib/Scrt1.o lib/crti.o lib/crtn.o
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
-SHARED_LIBS = lib/libc.so
-TOOL_LIBS = lib/gcc-wrap.specs
-ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/gcc-wrap
+TOOL_LIBS = lib/gcc-wrap.specs  lib/gcc-wrap-uninstalled.specs
+ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+ALL_TOOLS = tools/gcc-wrap tools/gcc-wrap-uninstalled
 
 -include config.mak
 
-LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
-
-
-all: prepare_for_aarch64 $(ALL_LIBS) $(ALL_TOOLS)
+all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh
+	-./tools/create_wrappers.sh $(prefix) $(libdir)
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
-
-prepare_for_aarch64:
-
-ifeq ($(ARCH), aarch64)
-	-rm -f fdlibm/math/acosl.c
-	-rm -f fdlibm/math/asinl.c
-	-rm -f fdlibm/math/atan2l.c
-	-rm -f fdlibm/math/atanl.c
-endif
-
 clean:
-	-rm -f crt/*.o
-	-rm -f $(OBJS)
-	-rm -f $(LOBJS)
-	-rm -f $(ALL_LIBS) lib/*.[ao] lib/*.so
-	-rm -f $(ALL_TOOLS)
-	-rm -f $(GENH) 
-	-rm -f include/bits
-	-make clean_test
-	-rm -f config.mak
-	-rm -rf usr logs
-	-$(MAKE) clean_test 
-	-rm -f test_i386_log test_x86_64_log test_arm_log test_arm_clang_log
-	-rm -f tools/clang-wrap
-	-$(RM) $(TEST_OBJ) $(CONTROL_OBJ) 
+	-$(RM) -f crt/*.o
+	-$(RM) -f $(OBJS)
+	-$(RM) -f $(LOBJS)
+	-$(RM) -f $(ALL_LIBS) lib/*.[ao] lib/*.so
+	-$(RM) -f $(ALL_TOOLS)
+	-$(RM) -f $(GENH) 
+	-$(RM) -rf include/bits
+	-$(RM) -f config.mak
+	-$(RM) -rf usr logs
+	-$(RM) -f test_*
+	-$(RM) -f tools/clang-wrap
 	-$(RM) -r control
+	-$(RM) -r hbox-control
+	-$(MAKE) cleantest
+
+cleantest:
+	cd tests/ && make clean
+	cd hbox/ && make clean
 
 include/bits:
-	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make. Or run 'make test' to invoke the suite" ; exit 1 ; }
-	ln -sf ../arch/$(ARCH)/bits $@
+	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
+	@test "$(ARCH)" || echo "\tor use the ./configure script."
+	@test "$(ARCH)" || { echo "\tRun 'make gcctest|clangtest' to invoke the test suite\n\n" ; exit 1 ; }
+	cp -r arch/$(ARCH)/bits include/
+	
 
 include/bits/alltypes.h.sh: include/bits
 
 include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
 
+%.o: $(ARCH)/%.c
+	$(CC) $(CFLAGS_ALL_STATIC) -O2 $(STACK_ALIGNMENT) -c -o $@ $<
+
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
-%.o: %.c $(GENH) $(IMPH)
+%.o: %.c $(GENH)
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
-%.lo: $(ARCH)/%.s
-	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
-
-%.lo: %.c $(GENH) $(IMPH)
-	$(CC) $(CFLAGS_ALL_SHARED) -c -o $@ $<
-
-lib/libc.so: $(LOBJS)
-	$(CC) $(CFLAGS_ALL_SHARED) $(LDFLAGS) -nostdlib -shared \
-	-Wl,-e,_start -Wl,-Bsymbolic-functions \
-	-Wl,-soname=libc.so -o $@ $(LOBJS) -lgcc
-
 lib/libc.a: $(OBJS)
-	rm -f $@
+	$(RM) -f $@
 	$(AR) rc $@ $(OBJS)
 	$(RANLIB) $@
 
 $(EMPTY_LIBS):
-	rm -f $@
+	$(RM) -f $@
 	$(AR) rc $@
 
 lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	chmod +x $@
+
+tools/gcc-wrap-uninstalled: config.mak
+	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap-uninstalled.specs"\n' "$(PWD)/lib/" > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
-
-$(DESTDIR)$(libdir)/%.so: lib/%.so
-	install -D -m 755 $< $@
 
 $(DESTDIR)$(libdir)/%: lib/%
 	install -D -m 644 $< $@
@@ -148,28 +121,40 @@ $(DESTDIR)$(syslibdir):
 	install -d -m 755 $(DESTDIR)$(syslibdir)
 
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(includedir)" "$(libdir)" "$(LDSO_PATHNAME)" > $@
+	sh $< "$(includedir)" "$(libdir)"  > $@
 
-$(DESTDIR)$(LDSO_PATHNAME): $(DESTDIR)$(syslibdir)
-	ln -sf $(libdir)/libc.so $@ || true
-
-testing: $(TEST_OBJ)
-
-control: $(CONTROL_OBJ)
+lib/gcc-wrap-uninstalled.specs: tools/gcc-wrap.specs.sh config.mak
+	sh $< "$(PWD)/include" "$(PWD)/lib/"  > $@
 
 gcctests:
-	$(MAKE) $(GCC_WRAP) testing
-	LDLIBS="-lm -lbsd" $(MAKE) control 2>/dev/null
+	cd hbox && $(GCC_WRAP) make
+	cd hbox-control/ && make
+	cd tests/ && $(GCC_WRAP) make
+	cd control && make
 
 clangtests:
-	$(MAKE) $(CLANG_WRAP) testing
-	LDLIBS="-lm" $(MAKE) control 2>/dev/null
+	cd hbox/ && $(CLANG_WRAP) make
+	cd hbox-control/ && make
+	cd tests/ && $(CLANG_WRAP) make
+	cd control && make
 
 gcctest:
 	./tools/build.sh gcctests gcc
 
 clangtest:
 	./tools/build.sh clangtests clang
+
+release:
+	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
+	./tools/text2html.sh README
+	cd ../ && cp -r hlibc $(RELENG) 
+	cd ../ && rm -rf $(RELENG)/.git
+	cd ../ && tar -cf $(RELENG).tar.gz $(RELENG) 
+	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH):$(RELENG_DIR)
+	ssh $(RELENG_SSH) -f 'cd $(RELENG_DIR) && md5sum $(RELENG).tar.gz >> CHECKSUMS'
+	git add README Makefile README.html
+	git commit -m "release $(RELENG)"
+	git push origin master
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 

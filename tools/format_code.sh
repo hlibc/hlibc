@@ -45,7 +45,7 @@ command -v clang-tidy >/dev/null 2>&1 || { \
 # ======
 
 for f in $DIRS; do
-	echo "Fixing braces in '$f'..."
+	printf "%s\n" "Fixing braces in '$f'..."
 	find "$f" -type f -name "*.h" | xargs clang-tidy \
 		-fix-errors \
 		-checks="readability-braces-around-statements" \

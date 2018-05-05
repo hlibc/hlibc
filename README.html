@@ -5,7 +5,7 @@
 </pre><dd><hr/></dd><pre>
 
 	hlibc is an experimental libc targeted at the linux kernel's syscall
-	ABI. It is a standalone libc which supports i386, x86_64 and arm 
+	ABI. It is a standalone libc which supports the i386, x86_64 and arm 
 	architectures. hlibc can be compiled with either gcc or the llvm
 	clang compiler.
 
@@ -13,7 +13,7 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>BUILDING:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	hlibc contains a shell wrapper for gcc called gcc-wrap. This allows it 
+	hlibc contains a shell wrapper for gcc called `gcc-wrap`. This allows it 
 	to be easily installed and used from your home directory without the 
 	need for root privilege.
 
@@ -25,41 +25,16 @@
 	Test the installation:
 
 		cd /home/$USER/buildarea 
-		./bin/gcc-wrap tests/pow_test.c -static
+		./bin/gcc-wrap tests/pow_test.c
 
-	Make sure you are using the -static argument whenever you compile
-	anything using the gcc wrapper because hlibc only supports static
-	linking at this time. Or delete the libc.so stub in the lib/ directory
-	which will cause the compiler to statically link to the libc.a by
-	default. 
+	hlibc only supports static linking at this time.
 
 
-<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>STRUCTURE:</strong></dl><pre></dl><pre>
-</pre><dd><hr/></dd><pre>
+		<a href="hbox/">hbox/</a>
+			A small busybox like set of POSIX utilities.
 
-	<a href="musllibc/">musllibc/</a>
-		Source code original to the musl C library
-
-	<a href="hlibc/">hlibc/</a>
-		Source code original to the hlibc C library.
-
-	<a href="fdlibm/">fdlibm/</a>
-		Source code original to the Sun libm math library
-
-	<a href="tests/">tests/</a>
-		Various test binaries
-
-	<a href="crt/">crt/</a>
-		Crt stuff startup assembly code
-
-	<a href="include/">include/</a>
-		Header files.
-
-	<a href="arch/">arch/</a>
-		Architecture specific header files.
-
-	<a href="tools/">tools/</a>
-		several tools including the gcc-wrap wrapper script
+		<a href="tests/">tests/</a>
+			A set of C run time tests.
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>AUTOMATIC TESTING:</strong></dl><pre></dl><pre>
@@ -68,7 +43,7 @@
 	Use the following instructions to retrieve, build and run hlibc 
 	and the hlibc test suite.
 
-		git clone <a href="https://www.github.com/cmgraff/hlibc">https://www.github.com/cmgraff/hlibc</a>
+		git clone <a href="https://git.zv.io/r/hlibc.git">https://git.zv.io/r/hlibc.git</a>
 		cd hlibc
 		make gcctest
 
@@ -76,34 +51,44 @@
 	a confirmation notice containing the results of the test suite 
 	will be printed to screen looking something like this:
 
-	==========COMPILING TESTS ===================================
-	=============================================================
-	==========TEST RESULT START==================================
-	This number should be (16.000000): 16.000000    (4^3)
-	This number should be (15.580524): 15.580524    (3.3^2.3)
-	The `cat' utility successfully copied a file
-	The `malloc_driver' test utility successfully iterated through a d ....
-	The `popen_driver' test utility successfully ran `du' on a directo ....
-	The `printf_driver' test utility successfully created and copied a ....
-	The `popen-to-file' driver test utility successfully ran `du' on a ....
-	============================================================
-
+		==========COMPILING TESTS ===================================
+		=============================================================
+		==========TEST RESULT START==================================
+		This number should be (16.000000): 16.000000    (4^3)
+		This number should be (15.580524): 15.580524    (3.3^2.3)
+		The `cat' utility successfully copied a file
+		The `malloc_driver' test utility successfully iterated thro ...
+		The `popen_driver' test utility successfully ran `du' on a  ...
+		The `printf_driver' test utility successfully created and c ...
+		The `popen-to-file' driver test utility successfully ran `d ...
+		============================================================
 
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
 
 	If you wish to add a new test to the test suite simply put the program
-	under tests/ and it will be compiled along with the other tests. There
-	are no automatic mechanisms for running supplied tests. As of this time
-	each actual test (and diff if required) must be scripted into 
-	tools/build.sh.
+	under tests/ and it will be compiled along with the other tests. To
+	have the test automatically ran with the hlibc testsuite then add the
+	title of its binary to BASIC_TESTS= at the top of tools/build.sh. This
+	method is for tests that produce output as stdout and are then compared
+	with the output of the same test compiled against the host. If the test
+	does not use stdout or is unsuitable for running against the host as a
+	control medium then it must be scripted into ./tools/build.sh by hand.
+
+	Two duplicate test directories are created with the test suite, These
+	duplicate test directories are compiled against the default host libc
+	and used as control mediums to diff the output of the same tests
+	compiled against hlibc:
+
+		control/*.c (links to tests/*.c)
+		hbox-control/*.c (links to hbox/*.c/)
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>USING LLVM/CLANG:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
 	Clang does work with hlibc. However, the wrapper script is still
-	experiemental. It can be automatically tested by running;
+	experimental. It can be automatically tested by running;
 
 		make clangtest
 
@@ -111,48 +96,64 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>ROADMAP:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
+	Add time() and random() so that the arbsh/arbprec library can be built
+	using hlibc.
+
 	Write more tests in C, add them to tests/ and script them into build.sh
-	Scripting should be kept dead simple. Utility code can be taken from 
-	arbsh/posix if new unique C code is needed.
-	(easy)
 
-	Remove and rewrite strtok
-	(intermediate)
-
-	Add an fdopen() function and redesign popen() to use it
-	(advanced)
+	Add an fdopen() function and redesign popen() to use it. 
 
 	Redesign the syscall interface to use unique code and start removing the
-	remnants of <a href="musllibc/">musllibc/</a>
-	(advanced)
-
-	Add more string functions, essentially finishing hlibc/string for non-
-	wide character support. strrchr
-	(intermediate)
-
-	Support for properly printing and rounding of floats / doubles.
-		When this is done the printf test in tools/build.sh can be
-		uncommented. In the meantime that test can be used to finish
-		_print_inter
-	(extremely advanced)
+	remnants of musllibc/.
 
 	Rewrite getopt(), write tests for getopt(). This getopt version was
 	written by Henry Spencer and is not unique to hlibc.
-	(intermediate)
 
 	Address proper switching between unbuffered, line buffered and buffered
 	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
-	and then with the internal atexit-style handlers.
-	(advanced)
+	and then with the internal exit() function.
+
+	Fix the experimental MIPS port. Popen and stat are not working 
+	correctly.
+
+	Finish the aarch64 port.
+	
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>REVISION CONTROL:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
+	<a href="https://git.zv.io/r/hlibc">https://git.zv.io/r/hlibc</a>
+
+	Graff's original repo, (may be out of date):
 	<a href="https://github.com/cmgraff/hlibc">https://github.com/cmgraff/hlibc</a>
 
-	Or you can use the mirror generously hosted by contributor Zach van Rijn
 
-	<a href="https://git.zv.io/me/hlibc">https://git.zv.io/me/hlibc</a>
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>DEVELOPERS:</strong></dl><pre></dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	Important:
+	
+	One of the simplest ways to contribute to hlibc is to make patches
+	using `git'. They can be constructed as follows:
+
+		git add src/path/to/work.c
+		git commit -m "something new added"
+		git format-patch -1 --stdout > work.patch
+
+	After the patch is constructed it can be handed over via a pastebin by
+	posting the work on `#hlibc` on irc.freenode.net. We recommend `ix.io`.
+	
+	Optional:
+	
+	We provide a style guide, in the form of a file called `.clang-format` found
+	in the project base. This requires a recent version of the utility
+	`clang-format`. If you do not have access to this, please ask for assistance
+	in IRC. You can test (print to stdout) it first by doing:
+	
+	    clang-format --style=<root>/.clang-format my_contribution.c
+	
+	To modify files in-place, append the `-i` flag. Please do not re-format any
+	files that you did not otherwise change.
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>WEB HOME:</strong></dl><pre></dl><pre>
@@ -172,5 +173,40 @@
 
 	#hlibc on irc.freenode.net
 
+
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>RELENG:</strong></dl><pre></dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	A release can be engineered by running:
+
+		make release RELENG="hlibc-0.1x" \
+		RELENG_MIR="<a href="http://mirror/" \">http://mirror/" \</a>
+		RELENG_DIR="public_html/" \
+		RELENG_SSH="<a href="mailto:user@host:www"">user@host:www"</a>
+
+
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>REFERENCES:</strong></dl><pre></dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	<a href="https://www.corsix.org/content/converting-floats-to-strings-part-1">https://www.corsix.org/content/converting-floats-to-strings-part-1</a>
+
+	<a href="https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html">https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html</a>
+
+	<a href="https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Warning-Options">https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Warning-Options</a>
+
+	<a href="http://lolengine.net/blog/2011/12/21/better-function-approximations">http://lolengine.net/blog/2011/12/21/better-function-approximations</a>
+    
+	<a href="http://lolengine.net/blog/2011/9/17/playing-with-the-cpu-pipeline">http://lolengine.net/blog/2011/9/17/playing-with-the-cpu-pipeline</a>
+
+	Russ Cox does really nice research on regular expressions:
+	<a href="https://swtch.com/~rsc/regexp/regexp1.html">https://swtch.com/~rsc/regexp/regexp1.html</a>
+
+
+<br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>RELEASES:</strong></dl><pre></dl><pre>
+</pre><dd><hr/></dd><pre>
+
+	<a href="http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz">http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz</a>
+
+	<a href="http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz">http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz</a>
 
 </pre>

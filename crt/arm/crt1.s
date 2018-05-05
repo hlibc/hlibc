@@ -13,5 +13,5 @@ _start:
 	str a4,[sp,#-4]!
 	ldr a4,=_init /* 4th arg: init/ctors function */
 	ldr a1,=main /* 1st arg: application entry ip */
-	bl __libc_start_main /* musl init will run the program */
+	bl __libc_start_main /* hlibc init will run the program */
 1:	b 1b

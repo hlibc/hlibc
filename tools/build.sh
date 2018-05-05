@@ -1,110 +1,165 @@
 #!/bin/sh
 
-TOOLING=$(pwd)/usr
+BASIC_TYPE="	atoll-small
+		strtoll-driver
+		malloc-huge
+		ctype
+		malloc-unique-pointer
+		getline-driver
+		atoi
+		atol
+		atoll
+		environ
+		getenv-driver
+		hcreate-driver
+		printf-driver
+		printf-driver-integers
+		strstr-driver
+		strstr-effectiveness2
+		malloc-driver /usr
+		popen-driver du /usr
+		puts-driver
+		strerror-driver
+		pow_test
+"
 
-SUF="$(pwd)/logs" 
-make clean 
-CC=$2 ./configure --prefix=${TOOLING} --enable-gcc-wrapper
-mkdir -p ${SUF}
+DISPLAYDIFF="1"
+JOBS="1"
+TOOLING="$(pwd)/usr"
+SUF="$(pwd)/logs"
+RETVAL="0"
+
+checkifempty()
+{
+	if [ ! -s "$1" ]
+	then    printf "%s\n" "empty test file, something went wrong!!"
+		printf "%s\n" "Returning failure for the entire test suite!!"
+		RETVAL=1
+	fi
+}
+
+displaydiff()
+{
+	if [ "$DISPLAYDIFF" = "1" ]
+	then	grep '^<' "${SUF}/testerr" | tail
+		grep '^>' "${SUF}/testerr" | tail
+	fi
+}
+
+make clean
+
+CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper --disable-shared
+
+mkdir -p "${SUF}"
 mkdir -p control
+mkdir -p hbox-control
+
 for i in tests/*.c
-do ln $i control/$(basename $i)
+do ln "$i" "control/$(basename "$i")"
 done
-printf "automatic build is being logged to: ${SUF}/buildlog \n\n"
-CC=clang make -j4 > ${SUF}/buildlog 2>&1
+
+ln tests/Makefile control/Makefile
+
+for i in hbox/*.c
+do ln "$i" "hbox-control/$(basename "$i")"
+done
+ln hbox/Makefile hbox-control/Makefile
+
+CC="$2" make "-j${JOBS}"
+
 make install
+
 printf "==========COMPILING TESTS ===================================\n"
-make $1 > ${SUF}/testlog
+make "$1"
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n"
 
-./tests/pow_test 
+printf "%s" "$BASIC_TYPE" | while read -r i
+do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i} 
+	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
+	checkifempty "${SUF}/diff2"
+	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+	then	printf "%s\n" "\`${i}' compared equal to its control method"
+	else	printf "%s\n" "##${i} failed to compare equal to its control method"
+		eval RETVAL="1"
+		displaydiff
+		
+	fi
+done 
 
-./tests/puts-driver > ${SUF}/diff2 2>${SUF}/testerr
-./control/puts-driver > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`puts-driver' test compared equal to its control method" || \
-echo "##puts-driver test failed" 
+# unique tests that don't work as BASIC_TYPEs
+./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
+./tests/popen-to-file "du /usr" "${SUF}/diff3" 2>"${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file and compared equal to its control method"
+else	printf "%s\n" "##popen-to-file driver failed to output to a file" 
+	RETVAL="1"
+	displaydiff
+fi
 
-./tests/strerror-driver > ${SUF}/diff2 2>${SUF}/testerr
-./control/strerror-driver > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`strerror-driver' test compared equal to its control method" || \
-echo "##strerror-driver test failed" 
+#dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=50 2>"${SUF}/testerr"
+#./tests/printf-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
+#checkifempty "${SUF}/diff2"
+#if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+#then	printf "%s\n" "\`printf-driver' test utility successfully created and copied a large file of urandom data"
+#else	printf "%s\n" "##printf-driver was unable to create and copy a large file of urandom data"
+#	RETVAL="1"
+#fi
 
+dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=12 2>"${SUF}/testerr"
+./tests/putc-driver "${SUF}/diff2" > "${SUF}/diff3" 2>"${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`putc-driver' test utility successfully created and copied a large file of urandom data"
+else	printf "%s\n" "##putc-driver was unable to create and copy a large file of urandom data"
+	RETVAL="1"
+fi
 
-./tests/atoi > ${SUF}/diff2 2>${SUF}/testerr
-./control/atoi > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`atoi' test compared equal to its control method" || \
-echo "##atoi test failed" 
+dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2> "${SUF}/testerr"
+cp "${SUF}/diff2" "${SUF}/diff3"
+mv "${SUF}/diff2" "${SUF}/diff4"
+./tests/rename-driver "${SUF}/diff3" "${SUF}/diff5" 2> "${SUF}/testerr"
+checkifempty "${SUF}/diff4"
+if diff "${SUF}/diff4" "${SUF}/diff5" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small file of urandom data"
+else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
+	RETVAL="1"
+fi
 
+./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
+./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`ftw-driver compared equal to its control method"
+else	printf "%s\n" "##ftw-driver failed to output to a file" 
+	#RETVAL="1"
+	displaydiff
+fi
 
-./tests/atol > ${SUF}/diff2 2>${SUF}/testerr
-./control/atol > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`atol' test compared equal to its control method" || \
-echo "##atol test failed" 
+./control/nftw-driver /tmp dmcp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
+./tests/nftw-driver /tmp dmcp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`nftw-driver compared equal to its control method"
+else	printf "%s\n" "##nftw-driver failed to output to a file" 
+	#RETVAL="1"
+	displaydiff
+fi
 
-
-./tests/atoll > ${SUF}/diff2 2>${SUF}/testerr
-./control/atoll > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`atoll' test compared equal to its control method" || \
-echo "##atoll test failed" 
-
-./tests/strlcpy > ${SUF}/diff2 2>${SUF}/testerr
-./control/strlcpy > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`strlcpy' test compared equal to its control method" || \
-echo "##strlcpy test failed" 
-
-./tests/strlcat > ${SUF}/diff2 2>${SUF}/testerr
-./control/strlcat > ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`strlcat' test compared equal to its control method" || \
-echo "##strlcat test failed" 
-
-./tests/cat Makefile > ${SUF}/diff1 2>${SUF}/testerr 
-diff Makefile ${SUF}/diff1 2>&1 > ${SUF}/testerr && \
-echo "\`cat' utility successfully copied a file" || \
-echo "##cat util failed" 
-
-./control/malloc-driver /usr > ${SUF}/diff2 2>${SUF}/testerr 
-./tests/malloc-driver /usr > ${SUF}/diff3 2>${SUF}/testerr 
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`malloc_driver' test utility successfully iterated through a dir and compared equal to its control method" || \
-echo "##malloc driver failed" 
-
-./control/popen-driver "du /usr" >${SUF}/diff2 2>${SUF}/testerr 
-./tests/popen-driver "du /usr" >${SUF}/diff3 2>${SUF}/testerr 
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`popen_driver' test utility successfully ran \`du' on a directory and compared equal to its control method" || \
-echo "##popen driver failed" 
-
-#fix float rounding and add this back
-#./control/printf-driver >${SUF}/diff2 2>${SUF}/testerr 
-#./tests/printf-driver >${SUF}/diff3 2>${SUF}/testerr 
-#diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-#echo "\`printf_driver' test utility successfully compared equal to its control method" || \
-#echo "printf driver had a float rounding error "
-
-./tests/printf-driver Makefile ${SUF}/testfile
-diff Makefile ${SUF}/testfile 2>&1 > ${SUF}/testerr && \
-echo "\`printf_driver' test utility successfully created and copied a file" || \
-echo "##printf driver was unable to create and copy a file"
-
-./control/popen-to-file "du /usr" ${SUF}/diff2 2>${SUF}/testerr
-./tests/popen-to-file "du /usr" ${SUF}/diff3 2>${SUF}/testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>&1 > ${SUF}/testerr && \
-echo "\`popen-to-file' test utility successfully ran \`du' on a directory, output to a file and compared equal to its control method" || \
-echo "##popen-to-file driver failed to output to a file" 
-
-dd if=/dev/urandom of=${SUF}/diff2 bs=1M count=50 2>${SUF}/testerr
-./tests/printf-driver ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr
-diff Makefile ${SUF}/testfile 2>&1 > ${SUF}/testerr && \
-echo "\`printf_driver' test utility successfully created and copied a large file of urandom data" || \
-echo "##printf driver was unable to create and copy a large file of urandom data"
+for i in `seq 1 256`
+do	printf "%s" "ABCD" >> "${SUF}/test.txt"
+done
+printf "%s" "EEEE" >> "${SUF}/test.txt"
+./control/getline-driver "${SUF}/test.txt" > "${SUF}/diff2" 2> "${SUF}/testerr"
+./tests/getline-driver "${SUF}/test.txt" > "${SUF}/diff3" 2> "${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`getline-driver compared equal to its control method"
+else	printf "%s\n" "##getline-driver failed to read lines from file" 
+	#RETVAL="1"
+	displaydiff
+fi
 
 ./tests/strsep-driver > ${SUF}/diff2 2>${SUF}/testerr
 ./control/strsep-driver > ${SUF}/diff3 2>${SUF}testerr
@@ -114,3 +169,4 @@ echo "##strsep driver test failed"
 
 printf "============================================================\n"
 
+exit "$RETVAL"
