@@ -1010,16 +1010,6 @@ int execvp(const char *file, char *const argv[])
 	return -1;
 }
 
-int fexecve(int fd, char *const argv[], char *const envp[])
-{
-	static const char proc[] = "/proc/self/fd/%d";
-	char buf[sizeof proc + 3*sizeof(int)];
-	snprintf(buf, sizeof buf, proc, fd);
-	execve(buf, argv, envp);
-	if (errno == ENOENT) errno = EBADF;
-	return -1;
-}
-
 pid_t wait(int *status)
 {
 	return waitpid((pid_t)-1, status, 0);
