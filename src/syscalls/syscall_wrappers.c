@@ -113,15 +113,6 @@ int chdir(const char *path)
 	return __syscall(SYS_chdir, path);
 }
 
-int chown(const char *path, uid_t uid, gid_t gid)
-{
-#ifdef	SYS_chown
-	return __syscall(SYS_chown, path, uid, gid);
-#else
-	return __syscall(SYS_fchownat, AT_FDCWD, path, uid, gid, 0);
-#endif
-}
-
 int close(int fd)
 {
 	return __syscall(SYS_close, fd);
@@ -1119,15 +1110,6 @@ int mkfifo(const char *path, mode_t mode)
 int mknodat(int fd, const char *path, mode_t mode, dev_t dev)
 {
 	return __syscall(SYS_mknodat, fd, path, mode, dev & 0xffff);
-}
-
-int stat(const char *restrict path, struct stat *restrict buf)
-{
-#ifdef	SYS_stat
-	return __syscall(SYS_stat, path, buf);
-#else
-	return __syscall(SYS_fstatat, AT_FDCWD, path, buf, 0);
-#endif
 }
 
 mode_t umask(mode_t mode)

@@ -95,6 +95,9 @@ USING LLVM/CLANG:
 ROADMAP:
 --------
 
+	Add time() and random() so that the arbsh/arbprec library can be built
+	using hlibc.
+
 	Write more tests in C, add them to tests/ and script them into build.sh
 
 	Add an fdopen() function and redesign popen() to use it. 
