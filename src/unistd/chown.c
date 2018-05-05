@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <syscall.h>
+#include <fcntl.h>
 
 int chown(const char *path, uid_t uid, gid_t gid)
 {
