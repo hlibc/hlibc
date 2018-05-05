@@ -2,6 +2,9 @@
 #include <signal.h>
 #include <syscall.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 
 int stat(const char *p, struct stat *b)
 {
