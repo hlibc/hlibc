@@ -1,5 +1,9 @@
 #include <stddef.h>
 #include <string.h>
+/*
+	Copyright © 2017, Adrian Parvin D. Ouano
+	Copyright © 2018, CM Graff
+*/
 
 char *strtok(char *s, const char *delim)
 {
