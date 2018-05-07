@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	malloc-huge
+BASIC_TYPE="	strtoll-driver
+		malloc-huge
 		ctype
 		malloc-unique-pointer
 		getline-driver
