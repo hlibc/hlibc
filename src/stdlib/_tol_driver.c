@@ -1,10 +1,28 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+static int dehex(char ch)
+{
+  if (ch >= '0' && ch <= '9') return ch - '0';
+  if (ch >= 'a' && ch <= 'f') return ch - 'a' + 10;
+  if (ch >= 'A' && ch <= 'F') return ch - 'A' + 10;
+  return (ch == '\n') ? -2 : -1;
+}
+
 char *_tol_driver(const char *s, int base, long long *ans)
 { 
-	static int *__toltab = "0123456789ABCDEF";
-				
+	static int glph[110] = {
+                        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+                        0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  0,  0,
+                        0,  0,  0,  0,  0, 10, 11, 12, 13, 14, 15, 16,
+                        17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                        29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                        41, 42, 43, 44, 45,  0,  0,  0,  0,  0,  0,  0,
+                        0, 0 };
+
 	size_t i = 0;
 	long long ret = 0;
 	long long neg = -1;
@@ -21,7 +39,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	}
 
 	for (; s[i] && isdigit(s[i]); ++i) {
-		ret = (base * ret) - (__toltab[s[i]]);
+		ret = (base * ret) - (glph[s[i]]);
 	}
 
 	*ans =  ret * neg;
