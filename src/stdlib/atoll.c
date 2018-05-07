@@ -1,12 +1,10 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-static int __toltab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
-			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
-
 char *_tol_driver(const char *s, int base, long long *ans)
-{
+{ 
+	static int *__toltab = "0123456789ABSCDEF";
+				
 	size_t i = 0;
 	long long ret = 0;
 	long long neg = -1;
