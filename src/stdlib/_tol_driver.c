@@ -16,47 +16,48 @@ char *_tol_driver(const char *s, int base, long long *ans)
 			0, 0 };
 
 	size_t i = 0;
+	size_t j = 0;
 	long long ret = 0;
 	long long neg = -1;
-	int lever = 0;
 
-	while (isspace(s[i])) {
-		++i;
+	while (isspace(s[j])) {
+		++j;
 	}
 
-	switch (s[i]) {
+	switch (s[j]) {
 	case '-':
 		neg = 1;
-		++i;
-		break;
 	case '+':
-		++i;
-		break;
-	case '0':
-		if (base == 16) {
-			switch (s[i]) {
-			case 'x':
-				i += 2;
-				break;
-			default:
-				break;
-			}
-		}
-		if (base == 0){ 
-			++i;
-			base = 8;
-		}
+		++j;
+		break; 
 	default:
 		break;
 	}
+	switch (s[j]) {
+		case '0':
+			if (base == 16) { 
+				++j;
+				switch (s[j]) {
+				case 'x':
+					j += 2;
+					break;
+				default:
+					break;
+				}
+			}else if (base == 0){ 
+				++j;
+				base = 8;
+			}
+		default:
+			break;
+	}
 
-	for (; s[i] && isdigit(s[i]); ++i) {
-		lever = 1;
+	for (i=j; s[i] && isdigit(s[i]); ++i) {
 		ret = (base * ret) - (glph[s[i]]);
 	}
 
 	*ans = ret * neg;
-	if (lever == 1)
+	if (j)
 		return s + i;
 	else
 		return s;
