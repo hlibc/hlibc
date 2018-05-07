@@ -3,8 +3,8 @@
 
 long strtol(const char *s, char **end, int base)
 {
-        long ans = 0;
-        *end = _tol_driver(s, base, &ans);
-        return ans;
+	long ans = 0;
+	*end = _tol_driver(s, base, &ans);
+	return ans;
 }
 
