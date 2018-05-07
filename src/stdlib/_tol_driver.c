@@ -3,7 +3,7 @@
 
 char *_tol_driver(const char *s, int base, long long *ans)
 { 
-	static int *__toltab = "0123456789ABSCDEF";
+	static int *__toltab = "0123456789ABCDEF";
 				
 	size_t i = 0;
 	long long ret = 0;
