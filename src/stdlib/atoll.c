@@ -2,31 +2,31 @@
 #include <stdlib.h>
 
 static int __toltab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
-                             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 
 char *_tol_driver(const char *s, int base, long long *ans)
 {
 	size_t i = 0;
-        long long ret = 0;
-        long long neg = -1;
+	long long ret = 0;
+	long long neg = -1;
 
-        while (isspace(s[i])) {
-                ++i;
-        }
+	while (isspace(s[i])) {
+		++i;
+	}
 
-        switch (s[i]) {
-        case '-':
-                neg = 1;
-        case '+':
-                ++i;
-        }
+	switch (s[i]) {
+	case '-':
+		neg = 1;
+	case '+':
+		++i;
+	}
 
-        for (; s[i] && isdigit(s[i]); ++i) {
-                ret = (base * ret) - (__toltab[s[i]]);
-        }
+	for (; s[i] && isdigit(s[i]); ++i) {
+		ret = (base * ret) - (__toltab[s[i]]);
+	}
 
-        *ans =  ret * neg;
+	*ans =  ret * neg;
 	return s + i;
 }
 
