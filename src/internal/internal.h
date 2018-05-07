@@ -89,4 +89,6 @@ size_t _safe_addition(size_t, size_t, size_t);
 size_t _safe_upow(size_t, size_t);
 /* internal __errno_table */
 extern char *__errno_table[];
+/* str 2 num */
+char *_tol_driver(const char *, int, long long *);
 #endif
