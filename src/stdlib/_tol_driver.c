@@ -2,7 +2,12 @@
 #include <stdlib.h>
 
 char *_tol_driver(const char *s, int base, long long *ans)
-{ 
+{
+	/*
+		This table uses octal character representations of 0-9 and A-Z
+		0-9 = '\000'-'\011' starting at the 49th indice (decimal 48 '0')
+		A-Z = '\012'-'\055' starting at the 66th indice (decimal 65 'A')
+	 */
 	static int glph[] = { 
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -12,12 +17,10 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
-	/* 0-9 start at 48 code points from zero. */
-	/* v */
+	/* v  0-9 start at 48 code points from zero. */
 	'\000', '\001', '\002', '\003', '\004', '\005',
 	'\006', '\007', '\010', '\011', '\000', '\000',
-	/* A-Z start at 65 code points from zero. */
-						/* v */
+	/* A-Z start at 65 code points from zero.  v  */
 	'\000', '\000', '\000', '\000', '\000', '\012', 
 	'\013', '\014', '\015', '\016', '\017', '\020', 
 	'\021', '\022', '\023', '\024', '\025', '\026', 
@@ -26,7 +29,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	'\043', '\044', '\045', '\046', '\047', '\050', 
 	'\051', '\052', '\053', '\054', '\055', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
-	'\000', '\000', '\000', '\000', '\000', '\000' } ;
+	'\000', '\000', '\000', '\000', '\000', '\000' };
 
 	size_t i = 0;
 	size_t j = 0;
