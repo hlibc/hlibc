@@ -8,6 +8,22 @@ int main(void)
 	ans = strtoll(s1, &s1, 10);
 	printf("%lld\n", ans);
 	printf("end of string== %s\n", s1);
+
+	char *s2 = "0x2F4";
+	ans = strtoll(s2, &s2, 16);
+        printf("%x\n", (unsigned int)ans);
+
+
+	printf("%x\n", 0xff);
+	
+
+	char *s3 = "2F4";
+        ans = strtoll(s3, &s3, 16);
+        printf("%x\n", (unsigned int)ans);
+	
+	printf("%x\n", 0x2F4);
+      
+
 	return 0;
 }
 

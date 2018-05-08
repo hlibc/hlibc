@@ -3,10 +3,10 @@
 
 char *_tol_driver(const char *s, int base, long long *ans)
 {
-	/* gl[h tab uses octal character representations 
-	of 0-9 and A-Z 0-9 = '\000'-'\011' which is the
-	49th indice (decimal 48 '0') A-Z = '\012'-'\055' 
-	starting at the 66th indice (decimal 65 'A')  */
+	/* glph tab uses octal character representations 
+	of 0-9 and A-Z, 0-9 = '\000'-'\011' which is the
+	49th indice (decimal 48 '0'), A-Z = '\012'-'\055' 
+	which is the 66th indice (decimal 65 'A')  */
 	static int glph[] = { 
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -34,6 +34,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	size_t j = 0;
 	long long ret = 0;
 	long long neg = -1;
+	int (*f)(int);
 
 	while (isspace(s[j])) {
 		++j;
@@ -50,9 +51,8 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	}
 	switch (s[j]) {
 		case '0':
-			if (base == 16) { 
-				++j;
-				switch (s[j]) {
+			if (base == 16) {
+				switch (s[j + 1]) {
 				case 'x':
 					j += 2;
 					break;
@@ -67,10 +67,13 @@ char *_tol_driver(const char *s, int base, long long *ans)
 			break;
 	}
 
-	for (i=j; s[i] && isdigit(s[i]); ++i) {
+	f = isdigit;
+	if (base == 16)
+		f = isxdigit;
+		
+	for (i=j; s[i] && f(s[i]); ++i) {
 		ret = (base * ret) - (glph[s[i]]);
-	}
-
+	} 
 	*ans = ret * neg;
 	if (j)
 		return s + i;
