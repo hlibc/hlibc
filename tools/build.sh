@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	strtoll-driver
+BASIC_TYPE="	atoll-small
+		strtoll-driver
 		malloc-huge
 		ctype
 		malloc-unique-pointer

@@ -3,5 +3,5 @@
 
 long atol(const char *s)
 {
-	return atoll(s);
+	return (long)atoll(s);
 }

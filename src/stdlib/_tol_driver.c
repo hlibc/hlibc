@@ -34,7 +34,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	size_t j = 0;
 	long long ret = 0;
 	long long neg = -1;
-	int (*f)(int);
+	int (*f)(int) = isdigit;
 
 	while (isspace(s[j])) {
 		++j;
@@ -67,7 +67,6 @@ char *_tol_driver(const char *s, int base, long long *ans)
 			break;
 	}
 
-	f = isdigit;
 	if (base == 16)
 		f = isxdigit;
 		
