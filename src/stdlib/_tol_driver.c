@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 char *_tol_driver(const char *s, int base, long long *ans)
 {
@@ -7,7 +8,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	of 0-9 and A-Z, 0-9 = '\000'-'\011' which is the
 	49th indice (decimal 48 '0'), A-Z = '\012'-'\055' 
 	which is the 66th indice (decimal 65 'A')  */
-	static int glph[] = { 
+	static uint8_t glph[] = { 
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
