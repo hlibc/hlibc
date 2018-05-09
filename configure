@@ -75,6 +75,7 @@ tryldflag () {
 
 # Beginning of actual script
 
+STACK_ALIGNMENT=
 CFLAGS_C99FSE=
 CFLAGS_AUTO="-Wall -Wextra"
 LDFLAGS_AUTO=
@@ -172,6 +173,10 @@ case "$target" in
 	*) fail "$0: unknown or unsupported target \"$target\"" ;;
 esac
 
+# Find stack alignment flag
+tryflag STACK_ALIGNMENT -mpreferred-stack-boundary=3
+tryflag STACK_ALIGNMENT -mstack-alignment=3
+
 #
 # Try to get a conforming C99 freestanding environment
 #
@@ -264,6 +269,7 @@ libdir = $libdir
 includedir = $includedir
 syslibdir = $syslibdir
 CC = $CC
+STACK_ALIGNMENT = $STACK_ALIGNMENT
 CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
 CPPFLAGS = $CPPFLAGS

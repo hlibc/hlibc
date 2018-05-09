@@ -44,7 +44,7 @@ ALL_TOOLS = tools/gcc-wrap tools/gcc-wrap-uninstalled
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh $(prefix)
+	-./tools/create_wrappers.sh $(prefix) $(libdir)
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
 clean:
@@ -80,7 +80,7 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
 
 %.o: $(ARCH)/%.c
-	$(CC) $(CFLAGS_ALL_STATIC) -O2 -mno-sse -mpreferred-stack-boundary=3 -c -o $@ $<
+	$(CC) $(CFLAGS_ALL_STATIC) -O2 -mno-sse $(STACK_ALIGNMENT) -c -o $@ $<
 
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
