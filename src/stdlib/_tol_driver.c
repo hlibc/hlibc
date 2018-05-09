@@ -59,6 +59,8 @@ char *_tol_driver(const char *s, int base, long long *ans)
 
 	if (base > 36)
 		base = 36; // error? 
+	else if (base == 1)
+		base = 0;
 
 	while (isspace(s[j])) {
 		++j;
