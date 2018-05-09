@@ -11,8 +11,8 @@
 	
 	glph tab uses octal character representations of 0-9, A-Z and a-z. 
 	0-9 = '\000'-'\011' located at the 49th indice (decimal 48 '0')
-	A-Z = '\012'-'\055' located at the 66th indice (decimal 65 'A'),
-	a-z = '\012'-'\055' located at the 98th indice (decimal 97 'a') 
+	A-Z = '\012'-'\055' located at the 66th indice (decimal 65 'A')
+	a-z = '\012'-'\055' located at the 98th indice (decimal 97 'a')
 */
 
 char *_tol_driver(const char *s, int base, long long *ans)
@@ -55,6 +55,10 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	long long ret = 0;
 	long long neg = -1;
 	int (*f)(int) = isdigit;
+	uint8_t temp = 0;
+
+	if (base > 36)
+		base = 36; // error? 
 
 	while (isspace(s[j])) {
 		++j;
@@ -69,12 +73,16 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	default:
 		break;
 	}
+	/* starts with a 0 .. might be hexadecimal or octal */
 	switch (s[j]) {
 		case '0':
 			if (base == 16) {
 				switch (s[j + 1]) {
 				case 'x':
 					j += 2;
+					break;
+				case 'X':
+					j =+ 2;
 					break;
 				default:
 					break;
@@ -89,9 +97,13 @@ char *_tol_driver(const char *s, int base, long long *ans)
 
 	if (base == 16)
 		f = isxdigit;
-		
-	for (i=j; s[i] && f(s[i]); ++i) {
-		ret = (base * ret) - (glph[s[i]]);
+
+	for (i=j; s[i] && f(s[i]) ; ++i) {
+		temp = (glph[s[i]]);
+		/* break if char val lies outside of the base's range */
+		if (temp >= base)
+			break;
+		ret = (base * ret) - temp;
 	} 
 	*ans = ret * neg;
 	if (i > j)
