@@ -94,7 +94,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 		ret = (base * ret) - (glph[s[i]]);
 	} 
 	*ans = ret * neg;
-	if (j)
+	if (i > j)
 		return s + i;
 	else
 		return s;
