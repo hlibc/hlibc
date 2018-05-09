@@ -8,16 +8,15 @@
 	Copyright 2018 Tuomo Venäläinen
 	Copyright 2018 Zach van Rijn
 	Copyright 2018 Adrian Parvin D. Ouano
-*/
-
-char *_tol_driver(const char *s, int base, long long *ans)
-{
-	/* 
+	
 	glph tab uses octal character representations of 0-9, A-Z and a-z. 
 	0-9 = '\000'-'\011' located at the 49th indice (decimal 48 '0')
 	A-Z = '\012'-'\055' located at the 66th indice (decimal 65 'A'),
 	a-z = '\012'-'\055' located at the 98th indice (decimal 97 'a') 
-	*/
+*/
+
+char *_tol_driver(const char *s, int base, long long *ans)
+{ 
 	static uint8_t glph[] = { 
 	/* v    useless filler until the 1st isxdigit */
 	'\000', '\000', '\000', '\000', '\000', '\000',
