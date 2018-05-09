@@ -1,6 +1,7 @@
 { pkgs ? (import <nixpkgs> {})
 , stdenv ? pkgs.stdenv
 , gnumake ? pkgs.gnumake
+, gcc ? pkgs.gcc
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +15,16 @@ stdenv.mkDerivation rec {
     make gcctest -j$NIX_BUILD_CORES
   '';
 
+  postInstall = ''
+    ln -s $out/bin/gcc-wrap $out/bin/cc
+    substituteInPlace $out/bin/gcc-wrap --replace 'exec gcc' 'hardeningDisable=all exec ${gcc}/bin/gcc'
+  '';
+
   doCheck = true;
+  dontDisableStatic = true;
 
   hardeningDisable = ["all"];
+  nativeBuildInputs = [ gcc ];
 
   buildInputs = [ gnumake ];
 }
