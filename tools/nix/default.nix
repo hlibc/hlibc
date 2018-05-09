@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "patchPhase" "checkPhase" "configurePhase" "installPhase" ];
   checkPhase = ''
-    make gcctest -j1
+    echo $NIX_BUILD_CORES
+    export CFLAGS="-g"; make gcctest -j$NIX_BUILD_CORES
   '';
 
   doCheck = true;

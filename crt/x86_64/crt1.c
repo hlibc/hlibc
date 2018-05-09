@@ -1,5 +1,5 @@
 extern int __attribute__((__weak__)) (*main)(int, char **, char **);
-void __attribute__((__weak__)) _init(int, char **, char **);
+int  __attribute__((__weak__)) _init(int, char **, char **);
 void __attribute__((__weak__)) _fini(void);
 
 int __attribute__((__noreturn__)) __libc_start_main(
