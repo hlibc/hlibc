@@ -24,8 +24,7 @@ int main(void)
 	size_t hold = SIZE_MAX;
 	size_t t1[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
 	ssize_t t2[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-	ssize_t t3[22] = {-0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20 };
-	double two = 2;
+	ssize_t t3[22] = {-0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20 }; 
 
 	len = printf("This is a string containing only text to help debug the ret val of printf\n");
 	printf("%zu was the length of the last test\n", len);
@@ -63,9 +62,9 @@ int main(void)
 	printf("%zu len of last few sprintfs\n", len);
 	printf("vprintf:\n");
 	testgvprintf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest);
-	printf("%f\n", 3.1); 
-	printf("P\n"); 
-	printf("%f\n", two);
+
+
+
 	len += printf("%zu\n", (size_t)-1); 
 	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[0], t1[1],t1[2],t1[3],t1[4],t1[5],t1[6],t1[7],t1[8],t1[9],t1[10]);
 	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[11], t1[12],t1[13],t1[14],t1[15],t1[16],t1[17],t1[18],t1[19],t1[20]); 

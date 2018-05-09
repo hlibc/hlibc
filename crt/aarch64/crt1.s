@@ -1,26 +1,14 @@
-	
-	.file	"crt1.c"
-#APP
-	.text 
 .global _start
 .type _start,%function
 _start:
-       mov x29, #0
-       mov x30, #0
-       mov x0, sp
+	mov x29, #0
+	mov x30, #0
+	mov x0, sp
 .weak _DYNAMIC
 .hidden _DYNAMIC
-       adrp x1, _DYNAMIC
-       add x1, x1, #:lo12:_DYNAMIC
-       and sp, x0, #-16
-       b _start_c
-
-#NO_APP
-	.text
-	.align	2
-	.global	_start_c
-	.type	_start_c, %function
-_start_c:
+	adrp x1, _DYNAMIC
+	add x1, x1, #:lo12:_DYNAMIC
+	and sp, x0, #-16 
 	stp	x29, x30, [sp, -48]!
 	add	x29, sp, 0
 	str	x0, [x29,24]
@@ -38,8 +26,7 @@ _start_c:
 	ldr	x2, [x29,32]
 	mov	x5, 0
 	bl	__libc_start_main
-	.size	_start_c, .-_start_c
-	.align	3
+
 .LC0:
 	.xword	_init
 	.align	3
