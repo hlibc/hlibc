@@ -1,6 +1,9 @@
 #include "../internal/internal.h"
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
 
 /* '0' - '0' and 'a' - 'f' */
 static int __convtab[20] = {
