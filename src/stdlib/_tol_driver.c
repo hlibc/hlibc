@@ -17,7 +17,7 @@
 
 char *_tol_driver(const char *s, int base, long long *ans)
 { 
-	static uint8_t glph[] = { 
+	static int glph[] = { 
 	/* v    useless filler until the 1st isxdigit */
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -101,7 +101,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 		f = isxdigit;
 
 	for (i=j; s[i] && f(s[i]) ; ++i) {
-		temp = (glph[s[i]]);
+		temp = (glph[(int)(s[i])]);
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;
@@ -109,8 +109,8 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	} 
 	*ans = ret * neg;
 	if (i > j)
-		return s + i;
+		return (char*) s + i;
 	else
-		return s;
+		return (char *)s;
 }
 
