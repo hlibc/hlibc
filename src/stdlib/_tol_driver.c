@@ -98,7 +98,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	}
 
 	if (base == 16)
-		f = isxdigit;
+		f = isalnum;
 
 	for (i=j; s[i] && f(s[i]) ; ++i) {
 		temp = (glph[(int)(s[i])]);
