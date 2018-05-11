@@ -4,7 +4,6 @@
 
 /*
 	Copyright 2018 CM Graff
-	with various fixes by:
 	Copyright 2018 Tuomo Venäläinen
 	Copyright 2018 Zach van Rijn
 	Copyright 2018 Adrian Parvin D. Ouano
