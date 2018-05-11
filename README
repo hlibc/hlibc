@@ -121,11 +121,7 @@ ROADMAP:
 REVISION CONTROL:
 -----------------
 
-	master; hosted by Zach van Rijn
-		https://git.zv.io/r/hlibc
-
-	backup; graff's original repo, may be out-of-sync
-		https://github.com/cmgraff/hlibc
+	https://github.com/cmgraff/hlibc
 
 
 DEVELOPERS:
