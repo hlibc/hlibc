@@ -104,10 +104,10 @@ int _printf_inter(
 	long double fval = 0;
 
 	if (flag == 2) { /* snprintf */
-		bound = lim;
+		;//snprintf functionality is disabled
 	}
 
-	for (p = fmt; *p && i < bound; p++) {
+	for (p = fmt; *p; p++) {
 		int long_count = 0;
 		int base = 10;
 	
