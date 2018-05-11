@@ -16,21 +16,8 @@ typedef unsigned int tcflag_t;
 #define NCCS 32
 
 #include <bits/termios.h>
-
-speed_t cfgetospeed (const struct termios *);
-speed_t cfgetispeed (const struct termios *);
-int cfsetospeed (struct termios *, speed_t);
-int cfsetispeed (struct termios *, speed_t);
-
 int tcgetattr (int, struct termios *);
 int tcsetattr (int, int, const struct termios *);
-
-int tcsendbreak (int, int);
-int tcdrain (int);
-int tcflush (int, int);
-int tcflow (int, int);
-
-pid_t tcgetsid (int);
 
 #ifdef _GNU_SOURCE
 void cfmakeraw(struct termios *);

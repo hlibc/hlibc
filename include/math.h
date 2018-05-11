@@ -128,6 +128,9 @@ double      sqrt(double);
 #endif
 extern int signgam;
 
+#define _HAS_HLIBC_MATH
+double h_cos(double);
+
 #ifdef __cplusplus
 }
 #endif

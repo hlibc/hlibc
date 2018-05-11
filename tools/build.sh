@@ -1,6 +1,8 @@
 #!/bin/sh
 
-BASIC_TYPE="	malloc-huge
+BASIC_TYPE="	atoll-small
+		strtoll-driver
+		malloc-huge
 		ctype
 		malloc-unique-pointer
 		getline-driver
@@ -31,14 +33,16 @@ checkifempty()
 {
 	if [ ! -s "$1" ]
 	then    printf "%s\n" "empty test file, something went wrong!!"
+		printf "%s\n" "Returning failure for the entire test suite!!"
+		RETVAL=1
 	fi
 }
 
 displaydiff()
 {
 	if [ "$DISPLAYDIFF" = "1" ]
-	then	grep '<' "${SUF}/testerr" | tail
-		grep '>' "${SUF}/testerr" | tail
+	then	grep '^<' "${SUF}/testerr" | tail
+		grep '^>' "${SUF}/testerr" | tail
 	fi
 }
 
@@ -48,7 +52,7 @@ CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper --disable-shared
 
 mkdir -p "${SUF}"
 mkdir -p control
-mkdir -p posix-utils-control
+mkdir -p hbox-control
 
 for i in tests/*.c
 do ln "$i" "control/$(basename "$i")"
@@ -56,19 +60,16 @@ done
 
 ln tests/Makefile control/Makefile
 
-for i in posix-utils/*.c
-do ln "$i" "posix-utils-control/$(basename "$i")"
+for i in hbox/*.c
+do ln "$i" "hbox-control/$(basename "$i")"
 done
-ln posix-utils/Makefile posix-utils-control/Makefile
+ln hbox/Makefile hbox-control/Makefile
 
-# printf "automatic build is being logged to: ${SUF}/buildlog\n\n"
-#  > "${SUF}/buildlog"
 CC="$2" make "-j${JOBS}"
 
 make install
 
 printf "==========COMPILING TESTS ===================================\n"
-#  > "${SUF}/testlog"
 make "$1"
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n"
@@ -80,7 +81,7 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
-		RETVAL="1"
+		eval RETVAL="1"
 		displaydiff
 		
 	fi

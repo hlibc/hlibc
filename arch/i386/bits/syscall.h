@@ -10,7 +10,7 @@ static inline long __syscall0(long __n)
 	return __ret;
 }
 
-#ifndef __PIC__
+//#ifndef __PIC__
 
 static inline long __syscall1(long __n, long __a1)
 {
@@ -54,7 +54,7 @@ static inline long __syscall6(long __n, long __a1, long __a2, long __a3, long __
 		: "=a"(__ret) : "a"(__n), "b"(__a1), "c"(__a2), "d"(__a3), "S"(__a4), "D"(__a5), "g"(__a6) : "memory");
 	return __ret;
 }
-
+/*
 #else
 
 static inline long __syscall1(long __n, long __a1)
@@ -110,7 +110,7 @@ static inline long __syscall6(long __n, long __a1, long __a2, long __a3, long __
 }
 
 #endif
-
+*/
 
 #define __SC_socket      1
 #define __SC_bind        2

@@ -1,7 +1,10 @@
-# Use gmake
-# Use config.mak to override any of the following variables.
-# Do not make changes here.
-#
+# configure outputs to config.mak and this Makefile uses config.mak so
+# changes here may be lost. use GNU make
+
+RELENG ?= hlibc-0.1b
+RELENG_MIR ?= http://www.csit.parkland.edu/~cgraff1/
+RELENG_DIR ?= public_html
+RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
@@ -10,14 +13,13 @@ includedir = $(prefix)/include
 libdir = $(prefix)/lib
 syslibdir = /lib
 
-SRCS = $(sort $(wildcard musllibc/*/*.c hlibc/*/*.c fdlibm/*/*.c))
+SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
-IMPH = musllibc/internal/libc.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector -fPIC"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
 
 LDFLAGS =
 CPPFLAGS =
@@ -42,7 +44,7 @@ ALL_TOOLS = tools/gcc-wrap tools/gcc-wrap-uninstalled
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh $(prefix)
+	-./tools/create_wrappers.sh $(prefix) $(libdir)
 	-cp tools/clang-wrap $(DESTDIR)$(bindir)
 
 clean:
@@ -58,12 +60,12 @@ clean:
 	-$(RM) -f test_*
 	-$(RM) -f tools/clang-wrap
 	-$(RM) -r control
-	-$(RM) -r posix-utils-control
+	-$(RM) -r hbox-control
 	-$(MAKE) cleantest
 
 cleantest:
 	cd tests/ && make clean
-	cd posix-utils/ && make clean
+	cd hbox/ && make clean
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
@@ -77,10 +79,13 @@ include/bits/alltypes.h.sh: include/bits
 include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
 
+%.o: $(ARCH)/%.c
+	$(CC) $(CFLAGS_ALL_STATIC) -O2 $(STACK_ALIGNMENT) -c -o $@ $<
+
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
-%.o: %.c $(GENH) $(IMPH)
+%.o: %.c $(GENH)
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
 lib/libc.a: $(OBJS)
@@ -122,22 +127,34 @@ lib/gcc-wrap-uninstalled.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(PWD)/include" "$(PWD)/lib/"  > $@
 
 gcctests:
-	cd posix-utils/ && $(GCC_WRAP) make
-	cd posix-utils-control/ && make
+	cd hbox && $(GCC_WRAP) make
+	cd hbox-control/ && make
 	cd tests/ && $(GCC_WRAP) make
 	cd control && make
 
 clangtests:
-	cd posix-utils/ && $(CLANG_WRAP) make
-	cd posix-utils-control/ && make
+	cd hbox/ && $(CLANG_WRAP) make
+	cd hbox-control/ && make
 	cd tests/ && $(CLANG_WRAP) make
 	cd control && make
 
 gcctest:
-	./tools/build.sh gcctests gcc || exit 1
+	./tools/build.sh gcctests gcc
 
 clangtest:
-	./tools/build.sh clangtests clang || exit 1
+	./tools/build.sh clangtests clang
+
+release:
+	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
+	./tools/text2html.sh README
+	cd ../ && cp -r hlibc $(RELENG) 
+	cd ../ && rm -rf $(RELENG)/.git
+	cd ../ && tar -cf $(RELENG).tar.gz $(RELENG) 
+	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH):$(RELENG_DIR)
+	ssh $(RELENG_SSH) -f 'cd $(RELENG_DIR) && md5sum $(RELENG).tar.gz >> CHECKSUMS'
+	git add README Makefile README.html
+	git commit -m "release $(RELENG)"
+	git push origin master
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 

@@ -29,32 +29,11 @@ BUILDING:
 	hlibc only supports static linking at this time.
 
 
-STRUCTURE:
-----------
+		hbox/
+			A small busybox like set of POSIX utilities.
 
-	musllibc/
-		Source code original to the musl C library
-
-	hlibc/
-		Source code original to the hlibc C library
-
-	fdlibm/
-		Source code original to the Sun libm math library
-
-	tests/
-		Various test binaries
-
-	crt/
-		Crt stuff startup assembly code
-
-	include/
-		Header files.
-
-	arch/
-		Architecture specific header files
-
-	tools/
-		several tools including the gcc-wrap wrapper script
+		tests/
+			A set of C run time tests.
 
 
 AUTOMATIC TESTING:
@@ -100,8 +79,8 @@ AUTOMATIC TESTING:
 	and used as control mediums to diff the output of the same tests
 	compiled against hlibc:
 
-		control/ (links to tests/*.c)
-		posix-utils-control/ (linked to posix-utils/)
+		control/*.c (links to tests/*.c)
+		hbox-control/*.c (links to hbox/*.c/)
 
 
 USING LLVM/CLANG:
@@ -115,6 +94,9 @@ USING LLVM/CLANG:
 
 ROADMAP:
 --------
+
+	Add time() and random() so that the arbsh/arbprec library can be built
+	using hlibc.
 
 	Write more tests in C, add them to tests/ and script them into build.sh
 
@@ -132,6 +114,8 @@ ROADMAP:
 
 	Fix the experimental MIPS port. Popen and stat are not working 
 	correctly.
+
+	Finish the aarch64 port.
 	
 
 REVISION CONTROL:
@@ -152,7 +136,7 @@ DEVELOPERS:
 	One of the simplest ways to contribute to hlibc is to make patches
 	using `git'. They can be constructed as follows:
 
-		git add hlibc/path/to/work.c
+		git add src/path/to/work.c
 		git commit -m "something new added"
 		git format-patch -1 --stdout > work.patch
 
@@ -190,10 +174,15 @@ IRC:
 	#hlibc on irc.freenode.net
 
 
-RELEASES:
----------
+RELENG:
+-------
 
-	http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz
+	A release can be engineered by running:
+
+		make release RELENG="hlibc-0.1x" \
+		RELENG_MIR="http://mirror/" \
+		RELENG_DIR="public_html/" \
+		RELENG_SSH="user@host:www"
 
 
 REFERENCES:
@@ -211,4 +200,12 @@ REFERENCES:
 
 	Russ Cox does really nice research on regular expressions:
 	https://swtch.com/~rsc/regexp/regexp1.html
+
+
+RELEASES:
+---------
+
+	http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz
+
+	http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz
 
