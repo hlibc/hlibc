@@ -54,7 +54,6 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	size_t j = 0;
 	long long ret = 0;
 	long long neg = -1;
-	int (*f)(int) = isdigit;
 	uint8_t temp = 0;
 
 	if (base > 36)
@@ -97,10 +96,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 			break;
 	}
 
-	if (base == 16)
-		f = isxdigit;
-
-	for (i=j; s[i] && f(s[i]) ; ++i) {
+	for (i=j; s[i] && isalnum(s[i]) ; ++i) {
 		temp = (glph[(int)(s[i])]);
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
