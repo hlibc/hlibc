@@ -19,9 +19,8 @@
 #include <termios.h>
 #include <stdint.h>
 
-
 /*
-	(Copyright) 2014-2017, "shell.c", CM Graff
+	(Copyright) 2014-2018, "shell.c", CM Graff
 */
 
 #define GSHPROMPT	"gsh>> "
@@ -35,7 +34,6 @@ struct glb
 	int testparse;	/* -t mode 	*/
 	int cmode;	/* -c mode 	*/
 }glb = { 0, 0, 0, 0, 0};
-
 
 struct commands
 {
@@ -133,7 +131,8 @@ int main(int argc, char **argv)
 		{ 
 			//l = readline(GSHPROMPT);
 			//add_history(l);
-			write(2, GSHPROMPT, GSHPROMPT_LEN);
+			fprintf(stderr, "%s", GSHPROMPT);
+			fflush(stderr);
 			l = fgets(l, 1024, stdin);
 			++glb.count;
 		}
@@ -162,8 +161,9 @@ int cd(char *argv)
 }
 
 int destroy(int exitno, char *message, char *l)
-{ 
-	write(2, message, strlen(message));
+{
+	fprintf(stderr, "%s", message);
+	fflush(stderr);
 	if ( glb.cmode == 0)
 		free(l);
 	free(cmds);
@@ -217,10 +217,8 @@ int execute()
 		{
 			if( (cmds[k].in = open(cmds[k].infp, O_RDONLY) ) == -1 )
 			{
-				//fprintf(stderr,"'%s' File not found.\n", cmds[k].infp);
-				write(2, "'", 1);
-				write(2, cmds[k].infp, strlen(cmds[k].infp));
-				write(2, " ' File not found.\n", 19); 
+				fprintf(stderr, "'%s' File not found.\n", cmds[k].infp);
+				fflush(stderr);
 				return 0;
 			} 
 		}
@@ -230,7 +228,8 @@ int execute()
 		{ 
 			if((cmds[k].out = open(cmds[k].outfp, cmds[k].outflags, mode)) == -1)
 			{
-				write(2, " Permission denied?\n", 20);
+				fprintf(stderr, " Permission denied?\n");
+				fflush(stderr);
 				return 0;
 			} 
 		} 
@@ -282,9 +281,8 @@ int execute()
 			if ( cmds[k].argv[0] )
 			{
 				execvp(cmds[k].argv[0], cmds[k].argv);
-	       			write(2, "gsh: ", 6);
-				write(2, cmds[k].argv[0], strlen(cmds[k].argv[0]));
-				write(2, " not found\n", 11);
+				fprintf(stderr, "gsh: %s not found\n", cmds[k].argv[0]);
+	       			fflush(stderr);
 			} 
 			_exit(1); 
 		} 
@@ -302,6 +300,7 @@ int execute()
 		else
 		{ 
 			fprintf(stderr,"[%d]\n", cmds[k].pids); 
+			fflush(stderr);
 		} 
 	} 
 	glb.count = 0;
