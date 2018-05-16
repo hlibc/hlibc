@@ -1,3 +1,5 @@
 job1:
   script: "make gcctest"
 
+job2:
+  script: "make gcctest"
