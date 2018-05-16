@@ -15,6 +15,8 @@
 	a-z = '\012'-'\055' located at the 98th indice (decimal 97 'a')
 */
 
+
+
 char *_tol_driver(const char *s, int base, long long *ans)
 { 
 	static uint8_t glph[] = { 
@@ -93,7 +95,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	}
 
 	for (i=j; s[i] && isalnum(s[i]) ; ++i) {
-		temp = (glph[(int)(s[i])]);
+		temp = glph[(int)s[i]];
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;
