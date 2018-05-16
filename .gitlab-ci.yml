@@ -8,3 +8,5 @@ job2:
 
 
 
+job3:
+  script: "make gcctest"
