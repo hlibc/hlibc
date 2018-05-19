@@ -27,8 +27,8 @@ typedef struct
 	char *buf;
 	char *rp;
 	char *lp;
-	int len;
-	ssize_t pid;
+	ssize_t len;
+	pid_t pid;
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
@@ -64,7 +64,7 @@ int _flushbuf(int, FILE *);
 int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 
-/* internal number conversion */
+/* number to string */
 size_t __uint2str(char *, size_t, int);
 size_t __uint2str_inter(char *, size_t, int, size_t);
 size_t __int2str(char *, long long, int);
@@ -89,6 +89,6 @@ size_t _safe_addition(size_t, size_t, size_t);
 size_t _safe_upow(size_t, size_t);
 /* internal __errno_table */
 extern char *__errno_table[];
-/* str 2 num */
+/* string to number */
 char *_tol_driver(const char *, int, long long *);
 #endif

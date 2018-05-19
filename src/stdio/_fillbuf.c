@@ -1,8 +1,10 @@
 #include "../internal/internal.h"
 #include <stdlib.h>
+
 int _fillbuf(FILE *fp)
 {
 	size_t bufsize;
+	ssize_t ret = 0;
 
 	if ((fp->flags & (_READ | _EOF | _ERR)) != _READ) {
 		return EOF;
@@ -15,19 +17,25 @@ int _fillbuf(FILE *fp)
 	}
 
 	fp->rp = fp->buf;
-	fp->len = read(fp->fd, fp->rp, bufsize);
+	ret = read(fp->fd, fp->rp, bufsize);
 
-	if (--fp->len < 0) {
-		if (fp->len == -1) {
-			fp->flags |= _EOF;
-		}
-		else {
-			fp->flags |= _ERR;
-		}
-		fp->len = 0;
-		//fflush(fp);
-		return EOF;
+	/* zero length read */
+	if (ret == 0) {
+		fp->flags |= _EOF; 
+		goto eof; 
+	/* read error */
+	}else if ((ret == -1)) {
+		fp->flags |= _ERR;
+		goto eof;
 	}
 
+	/* return the first char and incr */
+	fp->len = ret - 1;
 	return (unsigned char)*fp->rp++;
+
+	/* end of file OR error condition */
+	eof:
+	fp->len = 0; 
+        return EOF;
 }
+
