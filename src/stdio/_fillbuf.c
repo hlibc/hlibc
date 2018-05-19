@@ -2,7 +2,7 @@
 #include <stdlib.h>
 int _fillbuf(FILE *fp)
 {
-	int bufsize;
+	size_t bufsize;
 
 	if ((fp->flags & (_READ | _EOF | _ERR)) != _READ) {
 		return EOF;

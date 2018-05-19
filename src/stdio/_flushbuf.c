@@ -3,7 +3,7 @@
 
 int _flushbuf(int x, FILE *fp)
 {
-	int bufsize;
+	size_t bufsize;
 	bufsize = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
 
 	if (fp->buf == NULL) {
@@ -20,7 +20,8 @@ int _flushbuf(int x, FILE *fp)
 	}
 
 	fp->rp = fp->buf;
-	fp->len = bufsize - 1;
+	//fp->len = bufsize - 1;
+	fp->len = bufsize;
 	if (x != EOF) {
 		*fp->rp++ = (char)x;
 	}
