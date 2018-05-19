@@ -1,2 +1,0 @@
-FROM amd64/debian:8
-RUN apt-get update && apt-get -y install make gcc

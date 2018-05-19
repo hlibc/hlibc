@@ -22,17 +22,16 @@ int _fillbuf(FILE *fp)
 	/* zero length read */
 	if (ret == 0) {
 		fp->flags |= _EOF;
-		fp->len = 0;
+		fp->len = 1;
 		return EOF;
 	/* read error */
 	}else if ((ret == -1)) {
 		fp->flags |= _ERR;
-		fp->len = 0;
+		fp->len = 1;
 		return EOF;
 	}
 
-	/* return the first char and incr */
-	//fp->len = ret - 1;
+	/* return the first char and incr ->rp past it */
 	fp->len = ret;
 	return (unsigned char)*fp->rp++;
 }
