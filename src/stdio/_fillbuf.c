@@ -32,7 +32,8 @@ int _fillbuf(FILE *fp)
 	}
 
 	/* return the first char and incr */
-	fp->len = ret - 1;
+	//fp->len = ret - 1;
+	fp->len = ret;
 	return (unsigned char)*fp->rp++;
 }
 

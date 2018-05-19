@@ -27,7 +27,7 @@ typedef struct
 	char *buf;
 	char *rp;
 	char *lp;
-	ssize_t len;
+	size_t len;
 	pid_t pid;
 } FILE;
 
