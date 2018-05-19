@@ -20,8 +20,8 @@ int _flushbuf(int x, FILE *fp)
 	}
 
 	fp->rp = fp->buf;
-	//fp->len = bufsize - 1;
-	fp->len = bufsize;
+	fp->len = bufsize - 1;
+	//fp->len = bufsize;
 	if (x != EOF) {
 		*fp->rp++ = (char)x;
 	}
