@@ -6,15 +6,15 @@
  *
  *
  *
- * Modified by CM Graff for hlibc
+ * Heavily modified by CM Graff for hlibc
  */
 
 #include <string.h>
 #include <unistd.h>
-char *optarg; /* Global argument pointer. */
-int optind = 0; /* Global argv index. */
-int optopt = 0;// a no opt -cmg
-int opterr = 1;// a no opt -cmg
+char *optarg;	/* Global argument pointer. */
+int optind = 0;	/* Global argv index. */
+int optopt = 0;	/* a no opt -cmg */
+int opterr = 1;	/* a no opt -cmg */
 int getopt(int argc, char *const argv[], const char *optstring)
 {
 	char c;
@@ -26,7 +26,6 @@ int getopt(int argc, char *const argv[], const char *optstring)
 		if (optind == 0) {
 			optind++;
 		}
-
 		if (optind >= argc || argv[optind][0] != '-'
 		    || argv[optind][1] == '\0') {
 			return -1;
@@ -35,7 +34,6 @@ int getopt(int argc, char *const argv[], const char *optstring)
 			optind++;
 			return -1;
 		}
-
 		scan = argv[optind] + 1;
 		optind++;
 	}
@@ -63,3 +61,4 @@ int getopt(int argc, char *const argv[], const char *optstring)
 	}
 	return c;
 }
+
