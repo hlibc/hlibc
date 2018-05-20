@@ -21,6 +21,12 @@ BASIC_TYPE="	atoll-small
 		puts-driver
 		strerror-driver
 		pow_test
+		getopt -ao arg path path
+		getopt -a -o arg path path
+		getopt -o arg -a path path
+		getopt -a -o arg -- path path
+		getopt -a -oarg path path
+		getopt -aoarg path path
 "
 
 DISPLAYDIFF="1"

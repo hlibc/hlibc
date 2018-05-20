@@ -7,5 +7,5 @@ all: $(OBJ)
 
 clean:
 
-	$(RM) $(OBJ) 
+	$(RM) $(OBJ)
 

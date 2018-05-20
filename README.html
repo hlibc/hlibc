@@ -128,29 +128,12 @@
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>DEVELOPERS:</strong></dl><pre></dl><pre>
 </pre><dd><hr/></dd><pre>
 
-	Important:
-	
 	One of the simplest ways to contribute to hlibc is to make patches
 	using `git'. They can be constructed as follows:
 
 		git add src/path/to/work.c
 		git commit -m "something new added"
 		git format-patch -1 --stdout > work.patch
-
-	After the patch is constructed it can be handed over via a pastebin by
-	posting the work on `#hlibc` on irc.freenode.net. We recommend `ix.io`.
-	
-	Optional:
-	
-	We provide a style guide, in the form of a file called `.clang-format` found
-	in the project base. This requires a recent version of the utility
-	`clang-format`. If you do not have access to this, please ask for assistance
-	in IRC. You can test (print to stdout) it first by doing:
-	
-	    clang-format --style=<root>/.clang-format my_contribution.c
-	
-	To modify files in-place, append the `-i` flag. Please do not re-format any
-	files that you did not otherwise change.
 
 
 <br clear="left"/></pre><dl><br clear="left"/></pre><dl><strong>WEB HOME:</strong></dl><pre></dl><pre>
