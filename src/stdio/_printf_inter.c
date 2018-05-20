@@ -227,8 +227,5 @@ int _printf_inter(
 		--i;
 		_populate(&i, '\0', flag, &str, fp); /* don't incr for '\0' */
 	}
-	//if (flag == 0) {
-	//	_flushbuf(EOF, fp);
-	//}
 	return i;
 }
