@@ -13,13 +13,13 @@
 #include <unistd.h>
 char *optarg; /* Global argument pointer. */
 int optind = 0; /* Global argv index. */
-static char *scan = NULL; /* Private scan pointer. */
 int optopt = 0;// a no opt -cmg
+int opterr = 1;// a no opt -cmg
 int getopt(int argc, char *const argv[], const char *optstring)
 {
 	char c;
 	char *place;
-
+	static char *scan = NULL;
 	optarg = NULL;
 
 	if (!scan || *scan == '\0') {
@@ -61,6 +61,5 @@ int getopt(int argc, char *const argv[], const char *optstring)
 			return ':';
 		}
 	}
-
 	return c;
 }
