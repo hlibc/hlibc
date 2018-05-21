@@ -1,7 +1,7 @@
 # configure outputs to config.mak and this Makefile uses config.mak so
 # changes here may be lost. use GNU make
 
-RELENG ?= hlibc-0.1b
+RELENG ?= hlibc-0.1c
 RELENG_MIR ?= http://www.csit.parkland.edu/~cgraff1/
 RELENG_DIR ?= public_html
 RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu
