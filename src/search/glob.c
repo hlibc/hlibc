@@ -50,6 +50,7 @@ struct path_list {
   int (*errfunc)(const char *, int);
 
   size_t allocated_count;
+  size_t matched_count;
   size_t next_accepted_pos;
   DIR * dir;
   const char * pattern_pos;
@@ -74,13 +75,14 @@ static enum state iterate_entries(const char * path, struct path_list * list) {
 
     if (direntry == NULL) {
       closedir(list->dir);
-      return E_GLOB_ABORTED;   // an error occurs TODO: return an appropriate error code
+      return E_GLOB_ABORTED;   // TODO: return an appropriate error code
     }
 
-    // for every entry in this directory, allocate a path_node for future processing.
-    // yes this occupies more space, but simplifies the code.
+    // for every entry in this directory, allocate a path_node for future
+    // processing.yes this occupies more space, but simplifies the code.
     size_t pathlength = strlen(path) + strlen(direntry->d_name) + 1;
-    struct path_node * node = (struct path_node*)malloc(sizeof(struct path_node) + pathlength);
+    struct path_node * node =
+        (struct path_node*)malloc(sizeof(struct path_node) + pathlength);
     if (node == NULL) {
       closedir(list->dir);
       return E_GLOB_NOSPACE;
@@ -134,7 +136,7 @@ static enum state glob_discard(struct path_list * list) {
 
   struct path_node * head = list->head;
   list->head = head->next;
-  fprintf(stderr, "discard %s\n", head->path_name);
+  // fprintf(stderr, "\t\tdiscard %s\n", head->path_name);
   free(head);
   return E_NEXT;
 }
@@ -147,7 +149,7 @@ static enum state glob_store(struct path_list * list) {
     if (paths == NULL) {
       return E_GLOB_NOSPACE;
     }
-    memset(paths + )
+    memset(paths + list->next_accepted_pos, 0x0, 16 * sizeof(char*));
     list->pglob->gl_pathv = paths;
   }
 
@@ -156,9 +158,10 @@ static enum state glob_store(struct path_list * list) {
   if (list->pglob->gl_pathv[list->next_accepted_pos] == NULL) {
     return E_GLOB_NOSPACE;
   }
-  fprintf(stderr, "store path %s\n", list->head->path_name);
+  // fprintf(stderr, "\t\tstore path %s\n", list->head->path_name);
   list->next_accepted_pos++;
   list->pglob->gl_pathc++;
+  list->matched_count++;
   return E_DISCARD;
 }
 
@@ -170,18 +173,23 @@ static enum state glob_asterisk(struct path_list * list) {
   return E_DISCARD;
 }
 
-// process one path_node, the result will be in 4 state:
-//  1. the path dismatch the pattern, discard it
-//  2. the path match part of the pattern(need to process sub directories or files), iterate its subdirectories and files and create according path_node and discard this path_node
-//  3. the path match totally the pattern, remove it from list head and save it in glob structure
-//  4.
+/*
+ * process one path_node, the result will be in 4 state:
+ *  1. the path dismatch the pattern, discard it
+ *  2. the path match part of the pattern(need to process sub directories or
+ *     files), iterate its subdirectories and files and create according
+ *     path_node and discard this path_node
+ *  3. the path match totally the pattern, remove it from list head and save it
+ *     in glob structure
+ *  4.
+ */
 static enum state glob_next(struct path_list * list) {
   if (list->head == NULL) {
     return E_END;
   }
 
   struct path_node * head = list->head;
-  fprintf(stderr, "processing %s\n", head->path_name);
+  // fprintf(stderr, "\t\tprocessing %s\n", head->path_name);
   while (*head->path_pos != '\0' &&
          *head->pattern_pos != '\0') {
     switch(*head->pattern_pos) {
@@ -194,6 +202,7 @@ static enum state glob_next(struct path_list * list) {
       case '*':
         return E_ASTERISK;
       case '\\':
+        fprintf(stderr, "got this\n");
       default:
         if (*head->path_pos != *head->pattern_pos) {
           return E_DISCARD;  // dismatch
@@ -225,7 +234,7 @@ static enum state glob_end(struct path_list * list) {
   return E_END;
 }
 
-static void candidate_list_init(struct path_list * list,
+static int candidate_list_init(struct path_list * list,
                                 const char * pattern,
                                 int flags,
                                 int (*errfunc)(const char *, int),
@@ -237,6 +246,7 @@ static void candidate_list_init(struct path_list * list,
   list->flags = flags;
   list->pattern = pattern;
   list->pglob = pglob;
+  list->matched_count = 0;
 
   if (flags & GLOB_DOOFFS) {
     list->next_accepted_pos = list->pglob->gl_offs;
@@ -251,8 +261,26 @@ static void candidate_list_init(struct path_list * list,
     list->pglob->gl_pathv = NULL;
   }
 
+  if (list->next_accepted_pos > 0) {
+    char ** paths = realloc(list->pglob->gl_pathv,
+                            list->next_accepted_pos * sizeof(char*));
+    if (paths == NULL) {
+      return GLOB_NOSPACE;
+    }
+
+    // initialize the reserved slots
+    if ((flags & GLOB_APPEND) == 0) {
+      for (size_t i = 0; i < list->pglob->gl_offs; ++i) {
+        paths[i] = NULL;
+      }
+    }
+
+    list->pglob->gl_pathv = paths;
+  }
+
   list->allocated_count = 0;
   list->dir = NULL;
+  return 0;
 }
 
 static void state_processor_init(struct pattern_state * states, int flags) {
@@ -277,9 +305,10 @@ int glob(const char *pattern,
          int (*errfunc)(const char *, int),
          glob_t *pglob) {
   struct path_list list;
-  candidate_list_init(&list, pattern, flags, errfunc, pglob);
-
-  fprintf(stderr, "hello, test\n");
+  int ret = candidate_list_init(&list, pattern, flags, errfunc, pglob);
+  if (ret != 0) {
+    return ret;
+  }
 
   struct pattern_state states[E_END + 1] = { {NULL} };
   state_processor_init(states, flags);
@@ -289,6 +318,9 @@ int glob(const char *pattern,
     s = states[s].process(&list);
   }
 
+  if (list.matched_count == 0) {
+    return GLOB_NOMATCH;
+  }
   // process list
   return 0;
 }

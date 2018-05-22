@@ -25,38 +25,27 @@ int eff(const char * path, int error) {
   return 0;
 }
 
-void test(const char * pattern) {
+int main(int argc, char *argv[]) {
+  int ret = 0;
   glob_t globbuf;
 
-  globbuf.gl_offs = 2;
-  int ret = glob("hello].c", GLOB_DOOFFS, eff, &globbuf);
-
-  debug(&globbuf, globbuf.gl_offs);
-  fprintf(stderr, "glob return %d GLOB_NOSPACE=%d GLOB_ABORTED=%d GLOB_NOMATCH=%d\n",
-          ret, GLOB_NOSPACE, GLOB_ABORTED, GLOB_NOMATCH);
-
-  /* ret = glob("../\*\/\*.bak", GLOB_DOOFFS | GLOB_APPEND, eff, &globbuf); */
-
-  /* debug(&globbuf, 2); */
-  /* fprintf(stderr, "glob return %d\n", ret); */
-
-  globbuf.gl_pathv[0] = "ls";
-  globbuf.gl_pathv[1] = "-l";
-  execvp("ls", &globbuf.gl_pathv[0]);
-}
-
-int main(int argc, char *argv[]) {
-  test(argv[1]);
-  #if 0
-  DIR * dir = opendir(argv[1]);
-  while (1) {
-    struct dirent * direntry = readdir(dir);
-    if (direntry == NULL) {
-      fprintf(stderr, "null read\n");
-      break;
-    }
-    fprintf(stderr, "readdir: %s\n", direntry->d_name);
+  if (argc > 1) {
+    globbuf.gl_offs = 2;
+    ret = glob(argv[1], GLOB_DOOFFS, eff, &globbuf);
+    fprintf(stderr, "first call return %d\n", ret);
+    debug(&globbuf, globbuf.gl_offs);
+    globbuf.gl_pathv[0] = "ls";
+    globbuf.gl_pathv[1] = "-l";
   }
-  #endif
+
+  if (argc > 2) {
+    // globbuf.gl_offs = 3; // is that would overwrite the result of previous call?
+    ret = glob(argv[2], GLOB_DOOFFS | GLOB_APPEND, eff, &globbuf);
+    fprintf(stderr, "second call return %d\n", ret);
+    debug(&globbuf, globbuf.gl_offs);
+    globbuf.gl_pathv[2] = "-a";
+  }
+
+  execvp("ls", &globbuf.gl_pathv[0]);
   return 0;
 }
