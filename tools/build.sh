@@ -167,6 +167,12 @@ else	printf "%s\n" "##getline-driver failed to read lines from file"
 	displaydiff
 fi
 
+./tests/strsep-driver > ${SUF}/diff2 2>${SUF}/testerr
+./control/strsep-driver > ${SUF}/diff3 2>${SUF}testerr
+diff ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr && \
+echo "\`strsep_driver' test compared equal to its control method" || \
+echo "##strsep driver test failed"
+
 printf "============================================================\n"
 
 exit "$RETVAL"

@@ -1,12 +1,8 @@
 #include <string.h>
 
-/*
-	Copyright 2017, Bao Hexing 'stpncpy'
-*/
-
 char *stpncpy(char *dest, const char *src, size_t n)
 {
-	char *p;
+	char * p;
 	for (; *src != '\0' && n > 0; --n) {
 		*dest++ = *src++;
 	}
