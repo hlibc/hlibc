@@ -4,7 +4,6 @@
 
 /*
 	Copyright 2018 CM Graff
-	with various fixes by:
 	Copyright 2018 Tuomo Venäläinen
 	Copyright 2018 Zach van Rijn
 	Copyright 2018 Adrian Parvin D. Ouano
@@ -103,7 +102,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	}
 	*ans = ret * neg;
 	if (i > j)
-		return (char*) s + i;
+		return (char *)s + i;
 	else
 		return (char *)s;
 }
