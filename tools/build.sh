@@ -27,6 +27,7 @@ BASIC_TYPE="	atoll-small
 		getopt -a -o arg -- path path
 		getopt -a -oarg path path
 		getopt -aoarg path path
+		strsep-driver
 "
 
 DISPLAYDIFF="1"
@@ -104,15 +105,6 @@ else	printf "%s\n" "##popen-to-file driver failed to output to a file"
 	displaydiff
 fi
 
-#dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=50 2>"${SUF}/testerr"
-#./tests/printf-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
-#checkifempty "${SUF}/diff2"
-#if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-#then	printf "%s\n" "\`printf-driver' test utility successfully created and copied a large file of urandom data"
-#else	printf "%s\n" "##printf-driver was unable to create and copy a large file of urandom data"
-#	RETVAL="1"
-#fi
-
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=12 2>"${SUF}/testerr"
 ./tests/putc-driver "${SUF}/diff2" > "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty "${SUF}/diff2"
@@ -165,13 +157,7 @@ then	printf "%s\n" "\`getline-driver compared equal to its control method"
 else	printf "%s\n" "##getline-driver failed to read lines from file" 
 	#RETVAL="1"
 	displaydiff
-fi
-
-./tests/strsep-driver > ${SUF}/diff2 2>${SUF}/testerr
-./control/strsep-driver > ${SUF}/diff3 2>${SUF}testerr
-diff ${SUF}/diff2 ${SUF}/diff3 2>${SUF}/testerr && \
-echo "\`strsep_driver' test compared equal to its control method" || \
-echo "##strsep driver test failed"
+fi 
 
 printf "============================================================\n"
 
