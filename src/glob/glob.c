@@ -288,11 +288,13 @@ static void state_processor_init(struct pattern_state * states, int flags) {
   states[E_ASTERISK].process = glob_asterisk;
   states[E_GLOB_NOSPACE].process = glob_error_no_space;
   states[E_GLOB_ABORTED].process = glob_error_read_error;
+/*
   if (flags) {
     states[E_END].process = glob_end;
   } else {
     states[E_END].process = glob_end;
   }
+*/
 }
 
 int glob(const char *pattern,
