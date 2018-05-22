@@ -230,10 +230,6 @@ static enum state glob_error_read_error(struct path_list * list) {
   return E_END;
 }
 
-static enum state glob_end(struct path_list * list) {
-  return E_END;
-}
-
 static int candidate_list_init(struct path_list * list,
                                 const char * pattern,
                                 int flags,
@@ -292,7 +288,6 @@ static void state_processor_init(struct pattern_state * states, int flags) {
   states[E_ASTERISK].process = glob_asterisk;
   states[E_GLOB_NOSPACE].process = glob_error_no_space;
   states[E_GLOB_ABORTED].process = glob_error_read_error;
-  states[E_END].process = glob_end;
   if (flags) {
     states[E_END].process = glob_end;
   } else {
