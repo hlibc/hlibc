@@ -1,5 +1,9 @@
 #include <string.h>
 
+/*
+	Copyright 2017, Bao Hexing 'stpncpy'
+*/
+
 char *stpncpy(char *dest, const char *src, size_t n)
 {
 	char *p;
