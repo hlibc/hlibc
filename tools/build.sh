@@ -125,7 +125,7 @@ else	printf "%s\n" "##popen-to-file driver failed to output to a file"
 fi
 
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=12 2>"${SUF}/testerr"
-./tests/putc-driver "${SUF}/diff2" > "${SUF}/diff3" 2>"${SUF}/testerr"
+./tests/putc-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`putc-driver' test utility successfully created and copied a large file of urandom data"
