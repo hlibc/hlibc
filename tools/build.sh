@@ -28,6 +28,7 @@ BASIC_TYPE="	atoll-small
 		getopt -a -oarg path path
 		getopt -aoarg path path
 		strsep-driver
+		index
 "
 
 DISPLAYDIFF="1"
