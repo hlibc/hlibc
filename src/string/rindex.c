@@ -11,7 +11,9 @@ char *rindex(const char *s, int c)
 
     if (*s == c) {
       target = (char*)s;
-      ++s;
+      if (*s != '\0') {
+          ++s;
+      }
     }
   } while (*s != '\0');
   return target;
