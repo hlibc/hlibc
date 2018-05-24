@@ -5,9 +5,15 @@
 extern "C" {
 #endif
 
-char *index(const char *s, int c);
+int bcmp(const void *, const void *, size_t);
 
-char *rindex(const char *s, int c);
+void bcopy(const void *, void *, size_t);
+
+void bzero(void *, size_t);
+
+char *index(const char *, int);
+
+char *rindex(const char *, int);
 
 #ifdef __cplusplus
 }
