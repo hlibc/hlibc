@@ -29,6 +29,7 @@ BASIC_TYPE="	atoll-small
 		getopt -aoarg path path
 		strsep-driver
 		index
+		memmove
 "
 
 HBOX_TYPE="	gsh ./hbox/gsh.sh
