@@ -31,6 +31,10 @@ BASIC_TYPE="	atoll-small
 		index
 "
 
+HBOX_TYPE="	gsh ./hbox/gsh.sh
+		ls -R hbox
+"
+
 DISPLAYDIFF="1"
 JOBS="1"
 TOOLING="$(pwd)/usr"
@@ -82,6 +86,8 @@ make "$1"
 printf "=============================================================\n"
 printf "==========TEST RESULT START==================================\n"
 
+
+
 printf "%s" "$BASIC_TYPE" | while read -r i
 do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i} 
 	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
@@ -89,6 +95,19 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
+		eval RETVAL="1"
+		displaydiff
+		
+	fi
+done
+
+printf "%s" "$HBOX_TYPE" | while read -r i
+do	./hbox/${i} > "${SUF}/diff2"
+	./hbox-control/${i} > "${SUF}/diff3"
+	checkifempty "${SUF}/diff2"
+	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+	then	printf "%s\n" "\`[POSIX system hbox] ${i}' compared equal to its control method"
+	else	printf "%s\n" "##[POSIX system hbox] ${i} failed to compare equal to its control method"
 		eval RETVAL="1"
 		displaydiff
 		
@@ -107,7 +126,7 @@ else	printf "%s\n" "##popen-to-file driver failed to output to a file"
 fi
 
 dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=12 2>"${SUF}/testerr"
-./tests/putc-driver "${SUF}/diff2" > "${SUF}/diff3" 2>"${SUF}/testerr"
+./tests/putc-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`putc-driver' test utility successfully created and copied a large file of urandom data"
