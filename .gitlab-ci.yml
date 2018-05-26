@@ -1,10 +1,10 @@
-gcc113__aarch64:
+gcc113_aarch64:
   tags:
     - aarch64
     - gcc113
   script: "make gcctest"
 
-gcc75__x86_64:
+gcc75_x86_64:
   tags:
     - x86_64
     - gcc75
@@ -27,5 +27,6 @@ gcc110_ppc64:
     - ppc64
     - gcc110
   script: "make gcctest"
+
 
 
