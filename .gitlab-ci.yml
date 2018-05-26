@@ -1,8 +1,39 @@
 variables:
   GIT_STRATEGY: clone
 
-gcc113_aarch64:
+gcc113__aarch64:
   tags:
     - gcc113
     - aarch64
   script: "make gcctest"
+
+gcc75__x86_64:
+  tags:
+    - gcc75
+    - x86_64
+  script: "make gcctest"
+
+gcc22__mips64:
+  tags:
+    - gcc22
+    - mips64
+  script: "make gcctest"
+
+gcc45__i686:
+  tags:
+    - gcc45
+    - i686
+  script: "make gcctest"
+
+gcc110__ppc64:
+  tags:
+    - gcc110
+    - ppc64
+  script: "make gcctest"
+
+100core__aarch64:
+  tags:
+    - 100core
+    - aarch64
+  script: "make gcctest"
+
