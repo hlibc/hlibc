@@ -3,32 +3,6 @@ variables:
 
 gcc113_aarch64:
   tags:
-    - aarch64
     - gcc113
+    - aarch64
   script: "make gcctest"
-
-gcc45_i686:
-  tags:
-    - gcc45
-    - i686
-  script: "make gcctest"
-
-gcc110_ppc64:
-  tags:
-    - gcc110
-    - ppc64
-  script: "make gcctest"
-
-gcc75_x86_64:
-  tags:
-    - gcc75
-    - x86_64
-  script: "make gcctest"
-
-gcc22_mips64:
-  tags:
-    - gcc22
-    - mips64
-  script: "make gcctest"
-
-
