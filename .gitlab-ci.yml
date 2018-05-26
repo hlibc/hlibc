@@ -5,6 +5,8 @@ gcc113_aarch64:
   before_script:
     - git clone https://git.hlibc.xyz/lab/hlibc/
     - cd hlibc && make gcctest
+   script:
+    - echo empty
 
 gcc75_x86_64:
   tags:
