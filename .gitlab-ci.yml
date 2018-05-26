@@ -3,5 +3,6 @@ gcc113_aarch64:
     - aarch64
     - gcc113
   before_script:
-    - echo hello
+    - git clone https://git.hlibc.xyz/lab/hlibc
+    - cd hlibc
   script: "make gcctest"
