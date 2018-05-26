@@ -3,6 +3,6 @@ variables:
 
 gcc113_aarch64:
   tags:
-    - gcc113
     - aarch64
+    - gcc113
   script: "make gcctest"
