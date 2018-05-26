@@ -1,9 +1,3 @@
-x86_64__gcc_xeon:
-  script: "make gcctest"
-
-aarch64_gcc_4core:
-  script: "make gcctest"
-
-x86_64__gcc__i7:
+job1:
   script: "make gcctest"
 
