@@ -13,8 +13,9 @@
 #include <dirent.h>
 
 static void debug(const glob_t * globbuf, size_t start_pos) {
+  size_t i = 0;
   fprintf(stderr, "gl_pathc = %lu\n", globbuf->gl_pathc);
-  for (size_t i = start_pos; globbuf->gl_pathv[i] != NULL; ++i) {
+  for (i = start_pos; globbuf->gl_pathv[i] != NULL; ++i) {
     fprintf(stderr, "gl_pathv[%lu] = %s\n", i, globbuf->gl_pathv[i]);
   }
   fprintf(stderr, "gl_offs = %lu\n", globbuf->gl_offs);
