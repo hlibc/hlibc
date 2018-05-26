@@ -2,4 +2,6 @@ gcc113_aarch64:
   tags:
     - aarch64
     - gcc113
+  before_script:
+    - echo hello
   script: "make gcctest"
