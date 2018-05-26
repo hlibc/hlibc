@@ -1,3 +1,12 @@
-job1:
+gcc113__aarch64:
+  tags:
+    - aarch64
+    - gcc113
+  script: "make gcctest"
+
+gcc75__x86_64:
+  tags:
+    - x86_64
+    - gcc75
   script: "make gcctest"
 
