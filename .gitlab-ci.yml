@@ -5,7 +5,10 @@ gcc113_aarch64:
   tags:
     - aarch64
     - gcc113
-  before_script:
-    - git clone https://git.hlibc.xyz/lab/hlibc
-    - cd hlibc
   script: "make gcctest"
+
+
+
+#  before_script:
+#    - git clone https://git.hlibc.xyz/lab/hlibc
+#    - cd hlibc
