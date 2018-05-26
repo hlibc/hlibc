@@ -3,8 +3,8 @@ gcc113_aarch64:
     - aarch64
     - gcc113
   script: 
-	- git clone https://git.hlibc.xyz/lab/hlibc/
-	- make gcctest
+    - git clone https://git.hlibc.xyz/lab/hlibc/
+    - make gcctest
 
 gcc75_x86_64:
   tags:
