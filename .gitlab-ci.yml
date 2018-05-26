@@ -10,3 +10,22 @@ gcc75__x86_64:
     - gcc75
   script: "make gcctest"
 
+gcc22_mips64:
+  tags:
+    - mips64
+    - gcc22
+  script: "make gcctest"
+
+gcc45_i686:
+  tags:
+    - i686
+    - gcc45
+  script: "make gcctest"
+
+gcc110_ppc64:
+  tags:
+    - ppc64
+    - gcc110
+  script: "make gcctest"
+
+
