@@ -2,13 +2,13 @@ gcc113_aarch64:
   tags:
     - aarch64
     - gcc113
-  before_script:
-    - echo before
-  script:
-    - git clone https://git.hlibc.xyz/lab/hlibc/
-    - cd hlibc && make gcctest
+  script: "make gcctest"
 
-
+100core_aarch64:
+  tags:
+    - aarch64
+    - 100core
+  script: "make gcctest"
 
 gcc75_x86_64:
   tags:
