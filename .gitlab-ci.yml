@@ -1,39 +1,77 @@
 variables:
   GIT_STRATEGY: clone
 
-gcc113__aarch64:
+# gcc
+gcc113__aarch64__gcc:
   tags:
     - gcc113
     - aarch64
   script: "make gcctest"
 
-gcc75__x86_64:
+gcc75__x86_64__gcc:
   tags:
     - gcc75
     - x86_64
   script: "make gcctest"
 
-gcc22__mips64:
+gcc22__mips64__gcc:
   tags:
     - gcc22
     - mips64
   script: "make gcctest"
 
-gcc45__i686:
+gcc45__i686__gcc:
   tags:
     - gcc45
     - i686
   script: "make gcctest"
 
-gcc110__ppc64:
+gcc110__ppc64__gcc:
   tags:
     - gcc110
     - ppc64
   script: "make gcctest"
 
-100core__aarch64:
+100core__aarch64__gcc:
   tags:
     - 100core
     - aarch64
   script: "make gcctest"
+
+# clang
+gcc113__aarch64__clang:
+  tags:
+    - gcc113
+    - aarch64
+  script: "make clangtest"
+
+gcc75__x86_64__clang:
+  tags:
+    - gcc75
+    - x86_64
+  script: "make clangtest"
+
+gcc22__mips64__clang:
+  tags:
+    - gcc22
+    - mips64
+  script: "make clangtest"
+
+gcc45__i686__clang:
+  tags:
+    - gcc45
+    - i686
+  script: "make clangtest"
+
+gcc110__ppc64__clang:
+  tags:
+    - gcc110
+    - ppc64
+  script: "make clangtest"
+
+100core__aarch64__clang:
+  tags:
+    - 100core
+    - aarch64
+  script: "make clangtest"
 
