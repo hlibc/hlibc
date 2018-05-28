@@ -80,7 +80,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 					j += 2;
 					break;
 				case 'X':
-					j =+ 2;
+					j += 2;
 					break;
 				default:
 					break;
