@@ -4,7 +4,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-
 /* '0' - '0' and 'a' - 'f' */
 static int __convtab[20] = {
 	'\060', '\061', '\062', '\063',
@@ -77,6 +76,7 @@ int _populate(size_t *incr, int x, int flag, char **s, FILE *fp)
 		return putc(x, fp);
 	}
 	return 0;
+
 }
 
 int _printf_inter(
@@ -110,10 +110,10 @@ int _printf_inter(
 	for (p = fmt; *p; p++) {
 		int long_count = 0;
 		int base = 10;
-	
+
 		size_t field_width = 6;
 		size_t precision = 6;
-		
+
 		if (*p != '%') {
 			_populate(&i, *p, flag, &str, fp);
 			continue;
@@ -141,14 +141,14 @@ int _printf_inter(
 				++p;
 				long_count = 2;
 				continue;
-				
+
 				// Handle integrals
 			case 'o':
 			case 'x':
 				base = *p == 'o' ? 8
 						 : 16;
 			case 'd':
-				lval = long_count == 0 ? va_arg(ap, int) 
+				lval = long_count == 0 ? va_arg(ap, int)
 				     : long_count == 1 ? va_arg(ap, long)
 				     :		   va_arg(ap, long long);
 				goto integer;
@@ -165,13 +165,13 @@ int _printf_inter(
 					break;
 				}
 				break;
-			
+
 				// Handle characters
 			case 'c':
 				cval = va_arg(ap, int);
 				_populate(&i, cval, flag, &str, fp);
 				break;
-			
+
 				// Handle strings
 			case 's':
 				sval = va_arg(ap, char *);
@@ -179,7 +179,7 @@ int _printf_inter(
 					_populate(&i, *sval, flag, &str, fp);
 				}
 				break;
-			
+
 				// Handle floating point
 			case 'f':
 			case 'g':
@@ -196,11 +196,11 @@ int _printf_inter(
 					_populate(&i, converted[j], flag, &str, fp);
 				}
 				break;
-				
+
 			default:
 				_populate(&i, *p, flag, &str, fp);
 				break;
-				
+
 			integer:
 				memset(converted, 0, 100);
 				convlen = __int2str(converted, lval, base);
