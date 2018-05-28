@@ -189,9 +189,7 @@ int _printf_inter(
 				convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
 				for (j = 0; convlen--; ++j) {
 					if (converted[j] == '.') {
-						if (convlen > precision) {
-							convlen = precision;
-						}
+						convlen = MIN(convlen, precision);
 					}
 					_populate(&i, converted[j], flag, &str, fp);
 				}
