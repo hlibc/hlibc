@@ -4,7 +4,7 @@ ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | wc -l
 
 diff logs/some logs/some2
 
-./make_temps.sh
+./hbox/make_temps.sh
 
 ./tests/putc-driver logs/gshtest logs/gshtest-control & ./tests/putc-driver logs/gshtest2 logs/gshtest-control2 & ./tests/putc-driver logs/gshtest3 logs/gshtest-control3
 
