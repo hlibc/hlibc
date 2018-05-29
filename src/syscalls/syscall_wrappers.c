@@ -42,10 +42,10 @@ int brk(void *);
 void *sbrk(intptr_t);
 
 struct __libc {
-        size_t *auxv;
-        int (*atexit)(void (*)(void));
-        void (*fini)(void);
-        void (*ldso_fini)(void);
+	size_t *auxv;
+	int (*atexit)(void (*)(void));
+	void (*fini)(void);
+	void (*ldso_fini)(void);
 };
 
 #ifndef LIBC_H
@@ -76,8 +76,8 @@ extern char **__environ;
 #ifdef USE_LIBC_ACCESSOR
 struct __libc *__libc_loc()
 {
-        static struct __libc __libc;
-        return &__libc;
+	static struct __libc __libc;
+	return &__libc;
 }
 #else
 struct __libc __libc;
@@ -91,12 +91,12 @@ __asm__(".hidden __libc");
 
 struct __DIR_s
 {
-        int fd;
-        off_t tell;
-        int buf_pos;
-        int buf_end;
-        int lock[2];
-        char buf[2048];
+	int fd;
+	off_t tell;
+	int buf_pos;
+	int buf_end;
+	int lock[2];
+	char buf[2048];
 };
 
 int access(const char *filename, int amode)
@@ -1086,9 +1086,9 @@ int lchmod(const char *path, mode_t mode)
 int lstat(const char *restrict path, struct stat *restrict buf)
 {
 #ifdef SYS_lstat
-        return __syscall(SYS_lstat, path, buf);
+	return __syscall(SYS_lstat, path, buf);
 #else
-        return __syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
+	return __syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
 #endif
 }
 
@@ -1146,26 +1146,49 @@ int nanosleep(const struct timespec *req, struct timespec *rem)
 
 long __syscall_ret(unsigned long r)
 {
-        if (r > -4096UL) {
-                errno = -r;
-                return -1;
-        }
-        return r;
+	if (r > -4096UL) {
+		errno = -r;
+		return -1;
+	}
+	return r;
 }
 
 #undef syscall
 long syscall(long n, ...)
 {
-        va_list ap;
-        long a, b, c, d, e, f;
-        va_start(ap, n);
-        a=va_arg(ap, long);
-        b=va_arg(ap, long);
-        c=va_arg(ap, long);
-        d=va_arg(ap, long);
-        e=va_arg(ap, long);
-        f=va_arg(ap, long);
-        va_end(ap);
-        return __syscall_ret(syscall(n, a, b, c, d, e, f));
+	va_list ap;
+	long a, b, c, d, e, f;
+	va_start(ap, n);
+	a=va_arg(ap, long);
+	b=va_arg(ap, long);
+	c=va_arg(ap, long);
+	d=va_arg(ap, long);
+	e=va_arg(ap, long);
+	f=va_arg(ap, long);
+	va_end(ap);
+	return __syscall_ret(syscall(n, a, b, c, d, e, f));
 }
 
+int clock_gettime(clockid_t clk, struct timespec *ts)
+{
+	int r = __syscall(SYS_clock_gettime, clk, ts);
+	if (!r) return r;
+	if (r == -ENOSYS) {
+		if (clk == CLOCK_REALTIME) {
+			__syscall(SYS_gettimeofday, clk, ts, 0);
+			ts->tv_nsec = (int)ts->tv_nsec * 1000;
+			return 0;
+		}
+		r = -EINVAL;
+	}
+	errno = -r;
+	return -1;
+}
+
+time_t time(time_t *t)
+{
+	struct timespec ts;
+	clock_gettime(CLOCK_REALTIME, &ts);
+	if (t) *t = ts.tv_sec;
+	return ts.tv_sec;
+}

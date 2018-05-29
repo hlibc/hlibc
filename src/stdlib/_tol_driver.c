@@ -19,7 +19,7 @@
 char *_tol_driver(const char *s, int base, long long *ans)
 { 
 	static uint8_t glph[] = { 
-	/* v    useless filler until the 1st isxdigit */
+	/* v    useless filler until the 1st isalnum  */
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -80,7 +80,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 					j += 2;
 					break;
 				case 'X':
-					j =+ 2;
+					j += 2;
 					break;
 				default:
 					break;

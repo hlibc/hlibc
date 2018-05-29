@@ -30,6 +30,7 @@ BASIC_TYPE="	atoll-small
 		strsep-driver
 		index
 		memmove
+		time
 "
 
 HBOX_TYPE="	gsh ./hbox/gsh.sh
