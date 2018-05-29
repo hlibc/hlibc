@@ -31,6 +31,7 @@ BASIC_TYPE="	atoll-small
 		index
 		memmove
 		time
+		fwrite
 "
 
 HBOX_TYPE="	gsh ./hbox/gsh.sh
