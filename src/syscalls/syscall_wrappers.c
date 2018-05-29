@@ -1169,3 +1169,26 @@ long syscall(long n, ...)
         return __syscall_ret(syscall(n, a, b, c, d, e, f));
 }
 
+int clock_gettime(clockid_t clk, struct timespec *ts)
+{
+        int r = __syscall(SYS_clock_gettime, clk, ts);
+        if (!r) return r;
+        if (r == -ENOSYS) {
+                if (clk == CLOCK_REALTIME) {
+                        __syscall(SYS_gettimeofday, clk, ts, 0);
+                        ts->tv_nsec = (int)ts->tv_nsec * 1000;
+                        return 0;
+                }
+                r = -EINVAL;
+        }
+        errno = -r;
+        return -1;
+}
+
+time_t time(time_t *t)
+{
+        struct timespec ts;
+        clock_gettime(CLOCK_REALTIME, &ts);
+        if (t) *t = ts.tv_sec;
+        return ts.tv_sec;
+}
