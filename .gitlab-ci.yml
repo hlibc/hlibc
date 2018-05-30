@@ -38,6 +38,12 @@ gcc110__ppc64__gcc:
     - aarch64
   script: "make gcctest"
 
+alpine__x86_64__gcc:
+  tags:
+    - alpine
+    - x86_64
+  script: "make gcctest"
+
 # clang
 gcc113__aarch64__clang:
   tags:
@@ -75,3 +81,8 @@ gcc110__ppc64__clang:
     - aarch64
   script: "make clangtest"
 
+alpine__x86_64__clang:
+  tags:
+    - alpine
+    - x86_64
+  script: "make clangtest"
