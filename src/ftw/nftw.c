@@ -299,6 +299,7 @@ int nftw(const char *path,
 		}
 	}
 
+    (void)fd_limit;
 	return 0;
 }
 

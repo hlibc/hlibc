@@ -206,6 +206,7 @@ int ftw(const char *path,
 		}
 	}
 
+    (void)ndirs;
 	return 0;
 }
 
