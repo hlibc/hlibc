@@ -32,6 +32,7 @@ BASIC_TYPE="	atoll-small
 		memmove
 		time
 		fwrite
+		strchr-driver
 "
 
 HBOX_TYPE="	gsh ./hbox/gsh.sh
