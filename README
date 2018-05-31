@@ -95,18 +95,17 @@ USING LLVM/CLANG:
 ROADMAP:
 --------
 
-	Add time() and random() so that the arbsh/arbprec library can be built
-	using hlibc.
+	Add random() so that the arbsh/arbprec library can be built using hlibc.
 
-	Write more tests in C, add them to tests/ and script them into build.sh
+	Write more tests in C, add them to tests/ and toos/bui.d.sh.
 
 	Add an fdopen() function and redesign popen() to use it. 
 
 	Redesign the syscall interface to use unique code and start removing the
 	remnants of musllibc/.
 
-	Rewrite getopt(), write tests for getopt(). This getopt version was
-	written by Henry Spencer and is not unique to hlibc.
+	Rewrite getopt(), This getopt version was written by Henry Spencer and
+	is not unique to hlibc.
 
 	Address proper switching between unbuffered, line buffered and buffered
 	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
