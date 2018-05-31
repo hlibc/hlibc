@@ -4,17 +4,18 @@ size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *fp)
 {
 	size_t request = size * nmemb;
 	size_t ret = 0;
-	size_t i = 0;
 	size_t j = 0;
 	size_t k = 0;
 	char *t = ptr;
 	if ((fp->flags & _LNBUF)) {
-		for (i=0; i<request;++i, ++k) {
+		for (k=0; k<request; ++k) {
 			if (t[k] == '\n') {
-				ret += write(fp->fd, t + j, i);
-				j = i;
-				i = 0;
+				ret += write(fp->fd, t + j, k - j + 1);
+				j = k + 1;
 			}
+		}
+		if (j < k) {
+			ret += write(fp->fd, t + j, k - j);
 		}
 	}
 	else {
