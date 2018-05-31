@@ -68,7 +68,7 @@ AUTOMATIC TESTING:
 	If you wish to add a new test to the test suite simply put the program
 	under tests/ and it will be compiled along with the other tests. To
 	have the test automatically ran with the hlibc testsuite then add the
-	title of its binary to BASIC_TESTS= at the top of tools/build.sh. This
+	title of its binary to BASIC_TYPE= at the top of tools/build.sh. This
 	method is for tests that produce output as stdout and are then compared
 	with the output of the same test compiled against the host. If the test
 	does not use stdout or is unsuitable for running against the host as a
