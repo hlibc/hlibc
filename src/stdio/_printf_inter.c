@@ -1,5 +1,6 @@
 #include "../internal/internal.h"
 #include <stdarg.h>
+#include <stdint.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
