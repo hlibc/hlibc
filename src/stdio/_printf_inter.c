@@ -95,6 +95,7 @@ int _printf_inter(
 	/* Hold converted numerical strings */
 	char converted[BUFSIZ] = { 0 };
 	size_t convlen = 0;
+	size_t convlen_f = 0; // Required to normalize the value of floating point convlen
 	size_t j = 0;
 
 	/* data types */
@@ -112,8 +113,10 @@ int _printf_inter(
 		int long_count = 0;
 		int base = 10;
 
-		size_t field_width = SIZE_MAX;
+		size_t field_width = 0;
 		size_t precision = 6;
+
+		size_t padding = 0; // Computed from convlen and field_width
 
 		if (*p != '%') {
 			_populate(&i, *p, flag, &str, fp);
@@ -187,10 +190,18 @@ int _printf_inter(
 					              : va_arg(ap, long double) ;
 				// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
 				convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
-				for (j = 0; convlen--; ++j) {
+				for (j = 0, convlen_f = 0; convlen--; ++j, convlen_f++) {
 					if (converted[j] == '.') {
 						convlen = MIN(convlen, precision);
 					}
+				}
+
+				convlen = convlen_f;
+				padding = (field_width > convlen) ? field_width - convlen : 0;
+				for (; padding > 0; --padding) {
+					_populate(&i, ' ', flag, &str, fp);
+				}
+				for (j = 0; convlen--; ++j) {
 					_populate(&i, converted[j], flag, &str, fp);
 				}
 				break;
@@ -202,6 +213,10 @@ int _printf_inter(
 			integer:
 				memset(converted, 0, 100);
 				convlen = __int2str(converted, lval, base);
+				padding = (field_width > convlen) ? field_width - convlen : 0;
+				for (; padding > 0; --padding) {
+					_populate(&i, ' ', flag, &str, fp);
+				}
 				for (j = 0; j < convlen; ++j) {
 					_populate(&i, converted[j], flag, &str, fp);
 				}
@@ -209,6 +224,10 @@ int _printf_inter(
 				break;
 			uinteger:
 				convlen = __uint2str(converted, zuval, base);
+				padding = (field_width > convlen) ? field_width - convlen : 0;
+				for (; padding > 0; --padding) {
+					_populate(&i, ' ', flag, &str, fp);
+				}
 				for (j = 0; j < convlen; ++j) {
 					_populate(&i, converted[j], flag, &str, fp);
 				}
