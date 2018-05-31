@@ -118,9 +118,8 @@ int _printf_inter(
 			_populate(&i, *p, flag, &str, fp);
 			continue;
 		}
-		++p;
 
-		if (isdigit(*p)) // Handle field width
+		if (isdigit(*++p)) // Handle field width
 			{
 				field_width = strtol(p, &p, 10);
 			}
