@@ -115,6 +115,8 @@ ROADMAP:
 	correctly.
 
 	Finish the aarch64 port.
+
+	Write tempnam and mktemp for stdio.
 	
 
 REVISION CONTROL:
