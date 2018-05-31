@@ -112,7 +112,7 @@ int _printf_inter(
 		int long_count = 0;
 		int base = 10;
 
-		size_t field_width = 6;
+		size_t field_width = SIZE_MAX;
 		size_t precision = 6;
 
 		if (*p != '%') {
