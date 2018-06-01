@@ -1,4 +1,6 @@
-int scanf(const char *format, ...)
+#include "../internal/internal.h"
+
+int scanf(const char *fmt, ...)
 {
 	int ret = 0;
 	va_list argptr;
