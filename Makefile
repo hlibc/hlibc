@@ -1,10 +1,10 @@
 # configure outputs to config.mak and this Makefile uses config.mak so
 # changes here may be lost. use GNU make
 
-RELENG ?= hlibc-0.1c
-RELENG_MIR ?= http://www.csit.parkland.edu/~cgraff1/
-RELENG_DIR ?= public_html
-RELENG_SSH ?= cgraff1@shaula.csit.parkland.edu
+RELENG ?= hlibc-0.1d
+RELENG_MIR ?= hlibc.xyz/
+RELENG_DIR ?= www
+RELENG_SSH ?= webuser@hlibc.xyz
 
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
@@ -146,13 +146,11 @@ clangtest:
 
 release:
 	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
-	./tools/text2html.sh README
-	cd ../ && cp -r hlibc $(RELENG) 
-	cd ../ && rm -rf $(RELENG)/.git
-	cd ../ && tar -cf $(RELENG).tar.gz $(RELENG) 
+	cd ../ && cp -r hlibc $(RELENG)
+	cd ../ && tar -czf $(RELENG).tar.gz $(RELENG)
 	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH):$(RELENG_DIR)
 	ssh $(RELENG_SSH) -f 'cd $(RELENG_DIR) && md5sum $(RELENG).tar.gz >> CHECKSUMS'
-	git add README Makefile README.html
+	git add README Makefile
 	git commit -m "release $(RELENG)"
 	git push origin master
 
