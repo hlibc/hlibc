@@ -8,6 +8,8 @@ DESCRIPTION:
 	architectures. hlibc can be compiled with either gcc or the llvm
 	clang compiler.
 
+	hlibc has experimental ports for mips and aarch64.
+
 
 BUILDING:
 ---------
