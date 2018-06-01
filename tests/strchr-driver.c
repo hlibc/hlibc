@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main () {
+int main (void) {
    const char str[] = "http://www.tutorialspoint.com";
    const char ch = '.';
    char *ret;
