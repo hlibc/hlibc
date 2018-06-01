@@ -127,21 +127,13 @@ REVISION CONTROL:
 	https://git.hlibc.xyz/lab/hlibc
 
 
-DEVELOPERS:
------------
-
-	One of the simplest ways to contribute to hlibc is to make patches
-	using `git'. They can be constructed as follows:
-
-		git add src/path/to/work.c
-		git commit -m "something new added"
-		git format-patch -1 --stdout > work.patch
-
-
 WEB HOME:
 ---------
 
-	http://www.csit.parkland.edu/~cgraff1/hlibc
+	hlibc is in the process of redesigning our web home. In the meantime,
+	this will be its location, and releases can be retrieved from there:
+
+	http://hlibc.xyz/
 
 
 CONTACT:
@@ -167,6 +159,17 @@ RELENG:
 		RELENG_SSH="user@host:www"
 
 
+DEVELOPERS:
+-----------
+
+	One of the simplest ways to contribute to hlibc is to make patches
+	using `git'. They can be constructed as follows:
+
+		git add src/path/to/work.c
+		git commit -m "something new added"
+		git format-patch -1 --stdout > work.patch
+
+
 REFERENCES:
 -----------
 
@@ -187,8 +190,9 @@ REFERENCES:
 RELEASES:
 ---------
 
-	http://www.csit.parkland.edu/~cgraff1/hlibc-0.1a.tar.gz
+	http://hlibc.xyz/hlibc-0.1a.tar.gz
 
-	http://www.csit.parkland.edu/~cgraff1/hlibc-0.1b.tar.gz
+	http://hlibc.xyz/hlibc-0.1b.tar.gz
 
-	http://www.csit.parkland.edu/~cgraff1//hlibc-0.1c.tar.gz
+	http://hlibc.xyz/hlibc-0.1c.tar.gz
+
