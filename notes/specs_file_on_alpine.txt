@@ -1,0 +1,78 @@
+16:24 < graff> So, the musl-gcc specs file system doesn't seem to be working right on alpine
+16:24 < graff> in fact it seems like the alpine toolchain is misconfigured
+16:24 < graff> we use the same type of specs file for hlibc so ofc it is broken there too
+16:25 < graff> the initial error is "cannot find -lssp_nonshared"
+16:26 < graff> but trivial work arounds reveal that there is a larger problem with linking against libgcc, and ultimately this seems to also affect clang
+16:27 < graff> (as clang generally needs to find libgcc as well, unless it is using its compiler-rt replacement library)
+16:29 < graff> being that alpine is the main distro representing musl this leaves those of us wanting to test on it pretty set back
+16:32 -!- clemens3 [~clemens@catv-80-99-119-23.catv.broadband.hu] has quit [Ping timeout: 240 seconds]
+16:34 -!- sortie [~Sortie@static-5-186-55-44.ip.fibianet.dk] has joined #musl
+16:37 -!- Maxpm [~Maxpm@cpe-74-66-72-233.nyc.res.rr.com] has joined #musl
+17:07 <@dalias> why would you use musl-gcc when the native compiler is musl-targeting??
+17:07 <@dalias> musl's configure script automatically disables installation of the wrapper in that case
+17:09 -!- landley [~landley@172.58.139.198] has quit [Ping timeout: 260 seconds]
+17:10 -!- arti [~arti@do.arti.ee] has quit [Quit: No Ping reply in 180 seconds.]
+17:10 -!- multiplexd [~multiplex@unaffiliated/multiplexd] has quit [Quit: bye]
+17:11 -!- arti [~arti@do.arti.ee] has joined #musl
+17:14 < graff> we set --enable-wrapper
+17:14 < graff> i don't see how the musl-gcc script is only connected to a particular platform, furthermore there's no reason for it to be broken
+17:15 < graff> I understand that your intention for the script is for musl to co-exist with another libc, but there is no reason why it can not be used in the same way to coexist with itself
+17:16 <@dalias> the wrapper is highly not-recommended-for-anything-serious, but there's no good reason i'm aware of that it shouldn't work like this
+17:16 <@dalias> what is your problem linking libgcc?
+17:17 < graff> that is just the next problem it presents if a dummy library is supplied for ssp
+17:17 <@dalias> ?
+17:17 < graff> in general the toolchain seems to be broken in a number of ways
+17:17 <@dalias> i think alpine puts libssp_nonshared in /usr/lib rather than the gcc (version-specific) lib directory
+17:18 <@dalias> this is specific to alpine, not musl
+17:21 < awilfox> graff: if I pushed a test apk that put libssp_nonshared in the gcc lib dir, would you be able to test it?
+17:22 < awilfox> and, would you be able to clarify in what other ways the toolchain is broken?
+17:22 < graff> awilfox: it's a very basic test. basically you just compile musl and then try to use the musl-gcc wrapper script.
+17:22 < graff> awilfox: i can try sure
+17:23 < awilfox> musl master, or the musl that alpine ships with?
+17:23 < graff> upstream musl
+17:23 < awilfox> the musl that alpine ships is not master, though it should be ABI-compatible
+17:23 < graff> though this same problem occurs for all versions of musl that I know of
+17:23 < awilfox> I know that in adelie, we have slight changes to how it works (we pulled the complex math fixes from git etc), but it should work fine
+17:24 < graff> alright I need to try to set up adelie actually, that was something ed recommended to me
+17:26 < awilfox> /usr/lib/gcc/x86_64-foxkit-linux-musl/6.4.0/../../../../x86_64-foxkit-linux-musl/bin/ld: /usr/lib/gcc/x86_64-foxkit-linux-musl/6.4.0/crtend.o: relocation R_X86_64_32 against `.ctors' can not be used when making a PIE object; recompile with -fPIC
+17:26 < graff> we can just use musl-cross make for our alpine tests, but in general it would be nice if musl-gcc -static worked
+17:27 < awilfox> that's pretty interesting
+17:27 < graff> and if it did, then the hlibc test suite would also work on alpine. which would be nice. we can't build a compiler yet so the only other way is with a chroot or small qemu system
+17:28 < awilfox> is that the error you're seeing?
+17:28 < awilfox> it's the only one I am seeing, and I'm not entirely sure why
+17:28 < graff> awilfox: i have had that one before yeah
+17:28 < graff> awilfox: are you using -static?
+17:28 < awilfox> no
+17:28 < awilfox> but, adding -static doesn't change the error
+17:32 < awilfox> it looks like musl-gcc needs to ship its own crtbegin/end.o files
+17:32 <@dalias> the wrapper is not suited for gcc's configured as default-pie, i think
+17:32 <@dalias> no
+17:32 <@dalias> the problem is that it's using crtbegin/end rather than the "S" versions
+17:32 < awilfox> yeah we use PIE by default in adelie
+17:32 <@dalias> instead of:
+17:32 <@dalias> *startfile:
+17:32 <@dalias> %{!shared: $libdir/%{pie:S}crt1.o} $libdir/crti.o %{shared|pie:crtbeginS.o%s;:crtbegin.o%s}
+17:33 <@dalias> *endfile:
+17:33 <@dalias> %{shared|pie:crtendS.o%s;:crtend.o%s} $libdir/crtn.o
+17:33 <@dalias> the specs file should just unconditionally use the "S" versions
+17:33 <@dalias> they're always safe to use and there's no reason for the non-S ones to exist
+17:34 < awilfox> that works when compiled dynamically
+17:34 < awilfox> -static gives segfault
+17:34 < awilfox> when run
+17:34 <@dalias> because it defaults to static pie
+17:35 <@dalias> maybe instead musl-gcc should get rid of default-pie
+17:35 <@dalias> so that you have to use explicit -pie if you want pie
+17:35 <@dalias> then the specs could correctly switch to rcrt
+17:36 < awilfox> Program received signal SIGSEGV, Segmentation fault.
+17:36 < awilfox> 0x00007ffff7dfbfc1 in vfprintf ()
+17:36 <@dalias> if you add -no-pie ?
+17:36 < awilfox> ah
+17:36 < awilfox> then it works
+17:36 < awilfox> yeah
+17:36 <@dalias> right
+17:37 <@dalias> the musl-gcc wrapper does not support static pie
+17:37 <@dalias> because it hasn't been touched since there was upstream static pie support
+17:37 < awilfox> graff: ok, so making it use the S versions unconditionally and using -no-pie -static works fine on adelie
+17:37 <@dalias> what happens if you add -no-pie to the *link specs?
+17:37 <@dalias> does explicit -pie still work to get you a pie?
+
