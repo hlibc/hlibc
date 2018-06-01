@@ -1,4 +1,4 @@
-ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | ls | wc -l
+ls | wc -l | wc -l | wc -l | wc -l | wc -l | wc -l | wc -l | wc -l | wc -l
 
 ./tests/putc-driver Makefile logs/some & ./tests/putc-driver Makefile logs/some2
 
@@ -12,8 +12,6 @@ diff logs/gshtest logs/gshtest-control
 
 diff logs/gshtest2 logs/gshtest-control2
 
-
-
-
+diff logs/gshtest3 logs/gshtest-control3
 
 
