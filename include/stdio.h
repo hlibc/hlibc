@@ -30,6 +30,7 @@ typedef struct FILE FILE;
 /* putc/getc */
 int getc(FILE *);
 int putc(int, FILE *);
+int putchar(int);
 int fputc(int, FILE *);
 int ungetc(int, FILE *);
 int fgetc(FILE *);

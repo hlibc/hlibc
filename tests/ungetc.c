@@ -1,25 +1,14 @@
-
-
- 
 #include <stdio.h>
+
 int main(void)
 {
-    int ch;
- 
-
-
- 
+    int ch; 
     while ((ch = getchar()) != '1')
-        putchar(ch);
- 
-    /* ungetc() returns '1' previously read back to stdin */
+        putchar(ch); 
+   
     ungetc('+', stdin);
- 
-
 
     //ch = getchar();
- 
-    /* putchar() displays character */
     putchar(ch);
     
     puts("");
