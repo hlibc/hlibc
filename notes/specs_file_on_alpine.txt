@@ -75,4 +75,92 @@
 17:37 < awilfox> graff: ok, so making it use the S versions unconditionally and using -no-pie -static works fine on adelie
 17:37 <@dalias> what happens if you add -no-pie to the *link specs?
 17:37 <@dalias> does explicit -pie still work to get you a pie?
+17:32 <@dalias> %{!shared: $libdir/%{pie:S}crt1.o} $libdir/crti.o %{shared|pie:crtbeginS.o%s;:crtbegin.o%s}
+17:33 <@dalias> *endfile:
+17:33 <@dalias> %{shared|pie:crtendS.o%s;:crtend.o%s} $libdir/crtn.o
+17:33 <@dalias> the specs file should just unconditionally use the "S" versions
+17:33 <@dalias> they're always safe to use and there's no reason for the non-S ones to exist
+17:34 < awilfox> that works when compiled dynamically
+17:34 < awilfox> -static gives segfault
+17:34 < awilfox> when run
+17:34 <@dalias> because it defaults to static pie
+17:35 <@dalias> maybe instead musl-gcc should get rid of default-pie
+17:35 <@dalias> so that you have to use explicit -pie if you want pie
+17:35 <@dalias> then the specs could correctly switch to rcrt
+17:36 < awilfox> Program received signal SIGSEGV, Segmentation fault.
+17:36 < awilfox> 0x00007ffff7dfbfc1 in vfprintf ()
+17:36 <@dalias> if you add -no-pie ?
+17:36 < awilfox> ah
+17:36 < awilfox> then it works
+17:36 < awilfox> yeah
+17:36 <@dalias> right
+17:37 <@dalias> the musl-gcc wrapper does not support static pie
+17:37 <@dalias> because it hasn't been touched since there was upstream static pie support
+17:37 < awilfox> graff: ok, so making it use the S versions unconditionally and using -no-pie -static works fine on adelie
+17:37 <@dalias> what happens if you add -no-pie to the *link specs?
+17:37 <@dalias> does explicit -pie still work to get you a pie?
+17:43 < graff> alright thanks you guys. let me try to do all of that. if possible it would be nice to have this added as a default
+17:44 < graff> I'll get on top of setting up our adelie VMs too. in general I have been having a lot of troubles with qemu -curses that have been slowing 
+               things down
+17:44 < graff> but hopefully I'll have all of the major native musl platforms done soon
+18:09 < graff> awilfox: could I get a copy of this working specs file? not sure I am seeing what you changed
+18:12 -!- halbeno [~halbeno@S0106ac202ecc7933.ed.shawcable.net] has joined #musl
+18:18 -!- sortie [~Sortie@static-5-186-55-44.ip.fibianet.dk] has quit [Quit: Leaving]
+18:41 < graff> %{!shared: $libdir/%{pie:S}crt1.o} $libdir/crti.o %{shared|pie:crtbeginS.o%s;:crtbegin.o%s} becomes %{!shared: $libdir/%{pie:S}crt1.o} 
+               $libdir/crti.o %{shared|pie:crtbeginS.o%s;:crtbeginS.o%s} ?
+18:41 < graff> and %{shared|pie:crtendS.o%s;:crtend.o%s} $libdir/crtn.o becomes %{shared|pie:crtendS.o%s;:crtendS.o%s} $libdir/crtn.o?
+18:43 < graff> i guess that also means they don't need the conditionals at all
+18:50 -!- sigsts [~sigsts@unaffiliated/skyroverr] has quit [Remote host closed the connection]
+19:01 -!- sigsts [~sigsts@unaffiliated/skyroverr] has joined #musl
+19:18 < graff> Alright that didn't work for me on alpine. still the same " cannot find -lssp_nonshared"
+19:19 < awilfox> you need to install /usr/lib/libssp_nonshared.a to $muslroot/lib/
+19:19 < awilfox> that was my workaround anyway
+19:19 < awilfox> let me play with it a little.
+19:19 < graff> ahh, hmm
+19:20 < awilfox> ah ha, dalias is right; installing it to gcc lib dir works
+19:20 < awilfox> I will just change the build :)
+19:20 < awilfox> this is going to be some 'fun' on the slower builders...
+19:21 < awilfox> oh
+19:21 < awilfox> it is provided by musl package
+19:21 < awilfox> hmm...
+19:21 < awilfox> graff: would it be acceptable to install a package like 'gcc-libssp' for you?
+19:27 -!- sigsts [~sigsts@unaffiliated/skyroverr] has quit [Remote host closed the connection]
+19:32 -!- sigsts [~sigsts@unaffiliated/skyroverr] has joined #musl
+19:32 < graff> awilfox: I don't really mind installing stuff related to package dependencies.
+19:33 < graff> do I need to install something for alpine already to get libssp?
+19:33 < graff> or is it just in the wrong place for this use case
+19:39 < awilfox> graff: it's just in the wrong place
+19:39 < awilfox> graff: on alpine, you can just ln -s /usr/lib/libssp_nonshared.a /usr/lib/gcc/${CHOST}/6.4.0/libssp_nonshared.a
+19:39 < awilfox> graff: on adelie, you can now install 'gcc-libssp' and get that free
+19:40 < graff> awilfox: interesting. thank you!
+19:40 < awilfox> https://code.foxkit.us/adelie/packages/commit/2adad41c4eae395a5ae9f50ac50d21dc51095f91
+19:40 < feepbot> system/gcc-libssp: new package, requested from #musl (2adad41c) | Commits | Ad�lie Linux / packages | GitLab
+19:52 -!- FRIGN [~FRIGN@2001-4dd3-9c47-1-6d0c-e760-cc08-f336.ipv6dyn.netcologne.de] has quit [Remote host closed the connection]
+19:58 < awilfox> fun fact: with this package installed /usr/lib/libssp_nonshared.a is no longer needed
+19:59 < awilfox> I might integrate this into our gcc build and remove it from the musl build, at some point
+19:59 < awilfox> but that point is not right now, we are hours from beta1
+20:13 <@dalias> i think alpine is not using the real gcc libssp_nonshared.a but a simplified one
+20:13 -!- corkmork [~michaeljc@122-58-167-22-fibre.bb.spark.co.nz] has joined #musl
+20:17 < awilfox> dalias: correct.  and idk why either
+20:18 < awilfox> is there a technical reason to not use gcc's libssp?
+20:18 <@dalias> yes, but this is libssp_nonshared
+20:18 <@dalias> but there's also a technical reason not to use it :)
+20:19 <@dalias> the __stack_chk_fail_local in gcc's libssp_nonshared calls __stack_chk_fail via the GOT/PLT, which might be compromised in situations 
+                highly correlated with the cases when it's called
+20:20 -!- sigsts [~sigsts@unaffiliated/skyroverr] has quit [Remote host closed the connection]
+20:20 <@dalias> a replacement provided by musl can just directly terminate the process with no cross-DSO calls
+20:23 < awilfox> alpine's calls __stack_chk_fail too
+20:24 -!- feepbot [~feepbot@i59F609A3.versanet.de] has quit [Remote host closed the connection]
+20:24 -!- sigsts [~sigsts@unaffiliated/skyroverr] has joined #musl
+20:24 <@dalias> ah
+20:25 <@dalias> then it
+20:25 <@dalias> then it's no better than gcc's
+20:26 -!- feepbot [~feepbot@i59F609A3.versanet.de] has joined #musl
+20:28 < awilfox> dalias: if you had any time to contribute a better __stack_chk_fail_local.c, you can submit a PR/email a patch to us and I'd happily ship 
+                 it :)
+20:28 < awilfox> but I understand you might not
+20:30 -!- pcarrier [uid12046@gateway/web/irccloud.com/x-pxwwdjxgotihibqc] has joined #musl
+20:31 <@dalias> well a better one will be arch-specific or will rely on __builtin_trap() actually being implemented for the arch
+20:31 <@dalias> (iirc it's missing for some archs)
+20:32 <@dalias> (missing = implemented as a call to abort() which is worse)
 
