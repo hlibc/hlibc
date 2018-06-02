@@ -8,7 +8,7 @@
  */
 
 #include <stdio.h>
-
+#include <string.h>
 int main(void)
 {
 	char * ptr = "hello, hlibc\nhello, world\nhello, graff\n";
