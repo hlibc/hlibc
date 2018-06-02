@@ -8,7 +8,7 @@ int main(void)
    
     ungetc('+', stdin);
 
-    //ch = getchar();
+    ch = getchar();
     putchar(ch);
     
     puts("");
