@@ -36,8 +36,8 @@ BASIC_TYPE="	atoll-small
 "
 
 HBOX_TYPE="	gsh ./hbox/gsh.sh
-		ls -R hbox
 "
+# ls -R hbox
 
 DISPLAYDIFF="1"
 JOBS="1"
