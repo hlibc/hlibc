@@ -130,6 +130,16 @@ else	printf "%s\n" "##scanf-driver failed to compare equal to its control method
 	displaydiff
 fi
 
+echo "123abc" | ./control/scanf-getc > "${SUF}/diff2" 2>"${SUF}/testerr"
+echo "123abc" | ./tests/scanf-getc > "${SUF}/diff3" 2>"${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`scanf-driver' test compared equal to its control method"
+else	printf "%s\n" "##scanf-driver failed to compare equal to its control method"
+	RETVAL="1"
+	displaydiff
+fi
+
 ./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
 ./tests/popen-to-file "du /usr" "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty "${SUF}/diff2"
