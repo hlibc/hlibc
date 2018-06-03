@@ -6,7 +6,6 @@ int main(int argc, char *argv[])
 	size_t frret = 0;
 	size_t fwret = 0;
 	size_t ret = 0;
-	int c = 0;
 	FILE *fp = stdin;
 	if ( argc > 1 ) {
 		fp = fopen(argv[1], "r");

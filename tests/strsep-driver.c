@@ -3,17 +3,17 @@
 #include <assert.h>
 #include <stdlib.h>
 
-int main(int argc, char ** argv)
+int main(void)
 {
-    char	*token,	*string, *tofree;
+	char	*token,	*string, *tofree;
 
-    tofree = string = strdup("abc,def,ghi");
-    assert(string != NULL);
+	tofree = string = strdup("abc,def,ghi");
+	assert(string != NULL);
 
-    while ((token = strsep(&string, ",")) != NULL)
-        printf("%s\n", token);
+	while ((token = strsep(&string, ",")) != NULL)
+		printf("%s\n", token);
 
-    free(tofree);
+	free(tofree);
 
-    return 0;
+	return 0;
 }

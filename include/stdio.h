@@ -30,7 +30,10 @@ typedef struct FILE FILE;
 /* putc/getc */
 int getc(FILE *);
 int putc(int, FILE *);
+int putchar(int);
 int fputc(int, FILE *);
+int ungetc(int, FILE *);
+int fgetc(FILE *);
 
 /* getline */
 ssize_t getline (char **, size_t *, FILE *);
@@ -70,7 +73,6 @@ int fputs(const char *, FILE *);
 int puts(const char *);
 char *fgets(char *, int, FILE *);
 FILE *fopen(const char *, const char *);
-int fgetc(FILE *m);
 char *fgets(char *, int, FILE *);
 int getchar(void);
 int fclose(FILE *);

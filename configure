@@ -211,23 +211,6 @@ test "x$debug" = xyes && CFLAGS_AUTO="-g"
 tryflag CFLAGS_AUTO -pipe
 
 #
-# If debugging is disabled, omit bloated DWARF2 unwind tables & frame ptr
-#
-if ! fnmatch '-g*|*\ -g*' "$CFLAGS_AUTO $CFLAGS"
-then	tryflag CFLAGS_AUTO -fno-unwind-tables
-	tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
-	tryflag CFLAGS_AUTO -fomit-frame-pointer
-fi
-
-#
-# Some optimization levels add bloated alignment that hurt performance
-#
-tryflag CFLAGS_AUTO -falign-functions=1
-tryflag CFLAGS_AUTO -falign-labels=1
-tryflag CFLAGS_AUTO -falign-loops=1
-tryflag CFLAGS_AUTO -falign-jumps=1
-
-#
 # On x86, make sure we don't have incompatible instruction set
 # extensions enabled by default. This is bad for making static binaries.
 # We cheat and use i486 rather than i386 because i386 really does not
