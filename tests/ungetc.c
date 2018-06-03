@@ -10,9 +10,6 @@ int main(void)
 
     ch = getchar();
     putchar(ch);
-    
-    puts("");
- 
-    printf("Thank you!\n");
+    printf("\n");
     return 0;
 }

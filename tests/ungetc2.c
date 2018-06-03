@@ -2,12 +2,15 @@
 
 int main(void)
 {
-    int ch; 
-   
+    int ch;
+
     ungetc('+', stdin);
 
     while ((ch = getchar()) != '1')
-        putchar(ch); 
-    
+    {
+        putchar(ch);
+        fflush(stdout);
+    }
+
     return 0;
 }

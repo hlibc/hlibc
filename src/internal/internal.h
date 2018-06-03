@@ -20,6 +20,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define UNGETC 8
+
 typedef struct
 {
 	int fd;
@@ -29,6 +31,8 @@ typedef struct
 	char *lp;
 	size_t len;
 	pid_t pid;
+	char ungotten[8];
+	size_t ungot;
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
