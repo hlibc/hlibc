@@ -85,6 +85,12 @@ int rename(const char *, const char *);
 /* perror */
 void perror(const char *);
 
+/* scanf */
+int scanf(const char *format, ...);
+int fscanf(FILE *stream, const char *format, ...);
+int sscanf(const char *str, const char *format, ...);
+
+
 /* opaque objects */
 FILE *stdin;
 FILE *stdout;
