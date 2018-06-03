@@ -186,9 +186,6 @@ case "$target" in
 	*) fail "$0: unknown or unsupported target \"$target\"" ;;
 esac
 
-# Find stack alignment flag
-trymultiflag STACK_ALIGNMENT "-mno-sse -mpreferred-stack-boundary=3"
-tryflag STACK_ALIGNMENT -mstack-alignment=3
 
 #
 # Try to get a conforming C99 freestanding environment
