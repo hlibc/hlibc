@@ -15,24 +15,25 @@ int safe_getc(struct stream* stream)
 	char unget;
 	if (stream->fp == NULL) return *(stream->pos++);
 	if (unget == '\0') return getchar(stream->fp);
+	
 	unget = stream->unget;
 	stream->unget = '\0';
 	return unget;
 }
 
-void safe_ungetc(char c, struct stream* stream)
+void safe_ungetc(char c, struct stream *stream)
 {
 	if (stream->fp == NULL) *(--stream->pos) = c;
-	stream->unget = c;
+	else stream->unget = c;
 }
 
-int read_int(struct stream* stream, int *x)
+int read_int(struct stream *stream, int *x)
 {
 	char buf[BUFSIZ];
 	char *pos = buf;
 
 	while (isdigit(*pos++ = safe_getc(stream)));
-	safe_ungetc(*pos, stream);
+	safe_ungetc(*--pos, stream);
 
 	*x = strtoll(buf, NULL, 10);
 
