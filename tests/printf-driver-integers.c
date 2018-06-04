@@ -35,11 +35,11 @@ int main(void)
 	len += fprintf(stdout, "The string literal \"987654\"     %s\n", "987654");
 	len += fprintf(stdout, "decimal value of -987654	%d\n", -987654);
 	fflush(stdout);
-	//len += dprintf(1, "decimal value of 987654	 %d\n", 987654);
-	//len += dprintf(1, "octal value of 987654	   %o\n", 987654);
-	//len += dprintf(1, "hexadecimal value of 987654     %x\n", 987654);
-	//len += dprintf(1, "The string literal \"987654\"     %s\n", "987654");
-	//len += dprintf(1, "decimal value of -987654	%d\n", -987654);
+	len += dprintf(1, "decimal value of 987654	 %d\n", 987654);
+	len += dprintf(1, "octal value of 987654	   %o\n", 987654);
+	len += dprintf(1, "hexadecimal value of 987654     %x\n", 987654);
+	len += dprintf(1, "The string literal \"987654\"     %s\n", "987654");
+	len += dprintf(1, "decimal value of -987654	%d\n", -987654);
 	
 	len += printf("length of all strings so far %zu\n", len);
 	fflush(stdout);

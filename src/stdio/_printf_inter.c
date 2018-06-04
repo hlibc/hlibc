@@ -44,9 +44,25 @@ size_t __uint2str(char *s, size_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
+static void _dprintf_buffer(int x, FILE *f)
+{
+        static char b[BUFSIZ];
+        static size_t i = 0;
+        if (x > -1)
+                b[i++] = x;
+        if (i == BUFSIZ || x == -1)
+        {
+                write(f - stdout, b, i);
+                i = 0;
+        }
+}
+
 int _populate(int incr, int x, int flag, char *s, FILE *fp)
 {
-	if (flag > 0) {
+	if (flag == 3)
+	{
+		_dprintf_buffer(x, fp);
+	}else if (flag > 0) {
 		*s = x;
 	}
 	else {
@@ -60,6 +76,7 @@ int _printf_inter(
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
+	/* flag == 3 == dprintf */
 	/* flag == 0 == printf, vprintf, dprintf etc  */
 
 	const char *p = NULL;
@@ -86,7 +103,7 @@ int _printf_inter(
 		bound = lim;
 	}
 
-	for (p = fmt; *p && i < bound; p++) {
+	for (p = fmt; *p ; p++) {
 		if (*p != '%') {
 			i = _populate(i, *p, flag, str++, fp);
 			continue;
@@ -179,6 +196,7 @@ int _printf_inter(
 			for (j = 0; j < convlen; ++j) {
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
+			base = 10;
 			break;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
@@ -195,11 +213,13 @@ int _printf_inter(
 			break;
 		}
 	}
+	
+	if (flag == 3) {
+                _dprintf_buffer(-1, fp);
+                return i;
+        }
 	if (flag > 0) {
 		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
-	}
-	if (flag == 0) {
-		_flushbuf(EOF, fp);
 	}
 	return i;
 }

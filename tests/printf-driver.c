@@ -1034,11 +1034,11 @@ int main(void)
 	fprintf(stdout, "The string literal \"987654\"     %s\n", "987654");
 	fprintf(stdout, "decimal value of -987654        %d\n", -987654); 
 	
-	//dprintf(1, "decimal value of 987654         %d\n", 987654);
-	//dprintf(1, "octal value of 987654           %o\n", 987654);
-	//dprintf(1, "hexadecimal value of 987654     %x\n", 987654);
-	//dprintf(1, "The string literal \"987654\"     %s\n", "987654");
-	//dprintf(1, "decimal value of -987654        %d\n", -987654); 
+	dprintf(1, "decimal value of 987654         %d\n", 987654);
+	dprintf(1, "octal value of 987654           %o\n", 987654);
+	dprintf(1, "hexadecimal value of 987654     %x\n", 987654);
+	dprintf(1, "The string literal \"987654\"     %s\n", "987654");
+	dprintf(1, "decimal value of -987654        %d\n", -987654); 
 
 	printf("gprintf:\n");
 	printf(format, zutest, dtest, string, zutest, dtest, string, 'a', 'b', 'c', 'd', ltest, ftest, ftest2);
