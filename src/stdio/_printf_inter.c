@@ -19,7 +19,6 @@ size_t __int2str_inter(char *s, long long n, int base, size_t i)
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
 	}
-	
 	s[i] = __convtab[+(-(n % base))];
 	return ++i;
 }
@@ -59,8 +58,7 @@ static void _dprintf_buffer(int x, FILE *f)
 
 int _populate(int incr, int x, int flag, char *s, FILE *fp)
 {
-	if (flag == 3)
-	{
+	if (flag == 3) {
 		_dprintf_buffer(x, fp);
 	}else if (flag > 0) {
 		*s = x;
@@ -71,8 +69,7 @@ int _populate(int incr, int x, int flag, char *s, FILE *fp)
 	return incr + 1;
 }
 
-int _printf_inter(
-	FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
+int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
@@ -81,7 +78,8 @@ int _printf_inter(
 
 	const char *p = NULL;
 	size_t i = 0;
-	size_t bound = BUFSIZ;
+	/* this should probably be INT_MAX */
+	size_t bound = SIZE_MAX;
 	int base = 10;
 
 	/* Hold converted numerical strings */
@@ -100,10 +98,10 @@ int _printf_inter(
 	size_t precision = 6;
 
 	if (flag == 2) { /* snprintf */
-		bound = lim;
+		bound = lim; // +1?
 	}
 
-	for (p = fmt; *p ; p++) {
+	for (p = fmt; *p && i < bound ; p++) {
 		if (*p != '%') {
 			i = _populate(i, *p, flag, str++, fp);
 			continue;
@@ -184,12 +182,12 @@ int _printf_inter(
 			i = _populate(i, cval, flag, str++, fp);
 			break;
 		integer:
-			memset(converted, 0, 100);
 			convlen = __int2str(converted, lval, base);
 			for (j = 0; j < convlen; ++j) {
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			base = 10;
+			memset(converted, 0, convlen);
 			break;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
@@ -197,6 +195,7 @@ int _printf_inter(
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
 			base = 10;
+			memset(converted, 0, convlen);
 			break;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
@@ -209,16 +208,13 @@ int _printf_inter(
 				}
 				i = _populate(i, converted[j], flag, str++, fp);
 			}
-			
 			break;
 		}
 	}
 	
 	if (flag == 3) {
                 _dprintf_buffer(-1, fp);
-                return i;
-        }
-	if (flag > 0) {
+        }else if (flag > 0) {
 		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 	return i;
