@@ -20,8 +20,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#define UNGETC 8
-
 typedef struct
 {
 	int fd;
@@ -65,7 +63,7 @@ pid_t waitpid(pid_t, int *, int);
 /* internal */
 int _fillbuf(FILE *);
 int _flushbuf(int, FILE *);
-int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
+int __printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 
 /* number to string */

@@ -43,7 +43,7 @@ size_t __uint2str(char *s, size_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
-static void _dprintf_buffer(int x, FILE *f)
+static void __dprintf_buffer(int x, FILE *f)
 {
         static char b[BUFSIZ];
         static size_t i = 0;
@@ -56,10 +56,10 @@ static void _dprintf_buffer(int x, FILE *f)
         }
 }
 
-int _populate(int incr, int x, int flag, char *s, FILE *fp)
+int __populate(int incr, int x, int flag, char *s, FILE *fp)
 {
 	if (flag == 3) {
-		_dprintf_buffer(x, fp);
+		__dprintf_buffer(x, fp);
 	}else if (flag > 0) {
 		*s = x;
 	}
@@ -69,7 +69,7 @@ int _populate(int incr, int x, int flag, char *s, FILE *fp)
 	return incr + 1;
 }
 
-int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
+int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
@@ -79,7 +79,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 	const char *p = NULL;
 	size_t i = 0;
 	/* this should probably be INT_MAX */
-	size_t bound = SIZE_MAX;
+	size_t bound = (size_t)-1;
 	int base = 10;
 
 	/* Hold converted numerical strings */
@@ -103,7 +103,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 
 	for (p = fmt; *p && i < bound ; p++) {
 		if (*p != '%') {
-			i = _populate(i, *p, flag, str++, fp);
+			i = __populate(i, *p, flag, str++, fp);
 			continue;
 		}
 		++p;
@@ -171,20 +171,20 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 			}
 			break;
 		default:
-			i = _populate(i, *p, flag, str++, fp);
+			i = __populate(i, *p, flag, str++, fp);
 			break;
 		string:
 			for (; *sval; sval++) {
-				i = _populate(i, *sval, flag, str++, fp);
+				i = __populate(i, *sval, flag, str++, fp);
 			}
 			break;
 		character:
-			i = _populate(i, cval, flag, str++, fp);
+			i = __populate(i, cval, flag, str++, fp);
 			break;
 		integer:
 			convlen = __int2str(converted, lval, base);
 			for (j = 0; j < convlen; ++j) {
-				i = _populate(i, converted[j], flag, str++, fp);
+				i = __populate(i, converted[j], flag, str++, fp);
 			}
 			base = 10;
 			memset(converted, 0, convlen);
@@ -192,7 +192,7 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
 			for (j = 0; j < convlen; ++j) {
-				i = _populate(i, converted[j], flag, str++, fp);
+				i = __populate(i, converted[j], flag, str++, fp);
 			}
 			base = 10;
 			memset(converted, 0, convlen);
@@ -206,16 +206,17 @@ int _printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va
 						convlen = precision;
 					}
 				}
-				i = _populate(i, converted[j], flag, str++, fp);
+				i = __populate(i, converted[j], flag, str++, fp);
 			}
 			break;
 		}
 	}
 	
 	if (flag == 3) {
-                _dprintf_buffer(-1, fp);
+                __dprintf_buffer(-1, fp);
         }else if (flag > 0) {
-		_populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
+		__populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 	return i;
 }
+
