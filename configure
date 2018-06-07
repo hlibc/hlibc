@@ -187,8 +187,8 @@ case "$target" in
 esac
 
 # Find stack alignment flag
-trymultiflag STACK_ALIGNMENT "-mno-sse -mpreferred-stack-boundary=3"
-tryflag STACK_ALIGNMENT -mstack-alignment=3
+#trymultiflag STACK_ALIGNMENT "-mno-sse -mpreferred-stack-boundary=3"
+#tryflag STACK_ALIGNMENT -mstack-alignment=3
 
 #
 # Try to get a conforming C99 freestanding environment
@@ -281,3 +281,4 @@ test "x$wrapper" = xno && echo "TOOL_LIBS ="
 exec 1>&3 3>&-
 
 printf "done\n"
+echo $SPECIAL
