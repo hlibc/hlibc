@@ -101,7 +101,7 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	printf '#!/bin/sh\nexec gcc -fno-pie -no-pie -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
 
 tools/gcc-wrap-uninstalled: config.mak
