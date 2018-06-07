@@ -18,8 +18,8 @@ OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static -fno-stack-protector"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static -fno-stack-protector"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
 
 LDFLAGS =
 CPPFLAGS =
@@ -105,7 +105,7 @@ tools/gcc-wrap: config.mak
 	chmod +x $@
 
 tools/gcc-wrap-uninstalled: config.mak
-	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap-uninstalled.specs"\n' "$(PWD)/lib/" > $@
+	printf '#!/bin/sh\nexec gcc -fno-pie -no-pie -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap-uninstalled.specs"\n' "$(PWD)/lib/" > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
