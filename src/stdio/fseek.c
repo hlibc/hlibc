@@ -5,7 +5,7 @@
 int fseek(FILE *fp, long offset, int whence)
 {
 	int ret = 0;
-	_flushbuf(EOF, fp);
+	__flushbuf(EOF, fp);
 	if ((lseek(fp->fd, offset, whence)) == -1) {
 		ret = -1;
 	}

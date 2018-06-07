@@ -110,7 +110,7 @@ ROADMAP:
 	is not unique to hlibc.
 
 	Address proper switching between unbuffered, line buffered and buffered
-	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
+	modes inside of __fillbuf.c and __flushbuf.c. Register them before main
 	and then with the internal exit() function.
 
 	Fix the experimental MIPS port. Popen and stat are not working 

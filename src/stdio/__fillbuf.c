@@ -1,7 +1,7 @@
 #include "../internal/internal.h"
 #include <stdlib.h>
 
-int _fillbuf(FILE *fp)
+int __fillbuf(FILE *fp)
 {
 	size_t bufsize;
 	ssize_t ret = 0;

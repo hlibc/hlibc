@@ -61,8 +61,8 @@ int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
 
 /* internal */
-int _fillbuf(FILE *);
-int _flushbuf(int, FILE *);
+int __fillbuf(FILE *);
+int __flushbuf(int, FILE *);
 int __printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 

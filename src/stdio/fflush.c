@@ -8,12 +8,12 @@ int fflush(FILE *fp)
 	if (fp == NULL) {
 		for (fp = stdout; i < FOPEN_MAX; ++fp, ++i) {
 			if (fp->buf != NULL) {
-				ret = _flushbuf(EOF, fp);
+				ret = __flushbuf(EOF, fp);
 			}
 		}
 	}
 	else if (fp->flags & _WRITE) {
-		ret = _flushbuf(EOF, fp);
+		ret = __flushbuf(EOF, fp);
 	}
 
 	fp->len = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
