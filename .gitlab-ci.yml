@@ -26,11 +26,11 @@ gcc45__i686__gcc:
     - i686
   script: "make gcctest"
 
-gcc110__ppc64__gcc:
-  tags:
-    - gcc110
-    - ppc64
-  script: "make gcctest"
+#gcc110__ppc64__gcc:
+#  tags:
+#    - gcc110
+#    - ppc64
+#  script: "make gcctest"
 
 100core__aarch64__gcc:
   tags:
@@ -75,11 +75,11 @@ gcc45__i686__clang:
     - i686
   script: "make clangtest"
 
-gcc110__ppc64__clang:
-  tags:
-    - gcc110
-    - ppc64
-  script: "make clangtest"
+#gcc110__ppc64__clang:
+#  tags:
+#    - gcc110
+#    - ppc64
+#  script: "make clangtest"
 
 100core__aarch64__clang:
   tags:
