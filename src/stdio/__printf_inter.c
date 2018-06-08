@@ -5,7 +5,7 @@
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
+static size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
 	if (n / base) {
 		i = __uint2str_inter(s, n / base, base, i);
@@ -14,7 +14,7 @@ size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 	return ++i;
 }
 
-size_t __int2str_inter(char *s, long long n, int base, size_t i)
+static size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
@@ -23,7 +23,7 @@ size_t __int2str_inter(char *s, long long n, int base, size_t i)
 	return ++i;
 }
 
-size_t __int2str(char *s, long long n, int base)
+static size_t __int2str(char *s, long long n, int base)
 {
 	size_t i = 0;
 	int toggle = 0;
@@ -37,7 +37,7 @@ size_t __int2str(char *s, long long n, int base)
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
-size_t __uint2str(char *s, size_t n, int base)
+static size_t __uint2str(char *s, size_t n, int base)
 {
 	size_t i = 0;
 	return __uint2str_inter(s, n, base, i);
@@ -45,18 +45,18 @@ size_t __uint2str(char *s, size_t n, int base)
 
 static void __dprintf_buffer(int x, FILE *f)
 {
-        static char b[BUFSIZ];
-        static size_t i = 0;
-        if (x > -1)
-                b[i++] = x;
-        if (i == BUFSIZ || x == -1)
-        {
-                write(f - stdout, b, i);
-                i = 0;
-        }
+	static char b[BUFSIZ];
+	static size_t i = 0;
+	if (x > -1)
+		b[i++] = x;
+	if (i == BUFSIZ || x == -1)
+	{
+		write(f - stdout, b, i);
+		i = 0;
+	}
 }
 
-int __populate(int incr, int x, int flag, char *s, FILE *fp)
+static int __populate(int incr, int x, int flag, char *s, FILE *fp)
 {
 	if (flag == 3) {
 		__dprintf_buffer(x, fp);
@@ -213,8 +213,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	}
 	
 	if (flag == 3) {
-                __dprintf_buffer(-1, fp);
-        }else if (flag > 0) {
+		__dprintf_buffer(-1, fp);
+	}else if (flag > 0) {
 		__populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 	return i;
