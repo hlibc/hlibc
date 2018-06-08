@@ -99,7 +99,7 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
-		export RETVAL="1"
+		echo RETVAL="1" > tests/retval
 		displaydiff
 		
 	fi
@@ -112,11 +112,16 @@ do	./hbox/${i} > "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`[POSIX system hbox] ${i}' compared equal to its control method"
 	else	printf "%s\n" "##[POSIX system hbox] ${i} failed to compare equal to its control method"
-		export RETVAL="1"
+		echo RETVAL="1" > tests/retval
 		displaydiff
 		
 	fi
 done 
+
+if [ -f tests/retval ]
+then	. tests/retval
+	rm tests/retval
+fi
 
 # unique tests that don't work as BASIC_TYPEs
 ./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
