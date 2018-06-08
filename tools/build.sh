@@ -112,7 +112,6 @@ do	./hbox/${i} > "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`[POSIX system hbox] ${i}' compared equal to its control method"
 	else	printf "%s\n" "##[POSIX system hbox] ${i} failed to compare equal to its control method"
-		echo RETVAL="1" > tests/retval
 		displaydiff
 		
 	fi
