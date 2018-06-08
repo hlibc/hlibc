@@ -35,9 +35,9 @@ EMPTY_LIB_NAMES = m
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
-TOOL_LIBS = lib/gcc-wrap.specs  lib/gcc-wrap-uninstalled.specs
+TOOL_LIBS = lib/gcc-wrap.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/gcc-wrap tools/gcc-wrap-uninstalled
+ALL_TOOLS = tools/gcc-wrap
 
 -include config.mak
 
@@ -101,12 +101,7 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc $(SPECIAL) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
-
-	chmod +x $@
-
-tools/gcc-wrap-uninstalled: config.mak
-	printf '#!/bin/sh\nexec gcc $(SPECIAL) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap-uninstalled.specs"\n' "$(PWD)/lib/" > $@
+	printf '#!/bin/sh\nexec gcc $(SPECIAL) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@ 
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
@@ -123,9 +118,6 @@ $(DESTDIR)$(syslibdir):
 
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
-
-lib/gcc-wrap-uninstalled.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(PWD)/include" "$(PWD)/lib/"  > $@
 
 gcctests:
 	cd hbox && $(GCC_WRAP) make

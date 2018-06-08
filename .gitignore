@@ -6,9 +6,8 @@
 
 config.mak
 include/bits/
-lib/gcc-wrap-uninstalled.specs
 lib/gcc-wrap.specs
 tests/a.out
 tools/clang-wrap
 tools/gcc-wrap
-tools/gcc-wrap-uninstalled
+
