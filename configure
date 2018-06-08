@@ -281,4 +281,4 @@ test "x$wrapper" = xno && echo "TOOL_LIBS ="
 exec 1>&3 3>&-
 
 printf "done\n"
-echo $SPECIAL
+
