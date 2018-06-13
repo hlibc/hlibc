@@ -99,7 +99,7 @@ union ldshape {
         } i2;
 };
 #endif
-/*
+*/
 #define FORCE_EVAL(x) do {                          \
 	if (sizeof(x) == sizeof(float)) {           \
 		volatile float __x;                 \
