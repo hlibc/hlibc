@@ -2,7 +2,7 @@
 # changes here may be lost. use GNU make
 
 RELENG ?= hlibc-0.1d
-RELENG_MIR ?= http://hlibc.xyz/
+RELENG_MIR ?= http://hlibc.xyz
 RELENG_DIR ?= www
 RELENG_SSH ?= webuser@hlibc.xyz
 
