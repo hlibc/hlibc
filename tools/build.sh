@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	atoll-small
+BASIC_TYPE="	stat-driver
+		atoll-small
 		strtoll-driver
 		malloc-huge
 		ctype

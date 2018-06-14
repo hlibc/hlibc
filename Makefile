@@ -51,7 +51,7 @@ clean:
 	-$(RM) -f crt/*.o
 	-$(RM) -f $(OBJS)
 	-$(RM) -f $(LOBJS)
-	-$(RM) -f $(ALL_LIBS) lib/*.[ao] lib/*.so
+	-$(RM) -f $(ALL_LIBS) lib/*.[ao]
 	-$(RM) -f $(ALL_TOOLS)
 	-$(RM) -f $(GENH) 
 	-$(RM) -rf include/bits
@@ -61,6 +61,7 @@ clean:
 	-$(RM) -f tools/clang-wrap
 	-$(RM) -r control
 	-$(RM) -r hbox-control
+	-$(RM) -r tests/retval
 	-$(MAKE) cleantest
 
 cleantest:
