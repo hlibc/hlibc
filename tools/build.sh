@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASIC_TYPE="	stat-driver
+BASIC_TYPE="	stat-driver Makefile
 		atoll-small
 		strtoll-driver
 		malloc-huge
