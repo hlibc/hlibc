@@ -6,6 +6,7 @@ int fclose(FILE *fp)
 	if (fp != NULL) {
 		fflush(fp);
 		fp->len = 0;
+		fp->ungot = 0;
 		fp->flags &= ~(_READ | _WRITE);
 		if (fp->pid == 0) {
 			if (!(close(fp->fd))){
@@ -16,3 +17,4 @@ int fclose(FILE *fp)
 	}
 	return ret;
 }
+

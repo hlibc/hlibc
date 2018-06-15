@@ -1,7 +1,7 @@
 #include "../internal/internal.h"
 #include <stdlib.h>
 
-int _flushbuf(int x, FILE *fp)
+int __flushbuf(int x, FILE *fp)
 {
 	size_t bufsize;
 	bufsize = (fp->flags & _UNBUF) ? 1 : BUFSIZ;

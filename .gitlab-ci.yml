@@ -14,11 +14,11 @@ gcc75__x86_64__gcc:
     - x86_64
   script: "make gcctest"
 
-gcc22__mips64__gcc:
-  tags:
-    - gcc22
-    - mips64
-  script: "make gcctest"
+#gcc22__mips64__gcc:
+#  tags:
+#    - gcc22
+#    - mips64
+#  script: "make gcctest"
 
 gcc45__i686__gcc:
   tags:
@@ -26,11 +26,11 @@ gcc45__i686__gcc:
     - i686
   script: "make gcctest"
 
-gcc110__ppc64__gcc:
-  tags:
-    - gcc110
-    - ppc64
-  script: "make gcctest"
+#gcc110__ppc64__gcc:
+#  tags:
+#    - gcc110
+#    - ppc64
+#  script: "make gcctest"
 
 100core__aarch64__gcc:
   tags:
@@ -51,11 +51,11 @@ alpine__i386__gcc:
   script: "make gcctest"
 
 # clang
-gcc113__aarch64__clang:
-  tags:
-    - gcc113
-    - aarch64
-  script: "make clangtest"
+#gcc113__aarch64__clang:
+#  tags:
+#   - gcc113
+#    - aarch64
+#  script: "make clangtest"
 
 gcc75__x86_64__clang:
   tags:
@@ -63,11 +63,11 @@ gcc75__x86_64__clang:
     - x86_64
   script: "make clangtest"
 
-gcc22__mips64__clang:
-  tags:
-    - gcc22
-    - mips64
-  script: "make clangtest"
+#gcc22__mips64__clang:
+#  tags:
+#    - gcc22
+#    - mips64
+#  script: "make clangtest"
 
 gcc45__i686__clang:
   tags:
@@ -75,17 +75,17 @@ gcc45__i686__clang:
     - i686
   script: "make clangtest"
 
-gcc110__ppc64__clang:
-  tags:
-    - gcc110
-    - ppc64
-  script: "make clangtest"
+#gcc110__ppc64__clang:
+#  tags:
+#    - gcc110
+#    - ppc64
+#  script: "make clangtest"
 
-100core__aarch64__clang:
-  tags:
-    - 100core
-    - aarch64
-  script: "make clangtest"
+#100core__aarch64__clang:
+#  tags:
+#    - 100core
+#    - aarch64
+#  script: "make clangtest"
 
 alpine__x86_64__clang:
   tags:

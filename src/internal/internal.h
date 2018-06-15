@@ -29,6 +29,8 @@ typedef struct
 	char *lp;
 	size_t len;
 	pid_t pid;
+	char ungotten[8];
+	size_t ungot;
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
@@ -59,16 +61,12 @@ int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
 
 /* internal */
-int _fillbuf(FILE *);
-int _flushbuf(int, FILE *);
-int _printf_inter(FILE *, char *, size_t, int, const char *, va_list);
+int __fillbuf(FILE *);
+int __flushbuf(int, FILE *);
+int __printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 
-/* number to string */
-size_t __uint2str(char *, size_t, int);
-size_t __uint2str_inter(char *, size_t, int, size_t);
-size_t __int2str(char *, long long, int);
-size_t __int2str_inter(char *, long long, int, size_t);
+/* number to string */ 
 int fmt_fp(char *, long double, int, int, int, int);
 #define MAX(a,b) ((a)>(b) ? (a) : (b))
 #define MIN(a,b) ((a)<(b) ? (a) : (b))

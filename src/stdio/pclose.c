@@ -11,6 +11,5 @@ int pclose(FILE *fp)
 	fp->pid = 0;
 
 	fclose(fp);
-	fflush(NULL);
 	return -1;
 }

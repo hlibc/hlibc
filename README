@@ -18,6 +18,7 @@ BUILDING:
 	to be easily installed and used from your home directory without the 
 	need for root privilege.
 
+		git clone https://git.hlibc.xyz/lab/hlibc
 		cd hlibc 
 		./configure --prefix=/home/$USER/buildarea 
 		make 
@@ -25,17 +26,19 @@ BUILDING:
 
 	Test the installation:
 
-		cd /home/$USER/buildarea 
-		./bin/gcc-wrap tests/pow_test.c
+		/home/$USER/buildarea/bin/gcc-wrap hello.c
+
+
 
 	hlibc only supports static linking at this time.
 
 
-		hbox/
-			A small busybox like set of POSIX utilities.
 
-		tests/
-			A set of C run time tests.
+	hbox/
+		A small busybox like set of POSIX utilities.
+
+	tests/
+		A set of C run time tests.
 
 
 AUTOMATIC TESTING:
@@ -55,14 +58,14 @@ AUTOMATIC TESTING:
 		==========COMPILING TESTS ===================================
 		=============================================================
 		==========TEST RESULT START==================================
-		This number should be (16.000000): 16.000000    (4^3)
-		This number should be (15.580524): 15.580524    (3.3^2.3)
-		The `cat' utility successfully copied a file
-		The `malloc_driver' test utility successfully iterated thro ...
-		The `popen_driver' test utility successfully ran `du' on a  ...
-		The `printf_driver' test utility successfully created and c ...
-		The `popen-to-file' driver test utility successfully ran `d ...
-		============================================================
+		`atoll-small' compared equal to its control method
+		`strtoll-driver' compared equal to its control method
+		`malloc-huge' compared equal to its control method
+		`ctype' compared equal to its control method
+		`malloc-unique-pointer' compared equal to its control method
+		`getline-driver' compared equal to its control method
+		`atoi' compared equal to its control method
+		 ...
 
 	If any compiler or linker errors occur within this report then the libc
 	has changed and likely regressed or otherwise lost a functionality.
@@ -99,7 +102,7 @@ ROADMAP:
 
 	Add random() so that the arbsh/arbprec library can be built using hlibc.
 
-	Write more tests in C, add them to tests/ and toos/bui.d.sh.
+	Write more tests in C, add them to tests/ and tools/build.sh.
 
 	Add an fdopen() function and redesign popen() to use it. 
 
@@ -110,7 +113,7 @@ ROADMAP:
 	is not unique to hlibc.
 
 	Address proper switching between unbuffered, line buffered and buffered
-	modes inside of _fillbuf.c and _flushbuf.c. Register them before main
+	modes inside of __fillbuf.c and __flushbuf.c. Register them before main
 	and then with the internal exit() function.
 
 	Fix the experimental MIPS port. Popen and stat are not working 
@@ -196,4 +199,4 @@ RELEASES:
 
 	http://hlibc.xyz/hlibc-0.1c.tar.gz
 
-	hlibc.xyz//hlibc-0.1d.tar.gz
+	http://hlibc.xyz/hlibc-0.1d.tar.gz

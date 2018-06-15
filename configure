@@ -187,8 +187,8 @@ case "$target" in
 esac
 
 # Find stack alignment flag
-trymultiflag STACK_ALIGNMENT "-mno-sse -mpreferred-stack-boundary=3"
-tryflag STACK_ALIGNMENT -mstack-alignment=3
+#trymultiflag STACK_ALIGNMENT "-mno-sse -mpreferred-stack-boundary=3"
+#tryflag STACK_ALIGNMENT -mstack-alignment=3
 
 #
 # Try to get a conforming C99 freestanding environment
@@ -235,6 +235,8 @@ fi
 
 # Some patched GCC builds have these defaults messed up...
 tryflag CFLAGS_AUTO -fno-stack-protector
+tryflag SPECIAL -fno-pie
+tryflag SPECIAL -no-pie
 tryldflag LDFLAGS_AUTO -Wl,--hash-style=sysv
 
 # Disable dynamic linking if ld is broken and can't do -Bsymbolic-functions
@@ -270,7 +272,7 @@ CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
 CPPFLAGS = $CPPFLAGS
 LDFLAGS = $LDFLAGS_AUTO $LDFLAGS
-
+SPECIAL = $SPECIAL
 EOF
 test "x$static" = xno && echo "STATIC_LIBS ="
 test "x$shared" = xno && echo "SHARED_LIBS ="
@@ -279,3 +281,4 @@ test "x$wrapper" = xno && echo "TOOL_LIBS ="
 exec 1>&3 3>&-
 
 printf "done\n"
+

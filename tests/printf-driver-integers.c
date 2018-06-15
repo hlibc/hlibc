@@ -41,7 +41,8 @@ int main(void)
 	len += dprintf(1, "The string literal \"987654\"     %s\n", "987654");
 	len += dprintf(1, "decimal value of -987654	%d\n", -987654);
 	
-	len += printf("length of all strings so far %zu\n", len);
+	printf("length of all strings so far %zu\n", len);
+	
 	fflush(stdout);
 	
 	printf("printf:\n");

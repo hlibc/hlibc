@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	atoll-small
+BASIC_TYPE="	stat-driver Makefile
+		atoll-small
 		strtoll-driver
 		malloc-huge
 		ctype
@@ -100,7 +101,7 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
-		eval RETVAL="1"
+		echo RETVAL="1" > tests/retval
 		displaydiff
 
 	fi
@@ -113,11 +114,15 @@ do	./hbox/${i} > "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`[POSIX system hbox] ${i}' compared equal to its control method"
 	else	printf "%s\n" "##[POSIX system hbox] ${i} failed to compare equal to its control method"
-		eval RETVAL="1"
 		displaydiff
 
 	fi
 done
+
+if [ -f tests/retval ]
+then	. tests/retval
+	rm tests/retval
+fi
 
 # unique tests that don't work as BASIC_TYPEs
 echo "123" | ./control/scanf-driver > "${SUF}/diff2" 2>"${SUF}/testerr"
@@ -156,17 +161,6 @@ checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`putc-driver' test utility successfully created and copied a large file of urandom data"
 else	printf "%s\n" "##putc-driver was unable to create and copy a large file of urandom data"
-	RETVAL="1"
-fi
-
-dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=1 2> "${SUF}/testerr"
-cp "${SUF}/diff2" "${SUF}/diff3"
-mv "${SUF}/diff2" "${SUF}/diff4"
-./tests/rename-driver "${SUF}/diff3" "${SUF}/diff5" 2> "${SUF}/testerr"
-checkifempty "${SUF}/diff4"
-if diff "${SUF}/diff4" "${SUF}/diff5" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`rename-driver' test utility successfully renamed a small file of urandom data"
-else	printf "%s\n" "##rename-driver was unable to rename a small file of urandom data"
 	RETVAL="1"
 fi
 

@@ -64,7 +64,7 @@ FILE *fopen(const char *name, const char *mode)
 			return NULL;
 		}
 	}
-
+	
 	if (name != NULL) {
 		if ((fd = open(name, oflags, perms)) == -1) {
 			return NULL;

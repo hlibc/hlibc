@@ -454,6 +454,7 @@ int __libc_start_main(
 	/* Execute constructors (static) linked into the application */
 	if (init) init(argc, argv, envp);
 
+	
 	/* Pass control to to application */
 	exit(main(argc, argv, envp));
 	return 0;
