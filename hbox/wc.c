@@ -3,7 +3,6 @@
 #include <unistd.h> 
 #include <stdlib.h>
 #include <unistd.h>
-#include <locale.h>
 
 /* Copyright 2015, C. Graff  "wc" */ 
 
