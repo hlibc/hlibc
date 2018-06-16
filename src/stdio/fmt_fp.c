@@ -49,7 +49,7 @@ static char *fmt_u(uintmax_t x, char *s)
 {
 	unsigned long y;
 	for (   ; x>ULONG_MAX; x/=10) *--s = '0' + x%10;
-	for (y=x;           y; y/=10) *--s = '0' + y%10;
+	for (y=x;	   y; y/=10) *--s = '0' + y%10;
 	return s;
 }
 

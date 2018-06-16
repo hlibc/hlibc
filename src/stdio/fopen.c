@@ -3,11 +3,9 @@
 FILE *fopen(const char *name, const char *mode)
 {
 	int fd = 0;
-	FILE *fp;
+	FILE *o;
 	int perms = 0666; // not yet used
-	const char *p = mode;
-	int oflags = 0;
-	int iflags = 0;
+	int outfile = 0;
 	int seek = -1;
 
 	for (o = _IO_stream; o < _IO_stream + FOPEN_MAX; o++) {
@@ -15,32 +13,32 @@ FILE *fopen(const char *name, const char *mode)
 			break;
 		}
 	}
-	if (fp >= _IO_stream + FOPEN_MAX) {
+	if (o >= _IO_stream + FOPEN_MAX) {
 		return NULL;
 	}
 
-	while (*p) {
-		switch (*p++) {
+	o = __init_file(o);
+
+	while (*mode) {
+		switch (*mode++) {
 		case 'r':
-			oflags = O_RDONLY;
-			iflags = _READ;
-			switch (*p) {
+			outfile |= O_RDONLY;
+			o->read = 1;
+			switch (*mode) {
 			case '+':
-				oflags = O_RDWR;
-				iflags = _READ | _WRITE;
+				outfile |= O_RDWR;
+				o->write = 1;
 				break;
 			default:
 				break;
 			}
 			break;
 		case 'w':
-
-			oflags = O_TRUNC | O_CREAT | O_RDWR;
-			iflags = _WRITE;
-			switch (*p) {
+			outfile = O_TRUNC | O_CREAT | O_RDWR;
+			o->write = 1;
+			switch (*mode) {
 			case '+':
-				oflags = O_RDWR | O_CREAT;
-				iflags = _WRITE;
+				outfile &= ~O_TRUNC; 
 				seek = SEEK_END;
 				break;
 			default:
@@ -48,12 +46,12 @@ FILE *fopen(const char *name, const char *mode)
 			}
 			break;
 		case 'a':
-			oflags = O_CREAT | O_APPEND;
-			iflags = _WRITE;
-			switch (*p) {
+			outfile = O_CREAT | O_APPEND;
+			o->write = 1;
+			switch (*mode) {
 			case '+':
-				oflags = O_CREAT | O_APPEND | O_RDWR;
-				iflags = _READ | _WRITE;
+				outfile |= O_RDWR;
+				o->read = 1;
 				break;
 			default:
 				break;
@@ -66,7 +64,7 @@ FILE *fopen(const char *name, const char *mode)
 	}
 	
 	if (name != NULL) {
-		if ((fd = open(name, oflags, perms)) == -1) {
+		if ((fd = open(name, outfile, perms)) == -1) {
 			return NULL;
 		}
 	}
@@ -75,10 +73,7 @@ FILE *fopen(const char *name, const char *mode)
 		lseek(fd, 0L, seek);
 	}
 
-	fp->len = 0;
-	fp->rp = fp->buf = NULL;
-	fp->flags = iflags;
-	fp->fd = fd;
+	o->fd = fd;
 
-	return fp;
+	return o;
 }

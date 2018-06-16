@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-
 /* Copyright 2015, C. Graff  "wc" */ 
 
 struct hd {
