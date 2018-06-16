@@ -30,11 +30,11 @@ FILE *fopen(const char *name, const char *mode)
 	while (*p) {
 		switch (*p++) {
 		case 'r':
-			outfile = O_RDONLY;
+			outfile |= O_RDONLY;
 			fp->f.read = 1;
 			switch (*p) {
 			case '+':
-				outfile = O_RDWR;
+				outfile |= O_RDWR;
 				fp->f.write = 1;
 				break;
 			default:
@@ -46,7 +46,7 @@ FILE *fopen(const char *name, const char *mode)
 			fp->f.write = 1;
 			switch (*p) {
 			case '+':
-				outfile = O_RDWR | O_CREAT;
+				outfile &= ~O_TRUNC; 
 				seek = SEEK_END;
 				break;
 			default:
@@ -58,7 +58,7 @@ FILE *fopen(const char *name, const char *mode)
 			fp->f.write = 1;
 			switch (*p) {
 			case '+':
-				outfile = O_CREAT | O_APPEND | O_RDWR;
+				outfile |= O_RDWR;
 				fp->f.read = 1;
 				fp->f.write = 1;
 				break;
