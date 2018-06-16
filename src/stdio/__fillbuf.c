@@ -3,11 +3,12 @@
 
 int __fillbuf(FILE *fp)
 {
-	size_t bufsize;
+	size_t bufsize = BUFSIZ;
 	ssize_t ret = 0; 
 	if (fp->read && fp->eof || fp->err)
 		return EOF;
-	bufsize = (fp->unbuf) ? 1 : BUFSIZ;
+	if (fp->unbuf)
+		bufsize = 1;
 	if (fp->buf == NULL) {
 		if ((fp->buf = malloc(bufsize)) == NULL) {
 			return EOF;

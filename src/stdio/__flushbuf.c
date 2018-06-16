@@ -3,9 +3,10 @@
 
 int __flushbuf(int x, FILE *fp)
 {
-	size_t bufsize;
-	bufsize = (fp->unbuf) ? 1 : BUFSIZ;
+	size_t bufsize = BUFSIZ;
 
+	if (fp->unbuf)
+		bufsize = 1;
 	if (fp->buf == NULL) {
 		if ((fp->buf = malloc(bufsize)) == NULL) {
 			return EOF;
