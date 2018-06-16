@@ -1,10 +1,10 @@
 #include "../internal/internal.h"
 
-FILE *__init_file(FILE *f)
+FILE *__init_file(FILE *o)
 {
-        f->read = f->write = f->lnbuf = f->unbuf = f->eof = f->err = f->len = 0;
-        f->pid = f->ungot = f->ungotten[0] = 0;
-        f->buf = f->rp = NULL;
-        return f;
+        o->read = o->write = o->lnbuf = o->unbuf = o->eof = o->err = o->len = 0;
+        o->pid = o->ungot = o->ungotten[0] = 0;
+        o->buf = o->rp = NULL;
+        return o;
 }
 
