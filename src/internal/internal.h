@@ -20,19 +20,17 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-typedef struct{
+typedef struct
+{
+	int fd;
+	/* flags */
 	int read;
 	int write;
 	int lnbuf;
 	int unbuf;
 	int eof;
 	int err;
-} __flags;
-
-typedef struct
-{
-	int fd;
-	__flags f;
+	/**/
 	char *buf;
 	char *rp;
 	char *lp;

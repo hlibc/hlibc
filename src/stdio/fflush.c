@@ -12,12 +12,12 @@ int fflush(FILE *fp)
 			}
 		}
 	}
-	else if (fp->f.write == 1) {
+	else if (fp->write == 1) {
 		ret = __flushbuf(EOF, fp);
 	}
 
 	fp->len = BUFSIZ;
-	if (fp->f.unbuf == 1)
+	if (fp->unbuf == 1)
 		fp->len = 1;
 	return ret;
 }

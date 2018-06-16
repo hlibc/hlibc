@@ -5,9 +5,9 @@ int __fillbuf(FILE *fp)
 {
 	size_t bufsize;
 	ssize_t ret = 0; 
-	if (fp->f.read && fp->f.eof || fp->f.err)
+	if (fp->read && fp->eof || fp->err)
 		return EOF;
-	bufsize = (fp->f.unbuf) ? 1 : BUFSIZ;
+	bufsize = (fp->unbuf) ? 1 : BUFSIZ;
 	if (fp->buf == NULL) {
 		if ((fp->buf = malloc(bufsize)) == NULL) {
 			return EOF;
@@ -19,12 +19,12 @@ int __fillbuf(FILE *fp)
 
 	/* zero length read */
 	if (ret == 0) { 
-		fp->f.eof = 1;
+		fp->eof = 1;
 		fp->len = 1;
 		return EOF;
 	/* read error */
 	}else if ((ret == -1)) { 
-		fp->f.err = 1;
+		fp->err = 1;
 		fp->len = 1;
 		return EOF;
 	}

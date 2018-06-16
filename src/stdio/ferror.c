@@ -2,5 +2,5 @@
 
 int ferror(FILE *fp)
 {
-	return (fp->f.err) != 0;
+	return (fp->err) != 0;
 }
