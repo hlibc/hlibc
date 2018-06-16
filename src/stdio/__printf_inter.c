@@ -56,38 +56,35 @@ static void __dprintf_buffer(int x, FILE *f)
 	}
 }
 
-int __populate(size_t *incr, int x, int flag, char **s, FILE *fp)
+static int __populate(int incr, int x, int flag, char *s, FILE *fp)
 {
-	(*incr)++;
-
 	if (flag == 3) {
 		__dprintf_buffer(x, fp);
-	} else if (flag > 0) {
-		**s = x;
-		(*s)++;
+	}else if (flag > 0) {
+		*s = x;
 	}
 	else {
-		return putc(x, fp);
+		putc(x, fp);
 	}
-	return 0;
+	return incr + 1;
 }
 
-int __printf_inter(
-	FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
+int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 {
 	/* flag == 1 == sprintf */
 	/* flag == 2 == snprintf */
-	/* flag == 0 == printf, vprintf  */
-	/* flag == 3 == dprintf, vdprintf */
+	/* flag == 3 == dprintf */
+	/* flag == 0 == printf, vprintf, dprintf etc  */
 
 	const char *p = NULL;
 	size_t i = 0;
-	size_t bound = BUFSIZ;
+	/* this should probably be INT_MAX */
+	size_t bound = (size_t)-1;
+	int base = 10;
 
 	/* Hold converted numerical strings */
 	char converted[BUFSIZ] = { 0 };
 	size_t convlen = 0;
-	size_t convlen_f = 0; // Required to normalize the value of floating point convlen
 	size_t j = 0;
 
 	/* data types */
@@ -97,144 +94,129 @@ int __printf_inter(
 	long long lval = 0;
 	long double fval = 0;
 
+	/* float precision */
+	size_t precision = 6;
+
 	if (flag == 2) { /* snprintf */
-		;//snprintf functionality is disabled
+		bound = lim; // +1?
 	}
 
-	for (p = fmt; *p; p++) {
-		int long_count = 0;
-		int base = 10;
-
-		size_t field_width = 0;
-		size_t precision = 6;
-
-		size_t padding = 0; // Computed from convlen and field_width
-
+	for (p = fmt; *p && i < bound ; p++) {
 		if (*p != '%') {
-			__populate(&i, *p, flag, &str, fp);
+			i = __populate(i, *p, flag, str++, fp);
 			continue;
 		}
-
-		if (isdigit(*++p)) // Handle field width
-			{
-				field_width = strtol(p, &p, 10);
-			}
-		if (*p == '.') // Handle precision
-			{
-				precision = strtol(++p, &p, 10);
-			}
-
-
-		do { // Allocate a new loop-block in order to allow re-entry to the switch-case using `continue`
-			// Handle long count
-			switch (*p) {
-			case 'l':
-				++p;
-				++long_count;
-				continue;
-			case 'L':
-				++p;
-				long_count = 2;
-				continue;
-
-				// Handle integrals
-			case 'o':
-			case 'x':
-				base = *p == 'o' ? 8
-						 : 16;
-			case 'd':
-				lval = long_count == 0 ? va_arg(ap, int)
-				     : long_count == 1 ? va_arg(ap, long)
-				     :		   va_arg(ap, long long);
-				goto integer;
-			case 'z':
-				switch (*++p) {
-				case 'u':
-					zuval = va_arg(ap, size_t);
-					goto uinteger;
-
-				case 'd':
-					lval = va_arg(ap, ssize_t);
-					goto integer;
-				default:
-					break;
-				}
-				break;
-
-				// Handle characters
-			case 'c':
-				cval = va_arg(ap, int);
-				__populate(&i, cval, flag, &str, fp);
-				break;
-
-				// Handle strings
-			case 's':
-				sval = va_arg(ap, char *);
-				for (; *sval; sval++) {
-					__populate(&i, *sval, flag, &str, fp);
-				}
-				break;
-
-				// Handle floating point
+		++p;
+		switch (*p) {
+		case 'c':
+			cval = va_arg(ap, int);
+			goto character;
+		case 's':
+			sval = va_arg(ap, char *);
+			goto string;
+		case 'o':
+			base = 8;
+			lval = va_arg(ap, int);
+			goto integer;
+		case 'd':
+			lval = va_arg(ap, int);
+			goto integer;
+		case 'x':
+			base = 16;
+			lval = va_arg(ap, int);
+			goto integer;
+		case 'f':
+			fval = va_arg(ap, double);
+			goto floating;
+		case 'g':
+			fval = va_arg(ap, double);
+			goto floating;
+		case 'L':
+			switch (*++p) {
 			case 'f':
-			case 'g':
-				fval = long_count < 2 ? va_arg(ap, double)
-					              : va_arg(ap, long double) ;
-				// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
-				convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
-				for (j = 0, convlen_f = 0; convlen--; ++j, convlen_f++) {
-					if (converted[j] == '.') {
-						convlen = MIN(convlen, precision);
-					}
-				}
-
-				convlen = convlen_f;
-				padding = (field_width > convlen) ? field_width - convlen : 0;
-				for (; padding > 0; --padding) {
-					__populate(&i, ' ', flag, &str, fp);
-				}
-				for (j = 0; convlen--; ++j) {
-					__populate(&i, converted[j], flag, &str, fp);
+				fval = va_arg(ap, long double);
+				goto floating;
+			}
+			break;
+		case 'l':
+			switch (*++p) {
+			case 'd':
+				lval = va_arg(ap, long);
+				goto integer;
+			case 'l':
+				switch (*++p) {
+				case 'd':
+					lval = va_arg(ap, long long);
+					goto integer;
 				}
 				break;
-
+			case 'f':
+				fval = va_arg(ap, double);
+				goto floating;
 			default:
-				__populate(&i, *p, flag, &str, fp);
-				break;
-
-			integer:
-				memset(converted, 0, 100);
-				convlen = __int2str(converted, lval, base);
-				padding = (field_width > convlen) ? field_width - convlen : 0;
-				for (; padding > 0; --padding) {
-					__populate(&i, ' ', flag, &str, fp);
-				}
-				for (j = 0; j < convlen; ++j) {
-					__populate(&i, converted[j], flag, &str, fp);
-				}
-				base = 10;
-				break;
-			uinteger:
-				convlen = __uint2str(converted, zuval, base);
-				padding = (field_width > convlen) ? field_width - convlen : 0;
-				for (; padding > 0; --padding) {
-					__populate(&i, ' ', flag, &str, fp);
-				}
-				for (j = 0; j < convlen; ++j) {
-					__populate(&i, converted[j], flag, &str, fp);
-				}
 				break;
 			}
 			break;
-		} while (1);
+		case 'z':
+			switch (*++p) {
+			case 'u':
+				zuval = va_arg(ap, size_t);
+				goto uinteger;
+
+			case 'd':
+				lval = va_arg(ap, ssize_t);
+				goto integer;
+			default:
+				break;
+			}
+			break;
+		default:
+			i = __populate(i, *p, flag, str++, fp);
+			break;
+		string:
+			for (; *sval; sval++) {
+				i = __populate(i, *sval, flag, str++, fp);
+			}
+			break;
+		character:
+			i = __populate(i, cval, flag, str++, fp);
+			break;
+		integer:
+			convlen = __int2str(converted, lval, base);
+			for (j = 0; j < convlen; ++j) {
+				i = __populate(i, converted[j], flag, str++, fp);
+			}
+			base = 10;
+			memset(converted, 0, convlen);
+			break;
+		uinteger:
+			convlen = __uint2str(converted, zuval, base);
+			for (j = 0; j < convlen; ++j) {
+				i = __populate(i, converted[j], flag, str++, fp);
+			}
+			base = 10;
+			memset(converted, 0, convlen);
+			break;
+		floating:
+			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
+			convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
+			for (j = 0; convlen--; ++j) {
+				if (converted[j] == '.') {
+					if (convlen > precision) {
+						convlen = precision;
+					}
+				}
+				i = __populate(i, converted[j], flag, str++, fp);
+			}
+			break;
+		}
 	}
+	
 	if (flag == 3) {
 		__dprintf_buffer(-1, fp);
-		return i;
-	}
-	if (flag > 0) {
-		--i;
-		__populate(&i, '\0', flag, &str, fp); /* don't incr for '\0' */
+	}else if (flag > 0) {
+		__populate(i, '\0', flag, str, fp); /* don't incr for '\0' */
 	}
 	return i;
 }
+

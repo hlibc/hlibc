@@ -3,42 +3,44 @@
 FILE *fopen(const char *name, const char *mode)
 {
 	int fd = 0;
-	FILE *o;
+	FILE *fp;
 	int perms = 0666; // not yet used
-	int outfile = 0;
+	const char *p = mode;
+	int oflags = 0;
+	int iflags = 0;
 	int seek = -1;
 
-	for (o = _IO_stream; o < _IO_stream + FOPEN_MAX; o++) {
-		if (o->read == 0 || o->write == 0) {
+	for (fp = _IO_stream; fp < _IO_stream + FOPEN_MAX; fp++) {
+		if ((fp->flags & (_READ | _WRITE)) == 0) {
 			break;
 		}
 	}
-	if (o >= _IO_stream + FOPEN_MAX) {
+	if (fp >= _IO_stream + FOPEN_MAX) {
 		return NULL;
 	}
 
-	o = __init_file(o);
-
-	while (*mode) {
-		switch (*mode++) {
+	while (*p) {
+		switch (*p++) {
 		case 'r':
-			outfile |= O_RDONLY;
-			o->read = 1;
-			switch (*mode) {
+			oflags = O_RDONLY;
+			iflags = _READ;
+			switch (*p) {
 			case '+':
-				outfile |= O_RDWR;
-				o->write = 1;
+				oflags = O_RDWR;
+				iflags = _READ | _WRITE;
 				break;
 			default:
 				break;
 			}
 			break;
 		case 'w':
-			outfile = O_TRUNC | O_CREAT | O_RDWR;
-			o->write = 1;
-			switch (*mode) {
+
+			oflags = O_TRUNC | O_CREAT | O_RDWR;
+			iflags = _WRITE;
+			switch (*p) {
 			case '+':
-				outfile &= ~O_TRUNC; 
+				oflags = O_RDWR | O_CREAT;
+				iflags = _WRITE;
 				seek = SEEK_END;
 				break;
 			default:
@@ -46,12 +48,12 @@ FILE *fopen(const char *name, const char *mode)
 			}
 			break;
 		case 'a':
-			outfile = O_CREAT | O_APPEND;
-			o->write = 1;
-			switch (*mode) {
+			oflags = O_CREAT | O_APPEND;
+			iflags = _WRITE;
+			switch (*p) {
 			case '+':
-				outfile |= O_RDWR;
-				o->read = 1;
+				oflags = O_CREAT | O_APPEND | O_RDWR;
+				iflags = _READ | _WRITE;
 				break;
 			default:
 				break;
@@ -64,7 +66,7 @@ FILE *fopen(const char *name, const char *mode)
 	}
 	
 	if (name != NULL) {
-		if ((fd = open(name, outfile, perms)) == -1) {
+		if ((fd = open(name, oflags, perms)) == -1) {
 			return NULL;
 		}
 	}
@@ -73,7 +75,10 @@ FILE *fopen(const char *name, const char *mode)
 		lseek(fd, 0L, seek);
 	}
 
-	o->fd = fd;
+	fp->len = 0;
+	fp->rp = fp->buf = NULL;
+	fp->flags = iflags;
+	fp->fd = fd;
 
-	return o;
+	return fp;
 }

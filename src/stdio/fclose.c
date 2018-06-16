@@ -7,8 +7,7 @@ int fclose(FILE *fp)
 		fflush(fp);
 		fp->len = 0;
 		fp->ungot = 0;
-		fp->read = 0;
-		fp->write = 0;
+		fp->flags &= ~(_READ | _WRITE);
 		if (fp->pid == 0) {
 			if (!(close(fp->fd))){
 				ret = EOF;

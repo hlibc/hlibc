@@ -23,14 +23,7 @@
 typedef struct
 {
 	int fd;
-	/* flags */
-	int read;
-	int write;
-	int lnbuf;
-	int unbuf;
-	int eof;
-	int err;
-	/**/
+	char flags;
 	char *buf;
 	char *rp;
 	char *lp;
@@ -41,6 +34,17 @@ typedef struct
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
+
+enum _flags
+{
+	_READ = 001,
+	_WRITE = 002,
+	_UNBUF = 004,
+	_LNBUF = 030,
+	_EOF = 010,
+	_ERR = 020,
+};
+
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
@@ -61,7 +65,6 @@ int __fillbuf(FILE *);
 int __flushbuf(int, FILE *);
 int __printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
-FILE *__init_file(FILE*);
 
 /* number to string */ 
 int fmt_fp(char *, long double, int, int, int, int);
