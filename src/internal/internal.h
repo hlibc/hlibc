@@ -41,7 +41,6 @@ typedef struct
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
-
 extern FILE *stdin;
 extern FILE *stdout;
 extern FILE *stderr;
@@ -62,6 +61,7 @@ int __fillbuf(FILE *);
 int __flushbuf(int, FILE *);
 int __printf_inter(FILE *, char *, size_t, int, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
+FILE *__init_file(FILE*);
 
 /* number to string */ 
 int fmt_fp(char *, long double, int, int, int, int);

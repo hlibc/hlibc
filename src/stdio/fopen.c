@@ -9,7 +9,6 @@ FILE *fopen(const char *name, const char *mode)
 	int outfile = 0;
 	int seek = -1;
 
-
 	for (fp = _IO_stream; fp < _IO_stream + FOPEN_MAX; fp++) {
 		if (fp->read == 0 || fp->write == 0) {
 			break;
@@ -19,13 +18,7 @@ FILE *fopen(const char *name, const char *mode)
 		return NULL;
 	}
 
-	/* initialize the FILE pointer to _IO_stream[N] */
-	fp->write = 0;
-	fp->read = 0;
-	fp->lnbuf = 0;
-	fp->unbuf = 0;
-	fp->err = 0;
-	fp->eof = 0;
+	fp = __init_file(fp);
 
 	while (*p) {
 		switch (*p++) {
@@ -60,7 +53,6 @@ FILE *fopen(const char *name, const char *mode)
 			case '+':
 				outfile |= O_RDWR;
 				fp->read = 1;
-				fp->write = 1;
 				break;
 			default:
 				break;
@@ -82,8 +74,6 @@ FILE *fopen(const char *name, const char *mode)
 		lseek(fd, 0L, seek);
 	}
 
-	fp->len = 0;
-	fp->rp = fp->buf = NULL;
 	fp->fd = fd;
 
 	return fp;
