@@ -7,7 +7,7 @@ size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *fp)
 	size_t j = 0;
 	size_t k = 0;
 	char *t = ptr;
-	if ((fp->lnbuf)) {
+	if ((fp->flags & _LNBUF)) {
 		for (k=0; k<request; ++k) {
 			if (t[k] == '\n') {
 				ret += write(fp->fd, t + j, k - j + 1);
