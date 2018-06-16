@@ -10,8 +10,8 @@ FILE *fopen(const char *name, const char *mode)
 	int iflags = 0;
 	int seek = -1;
 
-	for (fp = _IO_stream; fp < _IO_stream + FOPEN_MAX; fp++) {
-		if ((fp->flags & (_READ | _WRITE)) == 0) {
+	for (o = _IO_stream; o < _IO_stream + FOPEN_MAX; o++) {
+		if (o->read == 0 && o->write == 0) {
 			break;
 		}
 	}
