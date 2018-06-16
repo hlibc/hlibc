@@ -1,29 +1,29 @@
 #include "../internal/internal.h"
 #include <stdlib.h>
 
-int __flushbuf(int x, FILE *fp)
+int __flushbuf(int x, FILE *o)
 {
 	size_t bufsize = BUFSIZ;
 
-	if (fp->unbuf)
+	if (o->unbuf)
 		bufsize = 1;
-	if (fp->buf == NULL) {
-		if ((fp->buf = malloc(bufsize)) == NULL) {
+	if (o->buf == NULL) {
+		if ((o->buf = malloc(bufsize)) == NULL) {
 			return EOF;
 		}
-		fp->lp = fp->rp = fp->buf;
+		o->lp = o->rp = o->buf;
 	}
-	else if (fp->write) {
-		if (write(fp->fd, fp->buf, fp->rp - fp->buf) < 0) {
-			fp->err = 1;
+	else if (o->write) {
+		if (write(o->fd, o->buf, o->rp - o->buf) < 0) {
+			o->err = 1;
 			return EOF;
 		}
 	}
 
-	fp->rp = fp->buf;
-	fp->len = bufsize;
+	o->rp = o->buf;
+	o->len = bufsize;
 	if (x != EOF) {
-		*fp->rp++ = (char)x;
+		*o->rp++ = (char)x;
 	}
 	return x;
 }
