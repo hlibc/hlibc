@@ -9,7 +9,7 @@ FILE *fopen(const char *name, const char *mode)
 	int seek = -1;
 
 	for (o = _IO_stream; o < _IO_stream + FOPEN_MAX; o++) {
-		if (o->read == 0 || o->write == 0) {
+		if (o->read == 0 && o->write == 0) {
 			break;
 		}
 	}
