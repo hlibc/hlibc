@@ -6,7 +6,7 @@ static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 static void __dprintf_buffer(int x, FILE *f)
-{
+{ 
 	static char b[BUFSIZ];
 	static size_t i = 0;
 	if (x > -1)
@@ -16,6 +16,27 @@ static void __dprintf_buffer(int x, FILE *f)
 		write(f - stdout, b, i);
 		i = 0;
 	}
+}
+
+static int __populate1(size_t incr, int x, char *s, FILE *fp)
+{
+	(void)s;
+	__dprintf_buffer(x, fp); 
+	return incr + 1;
+}
+
+static int __populate2(size_t incr, int x, char *s, FILE *fp)
+{
+	(void)s;
+	putc(x, fp); 
+	return incr + 1;
+}
+
+static int __populate3(size_t incr, int x, char *s, FILE *fp)
+{
+	(void)fp;
+	s[incr] = x;
+	return incr + 1;
 }
 
 static int __populate(size_t incr, int x, int flag, char *s, FILE *fp)
@@ -77,6 +98,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	/* flag == 2 == snprintf */
 	/* flag == 3 == dprintf */
 	/* flag == 0 == printf, vprintf, dprintf etc  */
+	
 
 	const char *p = NULL;
 	size_t i = 0;
