@@ -4,7 +4,7 @@
 int __flushbuf(int x, FILE *fp)
 {
 	size_t bufsize;
-	bufsize = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
+	bufsize = (fp->f.unbuf) ? 1 : BUFSIZ;
 
 	if (fp->buf == NULL) {
 		if ((fp->buf = malloc(bufsize)) == NULL) {
@@ -12,9 +12,9 @@ int __flushbuf(int x, FILE *fp)
 		}
 		fp->lp = fp->rp = fp->buf;
 	}
-	else if (fp->flags & _WRITE) {
+	else if (fp->f.write) {
 		if (write(fp->fd, fp->buf, fp->rp - fp->buf) < 0) {
-			fp->flags |= _ERR;
+			fp->f.err = 1;
 			return EOF;
 		}
 	}
