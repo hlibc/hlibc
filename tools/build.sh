@@ -125,25 +125,25 @@ then	. tests/retval
 fi
 
 # unique tests that don't work as BASIC_TYPEs
-echo "123" | ./control/scanf-driver > "${SUF}/diff2" 2>"${SUF}/testerr"
-echo "123" | ./tests/scanf-driver > "${SUF}/diff3" 2>"${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`scanf-driver' test compared equal to its control method"
-else	printf "%s\n" "##scanf-driver failed to compare equal to its control method"
-	RETVAL="1"
-	displaydiff
-fi
+#echo "123" | ./control/scanf-driver > "${SUF}/diff2" 2>"${SUF}/testerr"
+#echo "123" | ./tests/scanf-driver > "${SUF}/diff3" 2>"${SUF}/testerr"
+#checkifempty "${SUF}/diff2"
+#if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+#then	printf "%s\n" "\`scanf-driver' test compared equal to its control method"
+#else	printf "%s\n" "##scanf-driver failed to compare equal to its control method"
+#	RETVAL="1"
+#	displaydiff
+#fi
 
-echo "123abc" | ./control/scanf-getc > "${SUF}/diff2" 2>"${SUF}/testerr"
-echo "123abc" | ./tests/scanf-getc > "${SUF}/diff3" 2>"${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`scanf-getc' test compared equal to its control method"
-else	printf "%s\n" "##scanf-getc failed to compare equal to its control method"
-	RETVAL="1"
-	displaydiff
-fi
+#echo "123abc" | ./control/scanf-getc > "${SUF}/diff2" 2>"${SUF}/testerr"
+#echo "123abc" | ./tests/scanf-getc > "${SUF}/diff3" 2>"${SUF}/testerr"
+#checkifempty "${SUF}/diff2"
+#if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+#then	printf "%s\n" "\`scanf-getc' test compared equal to its control method"
+#else	printf "%s\n" "##scanf-getc failed to compare equal to its control method"
+#	RETVAL="1"
+#	displaydiff
+#fi
 
 ./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
 ./tests/popen-to-file "du /usr" "${SUF}/diff3" 2>"${SUF}/testerr"
