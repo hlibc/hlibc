@@ -32,7 +32,6 @@ typedef struct{
 typedef struct
 {
 	int fd;
-	char flags;
 	__flags f;
 	char *buf;
 	char *rp;
@@ -44,16 +43,6 @@ typedef struct
 } FILE;
 
 extern FILE _IO_stream[FOPEN_MAX];
-
-enum _flags
-{
-	_READ = 001,
-	_WRITE = 002,
-	_UNBUF = 004,
-	_LNBUF = 030,
-	_EOF = 010,
-	_ERR = 020,
-};
 
 extern FILE *stdin;
 extern FILE *stdout;
