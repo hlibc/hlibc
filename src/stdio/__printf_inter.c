@@ -56,12 +56,12 @@ static void __dprintf_buffer(int x, FILE *f)
 	}
 }
 
-static int __populate(int incr, int x, int flag, char *s, FILE *fp)
+static int __populate(size_t incr, int x, int flag, char *s, FILE *fp)
 {
 	if (flag == 3) {
 		__dprintf_buffer(x, fp);
 	}else if (flag > 0) {
-		*s = x;
+		s[incr] = x;
 	}
 	else {
 		putc(x, fp);
@@ -103,7 +103,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 
 	for (p = fmt; *p && i < bound ; p++) {
 		if (*p != '%') {
-			i = __populate(i, *p, flag, str++, fp);
+			i = __populate(i, *p, flag, str, fp);
 			continue;
 		}
 		++p;
@@ -171,20 +171,20 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			}
 			break;
 		default:
-			i = __populate(i, *p, flag, str++, fp);
+			i = __populate(i, *p, flag, str, fp);
 			break;
 		string:
 			for (; *sval; sval++) {
-				i = __populate(i, *sval, flag, str++, fp);
+				i = __populate(i, *sval, flag, str, fp);
 			}
 			break;
 		character:
-			i = __populate(i, cval, flag, str++, fp);
+			i = __populate(i, cval, flag, str, fp);
 			break;
 		integer:
 			convlen = __int2str(converted, lval, base);
 			for (j = 0; j < convlen; ++j) {
-				i = __populate(i, converted[j], flag, str++, fp);
+				i = __populate(i, converted[j], flag, str, fp);
 			}
 			base = 10;
 			memset(converted, 0, convlen);
@@ -192,7 +192,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
 			for (j = 0; j < convlen; ++j) {
-				i = __populate(i, converted[j], flag, str++, fp);
+				i = __populate(i, converted[j], flag, str, fp);
 			}
 			base = 10;
 			memset(converted, 0, convlen);
@@ -206,7 +206,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 						convlen = precision;
 					}
 				}
-				i = __populate(i, converted[j], flag, str++, fp);
+				i = __populate(i, converted[j], flag, str, fp);
 			}
 			break;
 		}
