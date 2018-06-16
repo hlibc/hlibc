@@ -9,7 +9,7 @@ int __fillbuf(FILE *fp)
 	if ((fp->flags & (_READ | _EOF | _ERR)) != _READ) {
 		return EOF;
 	}
-	bufsize = (fp->flags & _UNBUF) ? 1 : BUFSIZ;
+	bufsize = (fp->f.unbuf) ? 1 : BUFSIZ;
 	if (fp->buf == NULL) {
 		if ((fp->buf = malloc(bufsize)) == NULL) {
 			return EOF;
@@ -22,11 +22,13 @@ int __fillbuf(FILE *fp)
 	/* zero length read */
 	if (ret == 0) {
 		fp->flags |= _EOF;
+		fp->f.eof = 1;
 		fp->len = 1;
 		return EOF;
 	/* read error */
 	}else if ((ret == -1)) {
 		fp->flags |= _ERR;
+		fp->f.err = 1;
 		fp->len = 1;
 		return EOF;
 	}
