@@ -4,15 +4,15 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <string.h> 
+#include <string.h>
 /* for popen / pclose */
 #include <sys/types.h>
-#include <sys/wait.h> 
+#include <sys/wait.h>
 #define __NEED_ssize_t
-#define __NEED_off_t 
-#include <bits/alltypes.h> 
-#define NULL ((void*)0) 
-#define EOF (-1) 
+#define __NEED_off_t
+#include <bits/alltypes.h>
+#define NULL ((void*)0)
+#define EOF (-1)
 #undef SEEK_SET
 #undef SEEK_CUR
 #undef SEEK_END
@@ -50,6 +50,9 @@ int vsprintf(char *, const char *, va_list);
 int vsnprintf(char *, size_t, const char *, va_list);
 int vdprintf(int, const char *, va_list); /* not implemented */
 int vfprintf(FILE *, const char *, va_list);
+
+/* scanf */
+int scanf(const char *, ...);
 
 /* fwrite */
 size_t fread(void *, size_t, size_t, FILE *);

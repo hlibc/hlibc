@@ -15,6 +15,7 @@ BASIC_TYPE="	stat-driver Makefile
 		hcreate-driver
 		printf-driver
 		printf-driver-integers
+		printf-driver-precision
 		strstr-driver
 		strstr-effectiveness2
 		malloc-driver /usr
@@ -94,7 +95,7 @@ printf "==========TEST RESULT START==================================\n"
 
 
 printf "%s" "$BASIC_TYPE" | while read -r i
-do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i} 
+do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
 	checkifempty "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
@@ -102,7 +103,7 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 		echo RETVAL="1" > tests/retval
 		displaydiff
-		
+
 	fi
 done
 
@@ -114,9 +115,9 @@ do	./hbox/${i} > "${SUF}/diff2"
 	then	printf "%s\n" "\`[POSIX system hbox] ${i}' compared equal to its control method"
 	else	printf "%s\n" "##[POSIX system hbox] ${i} failed to compare equal to its control method"
 		displaydiff
-		
+
 	fi
-done 
+done
 
 if [ -f tests/retval ]
 then	. tests/retval
@@ -124,12 +125,32 @@ then	. tests/retval
 fi
 
 # unique tests that don't work as BASIC_TYPEs
+echo "123" | ./control/scanf-driver > "${SUF}/diff2" 2>"${SUF}/testerr"
+echo "123" | ./tests/scanf-driver > "${SUF}/diff3" 2>"${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`scanf-driver' test compared equal to its control method"
+else	printf "%s\n" "##scanf-driver failed to compare equal to its control method"
+	RETVAL="1"
+	displaydiff
+fi
+
+echo "123abc" | ./control/scanf-getc > "${SUF}/diff2" 2>"${SUF}/testerr"
+echo "123abc" | ./tests/scanf-getc > "${SUF}/diff3" 2>"${SUF}/testerr"
+checkifempty "${SUF}/diff2"
+if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+then	printf "%s\n" "\`scanf-getc' test compared equal to its control method"
+else	printf "%s\n" "##scanf-getc failed to compare equal to its control method"
+	RETVAL="1"
+	displaydiff
+fi
+
 ./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
 ./tests/popen-to-file "du /usr" "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file and compared equal to its control method"
-else	printf "%s\n" "##popen-to-file driver failed to output to a file" 
+else	printf "%s\n" "##popen-to-file driver failed to output to a file"
 	RETVAL="1"
 	displaydiff
 fi
@@ -148,7 +169,7 @@ fi
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`ftw-driver compared equal to its control method"
-else	printf "%s\n" "##ftw-driver failed to output to a file" 
+else	printf "%s\n" "##ftw-driver failed to output to a file"
 	#RETVAL="1"
 	displaydiff
 fi
@@ -158,7 +179,7 @@ fi
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`nftw-driver compared equal to its control method"
-else	printf "%s\n" "##nftw-driver failed to output to a file" 
+else	printf "%s\n" "##nftw-driver failed to output to a file"
 	#RETVAL="1"
 	displaydiff
 fi
@@ -172,10 +193,10 @@ printf "%s" "EEEE" >> "${SUF}/test.txt"
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`getline-driver compared equal to its control method"
-else	printf "%s\n" "##getline-driver failed to read lines from file" 
+else	printf "%s\n" "##getline-driver failed to read lines from file"
 	#RETVAL="1"
 	displaydiff
-fi 
+fi
 
 printf "============================================================\n"
 
