@@ -38,21 +38,27 @@ static int __sprintf_buffer(size_t incr, int x, char *s, FILE *fp)
 
 static size_t __uint2str(size_t n, int base, size_t incr, char *s, FILE *fp, size_t bound)
 {
-	if (incr == bound)
-		return bound;
+
+	
 	if (n / base) {
 		 incr = __uint2str(n / base, base, incr, s, fp, bound);
 	}
+	
+	if (incr >= bound )
+		return bound;
 	return __populate(incr, __convtab[(n % base)], s, fp);
 }
 
 static size_t __int2str_inter(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
 {
-	if (incr == bound)
-		return bound;
+	
+	
+	
 	if (-n / base) {
 		incr = __int2str_inter(n / base, base, incr, s, fp, bound);
 	}
+	if (incr >= bound )
+		return bound;
 	return __populate(incr, __convtab[+(-(n % base))], s, fp);
 }
 
@@ -104,12 +110,13 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
                 __populate = f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound ; p++) {
+	for (p = fmt; *p && i < bound; p++) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			continue;
 		}
 		++p;
+
 		switch (*p) {
 		case 'c':
 			cval = va_arg(ap, int);
@@ -178,18 +185,25 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			break;
 		string:
 			for (; *sval; sval++) {
-				i = f(i, *sval, str, fp);
+				if (i < bound -1)
+					i = f(i, *sval, str, fp);
+				else
+					++i;
 			}
 			break;
 		character:
 			i = f(i, cval, str, fp);
 			break;
 		integer:
-			i = __int2str(lval, base, i, str, fp, bound);
+			i = __int2str(lval, base, i, str, fp, bound - 1);
+			if (i == bound -1)
+				++i;
 			base = 10;
 			break;
 		uinteger:
-			i = __uint2str(zuval, base, i, str, fp, bound);
+			i = __uint2str(zuval, base, i, str, fp, bound -1 );
+			if (i == bound -1)
+				++i;
 			base = 10;
 			break;
 		floating:
@@ -205,12 +219,13 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			}
 			break;
 		}
+	
 	}
 	
 	if (flag == 3) { /* dprintf flush */
 		f(i, -1, str, fp);
 	}else if (flag > 0) {
-		f(i, '\0', str, fp); /* don't incr for '\0' */
+		f(i, 0, str, fp); /* don't incr for '\0' */
 	}
 	return i;
 }

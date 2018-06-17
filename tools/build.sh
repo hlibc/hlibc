@@ -1,6 +1,10 @@
 #!/bin/sh
 
-BASIC_TYPE="	stat-driver Makefile
+BASIC_TYPE="	sprintf
+		snprintf
+		snprintf-number
+		snprintf-large
+		stat-driver Makefile
 		atoll-small
 		strtoll-driver
 		malloc-huge
