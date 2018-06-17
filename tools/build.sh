@@ -3,7 +3,6 @@
 BASIC_TYPE="	sprintf
 		snprintf
 		snprintf-number
-		snprintf-large
 		stat-driver Makefile
 		atoll-small
 		strtoll-driver

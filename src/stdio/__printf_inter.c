@@ -37,28 +37,22 @@ static int __sprintf_buffer(size_t incr, int x, char *s, FILE *fp)
 }
 
 static size_t __uint2str(size_t n, int base, size_t incr, char *s, FILE *fp, size_t bound)
-{
-
-	
+{ 
 	if (n / base) {
 		 incr = __uint2str(n / base, base, incr, s, fp, bound);
-	}
-	
+	} 
 	if (incr >= bound )
-		return bound;
+		return bound + 1; 
 	return __populate(incr, __convtab[(n % base)], s, fp);
 }
 
 static size_t __int2str_inter(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
-{
-	
-	
-	
+{ 
 	if (-n / base) {
 		incr = __int2str_inter(n / base, base, incr, s, fp, bound);
 	}
 	if (incr >= bound )
-		return bound;
+		return bound + 1;
 	return __populate(incr, __convtab[+(-(n % base))], s, fp);
 }
 
@@ -195,15 +189,11 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, cval, str, fp);
 			break;
 		integer:
-			i = __int2str(lval, base, i, str, fp, bound - 1);
-			if (i == bound -1)
-				++i;
+			i = __int2str(lval, base, i, str, fp, bound - 1); 
 			base = 10;
 			break;
 		uinteger:
-			i = __uint2str(zuval, base, i, str, fp, bound -1 );
-			if (i == bound -1)
-				++i;
+			i = __uint2str(zuval, base, i, str, fp, bound -1); 
 			base = 10;
 			break;
 		floating:
