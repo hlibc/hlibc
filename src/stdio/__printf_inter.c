@@ -12,10 +12,10 @@ static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 	(void)s;
 	static char b[BUFSIZ];
         static size_t j = 0;
-        if (x > -1)
+        if (x > -1) {
                 b[j++] = x;
-        if (i == BUFSIZ || x == -1)
-        {
+	}
+        if (i == BUFSIZ || x == -1){
                 write(o - stdout, b, j);
                 j = 0;
         }
@@ -107,7 +107,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
                 f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++) {
+	for (p = fmt; *p && i < bound; p++, base = 10) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			continue;
@@ -189,12 +189,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, cval, str, fp);
 			break;
 		integer:
-			i = __int2str(lval, base, i, str, fp, bound, f); 
-			base = 10;
+			i = __int2str(lval, base, i, str, fp, bound, f);
 			break;
 		uinteger:
-			i = __uint2str(zuval, base, i, str, fp, bound, f); 
-			base = 10;
+			i = __uint2str(zuval, base, i, str, fp, bound, f);
 			break;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
