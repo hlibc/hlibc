@@ -5,9 +5,9 @@
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-static int (*__populate)(size_t incr, int x, char *s, FILE *fp);
+int (*__populate)(size_t incr, int x, char *s, FILE *fp);
 
-static int __dprintf_buffer(size_t incr, int x, char *s, FILE *fp)
+int __dprintf_buffer(size_t incr, int x, char *s, FILE *fp)
 {
 	(void)s;
 	static char b[BUFSIZ];
@@ -22,41 +22,43 @@ static int __dprintf_buffer(size_t incr, int x, char *s, FILE *fp)
 	return incr + 1;
 }
 
-static int __printf_buffer(size_t incr, int x, char *s, FILE *fp)
+int __printf_buffer(size_t incr, int x, char *s, FILE *fp)
 {
 	(void)s;
 	putc(x, fp); 
 	return incr + 1;
 }
 
-static int __sprintf_buffer(size_t incr, int x, char *s, FILE *fp)
+int __sprintf_buffer(size_t incr, int x, char *s, FILE *fp)
 {
 	(void)fp;
 	s[incr] = x;
 	return incr + 1;
 }
 
-static size_t __uint2str(size_t n, int base, size_t incr, char *s, FILE *fp, size_t bound)
+size_t __uint2str(size_t n, int base, size_t incr, char *s, FILE *fp, size_t bound)
 { 
 	if (n / base) {
-		 incr = __uint2str(n / base, base, incr, s, fp, bound);
+		incr = __uint2str(n / base, base, incr, s, fp, bound);
 	} 
-	if (incr >= bound )
-		return bound + 1; 
-	return __populate(incr, __convtab[(n % base)], s, fp);
+	if (incr < bound)
+		return __populate(incr, __convtab[(n % base)], s, fp);
+	else
+		return incr + 1;
 }
 
-static size_t __int2str_inter(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
+size_t __int2str_inter(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
 { 
 	if (-n / base) {
 		incr = __int2str_inter(n / base, base, incr, s, fp, bound);
 	}
-	if (incr >= bound )
-		return bound + 1;
-	return __populate(incr, __convtab[+(-(n % base))], s, fp);
+	if (incr < bound)
+		return __populate(incr, __convtab[+(-(n % base))], s, fp);
+	else
+		return incr + 1;
 }
 
-static size_t __int2str(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
+size_t __int2str(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
 { 
 	if (n >= 0) {
 		n = -n;
@@ -79,7 +81,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	char converted[BUFSIZ] = { 0 };
 	size_t convlen = 0;
 	size_t j = 0;
-	static int (*f)(size_t incr, int x, char *s, FILE *fp);
+	int (*f)(size_t incr, int x, char *s, FILE *fp);
 	/* data types */
 	int cval = 0;
 	char *sval = NULL;
@@ -91,7 +93,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	size_t precision = 6;
 
 	if (flag == 2) {	/* flag 2 == snprintf */
-		bound = lim; // +1?
+		bound = lim -1; // +1?
 		__populate = f = __sprintf_buffer;
 	}
 	else if (flag == 1){	/* flag 1 == sprintf */
@@ -178,22 +180,19 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, *p, str, fp);
 			break;
 		string:
-			for (; *sval; sval++) {
-				if (i < bound -1)
-					i = f(i, *sval, str, fp);
-				else
-					++i;
+			for (; *sval; sval++) { 
+				i = f(i, *sval, str, fp);
 			}
 			break;
 		character:
 			i = f(i, cval, str, fp);
 			break;
 		integer:
-			i = __int2str(lval, base, i, str, fp, bound - 1); 
+			i = __int2str(lval, base, i, str, fp, bound); 
 			base = 10;
 			break;
 		uinteger:
-			i = __uint2str(zuval, base, i, str, fp, bound -1); 
+			i = __uint2str(zuval, base, i, str, fp, bound); 
 			base = 10;
 			break;
 		floating:
@@ -215,7 +214,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	if (flag == 3) { /* dprintf flush */
 		f(i, -1, str, fp);
 	}else if (flag > 0) {
-		f(i, 0, str, fp); /* don't incr for '\0' */
+		if (flag == 2)
+			f(bound, 0, str, fp);
+		else
+			f(i, 0, str, fp); /* don't incr for '\0' */
 	}
 	return i;
 }
