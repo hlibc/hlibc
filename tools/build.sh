@@ -2,6 +2,7 @@
 
 BASIC_TYPE="	sprintf
 		snprintf
+		snprintf-ls
 		snprintf-number
 		stat-driver Makefile
 		atoll-small
