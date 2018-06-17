@@ -33,6 +33,7 @@ int __sprintf_buffer(size_t incr, int x, char *s, FILE *fp)
 {
 	(void)fp;
 	s[incr] = x;
+	s[incr + 1] = 0; /* this needs to be fixed */
 	return incr + 1;
 }
 
@@ -93,7 +94,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	size_t precision = 6;
 
 	if (flag == 2) {	/* flag 2 == snprintf */
-		bound = lim -1; // +1?
+		bound = lim - 1;
 		__populate = f = __sprintf_buffer;
 	}
 	else if (flag == 1){	/* flag 1 == sprintf */
@@ -180,7 +181,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, *p, str, fp);
 			break;
 		string:
-			for (; *sval; sval++) { 
+			for (; *sval; sval++) {
 				i = f(i, *sval, str, fp);
 			}
 			break;

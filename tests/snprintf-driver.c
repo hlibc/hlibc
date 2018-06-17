@@ -19,13 +19,19 @@ int main2(void)
 	return 0;
 }
 
+int trial(size_t len)
+{
+	printf("and main returned %zu\n", len);
+}
 
 int main3(void)
 {
 	char *s = "This is a string literal";
 	char b[1024];
-	size_t len = snprintf(b, 100, "%s", s);
-	printf ("'%s' -- and snprintf returned %zu\n", b, len);
+	size_t len = 0;
+	len = snprintf(b, 100, "%s", s);
+	printf ("'%s'\n", b);
+	trial(len);
 	return 0;
 }
 
