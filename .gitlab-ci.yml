@@ -50,6 +50,12 @@ alpine__i386__gcc:
     - i386
   script: "make gcctest"
 
+debian__armel__gcc:
+  tags:
+    - debian
+    - armel
+  script: "make gcctest"
+
 # clang
 #gcc113__aarch64__clang:
 #  tags:
@@ -98,3 +104,11 @@ alpine__i386__clang:
     - alpine
     - i386
   script: "make clangtest"
+
+debian__armel__clang:
+  tags:
+    - debian
+    - armel
+  script: "make clangtest"
+
+# clang
