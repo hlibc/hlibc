@@ -5,66 +5,69 @@
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-static int (*__populate)(size_t incr, int x, char *s, FILE *fp);
+typedef size_t (*__f)(size_t, int, char *, FILE *);
 
-static int __dprintf_buffer(size_t incr, int x, char *s, FILE *fp)
+static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
 	static char b[BUFSIZ];
-        static size_t i = 0;
-        if (x > -1)
-                b[i++] = x;
-        if (i == BUFSIZ || x == -1)
-        {
-                write(fp - stdout, b, i);
-                i = 0;
+        static size_t j = 0;
+        if (x > -1) {
+                b[j++] = x;
+	}
+        if (i == BUFSIZ || x == -1){
+                write(o - stdout, b, j);
+                j = 0;
         }
-	return incr + 1;
+	return i + 1;
 }
 
-static int __printf_buffer(size_t incr, int x, char *s, FILE *fp)
+static size_t __printf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
-	putc(x, fp); 
-	return incr + 1;
+	putc(x, o); 
+	return i + 1;
 }
 
-static int __sprintf_buffer(size_t incr, int x, char *s, FILE *fp)
+static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
-	(void)fp;
-	s[incr] = x;
-	return incr + 1;
+	(void)o;
+	s[i] = x;
+	s[i + 1] = 0; /* this needs to be fixed */
+	return i + 1;
 }
 
-static size_t __uint2str(size_t n, int base, size_t incr, char *s, FILE *fp, size_t bound)
+size_t __uint2str(size_t n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
 { 
-	if (n / base) {
-		 incr = __uint2str(n / base, base, incr, s, fp, bound);
+	if (n / b) {
+		i = __uint2str(n / b, b, i, s, o, bound, f);
 	} 
-	if (incr >= bound )
-		return bound + 1; 
-	return __populate(incr, __convtab[(n % base)], s, fp);
+	if (i < bound)
+		return f(i, __convtab[(n % b)], s, o);
+	else
+		return i + 1;
 }
 
-static size_t __int2str_inter(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
+size_t __int2str_inter(long long n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
 { 
-	if (-n / base) {
-		incr = __int2str_inter(n / base, base, incr, s, fp, bound);
+	if (-n / b) {
+		i = __int2str_inter(n / b, b, i, s, o, bound, f);
 	}
-	if (incr >= bound )
-		return bound + 1;
-	return __populate(incr, __convtab[+(-(n % base))], s, fp);
+	if (i < bound)
+		return f(i, __convtab[+(-(n % b))], s, o);
+	else
+		return i + 1;
 }
 
-static size_t __int2str(long long n, int base, size_t incr, char *s, FILE *fp, size_t bound)
+size_t __int2str(long long n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
 { 
 	if (n >= 0) {
 		n = -n;
 	}
 	else {
-		incr = __populate(incr, '-', s, fp);
+		i = f(i, '-', s, o);
 	}
-	return __int2str_inter(n, base, incr, s, fp, bound);
+	return __int2str_inter(n, b, i, s, o, bound, f);
 }
 
 int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
@@ -79,7 +82,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	char converted[BUFSIZ] = { 0 };
 	size_t convlen = 0;
 	size_t j = 0;
-	static int (*f)(size_t incr, int x, char *s, FILE *fp);
+	__f f;
 	/* data types */
 	int cval = 0;
 	char *sval = NULL;
@@ -91,20 +94,20 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	size_t precision = 6;
 
 	if (flag == 2) {	/* flag 2 == snprintf */
-		bound = lim; // +1?
-		__populate = f = __sprintf_buffer;
+		bound = lim - 1;
+		f = __sprintf_buffer;
 	}
 	else if (flag == 1){	/* flag 1 == sprintf */
-		__populate = f = __sprintf_buffer;
+		f = __sprintf_buffer;
 	}
 	else if (flag == 0) {	/* flag 0 == printf, vprintf */
-		__populate = f = __printf_buffer;
+		f = __printf_buffer;
 	}
 	else if (flag == 3) {	/* flag 3 == dprintf */
-                __populate = f = __dprintf_buffer;
+                f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++) {
+	for (p = fmt; *p && i < bound; p++, base = 10) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			continue;
@@ -179,22 +182,17 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			break;
 		string:
 			for (; *sval; sval++) {
-				if (i < bound -1)
-					i = f(i, *sval, str, fp);
-				else
-					++i;
+				i = f(i, *sval, str, fp);
 			}
 			break;
 		character:
 			i = f(i, cval, str, fp);
 			break;
 		integer:
-			i = __int2str(lval, base, i, str, fp, bound - 1); 
-			base = 10;
+			i = __int2str(lval, base, i, str, fp, bound, f);
 			break;
 		uinteger:
-			i = __uint2str(zuval, base, i, str, fp, bound -1); 
-			base = 10;
+			i = __uint2str(zuval, base, i, str, fp, bound, f);
 			break;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
@@ -215,7 +213,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	if (flag == 3) { /* dprintf flush */
 		f(i, -1, str, fp);
 	}else if (flag > 0) {
-		f(i, 0, str, fp); /* don't incr for '\0' */
+		if (flag == 2)
+			f(bound, 0, str, fp);
+		else
+			f(i, 0, str, fp); /* don't incr for '\0' */
 	}
 	return i;
 }
