@@ -124,7 +124,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		switch (*p) {
 		case '.':
 			if (isdigit(*++p))
-				off = strtol(p, &p, 10);
+				precision = off = strtol(p, &p, 10);
 			goto start;
 		case '*':
 			++p;
@@ -141,10 +141,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		case '8':
 		case '9':
 			padding = strtol(p, &p, 10);
-			while (padding--)
-				i = f(i, ' ', str, fp);
 			goto start;
-			break;
 		case 'c':
 			cval = va_arg(ap, int);
 			goto character;
@@ -174,7 +171,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				fval = va_arg(ap, long double);
 				goto floating;
 			}
-			break;
+			goto end;
 		case 'l':
 			switch (*++p) {
 			case 'd':
@@ -186,14 +183,14 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 					lval = va_arg(ap, long long);
 					goto integer;
 				}
-				break;
+				goto end;
 			case 'f':
 				fval = va_arg(ap, double);
 				goto floating;
 			default:
-				break;
+				goto end;
 			}
-			break;
+			goto end;
 		case 'z':
 			switch (*++p) {
 			case 'u':
@@ -204,29 +201,31 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				lval = va_arg(ap, ssize_t);
 				goto integer;
 			default:
-				break;
+				goto end;
 			}
 			break;
 		default:
 			i = f(i, *p, str, fp);
-			break;
+			goto end;
+		}
+
 		string:
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
-			break;
+			goto end;
 		character:
 			i = f(i, cval, str, fp);
-			break;
+			goto end;
 		integer:
 			i = __int2str(lval, base, i, str, fp, bound, f);
-			break;
+			goto end;
 		uinteger:
 			i = __uint2str(zuval, base, i, str, fp, bound, f);
-			break;
+			goto end;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
-			convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
+			convlen = fmt_fp(converted, fval, 19, 6, ZERO_PAD|LEFT_ADJ, 'f');
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {
@@ -235,8 +234,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				}
 				i = f(i, converted[j], str, fp);
 			}
-			break;
-		}
+		end:
+			;
 	
 	}
 	

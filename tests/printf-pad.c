@@ -7,5 +7,8 @@ int main(void)
 	printf("%.*s\n", 5, s);
 	printf("%10s\n", "hell");
 	printf("%10d\n", 1234);
+
+	printf("%.3f\n", 3.33333);
+	printf("%.10f\n", 3.33333);
 	return 0;
 }
