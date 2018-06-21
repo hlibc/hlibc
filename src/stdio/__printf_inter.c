@@ -1,6 +1,7 @@
 #include "../internal/internal.h"
 #include <stdarg.h>
 #include <string.h>
+#include <limits.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -93,8 +94,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	/* float precision */
 	size_t precision = 6;
 
-	size_t off = 0;
+	/* field width */
+	size_t off = INT_MAX;	/* upper bound for meaningful comparison */
 	size_t z = 0;
+	size_t padding = 0;
 
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
@@ -110,7 +113,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
                 f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++, base = 10) {
+	for (p = fmt; *p && i < bound; p++, base = 10, off = INT_MAX, padding = 0) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			continue;
@@ -127,6 +130,21 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			++p;
 			off = va_arg(ap, int);
 			goto start;
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			padding = strtol(p, &p, 10);
+			while (padding--)
+				i = f(i, ' ', str, fp);
+			goto start;
+			break;
 		case 'c':
 			cval = va_arg(ap, int);
 			goto character;
@@ -193,15 +211,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, *p, str, fp);
 			break;
 		string:
-			z = 0;
-			if (off) {
-				for (; *sval && z < off; sval++, ++z) {
-					i = f(i, *sval, str, fp);
-				}
-			} else {
-				for (; *sval; sval++) {
-	                                i = f(i, *sval, str, fp);
-				}
+			for (z = 0; *sval && z < off; sval++, ++z) {
+				i = f(i, *sval, str, fp);
 			}
 			break;
 		character:
