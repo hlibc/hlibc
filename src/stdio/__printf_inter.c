@@ -98,6 +98,9 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	size_t off = INT_MAX;	/* upper bound for meaningful comparison */
 	size_t z = 0;
 	size_t padding = 0;
+	int zeropad = 0;
+	int altform = 0;
+	int stickysign = 0;
 
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
@@ -113,7 +116,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
                 f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++)
+	for (p = fmt; *p && i < bound; p++) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			goto end;
@@ -131,6 +134,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			off = va_arg(ap, int);
 			goto start;
 		case '0':
+			zeropad = 1;
 		case '1':
 		case '2':
 		case '3':
@@ -141,6 +145,14 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		case '8':
 		case '9':
 			padding = strtol(p, &p, 10);
+			goto start;
+		case '#':
+			++p;
+			altform = 1;
+			goto start;
+		case '+':
+			++p;
+			stickysign = 1;
 			goto start;
 		case 'c':
 			cval = va_arg(ap, int);
@@ -239,6 +251,9 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			off = INT_MAX;
 			padding = 0;
 			base = 10;
+			zeropad = 0;
+			altform = 0;
+			stickysign = 1;
 	}
 	
 	if (flag == 3) { /* dprintf flush */
