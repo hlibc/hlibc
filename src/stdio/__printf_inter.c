@@ -93,6 +93,9 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	/* float precision */
 	size_t precision = 6;
 
+	size_t off = 0;
+	size_t z = 0;
+
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
 		f = __sprintf_buffer;
@@ -114,7 +117,16 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		}
 		++p;
 
+		start:
 		switch (*p) {
+		case '.':
+			if (isdigit(*++p))
+				off = strtol(p, &p, 10);
+			goto start;
+		case '*':
+			++p;
+			off = va_arg(ap, int);
+			goto start;
 		case 'c':
 			cval = va_arg(ap, int);
 			goto character;
@@ -181,9 +193,17 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, *p, str, fp);
 			break;
 		string:
-			for (; *sval; sval++) {
+			
+			z = 0;
+			if (off)
+			for (; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
+			else
+			for (; *sval; sval++) {
+                                i = f(i, *sval, str, fp);
+                        }
+
 			break;
 		character:
 			i = f(i, cval, str, fp);
