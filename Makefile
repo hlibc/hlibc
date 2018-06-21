@@ -102,7 +102,7 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc $(SPECIAL) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@ 
+	printf '#!/bin/sh\nexec gcc $(STACK_PROTECTOR) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@ 
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%

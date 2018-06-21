@@ -235,8 +235,8 @@ fi
 
 # Some patched GCC builds have these defaults messed up...
 tryflag CFLAGS_AUTO -fno-stack-protector
-tryflag SPECIAL -fno-pie
-tryflag SPECIAL -no-pie
+tryflag STACK_PROTECTOR -fno-pie
+tryflag STACK_PROTECTOR -no-pie
 tryldflag LDFLAGS_AUTO -Wl,--hash-style=sysv
 
 # Disable dynamic linking if ld is broken and can't do -Bsymbolic-functions
@@ -272,7 +272,7 @@ CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
 CPPFLAGS = $CPPFLAGS
 LDFLAGS = $LDFLAGS_AUTO $LDFLAGS
-SPECIAL = $SPECIAL
+STACK_PROTECTOR = $STACK_PROTECTOR
 EOF
 test "x$static" = xno && echo "STATIC_LIBS ="
 test "x$shared" = xno && echo "SHARED_LIBS ="
