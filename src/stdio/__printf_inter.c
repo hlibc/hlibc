@@ -113,10 +113,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
                 f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++, base = 10, off = INT_MAX, padding = 0) {
+	for (p = fmt; *p && i < bound; p++)
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
-			continue;
+			goto end;
 		}
 		++p;
 
@@ -235,8 +235,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				i = f(i, converted[j], str, fp);
 			}
 		end:
-			;
-	
+			precision = 6;
+			off = INT_MAX;
+			padding = 0;
+			base = 10;
 	}
 	
 	if (flag == 3) { /* dprintf flush */
