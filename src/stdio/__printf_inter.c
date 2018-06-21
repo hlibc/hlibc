@@ -100,7 +100,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	size_t padding = 0;
 	int zeropad = 0;
 	int altform = 0;
-	int stickysign = 0;
+	int signage = 0;
+	int leftadj = 0;
+	int pls2spc = 0;
+
 
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
@@ -135,6 +138,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto start;
 		case '0':
 			zeropad = 1;
+			++p;
 		case '1':
 		case '2':
 		case '3':
@@ -152,7 +156,15 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto start;
 		case '+':
 			++p;
-			stickysign = 1;
+			signage = 1;
+			goto start;
+		case '-':
+			++p;
+			leftadj = 1;
+			goto start;
+		case ' ':
+			++p;
+			pls2spc = 1;
 			goto start;
 		case 'c':
 			cval = va_arg(ap, int);
@@ -249,11 +261,13 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		end:
 			precision = 6;
 			off = INT_MAX;
-			padding = 0;
 			base = 10;
+			padding = 0;
 			zeropad = 0;
 			altform = 0;
-			stickysign = 1;
+			leftadj = 0;
+			signage = 0;
+			pls2spc = 0;
 	}
 	
 	if (flag == 3) { /* dprintf flush */
