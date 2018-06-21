@@ -1,6 +1,7 @@
 #include "../internal/internal.h"
 #include <stdarg.h>
 #include <string.h>
+#include <limits.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -93,6 +94,17 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	/* float precision */
 	size_t precision = 6;
 
+	/* field width */
+	size_t off = INT_MAX;	/* upper bound for meaningful comparison */
+	size_t z = 0;
+	size_t padding = 0;
+	int zeropad = 0;
+	int altform = 0;
+	int signage = 0;
+	int leftadj = 0;
+	int pls2spc = 0;
+
+
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
 		f = __sprintf_buffer;
@@ -107,14 +119,53 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
                 f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++, base = 10) {
+	for (p = fmt; *p && i < bound; p++) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
-			continue;
+			goto end;
 		}
 		++p;
 
+		start:
 		switch (*p) {
+		case '.':
+			if (isdigit(*++p))
+				precision = off = strtol(p, &p, 10);
+			goto start;
+		case '*':
+			++p;
+			off = va_arg(ap, int);
+			goto start;
+		case '0':
+			zeropad = 1;
+			++p;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			padding = strtol(p, &p, 10);
+			goto start;
+		case '#':
+			++p;
+			altform = 1;
+			goto start;
+		case '+':
+			++p;
+			signage = 1;
+			goto start;
+		case '-':
+			++p;
+			leftadj = 1;
+			goto start;
+		case ' ':
+			++p;
+			pls2spc = 1;
+			goto start;
 		case 'c':
 			cval = va_arg(ap, int);
 			goto character;
@@ -144,7 +195,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				fval = va_arg(ap, long double);
 				goto floating;
 			}
-			break;
+			goto end;
 		case 'l':
 			switch (*++p) {
 			case 'd':
@@ -156,14 +207,14 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 					lval = va_arg(ap, long long);
 					goto integer;
 				}
-				break;
+				goto end;
 			case 'f':
 				fval = va_arg(ap, double);
 				goto floating;
 			default:
-				break;
+				goto end;
 			}
-			break;
+			goto end;
 		case 'z':
 			switch (*++p) {
 			case 'u':
@@ -174,29 +225,31 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				lval = va_arg(ap, ssize_t);
 				goto integer;
 			default:
-				break;
+				goto end;
 			}
 			break;
 		default:
 			i = f(i, *p, str, fp);
-			break;
+			goto end;
+		}
+
 		string:
-			for (; *sval; sval++) {
+			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
-			break;
+			goto end;
 		character:
 			i = f(i, cval, str, fp);
-			break;
+			goto end;
 		integer:
 			i = __int2str(lval, base, i, str, fp, bound, f);
-			break;
+			goto end;
 		uinteger:
 			i = __uint2str(zuval, base, i, str, fp, bound, f);
-			break;
+			goto end;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
-			convlen = fmt_fp(converted, fval, 19, 6, LEFT_ADJ, 'f');
+			convlen = fmt_fp(converted, fval, 19, 6, ZERO_PAD|LEFT_ADJ, 'f');
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {
@@ -205,9 +258,16 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				}
 				i = f(i, converted[j], str, fp);
 			}
-			break;
-		}
-	
+		end:
+			precision = 6;
+			off = INT_MAX;
+			base = 10;
+			padding = 0;
+			zeropad = 0;
+			altform = 0;
+			leftadj = 0;
+			signage = 0;
+			pls2spc = 0;
 	}
 	
 	if (flag == 3) { /* dprintf flush */
