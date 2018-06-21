@@ -193,17 +193,16 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, *p, str, fp);
 			break;
 		string:
-			
 			z = 0;
-			if (off)
-			for (; *sval && z < off; sval++, ++z) {
-				i = f(i, *sval, str, fp);
+			if (off) {
+				for (; *sval && z < off; sval++, ++z) {
+					i = f(i, *sval, str, fp);
+				}
+			} else {
+				for (; *sval; sval++) {
+	                                i = f(i, *sval, str, fp);
+				}
 			}
-			else
-			for (; *sval; sval++) {
-                                i = f(i, *sval, str, fp);
-                        }
-
 			break;
 		character:
 			i = f(i, cval, str, fp);

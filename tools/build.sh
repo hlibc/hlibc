@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	snprintf-driver
+BASIC_TYPE="	printf-pad
+		snprintf-driver
 		stat-driver Makefile
 		atoll-small
 		strtoll-driver
