@@ -16,20 +16,10 @@ int main(void)
         printf("%10.3s\n", "hello world");
  
 
+	printf("whitespace padding %%10.3s\n");
+        printf("%2.9s\n", "hello this is a world");
 
-	printf("=====================\n");
-
-
-
-
-
-
-
-
-
-
-
-
+	printf("=====================\n"); 
 
 	return 0;
 }

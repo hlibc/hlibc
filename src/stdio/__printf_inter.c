@@ -251,9 +251,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 
 		string:
 			len = strlen(sval);
-			if ( off && padding > off)
+			if (off && padding > len  - off)
 			{
-				padding += len - off;
+				if (len > off)
+					padding += len - off;
 			}
 			__padding(len, padding, f, i, ' ', str, fp);
 			for (z = 0; *sval && z < off; sval++, ++z) {
