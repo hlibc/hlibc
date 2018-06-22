@@ -91,6 +91,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	/* data types */
 	int cval = 0;
 	char *sval = NULL;
+	size_t len = 0;
+	size_t ii = 0;
 	size_t zuval = 0;
 	long long lval = 0;
 	long double fval = 0;
@@ -238,6 +240,13 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		}
 
 		string:
+			len = strlen(sval);
+			size_t ii = 0;
+			while (padding > len + ii)
+			{
+				i = f(i, ' ', str, fp);
+				++ii;
+			}
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
@@ -247,6 +256,13 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto end;
 		integer:
 			convlen = __int2str(converted, lval, base);
+			ii = 0;
+                        while (padding > convlen + ii)
+                        {
+                                i = f(i, ' ', str, fp);
+                                ++ii;
+                        }
+
                         for (j = 0; j < convlen; ++j) {
                                 i = f(i, converted[j], str, fp);
                         }
@@ -255,6 +271,13 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
+			ii = 0;
+                        while (padding > convlen + ii)
+                        {
+                                i = f(i, ' ', str, fp);
+                                ++ii;
+                        }
+
                         for (j = 0; j < convlen; ++j) {
                                 i = f(i, converted[j], str, fp);
                         }
