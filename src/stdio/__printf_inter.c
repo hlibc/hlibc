@@ -7,8 +7,7 @@ static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 typedef size_t (*__f)(size_t, int, char *, FILE *);
-
-static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
+size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
 	static char b[BUFSIZ];
@@ -38,25 +37,25 @@ static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 	return i + 1;
 }
 
-static size_t __uint2str_inter2(char *s, size_t n, int base, size_t i)
+static size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
         if (n / base) {
-                i = __uint2str_inter2(s, n / base, base, i);
+                i = __uint2str_inter(s, n / base, base, i);
         }
         s[i] = __convtab[(n % base)];
         return ++i;
 }
 
-static size_t __int2str_inter2(char *s, long long n, int base, size_t i)
+static size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
         if (-n / base) {
-                i = __int2str_inter2(s, n / base, base, i);
+                i = __int2str_inter(s, n / base, base, i);
         }
         s[i] = __convtab[+(-(n % base))];
         return ++i;
 }
 
-static size_t __int2str2(char *s, long long n, int base)
+static size_t __int2str(char *s, long long n, int base)
 {
         size_t i = 0;
         int toggle = 0;
@@ -67,46 +66,13 @@ static size_t __int2str2(char *s, long long n, int base)
                 s[0] = '-';
                 toggle = 1;
         }
-        return __int2str_inter2(s + toggle, n, base, i) + toggle;
+        return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
-static size_t __uint2str2(char *s, size_t n, int base)
+static size_t __uint2str(char *s, size_t n, int base)
 {
         size_t i = 0;
-        return __uint2str_inter2(s, n, base, i);
-}
-
-size_t __uint2str(size_t n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
-{ 
-	if (n / b) {
-		i = __uint2str(n / b, b, i, s, o, bound, f);
-	} 
-	if (i < bound)
-		return f(i, __convtab[(n % b)], s, o);
-	else
-		return i + 1;
-}
-
-size_t __int2str_inter(long long n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
-{ 
-	if (-n / b) {
-		i = __int2str_inter(n / b, b, i, s, o, bound, f);
-	}
-	if (i < bound)
-		return f(i, __convtab[+(-(n % b))], s, o);
-	else
-		return i + 1;
-}
-
-size_t __int2str(long long n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
-{ 
-	if (n >= 0) {
-		n = -n;
-	}
-	else {
-		i = f(i, '-', s, o);
-	}
-	return __int2str_inter(n, b, i, s, o, bound, f);
+        return __uint2str_inter(s, n, base, i);
 }
 
 int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
@@ -280,17 +246,15 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, cval, str, fp);
 			goto end;
 		integer:
-			convlen = __int2str2(converted, lval, base);
+			convlen = __int2str(converted, lval, base);
                         for (j = 0; j < convlen; ++j) {
                                 i = f(i, converted[j], str, fp);
                         }
                         base = 10;
                         memset(converted, 0, convlen);
-
 			goto end;
 		uinteger:
-		
-			convlen = __uint2str2(converted, zuval, base);
+			convlen = __uint2str(converted, zuval, base);
                         for (j = 0; j < convlen; ++j) {
                                 i = f(i, converted[j], str, fp);
                         }
