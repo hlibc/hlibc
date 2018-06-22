@@ -38,6 +38,44 @@ static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 	return i + 1;
 }
 
+static size_t __uint2str_inter2(char *s, size_t n, int base, size_t i)
+{
+        if (n / base) {
+                i = __uint2str_inter2(s, n / base, base, i);
+        }
+        s[i] = __convtab[(n % base)];
+        return ++i;
+}
+
+static size_t __int2str_inter2(char *s, long long n, int base, size_t i)
+{
+        if (-n / base) {
+                i = __int2str_inter2(s, n / base, base, i);
+        }
+        s[i] = __convtab[+(-(n % base))];
+        return ++i;
+}
+
+static size_t __int2str2(char *s, long long n, int base)
+{
+        size_t i = 0;
+        int toggle = 0;
+        if (n >= 0) {
+                n = -n;
+        }
+        else {
+                s[0] = '-';
+                toggle = 1;
+        }
+        return __int2str_inter2(s + toggle, n, base, i) + toggle;
+}
+
+static size_t __uint2str2(char *s, size_t n, int base)
+{
+        size_t i = 0;
+        return __uint2str_inter2(s, n, base, i);
+}
+
 size_t __uint2str(size_t n, int b, size_t i, char *s, FILE *o, size_t bound, __f f)
 { 
 	if (n / b) {
@@ -242,10 +280,22 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			i = f(i, cval, str, fp);
 			goto end;
 		integer:
-			i = __int2str(lval, base, i, str, fp, bound, f);
+			convlen = __int2str2(converted, lval, base);
+                        for (j = 0; j < convlen; ++j) {
+                                i = f(i, converted[j], str, fp);
+                        }
+                        base = 10;
+                        memset(converted, 0, convlen);
+
 			goto end;
 		uinteger:
-			i = __uint2str(zuval, base, i, str, fp, bound, f);
+		
+			convlen = __uint2str2(converted, zuval, base);
+                        for (j = 0; j < convlen; ++j) {
+                                i = f(i, converted[j], str, fp);
+                        }
+                        base = 10;
+                        memset(converted, 0, convlen);
 			goto end;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
