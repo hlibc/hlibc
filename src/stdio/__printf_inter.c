@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <limits.h>
+#include <stdlib.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -73,6 +74,15 @@ static size_t __uint2str(char *s, size_t n, int base)
 {
         size_t i = 0;
         return __uint2str_inter(s, n, base, i);
+}
+
+void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c , FILE *d)
+{
+	size_t i = 0;
+	for (i=0;want > have +i;++i)
+	{
+		f(a, b, c, d);
+	}
 }
 
 int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
@@ -241,12 +251,11 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 
 		string:
 			len = strlen(sval);
-			size_t ii = 0;
-			while (padding > len + ii)
+			if ( off && padding > off)
 			{
-				i = f(i, ' ', str, fp);
-				++ii;
+				padding += len - off;
 			}
+			__padding(len, padding, f, i, ' ', str, fp);
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
@@ -256,13 +265,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto end;
 		integer:
 			convlen = __int2str(converted, lval, base);
-			ii = 0;
-                        while (padding > convlen + ii)
-                        {
-                                i = f(i, ' ', str, fp);
-                                ++ii;
-                        }
-
+			__padding(convlen, padding, f, i, ' ', str, fp);
                         for (j = 0; j < convlen; ++j) {
                                 i = f(i, converted[j], str, fp);
                         }
@@ -271,13 +274,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
-			ii = 0;
-                        while (padding > convlen + ii)
-                        {
-                                i = f(i, ' ', str, fp);
-                                ++ii;
-                        }
-
+                        __padding(convlen, padding, f, i, ' ', str, fp);
                         for (j = 0; j < convlen; ++j) {
                                 i = f(i, converted[j], str, fp);
                         }

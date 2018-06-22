@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BASIC_TYPE="	printf-pad-strings
+BASIC_TYPE="	printf-pad-string
 		printf-field
 		snprintf-driver
 		stat-driver Makefile
