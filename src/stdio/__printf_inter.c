@@ -7,25 +7,20 @@
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-typedef struct __string {
-	char *s;
-	size_t len;
-} __string;
-
 typedef size_t (*__f)(size_t, int, char *, FILE *);
 
 size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
 	static char b[BUFSIZ];
-        static size_t j = 0;
-        if (x > -1) {
-                b[j++] = x;
+	static size_t j = 0;
+	if (x > -1) {
+		b[j++] = x;
 	}
-        if (j == BUFSIZ || x == -1){
-                write(o - stdout, b, j);
-                j = 0;
-        }
+	if (j == BUFSIZ || x == -1){
+		write(o - stdout, b, j);
+		j = 0;
+	}
 	return i + 1;
 }
 
@@ -46,40 +41,40 @@ static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 
 static size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 {
-        if (n / base) {
-                i = __uint2str_inter(s, n / base, base, i);
-        }
-        s[i] = __convtab[(n % base)];
-        return ++i;
+	if (n / base) {
+		i = __uint2str_inter(s, n / base, base, i);
+	}
+	s[i] = __convtab[(n % base)];
+	return ++i;
 }
 
 static size_t __int2str_inter(char *s, long long n, int base, size_t i)
 {
-        if (-n / base) {
-                i = __int2str_inter(s, n / base, base, i);
-        }
-        s[i] = __convtab[+(-(n % base))];
-        return ++i;
+	if (-n / base) {
+		i = __int2str_inter(s, n / base, base, i);
+	}
+	s[i] = __convtab[+(-(n % base))];
+	return ++i;
 }
 
 static size_t __int2str(char *s, long long n, int base)
 {
-        size_t i = 0;
-        int toggle = 0;
-        if (n >= 0) {
-                n = -n;
-        }
-        else {
-                s[0] = '-';
-                toggle = 1;
-        }
-        return __int2str_inter(s + toggle, n, base, i) + toggle;
+	size_t i = 0;
+	int toggle = 0;
+	if (n >= 0) {
+		n = -n;
+	}
+	else {
+		s[0] = '-';
+		toggle = 1;
+	}
+	return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
 static size_t __uint2str(char *s, size_t n, int base)
 {
-        size_t i = 0;
-        return __uint2str_inter(s, n, base, i);
+	size_t i = 0;
+	return __uint2str_inter(s, n, base, i);
 }
 
 void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c , FILE *d)
@@ -125,9 +120,6 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	int leftadj = 0;
 	int pls2spc = 0;
 
-
-	char *nullmark = "(null)";
-
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
 		f = __sprintf_buffer;
@@ -139,7 +131,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		f = __printf_buffer;
 	}
 	else if (flag == 3) {	/* flag 3 == dprintf */
-                f = __dprintf_buffer;
+		f = __dprintf_buffer;
 	}
 
 	for (p = fmt; *p && i < bound; p++) {
@@ -195,7 +187,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		case 's':
 			sval = va_arg(ap, char *); 
 			if (sval == NULL)
-				sval = nullmark;
+				sval = "(null)";
 			goto string;
 		case 'o':
 			base = 8;
@@ -276,20 +268,20 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		integer:
 			convlen = __int2str(converted, lval, base);
 			__padding(convlen, padding, f, i, ' ', str, fp);
-                        for (j = 0; j < convlen; ++j) {
-                                i = f(i, converted[j], str, fp);
-                        }
-                        base = 10;
-                        memset(converted, 0, convlen);
+			for (j = 0; j < convlen; ++j) {
+				i = f(i, converted[j], str, fp);
+			}
+			base = 10;
+			memset(converted, 0, convlen);
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
-                        __padding(convlen, padding, f, i, ' ', str, fp);
-                        for (j = 0; j < convlen; ++j) {
-                                i = f(i, converted[j], str, fp);
-                        }
-                        base = 10;
-                        memset(converted, 0, convlen);
+			__padding(convlen, padding, f, i, ' ', str, fp);
+			for (j = 0; j < convlen; ++j) {
+				i = f(i, converted[j], str, fp);
+			}
+			base = 10;
+			memset(converted, 0, convlen);
 			goto end;
 		floating:
 			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
