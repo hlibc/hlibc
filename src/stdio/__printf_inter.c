@@ -7,6 +7,11 @@
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
+typedef struct __string {
+	char *s;
+	size_t len;
+} __string;
+
 typedef size_t (*__f)(size_t, int, char *, FILE *);
 
 size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
@@ -121,6 +126,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	int pls2spc = 0;
 
 
+	char *nullmark = "(null)";
+
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
 		f = __sprintf_buffer;
@@ -186,7 +193,9 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			cval = va_arg(ap, int);
 			goto character;
 		case 's':
-			sval = va_arg(ap, char *);
+			sval = va_arg(ap, char *); 
+			if (sval == NULL)
+				sval = nullmark;
 			goto string;
 		case 'o':
 			base = 8;
