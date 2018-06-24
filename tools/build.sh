@@ -1,6 +1,9 @@
 #!/bin/sh
 
-BASIC_TYPE="	printf-field
+BASIC_TYPE="	printf-fieldpad
+		printf-leftadj
+		printf-pad-string
+		printf-field
 		snprintf-driver
 		stat-driver Makefile
 		atoll-small

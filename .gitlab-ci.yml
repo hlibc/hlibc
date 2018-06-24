@@ -52,8 +52,8 @@ alpine__i386__gcc:
 
 debian__armel__gcc:
   tags:
-    - debian
     - armel
+    - debian
   script: "make gcctest"
 
 # clang
