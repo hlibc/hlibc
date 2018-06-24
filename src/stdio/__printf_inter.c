@@ -119,6 +119,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	int signage = 0;
 	int leftadj = 0;
 	int pls2spc = 0;
+	int hasdot = 0;
 
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
@@ -144,12 +145,18 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		start:
 		switch (*p) {
 		case '.':
+			hasdot = 1;
 			if (isdigit(*++p))
 				precision = off = strtol(p, &p, 10);
 			goto start;
 		case '*':
 			++p;
-			off = va_arg(ap, int);
+			//if (leftadj == 1)
+			if (hasdot == 0)
+				padding = va_arg(ap, int);
+			else
+		//	else 
+				off = va_arg(ap, int);
 			goto start;
 		case '0':
 			zeropad = 1;
@@ -186,8 +193,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto character;
 		case 's':
 			sval = va_arg(ap, char *); 
-			if (sval == NULL)
-				sval = "(null)";
+			//if (sval == NULL)
+			//	sval = "(null)";
 			goto string;
 		case 'o':
 			base = 8;
@@ -279,7 +286,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			if (leftadj == 1)
+			if (leftadj == 1 && j < padding)
 				__padding(j, padding, f, i, ' ', str, fp);
 			memset(converted, 0, convlen);
 			goto end;
@@ -291,7 +298,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			if (leftadj == 1)
+			if (leftadj == 1 && j < padding)
 				__padding(j, padding, f, i, ' ', str, fp);
 			memset(converted, 0, convlen);
 			goto end;
@@ -316,6 +323,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			leftadj = 0;
 			signage = 0;
 			pls2spc = 0;
+			hasdot = 0;
 	}
 	
 	if (flag == 3) { /* dprintf flush */

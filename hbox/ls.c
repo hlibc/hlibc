@@ -45,7 +45,7 @@ struct global{
 int main(int argc, char *argv[])
 { 
 	int o;
-	global.plain = 1; 
+
 	/* POSIX ls [-CFRacdilqrtu1][-H | -L  */
 	while ((o = getopt (argc, argv, "lUinxhCaR")) != -1)
 		switch (o) { 
@@ -155,8 +155,8 @@ void list_dirs(char *argvv)
 	refactor = ( w.ws_col - factor ) / max ; 
 
 	/* Alphabetize discovered entries */
-	if ( global.alpha == 1 ) 
-		qsort(global.strings, c, sizeof (char*), compare);
+	//if ( global.alpha == 1 ) 
+	//	qsort(global.strings, c, sizeof (char*), compare);
 
 	if ( global.plain == 1 ) 
 		print_plain(c); 
@@ -201,15 +201,16 @@ void shift_alpha(int c, int refactor)
 void print_strings(char *s[], size_t c, size_t refactor, int max)
 {
 	size_t i, z;
-	(void)max;
+	//(void)max;
 	for (i = 0, z = 0; i <= c + refactor; i++)
 	{ 
-		if ((s[i])) 
-			//printf("%-*s ", max , s[i]);
-			printf("%s ", s[i]);
+		if ((s[i]))
+			printf("%-*s ", max , s[i]);
+			//printf("%s ", s[i]);
 		if ( ++z % refactor == 0 )
 			printf("\n"); 
 	} 
+		fflush(stdout);
 }
 
 void print_plain(size_t c)

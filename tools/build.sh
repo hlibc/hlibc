@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	printf-null
+BASIC_TYPE="	printf-fieldpad
+		printf-leftadj
 		printf-pad-string
 		printf-field
 		snprintf-driver
