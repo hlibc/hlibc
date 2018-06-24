@@ -252,14 +252,21 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 
 		string:
 			len = strlen(sval);
-			if (off < len && padding > len - off)
+			if (leftadj == 0)
 			{
-				if (len > off)
-					padding += len - off;
+				if (off < len && padding > len - off)
+				{
+					if (len > off)
+						padding += len - off;
+				}
+				__padding(len, padding, f, i, ' ', str, fp);
 			}
-			__padding(len, padding, f, i, ' ', str, fp);
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
+			}
+			if (leftadj == 1)
+			{
+				__padding(z, padding, f, i, ' ', str, fp);
 			}
 			goto end;
 		character:
@@ -267,18 +274,25 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto end;
 		integer:
 			convlen = __int2str(converted, lval, base);
-			__padding(convlen, padding, f, i, ' ', str, fp);
+			if (leftadj == 0)
+				__padding(convlen, padding, f, i, ' ', str, fp);
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
+			if (leftadj == 1)
+				__padding(j, padding, f, i, ' ', str, fp);
 			memset(converted, 0, convlen);
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
-			__padding(convlen, padding, f, i, ' ', str, fp);
+			if (leftadj == 0)
+				__padding(convlen, padding, f, i, ' ', str, fp);
+	
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
+			if (leftadj == 1)
+				__padding(j, padding, f, i, ' ', str, fp);
 			memset(converted, 0, convlen);
 			goto end;
 		floating:
