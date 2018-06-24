@@ -124,7 +124,7 @@ void list_dirs(char *argvv)
 	size_t factor, refactor;
 	size_t c = 0;
 	c = factor = refactor =  0;
-	static size_t outs = 1025;
+	static size_t outs = 1024;
 	size_t reset = 0;
 
 	if (global.output == NULL)
@@ -143,7 +143,7 @@ void list_dirs(char *argvv)
 			++reset;
 			if (reset >= outs)
 			{
-				outs += 1025;
+				outs += 1024;
 				global.output = realloc(global.output, sizeof(char*) * outs);
 				global.strings = realloc(global.strings, sizeof(char*) * outs);
 			}
@@ -201,7 +201,7 @@ void list_dirs(char *argvv)
 void shift_alpha(int c, int refactor)
 {
 	/* Format columnar lists to alphabetize vertically */
-	int cnt, sft, sftc, vary = 0;
+	size_t cnt, sft, sftc, vary = 0;
 	cnt = sft = sftc = vary = 0;
 	while ( cnt < c )
 	{
@@ -222,10 +222,10 @@ void print_strings(char **s, size_t c, size_t refactor, int max)
 {
 	size_t i, z;
 	for (i = 0, z = 0; i <= c + refactor; i++)
-	{ 
+	{
 		if ((s[i]))
 		{
-			printf("%-*s ", max , s[i]);
+			printf("%-*s ", max, s[i]);
 			free(s[i]);
 		}
 		if (++z % refactor == 0)
@@ -330,7 +330,7 @@ void octtoperm(int octal)
 	printf("%s ", s);
 }
 
-int compare (const void * a, const void * b )
+int compare(const void *a, const void *b)
 {
 	return strcmp(*(char **)a, *(char **)b);
 }
@@ -357,7 +357,7 @@ int find_pattern(char *path, size_t tot, size_t last)
 	size_t dlen = 0;
 
 
-	if ( chdir(path) == 0)
+	if (chdir(path) == 0)
 	{
 		printf("%s:\n", path);
 		list_dirs(".");
@@ -370,7 +370,7 @@ int find_pattern(char *path, size_t tot, size_t last)
 	if (!(spath))
 		return -1;
 	
-	if ( ( dir = opendir(path) ) ) 
+	if ((dir = opendir(path))) 
 	{
 		d = readdir(dir);
 
@@ -384,9 +384,9 @@ int find_pattern(char *path, size_t tot, size_t last)
 
 			tot = sprintf(spath, "%s/%s", path, d->d_name); 
 
-			if ( d->d_type == DT_DIR &&
-			   ( strcmp( ".", d->d_name)) &&
-			   ( strcmp( "..", d->d_name))) 
+			if (d->d_type == DT_DIR &&
+			   (strcmp( ".", d->d_name)) &&
+			   (strcmp( "..", d->d_name))) 
 			{ 
 				
 				find_pattern(spath, tot, last); 
