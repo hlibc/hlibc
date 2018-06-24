@@ -271,7 +271,6 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			base = 10;
 			memset(converted, 0, convlen);
 			goto end;
 		uinteger:
@@ -280,7 +279,6 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			base = 10;
 			memset(converted, 0, convlen);
 			goto end;
 		floating:
