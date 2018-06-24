@@ -120,6 +120,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	int leftadj = 0;
 	int pls2spc = 0;
 	int hasdot = 0;
+	char padd = ' ';
 
 	if (flag == 2) {	/* flag 2 == snprintf */
 		bound = lim - 1;
@@ -151,15 +152,14 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			goto start;
 		case '*':
 			++p;
-			//if (leftadj == 1)
 			if (hasdot == 0)
 				padding = va_arg(ap, int);
 			else
-		//	else 
 				off = va_arg(ap, int);
 			goto start;
 		case '0':
 			zeropad = 1;
+			padd = '0';
 			++p;
 		case '1':
 		case '2':
@@ -192,9 +192,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			cval = va_arg(ap, int);
 			goto character;
 		case 's':
-			sval = va_arg(ap, char *); 
-			//if (sval == NULL)
-			//	sval = "(null)";
+			sval = va_arg(ap, char *);
 			goto string;
 		case 'o':
 			base = 8;
@@ -266,14 +264,14 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 					if (len > off)
 						padding += len - off;
 				}
-				__padding(len, padding, f, i, ' ', str, fp);
+				__padding(len, padding, f, i, padd, str, fp);
 			}
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
 			if (leftadj == 1)
 			{
-				__padding(z, padding, f, i, ' ', str, fp);
+				__padding(z, padding, f, i, padd, str, fp);
 			}
 			goto end;
 		character:
@@ -282,24 +280,24 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		integer:
 			convlen = __int2str(converted, lval, base);
 			if (leftadj == 0)
-				__padding(convlen, padding, f, i, ' ', str, fp);
+				__padding(convlen, padding, f, i, padd, str, fp);
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
 			if (leftadj == 1 && j < padding)
-				__padding(j, padding, f, i, ' ', str, fp);
+				__padding(j, padding, f, i, padd, str, fp);
 			memset(converted, 0, convlen);
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
 			if (leftadj == 0)
-				__padding(convlen, padding, f, i, ' ', str, fp);
+				__padding(convlen, padding, f, i, padd, str, fp);
 	
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
 			if (leftadj == 1 && j < padding)
-				__padding(j, padding, f, i, ' ', str, fp);
+				__padding(j, padding, f, i, padd, str, fp);
 			memset(converted, 0, convlen);
 			goto end;
 		floating:
