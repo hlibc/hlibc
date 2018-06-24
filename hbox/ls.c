@@ -37,9 +37,9 @@ struct global{
 	int hiddn;
 	int recur;
 	char *path;
-	char *strings[10025]; 
-	char *output[10025];
-} global = { 0, 1, 0, 0, 0, 0 , 0, NULL, {}, {} };
+	char **strings; 
+	char **output;
+} global = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL };
 
 
 int main(int argc, char *argv[])
@@ -121,10 +121,17 @@ void list_dirs(char *argvv)
 	struct dirent *b; 
 	size_t max = 1;
 	size_t len = 1; 
-	int c, factor, refactor, z, i;
+	size_t factor, refactor;
+	size_t c = 0;
+	c = factor = refactor =  0;
+	static size_t outs = 1025;
+	size_t reset = 0;
 
-	c = factor = refactor = z = i = 0;
-	
+	if (global.output == NULL)
+	{
+		global.output = malloc(sizeof(char*) * outs);
+		global.strings = malloc(sizeof(char*) * outs);
+	}
 	/* Discover and count directory entries */
 	if ((a = opendir(argvv)))
 	{
@@ -133,10 +140,17 @@ void list_dirs(char *argvv)
 			if (( global.hiddn != 1 && b->d_name[0] == '.' ))
 				continue;
 			len = strlen(b->d_name);
+			if (reset >= outs)
+			{
+				outs += 1025;
+				global.output = realloc(global.output, sizeof(char*) * outs);
+				global.strings = realloc(global.strings, sizeof(char*) * outs);
+			}
 			global.strings[c] = malloc(len + 1);
+			++reset;
 			memcpy(global.strings[c], b->d_name, len + 1);
 			
-		       	if ( len > max )
+		       	if (len > max)
 			       	max = len;
 			++c; 
 		} 
@@ -147,22 +161,22 @@ void list_dirs(char *argvv)
 		return; 
 	} 
 
-	if ( max == 1 )
+	if (max == 1)
 		goto end; 
 
 	/* Obtain terminal information */ 
 	ioctl(0, TIOCGWINSZ, &w);
 	factor = w.ws_col / max ;
-	refactor = ( w.ws_col - factor ) / max ; 
+	refactor = (w.ws_col - factor) / max ; 
 
 	/* Alphabetize discovered entries */
-	if ( global.alpha == 1 ) 
+	if (global.alpha == 1) 
 		qsort(global.strings, c, sizeof (char*), compare);
 
-	if ( global.plain == 1 ) 
+	if (global.plain == 1) 
 		print_plain(c); 
 	
-	if ( global.plain == 0 )
+	if (global.plain == 0)
 	{
 		if ( global.horiz == 1 )
 		{
@@ -172,11 +186,11 @@ void list_dirs(char *argvv)
 		else {
 			shift_alpha(c, refactor); 
 			print_strings(global.output, c, refactor, max); 
-			
 		} 
 	} 
 	end:
-	closedir(a);
+	if (a)
+		closedir(a);
 }
 
 
@@ -206,9 +220,12 @@ void print_strings(char **s, size_t c, size_t refactor, int max)
 	for (i = 0, z = 0; i <= c + refactor; i++)
 	{ 
 		if ((s[i]))
+		{
 			printf("%-*s ", max , s[i]);
-		if ( ++z % refactor == 0 )
-			printf("\n"); 
+			free(s[i]);
+		}
+		if (++z % refactor == 0)
+			printf("\n");
 	} 
 	fflush(stdout);
 }
@@ -305,8 +322,6 @@ void octtoperm(int octal)
 		s[i++] = 'x';
 	else	
 		s[i++] = '-';
-
-	//write(1, s, i);
 	s[i] = 0;
 	printf("%s ", s);
 }
@@ -337,15 +352,16 @@ int find_pattern(char *path, size_t tot, size_t last)
 	char *spath = malloc(1);
 	size_t dlen = 0;
 
-	
+
 	if ( chdir(path) == 0)
 	{
 		printf("%s:\n", path);
 		list_dirs(".");
 		chdir(home);
 		printf("\n");
-	}else
+	}else {
 		return -1;
+	}
 				
 	if (!(spath))
 		return -1;
@@ -374,7 +390,8 @@ int find_pattern(char *path, size_t tot, size_t last)
 			d = readdir(dir); 
 		} 
 	}
-		free(spath);
+
+	free(spath);
 	if (dir)
 		closedir(dir);
 	return 0;
