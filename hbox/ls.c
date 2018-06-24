@@ -11,7 +11,7 @@
 #include <grp.h>
 
 /* 
-	Copyright 2015-2017, C. Graff "ls"
+	Copyright 2015-2018, C. Graff "ls"
 */ 
 
 /* functions */
@@ -20,7 +20,7 @@ void list_dirs(char *);
 void ls_error(char *, int);
 void octtoperm(int);
 void print_plain(size_t);
-void print_strings(char *[], size_t, size_t, int);
+void print_strings(char **, size_t, size_t, int);
 void prntstats(char *);
 void shift_alpha(int, int);
 int find_pattern(char *, size_t, size_t); 
@@ -118,9 +118,9 @@ void list_dirs(char *argvv)
 { 
 	struct winsize w;
 	DIR* a;
-	struct dirent* b; 
+	struct dirent *b; 
 	size_t max = 1;
-	size_t hold = 1; 
+	size_t len = 1; 
 	int c, factor, refactor, z, i;
 
 	c = factor = refactor = z = i = 0;
@@ -131,11 +131,13 @@ void list_dirs(char *argvv)
 		while ((b = readdir(a)))
 		{
 			if (( global.hiddn != 1 && b->d_name[0] == '.' ))
-				continue; 
-			global.strings[c] = b->d_name;
-			hold = strlen(global.strings[c]);
-		       	if ( hold > max )
-			       	max = hold;
+				continue;
+			len = strlen(b->d_name);
+			global.strings[c] = malloc(len + 1);
+			memcpy(global.strings[c], b->d_name, len + 1);
+			
+		       	if ( len > max )
+			       	max = len;
 			++c; 
 		} 
 	}
@@ -149,14 +151,13 @@ void list_dirs(char *argvv)
 		goto end; 
 
 	/* Obtain terminal information */ 
-	ioctl(0, TIOCGWINSZ, &w); 
+	ioctl(0, TIOCGWINSZ, &w);
 	factor = w.ws_col / max ;
-
 	refactor = ( w.ws_col - factor ) / max ; 
 
 	/* Alphabetize discovered entries */
-	//if ( global.alpha == 1 ) 
-	//	qsort(global.strings, c, sizeof (char*), compare);
+	if ( global.alpha == 1 ) 
+		qsort(global.strings, c, sizeof (char*), compare);
 
 	if ( global.plain == 1 ) 
 		print_plain(c); 
@@ -171,6 +172,7 @@ void list_dirs(char *argvv)
 		else {
 			shift_alpha(c, refactor); 
 			print_strings(global.output, c, refactor, max); 
+			
 		} 
 	} 
 	end:
@@ -184,7 +186,7 @@ void shift_alpha(int c, int refactor)
 	int cnt, sft, sftc, vary = 0;
 	cnt = sft = sftc = vary = 0;
 	while ( cnt < c )
-	{ 
+	{
 		global.output[sft] = global.strings[cnt];
 		sft = (sft + refactor);
 		++sftc;
@@ -198,25 +200,22 @@ void shift_alpha(int c, int refactor)
 	} 
 }
 
-void print_strings(char *s[], size_t c, size_t refactor, int max)
+void print_strings(char **s, size_t c, size_t refactor, int max)
 {
 	size_t i, z;
-	//(void)max;
 	for (i = 0, z = 0; i <= c + refactor; i++)
 	{ 
 		if ((s[i]))
 			printf("%-*s ", max , s[i]);
-			//printf("%s ", s[i]);
 		if ( ++z % refactor == 0 )
 			printf("\n"); 
 	} 
-		fflush(stdout);
+	fflush(stdout);
 }
 
 void print_plain(size_t c)
 { 
-	size_t i = 0; 
-	
+	size_t i = 0;
 	if ( global.recur == 0 && chdir(global.path) != 0 )
 		ls_error("failure to chdir()\v", 1);
 	for (; i < c ; ++i) 
@@ -225,8 +224,8 @@ void print_plain(size_t c)
 
 void ls_error(char *message, int i)
 { 
-	//if ( i > 0 )
-		//perror("Error: ");
+	if ( i > 0 )
+		perror("Error: ");
 	fprintf(stderr, "%s", message);
 	exit (i);
 }
