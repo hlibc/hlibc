@@ -140,6 +140,7 @@ void list_dirs(char *argvv)
 			if (( global.hiddn != 1 && b->d_name[0] == '.' ))
 				continue;
 			len = strlen(b->d_name);
+			++reset;
 			if (reset >= outs)
 			{
 				outs += 1025;
@@ -147,7 +148,7 @@ void list_dirs(char *argvv)
 				global.strings = realloc(global.strings, sizeof(char*) * outs);
 			}
 			global.strings[c] = malloc(len + 1);
-			++reset;
+			
 			memcpy(global.strings[c], b->d_name, len + 1);
 			
 		       	if (len > max)
@@ -155,6 +156,7 @@ void list_dirs(char *argvv)
 			++c; 
 		} 
 	}
+	
 	else /* it's not a directory, so just lstat it */
 	{ 
 		prntstats(argvv); 
@@ -189,8 +191,10 @@ void list_dirs(char *argvv)
 		} 
 	} 
 	end:
+	
 	if (a)
 		closedir(a);
+		;
 }
 
 
