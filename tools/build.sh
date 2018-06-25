@@ -22,7 +22,7 @@ BASIC_TYPE="	printf-fieldpad
 		printf-driver-integers
 		strstr-driver
 		strstr-effectiveness2
-		malloc-driver /usr
+		realloc-filetreewalk /usr
 		popen-driver du /usr
 		puts-driver
 		strerror-driver
