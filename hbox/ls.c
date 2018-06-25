@@ -24,10 +24,12 @@ typedef struct {
 	int hiddn;
 	int recur;
 	char *path;
-	char **strings; 
+	char **strings;
 	char **output;
 	char *home;
-}lstype ;
+	size_t c; // count of *strings
+	size_t refactor;// not yet used
+} lstype;
 
 /* functions */
 int compare(const void*, const void*);
@@ -37,14 +39,14 @@ void octtoperm(int);
 void print_plain(size_t, lstype);
 void print_strings(char **, size_t, size_t, int);
 void prntstats(char *, lstype);
-void shift_alpha(int, int, lstype);
+void shift_alpha(size_t, size_t, lstype);
 int find_pattern(char *, size_t, size_t, lstype);
 
 int main(int argc, char *argv[])
 { 
 	int o;
 
-	lstype g = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL, NULL};
+	lstype g = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL, NULL, 0, 0};
 	/* POSIX ls [-CFRacdilqrtu1][-H | -L  */
 	while ((o = getopt (argc, argv, "lUinxhCaR")) != -1)
 		switch (o) { 
@@ -182,7 +184,7 @@ void list_dirs(char *argvv, lstype g)
 	
 	if (g.plain == 0)
 	{
-		if (g.horiz == 1 )
+		if (g.horiz == 1)
 		{
 			print_strings(g.strings, c - refactor -1, refactor, max);
 			printf("\n"); 
@@ -200,17 +202,17 @@ void list_dirs(char *argvv, lstype g)
 }
 
 
-void shift_alpha(int c, int refactor, lstype g)
+void shift_alpha(size_t c, size_t refactor, lstype g)
 {
 	/* Format columnar lists to alphabetize vertically */
 	size_t cnt, sft, sftc, vary = 0;
 	cnt = sft = sftc = vary = 0;
-	while ( cnt < c )
+	while (cnt < c)
 	{
 		g.output[sft] = g.strings[cnt];
 		sft = (sft + refactor);
 		++sftc;
-		if (sftc == ( c / refactor ) + 1)
+		if (sftc == (c / refactor) + 1)
 		{
 			++vary;
 			sft = vary;
@@ -254,82 +256,78 @@ void ls_error(char *message, int i)
 }
 
 void octtoperm(int octal)
-{ 
-	char s[16];
-	size_t i = 0;
-
+{
 	switch (octal & S_IFMT)
 	{
-		case S_IFBLK: 
-			s[i++] = 'b';
+		case S_IFBLK:
+			printf("b");
 			break;
-		case S_IFCHR: 
-			s[i++] = 'c';
+		case S_IFCHR:
+			printf("c");
 			break;
-		case S_IFDIR: 
-			s[i++] = 'd';
+		case S_IFDIR:
+			printf("d");
 			break;
-		case S_IFIFO: 
-			s[i++] = 'p';
+		case S_IFIFO:
+			printf("p");
 			break;
-		case S_IFLNK: 
-			s[i++] = 'l';
+		case S_IFLNK:
+			printf("l");
 			break;
-		case S_IFREG: 
-			s[i++] = '-';
-			break; 
-		case S_IFSOCK: 
-			s[i++] = 'S';
-			break; 
+		case S_IFREG:
+			printf("-");
+			break;
+		case S_IFSOCK:
+			printf("S");
+			break;
 		default:
-			s[i++] = '?';
-			break; 
+			printf("?");
+			break;
 
-	} 
+	}
 
 	if (octal & S_IRUSR)
-		s[i++] = 'r';
+		printf("r");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IWUSR)
-		s[i++] = 'w';
+		printf("w");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IXUSR)
-		s[i++] = 'x';
+		printf("x");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IRGRP)
-		s[i++] = 'r';
+		printf("r");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IWGRP)
-		s[i++] = 'w';
+		printf("w");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IXGRP)
-		s[i++] = 'x';
+		printf("x");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IROTH)
-		s[i++] = 'r';
+		printf("r");
 	else
-		s[i++] = '-';
+		printf("-");
 	if (octal & S_IWOTH)
-		s[i++] = 'w';
+		printf("w");
 	else
-		s[i++] = '-';
+		printf("-");
 
-	if ( octal & S_ISVTX && octal & S_IXOTH)
-		s[i++] = 't';
-	else if (octal & S_ISVTX) 
-		s[i++] = 'T';
+	if (octal & S_ISVTX && octal & S_IXOTH)
+		printf("t");
+	else if (octal & S_ISVTX)
+		printf("T");
 	else if (octal & S_IXOTH)
-		s[i++] = 'x';
-	else	
-		s[i++] = '-';
-	s[i] = 0;
-	printf("%s ", s);
+		printf("x");
+	else
+		printf("-");
+	printf(" ");
 }
 
 int compare(const void *a, const void *b)
@@ -388,9 +386,7 @@ int find_pattern(char *path, size_t tot, size_t last, lstype g)
 
 			if (d->d_type == DT_DIR &&
 			   (strcmp( ".", d->d_name)) &&
-			   (strcmp( "..", d->d_name))) 
-			{ 
-				
+			   (strcmp( "..", d->d_name))) {
 				find_pattern(spath, tot, last, g);
 			} 
 			d = readdir(dir); 
