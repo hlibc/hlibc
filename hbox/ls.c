@@ -14,19 +14,6 @@
 	Copyright 2015-2018, C. Graff "ls"
 */ 
 
-/* functions */
-int compare(const void*, const void*);
-void list_dirs(char *);
-void ls_error(char *, int);
-void octtoperm(int);
-void print_plain(size_t);
-void print_strings(char **, size_t, size_t, int);
-void prntstats(char *);
-void shift_alpha(int, int);
-int find_pattern(char *, size_t, size_t); 
-char *home;
-
-
 /* structs */
 struct global{
 	int plain;
@@ -39,8 +26,19 @@ struct global{
 	char *path;
 	char **strings; 
 	char **output;
-} global = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL };
+	char *home;
+} global = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL, NULL};
 
+/* functions */
+int compare(const void*, const void*);
+void list_dirs(char *);
+void ls_error(char *, int);
+void octtoperm(int);
+void print_plain(size_t);
+void print_strings(char **, size_t, size_t, int);
+void prntstats(char *);
+void shift_alpha(int, int);
+int find_pattern(char *, size_t, size_t);
 
 int main(int argc, char *argv[])
 { 
@@ -86,30 +84,30 @@ int main(int argc, char *argv[])
 	argc -= optind;
 
 	/* disable vertical alphabetization with -R (it's broken) */
-	if ( global.recur == 1)
+	if (global.recur == 1)
 		global.horiz = 1;
 	
-	home = getcwd(home, 100);
+	global.home = getcwd(global.home, 100);
 
-	if (argc == 0 ) 
+	if (argc == 0) 
 	{
 		global.path = ".";
-		if ( global.recur == 0 )
+		if (global.recur == 0 )
 			list_dirs(".");
-		if ( global.recur == 1 )
+		if (global.recur == 1 )
 			find_pattern(".", 1, 0);
 	}
-	while (argc > 0 && *argv )
+	while (argc > 0 && *argv)
 	{ 
 		global.path = *argv;
-		if ( global.recur == 0 )
+		if (global.recur == 0)
 			list_dirs(*argv);
-		if ( global.recur == 1 )
+		if (global.recur == 1)
 			find_pattern(*argv, strlen(*argv), 0);
 		++argv;
 	}
 
-	free(home);
+	free(global.home);
 	return 0;
 } 
 
@@ -117,40 +115,42 @@ int main(int argc, char *argv[])
 void list_dirs(char *argvv) 
 { 
 	struct winsize w;
-	DIR* a;
+	DIR *a;
 	struct dirent *b; 
 	size_t max = 1;
 	size_t len = 1; 
-	size_t factor, refactor;
+	size_t factor = 0;
+	size_t refactor = 0;
 	size_t c = 0;
-	c = factor = refactor =  0;
 	static size_t outs = 1024;
-	size_t reset = 0;
 
 	if (global.output == NULL)
 	{
-		global.output = malloc(sizeof(char*) * outs);
-		global.strings = malloc(sizeof(char*) * outs);
+		if (!(global.output = malloc(sizeof(char*) * outs)))
+			ls_error("no mem", 1);
+		if (!(global.strings = malloc(sizeof(char*) * outs)))
+			ls_error("no mem", 1);
 	}
 	/* Discover and count directory entries */
 	if ((a = opendir(argvv)))
 	{
 		while ((b = readdir(a)))
 		{
-			if (( global.hiddn != 1 && b->d_name[0] == '.' ))
+			if ((global.hiddn != 1 && b->d_name[0] == '.' ))
 				continue;
 			len = strlen(b->d_name);
-			++reset;
-			if (reset >= outs)
+		
+			if (c >= outs)
 			{
 				outs += 1024;
-				global.output = realloc(global.output, sizeof(char*) * outs);
-				global.strings = realloc(global.strings, sizeof(char*) * outs);
+				if (!(global.output = realloc(global.output, sizeof(char*) * outs)))
+					ls_error("no mem", 1);
+				if (!(global.strings = realloc(global.strings, sizeof(char*) * outs)))
+					ls_error("no mem", 1);
 			}
-			global.strings[c] = malloc(len + 1);
-			
+			if (!(global.strings[c] = malloc(len + 1)))
+				ls_error("no mem", 1);
 			memcpy(global.strings[c], b->d_name, len + 1);
-			
 		       	if (len > max)
 			       	max = len;
 			++c; 
@@ -180,7 +180,7 @@ void list_dirs(char *argvv)
 	
 	if (global.plain == 0)
 	{
-		if ( global.horiz == 1 )
+		if (global.horiz == 1 )
 		{
 			print_strings(global.strings, c - refactor -1, refactor, max);
 			printf("\n"); 
@@ -194,7 +194,7 @@ void list_dirs(char *argvv)
 	
 	if (a)
 		closedir(a);
-		;
+		
 }
 
 
@@ -237,7 +237,7 @@ void print_strings(char **s, size_t c, size_t refactor, int max)
 void print_plain(size_t c)
 { 
 	size_t i = 0;
-	if ( global.recur == 0 && chdir(global.path) != 0 )
+	if (global.recur == 0 && chdir(global.path) != 0 )
 		ls_error("failure to chdir()\v", 1);
 	for (; i < c ; ++i) 
 		prntstats(global.strings[i]);
@@ -338,14 +338,15 @@ int compare(const void *a, const void *b)
 void prntstats(char *file)
 {
 	struct stat sb = { 0 };
-	if ( lstat(file, &sb) != 0 )
+	if (lstat(file, &sb) != 0)
 		return;
 	octtoperm(sb.st_mode);
 	printf(" ");
-	printf("%ld ", sb.st_nlink);
-	printf("%ld ", sb.st_nlink);
+	if (global.inode == 1)
+		printf("%-8ld ", sb.st_ino);
+	printf("%-3ld ", sb.st_nlink);
 	printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
-	printf("%lld ", (long long int)sb.st_size);
+	printf("%8lld ", (long long int)sb.st_size);
 	printf("%s\n", file); 
 } 
 
@@ -356,12 +357,11 @@ int find_pattern(char *path, size_t tot, size_t last)
 	char *spath = malloc(1);
 	size_t dlen = 0;
 
-
 	if (chdir(path) == 0)
 	{
 		printf("%s:\n", path);
 		list_dirs(".");
-		chdir(home);
+		chdir(global.home);
 		printf("\n");
 	}else {
 		return -1;
@@ -399,4 +399,5 @@ int find_pattern(char *path, size_t tot, size_t last)
 	if (dir)
 		closedir(dir);
 	return 0;
-} 
+}
+
