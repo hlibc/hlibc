@@ -15,7 +15,7 @@
 */ 
 
 /* structs */
-struct global{
+typedef struct {
 	int plain;
 	int alpha;
 	int inode;
@@ -27,49 +27,50 @@ struct global{
 	char **strings; 
 	char **output;
 	char *home;
-} global = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL, NULL};
+}lstype ;
 
 /* functions */
 int compare(const void*, const void*);
-void list_dirs(char *);
+void list_dirs(char *, lstype);
 void ls_error(char *, int);
 void octtoperm(int);
-void print_plain(size_t);
+void print_plain(size_t, lstype);
 void print_strings(char **, size_t, size_t, int);
-void prntstats(char *);
-void shift_alpha(int, int);
-int find_pattern(char *, size_t, size_t);
+void prntstats(char *, lstype);
+void shift_alpha(int, int, lstype);
+int find_pattern(char *, size_t, size_t, lstype);
 
 int main(int argc, char *argv[])
 { 
 	int o;
 
+	lstype g = { 0, 1, 0, 0, 0, 0 , 0, NULL, NULL, NULL, NULL};
 	/* POSIX ls [-CFRacdilqrtu1][-H | -L  */
 	while ((o = getopt (argc, argv, "lUinxhCaR")) != -1)
 		switch (o) { 
 			case 'l' : 
-				global.plain = 1; 
+				g.plain = 1; 
 				break;
 			case 'U' : 
-				global.alpha = 0; 
+				g.alpha = 0; 
 				break;
 			case 'i' : 
-				global.inode = 1; 
+				g.inode = 1; 
 				break;
 			case 'n' : 
-				global.numer = 1; 
+				g.numer = 1; 
 				break;
 			case 'x' : 
-				global.horiz = 1; 
+				g.horiz = 1; 
 				break;
 			case 'C' : 
-				global.plain = 0; 
+				g.plain = 0; 
 				break;
 			case 'a' : 
-				global.hiddn = 1; 
+				g.hiddn = 1; 
 				break;
 			case 'R':
-				global.recur = 1;
+				g.recur = 1;
 				break;
 			case 'h' : 
 				ls_error("Usage:   ls -lUinxhCaR [PATH(S)]\n", 0); 
@@ -84,35 +85,36 @@ int main(int argc, char *argv[])
 	argc -= optind;
 
 	/* disable vertical alphabetization with -R (it's broken) */
-	if (global.recur == 1)
-		global.horiz = 1;
+	if (g.recur == 1)
+		g.horiz = 1;
 	
-	global.home = getcwd(global.home, 100);
+	g.home = getcwd(g.home, 100);
+	
 
 	if (argc == 0) 
 	{
-		global.path = ".";
-		if (global.recur == 0 )
-			list_dirs(".");
-		if (global.recur == 1 )
-			find_pattern(".", 1, 0);
+		g.path = ".";
+		if (g.recur == 0 )
+			list_dirs(".", g);
+		if (g.recur == 1 )
+			find_pattern(".", 1, 0, g);
 	}
 	while (argc > 0 && *argv)
 	{ 
-		global.path = *argv;
-		if (global.recur == 0)
-			list_dirs(*argv);
-		if (global.recur == 1)
-			find_pattern(*argv, strlen(*argv), 0);
+		g.path = *argv;
+		if (g.recur == 0)
+			list_dirs(*argv, g);
+		if (g.recur == 1)
+			find_pattern(*argv, strlen(*argv), 0, g);
 		++argv;
 	}
 
-	free(global.home);
+	free(g.home);
 	return 0;
 } 
 
 
-void list_dirs(char *argvv) 
+void list_dirs(char *argvv, lstype g) 
 { 
 	struct winsize w;
 	DIR *a;
@@ -124,11 +126,11 @@ void list_dirs(char *argvv)
 	size_t c = 0;
 	static size_t outs = 1024;
 
-	if (global.output == NULL)
+	if (g.output == NULL)
 	{
-		if (!(global.output = malloc(sizeof(char*) * outs)))
+		if (!(g.output = malloc(sizeof(char*) * outs)))
 			ls_error("no mem", 1);
-		if (!(global.strings = malloc(sizeof(char*) * outs)))
+		if (!(g.strings = malloc(sizeof(char*) * outs)))
 			ls_error("no mem", 1);
 	}
 	/* Discover and count directory entries */
@@ -136,21 +138,21 @@ void list_dirs(char *argvv)
 	{
 		while ((b = readdir(a)))
 		{
-			if ((global.hiddn != 1 && b->d_name[0] == '.' ))
+			if ((g.hiddn != 1 && b->d_name[0] == '.' ))
 				continue;
 			len = strlen(b->d_name);
 		
 			if (c >= outs)
 			{
 				outs += 1024;
-				if (!(global.output = realloc(global.output, sizeof(char*) * outs)))
+				if (!(g.output = realloc(g.output, sizeof(char*) * outs)))
 					ls_error("no mem", 1);
-				if (!(global.strings = realloc(global.strings, sizeof(char*) * outs)))
+				if (!(g.strings = realloc(g.strings, sizeof(char*) * outs)))
 					ls_error("no mem", 1);
 			}
-			if (!(global.strings[c] = malloc(len + 1)))
+			if (!(g.strings[c] = malloc(len + 1)))
 				ls_error("no mem", 1);
-			memcpy(global.strings[c], b->d_name, len + 1);
+			memcpy(g.strings[c], b->d_name, len + 1);
 		       	if (len > max)
 			       	max = len;
 			++c; 
@@ -159,7 +161,7 @@ void list_dirs(char *argvv)
 	
 	else /* it's not a directory, so just lstat it */
 	{ 
-		prntstats(argvv); 
+		prntstats(argvv, g); 
 		return; 
 	} 
 
@@ -172,22 +174,22 @@ void list_dirs(char *argvv)
 	refactor = (w.ws_col - factor) / max ; 
 
 	/* Alphabetize discovered entries */
-	if (global.alpha == 1) 
-		qsort(global.strings, c, sizeof (char*), compare);
+	if (g.alpha == 1) 
+		qsort(g.strings, c, sizeof (char*), compare);
 
-	if (global.plain == 1) 
-		print_plain(c); 
+	if (g.plain == 1) 
+		print_plain(c, g); 
 	
-	if (global.plain == 0)
+	if (g.plain == 0)
 	{
-		if (global.horiz == 1 )
+		if (g.horiz == 1 )
 		{
-			print_strings(global.strings, c - refactor -1, refactor, max);
+			print_strings(g.strings, c - refactor -1, refactor, max);
 			printf("\n"); 
 		}
 		else {
-			shift_alpha(c, refactor); 
-			print_strings(global.output, c, refactor, max); 
+			shift_alpha(c, refactor, g); 
+			print_strings(g.output, c, refactor, max); 
 		} 
 	} 
 	end:
@@ -198,14 +200,14 @@ void list_dirs(char *argvv)
 }
 
 
-void shift_alpha(int c, int refactor)
+void shift_alpha(int c, int refactor, lstype g)
 {
 	/* Format columnar lists to alphabetize vertically */
 	size_t cnt, sft, sftc, vary = 0;
 	cnt = sft = sftc = vary = 0;
 	while ( cnt < c )
 	{
-		global.output[sft] = global.strings[cnt];
+		g.output[sft] = g.strings[cnt];
 		sft = (sft + refactor);
 		++sftc;
 		if (sftc == ( c / refactor ) + 1)
@@ -234,13 +236,13 @@ void print_strings(char **s, size_t c, size_t refactor, int max)
 	fflush(stdout);
 }
 
-void print_plain(size_t c)
+void print_plain(size_t c, lstype g)
 { 
 	size_t i = 0;
-	if (global.recur == 0 && chdir(global.path) != 0 )
+	if (g.recur == 0 && chdir(g.path) != 0 )
 		ls_error("failure to chdir()\v", 1);
 	for (; i < c ; ++i) 
-		prntstats(global.strings[i]);
+		prntstats(g.strings[i] ,g);
 }
 
 void ls_error(char *message, int i)
@@ -335,14 +337,14 @@ int compare(const void *a, const void *b)
 	return strcmp(*(char **)a, *(char **)b);
 }
 
-void prntstats(char *file)
+void prntstats(char *file, lstype g)
 {
 	struct stat sb = { 0 };
 	if (lstat(file, &sb) != 0)
 		return;
 	octtoperm(sb.st_mode);
 	printf(" ");
-	if (global.inode == 1)
+	if (g.inode == 1)
 		printf("%-8ld ", sb.st_ino);
 	printf("%-3ld ", sb.st_nlink);
 	printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
@@ -350,7 +352,7 @@ void prntstats(char *file)
 	printf("%s\n", file); 
 } 
 
-int find_pattern(char *path, size_t tot, size_t last)
+int find_pattern(char *path, size_t tot, size_t last, lstype g)
 { 
 	DIR *dir;
 	struct dirent *d;
@@ -360,8 +362,8 @@ int find_pattern(char *path, size_t tot, size_t last)
 	if (chdir(path) == 0)
 	{
 		printf("%s:\n", path);
-		list_dirs(".");
-		chdir(global.home);
+		list_dirs(".", g);
+		chdir(g.home);
 		printf("\n");
 	}else {
 		return -1;
@@ -389,7 +391,7 @@ int find_pattern(char *path, size_t tot, size_t last)
 			   (strcmp( "..", d->d_name))) 
 			{ 
 				
-				find_pattern(spath, tot, last); 
+				find_pattern(spath, tot, last, g);
 			} 
 			d = readdir(dir); 
 		} 
