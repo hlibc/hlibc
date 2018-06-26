@@ -67,11 +67,29 @@ object *_traverse_list(object *o)
 object *find_free_object(object **last, size_t size)
 {
 	object *o;
-	for (o = base; o && !(o->free && o->size >= size); o = o->next) {
-		*last = o;
-		o->free = 0;
+	int set = 0;
+	for (o = base; o ; o = o->next) { // && !(o->free && o->size >= size); o = o->next) { 
+		if (o->free == 1 && o->size >= size && set == 0) {
+			set = 1;
+		}else if (o->free == 1) {
+                        if (o->next == NULL) {
+                                o = deltail(o);
+                        }
+                        else if (o->prev == NULL) {
+                                o = delhead(o);
+                        }
+                        else {
+                                o = delmiddle(o);
+                        }
+                }
+		if ( set == 0)
+		{
+			o->free = 0;
+			*last = o;
+		}
+
 	}
-	o = _traverse_list(o);
+	//o = _traverse_list(o);
 	return o;
 }
 
