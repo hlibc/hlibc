@@ -87,7 +87,6 @@ object *find_free_object(object **last, size_t size)
 			o->free = 0;
 			*last = o;
 		}
-
 	}
 	return o;
 }
