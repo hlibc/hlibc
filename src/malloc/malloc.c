@@ -7,6 +7,8 @@
 #include <sys/mman.h>
 #include <errno.h>
 
+#define __HLIBC_PAGE 10000
+
 typedef struct object
 {
 	size_t size;
@@ -65,11 +67,27 @@ object *_traverse_list(object *o)
 object *find_free_object(object **last, size_t size)
 {
 	object *o;
-	
-	for (o = base; o && !(o->free && o->size >= size); o = o->next) {
-		*last = o;
+	int set = 0;
+	for (o = base; o ; o = o->next) {
+		if (o->free == 1 && o->size >= size && set == 0) {
+			set = 1;
+		}else if (o->free == 1) {
+			if (o->next == NULL) {
+				o = deltail(o);
+			}
+			else if (o->prev == NULL) {
+				o = delhead(o);
+			}
+			else {
+				o = delmiddle(o);
+			}
+		}
+		if (set == 0)
+		{
+			o->free = 0;
+			*last = o;
+		}
 	}
-	o = _traverse_list(o);
 	return o;
 }
 
@@ -78,7 +96,12 @@ object *morecore(object *last, size_t size)
 	object *o = NULL;
 	int pt = PROT_READ | PROT_WRITE;
 	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
-	size_t sum = 0;
+	size_t sum = 0; 
+
+	if (size < __HLIBC_PAGE)
+	{
+		size = __HLIBC_PAGE;
+	}
 
 	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
 		goto error;
