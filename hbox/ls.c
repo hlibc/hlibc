@@ -126,7 +126,7 @@ void list_dirs(char *argvv, lstype g)
 	size_t factor = 0;
 	size_t refactor = 0;
 	size_t c = 0;
-	static size_t outs = 1024;
+	static size_t outs = 10024;
 
 	if (g.output == NULL)
 	{
@@ -135,6 +135,7 @@ void list_dirs(char *argvv, lstype g)
 		if (!(g.strings = malloc(sizeof(char*) * outs)))
 			ls_error("no mem", 1);
 	}
+
 	/* Discover and count directory entries */
 	if ((a = opendir(argvv)))
 	{
@@ -143,37 +144,38 @@ void list_dirs(char *argvv, lstype g)
 			if ((g.hiddn != 1 && b->d_name[0] == '.' ))
 				continue;
 			len = strlen(b->d_name);
-		
+			
 			if (c >= outs)
 			{
-				outs += 1024;
+				outs += outs;
 				if (!(g.output = realloc(g.output, sizeof(char*) * outs)))
 					ls_error("no mem", 1);
 				if (!(g.strings = realloc(g.strings, sizeof(char*) * outs)))
 					ls_error("no mem", 1);
 			}
+		
 			if (!(g.strings[c] = malloc(len + 1)))
 				ls_error("no mem", 1);
 			memcpy(g.strings[c], b->d_name, len + 1);
 		       	if (len > max)
 			       	max = len;
-			++c; 
-		} 
+			++c;
+		}
 	}
 	
 	else /* it's not a directory, so just lstat it */
-	{ 
-		prntstats(argvv, g); 
-		return; 
-	} 
+	{
+		prntstats(argvv, g);
+		return;
+	}
 
 	if (max == 1)
-		goto end; 
+		goto end;
 
 	/* Obtain terminal information */ 
 	ioctl(0, TIOCGWINSZ, &w);
-	factor = w.ws_col / max ;
-	refactor = (w.ws_col - factor) / max ; 
+	factor = w.ws_col / max;
+	refactor = (w.ws_col - factor) / max;
 
 	/* Alphabetize discovered entries */
 	if (g.alpha == 1) 
@@ -198,9 +200,7 @@ void list_dirs(char *argvv, lstype g)
 	
 	if (a)
 		closedir(a);
-		
 }
-
 
 void shift_alpha(size_t c, size_t refactor, lstype g)
 {
@@ -235,14 +235,13 @@ void print_strings(char **s, size_t c, size_t refactor, int max)
 		if (++z % refactor == 0)
 			printf("\n");
 	} 
+	free(s);
 	fflush(stdout);
 }
 
 void print_plain(size_t c, lstype g)
 { 
 	size_t i = 0;
-	if (g.recur == 0 && chdir(g.path) != 0 )
-		ls_error("failure to chdir()\v", 1);
 	for (; i < c ; ++i) 
 		prntstats(g.strings[i] ,g);
 }
@@ -355,17 +354,11 @@ int find_pattern(char *path, size_t tot, size_t last, lstype g)
 	DIR *dir;
 	struct dirent *d;
 	char *spath = malloc(1);
-	size_t dlen = 0;
-
-	if (chdir(path) == 0)
-	{
-		printf("%s:\n", path);
-		list_dirs(".", g);
-		chdir(g.home);
-		printf("\n");
-	}else {
-		return -1;
-	}
+	size_t dlen = 0; 
+	
+	printf("%s:\n", path);
+	list_dirs(path, g);
+	printf("\n");
 				
 	if (!(spath))
 		return -1;
