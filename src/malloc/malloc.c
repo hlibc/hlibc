@@ -8,7 +8,6 @@
 #include <errno.h>
 
 #define __HLIBC_MALLOC_CHUNK 8192
-//#define __HLIBC_MALLOC_CHUNK 16
 
 typedef struct object
 {
@@ -89,24 +88,15 @@ object *morecore(object *last, size_t size)
 	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
 	size_t sum = 0; 
 	size_t orig = size;
-	/*
-	if (size < __HLIBC_MALLOC_CHUNK) {
-		size = __HLIBC_MALLOC_CHUNK;
-	}
-	*/
-
 	size_t mul = 1;
 
-	if ( size > __HLIBC_MALLOC_CHUNK)
+	if (size > __HLIBC_MALLOC_CHUNK)
 		mul += (size / __HLIBC_MALLOC_CHUNK);
 
-	
 	if ((size_t)-1 / __HLIBC_MALLOC_CHUNK < mul)
 		size = orig;
 	else
 		size = (__HLIBC_MALLOC_CHUNK * mul);
-	
-		
 
 	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
 		goto error;
