@@ -7,7 +7,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-#define __HLIBC_PAGE 10000
+#define __HLIBC_MALLOC_CHUNK 8192
 
 typedef struct object
 {
@@ -46,19 +46,17 @@ object *deltail(object *o)
 	return tmp;
 }
 
-object *_traverse_list(object *o)
+object *__eliminate(object *o)
 {
-	for (o = base; o; o = o->next) {
-		if (o->free == 1) {
-			if (o->next == NULL) {
-				o = deltail(o);
-			}
-			else if (o->prev == NULL) {
-				o = delhead(o);
-			}
-			else {
-				o = delmiddle(o);
-			}
+	if (o->free == 1) {
+		if (o->next == NULL) {
+			o = deltail(o);
+		}
+		else if (o->prev == NULL) {
+			o = delhead(o);
+		}
+		else {
+			o = delmiddle(o);
 		}
 	}
 	return o;
@@ -71,17 +69,9 @@ object *find_free_object(object **last, size_t size)
 	for (o = base; o ; o = o->next) {
 		if (o->free == 1 && o->size >= size && set == 0) {
 			set = 1;
-		}else if (o->free == 1) {
-			if (o->next == NULL) {
-				o = deltail(o);
-			}
-			else if (o->prev == NULL) {
-				o = delhead(o);
-			}
-			else {
-				o = delmiddle(o);
-			}
-		}
+		}else 
+			o = __eliminate(o);
+		/* lag one link behind */
 		if (set == 0)
 		{
 			o->free = 0;
@@ -98,9 +88,8 @@ object *morecore(object *last, size_t size)
 	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
 	size_t sum = 0; 
 
-	if (size < __HLIBC_PAGE)
-	{
-		size = __HLIBC_PAGE;
+	if (size < __HLIBC_MALLOC_CHUNK) {
+		size = __HLIBC_MALLOC_CHUNK;
 	}
 
 	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
@@ -195,8 +184,10 @@ void *calloc(size_t nmemb, size_t size)
 
 void _destroy_malloc()
 {
-	object *p = NULL;
-	p = _traverse_list(p);
+	object *o = NULL;
+	for (o = base; o; o = o->next) {
+		o = __eliminate(o);
+	}
 	if (base) {
 		munmap(base, base->size + sizeof(object));
 	}
