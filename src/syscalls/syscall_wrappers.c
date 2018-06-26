@@ -652,7 +652,7 @@ void exit(int code)
 {
 	__funcs_on_exit();
 	fflush(NULL);
-	_destroy_malloc();
+	__destroy_malloc();
 	if (libc.fini) libc.fini();
 	if (libc.ldso_fini) libc.ldso_fini();
 	_Exit(code);
