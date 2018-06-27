@@ -7,7 +7,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-#define __HLIBC_PAGE 10000
+static const size_t chunk_size = 8192;
 
 typedef struct object
 {
@@ -17,9 +17,9 @@ typedef struct object
 	int free;
 } object;
 
-object *base = NULL;
+static object *base = NULL;
 
-object *delmiddle(object *o)
+static object *delmiddle(object *o)
 {
 	object *tmp = o->prev;
 	o->prev->next = o->next;
@@ -28,7 +28,7 @@ object *delmiddle(object *o)
 	return tmp;
 }
 
-object *delhead(object *o)
+static object *delhead(object *o)
 {
 	object *tmp = o->next;
 	o->next->prev = NULL;
@@ -38,7 +38,7 @@ object *delhead(object *o)
 	return tmp;
 }
 
-object *deltail(object *o)
+static object *deltail(object *o)
 {
 	object *tmp = o->prev;
 	o->prev->next = NULL;
@@ -46,42 +46,32 @@ object *deltail(object *o)
 	return tmp;
 }
 
-object *_traverse_list(object *o)
+static object *eliminate(object *o)
 {
-	for (o = base; o; o = o->next) {
-		if (o->free == 1) {
-			if (o->next == NULL) {
-				o = deltail(o);
-			}
-			else if (o->prev == NULL) {
-				o = delhead(o);
-			}
-			else {
-				o = delmiddle(o);
-			}
+	if (o->free == 1) {
+		if (o->next == NULL) {
+			o = deltail(o);
+		}
+		else if (o->prev == NULL) {
+			o = delhead(o);
+		}
+		else {
+			o = delmiddle(o);
 		}
 	}
 	return o;
 }
 
-object *find_free_object(object **last, size_t size)
+static object *find_free(object **last, size_t size)
 {
 	object *o;
 	int set = 0;
 	for (o = base; o ; o = o->next) {
 		if (o->free == 1 && o->size >= size && set == 0) {
 			set = 1;
-		}else if (o->free == 1) {
-			if (o->next == NULL) {
-				o = deltail(o);
-			}
-			else if (o->prev == NULL) {
-				o = delhead(o);
-			}
-			else {
-				o = delmiddle(o);
-			}
-		}
+		}else 
+			o = eliminate(o);
+		/* lag one link behind */
 		if (set == 0)
 		{
 			o->free = 0;
@@ -91,17 +81,22 @@ object *find_free_object(object **last, size_t size)
 	return o;
 }
 
-object *morecore(object *last, size_t size)
+static object *morecore(object *last, size_t size)
 {
 	object *o = NULL;
 	int pt = PROT_READ | PROT_WRITE;
 	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
 	size_t sum = 0; 
+	size_t orig = size;
+	size_t mul = 1;
 
-	if (size < __HLIBC_PAGE)
-	{
-		size = __HLIBC_PAGE;
-	}
+	if (size > chunk_size)
+		mul += (size / chunk_size);
+
+	if ((size_t)-1 / chunk_size < mul)
+		size = orig;
+	else
+		size = (chunk_size * mul);
 
 	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
 		goto error;
@@ -138,7 +133,7 @@ void *malloc(size_t size)
 	}
 	else {
 		last = base;
-		if (!(o = find_free_object(&last, size))) {
+		if (!(o = find_free(&last, size))) {
 			if (!(o = morecore(last, size))) {
 				return NULL;
 			}
@@ -193,10 +188,12 @@ void *calloc(size_t nmemb, size_t size)
 	return o;
 }
 
-void _destroy_malloc()
+void __destroy_malloc()
 {
-	object *p = NULL;
-	p = _traverse_list(p);
+	object *o = NULL;
+	for (o = base; o; o = o->next) {
+		o = eliminate(o);
+	}
 	if (base) {
 		munmap(base, base->size + sizeof(object));
 	}
