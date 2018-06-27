@@ -1,0 +1,30 @@
+# Some notes on performance analysis for hlibc
+# using linux `perf' and valgrind's callgrind
+
+
+# compile everything with debugging symbols
+CFLAGS="-g" make gcctest
+
+
+# use valgrind's callgrind 
+# --threshold=100 specifies 100 percent of functions so we can examine hlibc
+valgrind --tool=callgrind  --dump-instr=yes --callgrind-out-file=callgrindlog ./hbox/ls -R
+callgrind_annotate --threshold=100 --auto=yes callgrindlog > log
+head -n100 log
+
+
+# use the linux perf tool (may require root)
+perf record -g ./hbox/ls -R
+perf report
+
+
+
+# for perf I had to install a few things on ubuntu
+apt-get install linux-tools
+apt-get install linux-tools-4.4.0-103-generic
+apt-get install linux-cloud-tools-4.4.0-103-generic
+
+
+# for valgrind and its subsystem callgrind
+apt-get install valgrind
+
