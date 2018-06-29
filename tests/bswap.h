@@ -1,0 +1,11 @@
+#include <arpa/inet.h>
+
+enum
+{
+    LE16 = 0x1122ULL,
+    BE16 = 0x2211ULL,
+    LE32 = 0x11223344ULL,
+    BE32 = 0x44332211ULL,
+    LE64 = 0x1122334455667788ULL,
+    BE64 = 0x8877665544332211ULL,
+};
