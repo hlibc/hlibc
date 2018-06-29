@@ -9,7 +9,7 @@ static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 
 typedef size_t (*__f)(size_t, int, char *, FILE *);
 
-size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
+static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
 	static char b[BUFSIZ];
@@ -77,7 +77,7 @@ static size_t __uint2str(char *s, size_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
-void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c , FILE *d)
+static void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c , FILE *d)
 {
 	size_t i = 0;
 	for (i=0;want > have +i;++i) {
