@@ -2,6 +2,7 @@
 
 int main(void)
 {
+#ifdef _HAS_HLIBC_ENDIAN
     if(__bswap16(0x1122) != 0x2211)
     {
         return 1;
@@ -16,6 +17,7 @@ int main(void)
     {
         return 1;
     }
+#endif
 
     return 0;
 }
