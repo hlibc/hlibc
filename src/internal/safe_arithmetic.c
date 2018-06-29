@@ -2,7 +2,7 @@
 #include <limits.h>
 
 /* new API */
-int __safe_usub(unsigned long long a, unsigned long long b, unsigned long long *c)
+int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
 {
 	if(a >= b)
 	{
@@ -12,11 +12,21 @@ int __safe_usub(unsigned long long a, unsigned long long b, unsigned long long *
 	return -1;
 }
 
-int __safe_udiv(unsigned long long a, unsigned long long b, unsigned long long *c)
+int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)
 {
 	if(b != 0)
 	{
 		*c = a / b;
+		return 0;
+	}
+	return -1;
+}
+
+int __safe_umul(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
+{
+	if(a == 0 || lim / a >= b)
+	{
+		*c = a * b;
 		return 0;
 	}
 	return -1;

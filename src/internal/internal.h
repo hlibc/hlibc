@@ -15,6 +15,7 @@
 #define TMP_MAX 10000
 #include <sys/types.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
