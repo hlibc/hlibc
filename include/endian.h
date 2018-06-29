@@ -121,44 +121,25 @@ static uint64_t __be_bswap64(uint64_t x)
 #endif
 }
 
-#if __BYTE_ORDER == __LITTLE_ENDIAN
-#define htobe16(x) __bswap16(x)
-#define be16toh(x) __bswap16(x)
-#define betoh16(x) __bswap16(x)
-#define htobe32(x) __bswap32(x)
-#define be32toh(x) __bswap32(x)
-#define betoh32(x) __bswap32(x)
-#define htobe64(x) __bswap64(x)
-#define be64toh(x) __bswap64(x)
-#define betoh64(x) __bswap64(x)
-#define htole16(x) (uint16_t)(x)
-#define le16toh(x) (uint16_t)(x)
-#define letoh16(x) (uint16_t)(x)
-#define htole32(x) (uint32_t)(x)
-#define le32toh(x) (uint32_t)(x)
-#define letoh32(x) (uint32_t)(x)
-#define htole64(x) (uint64_t)(x)
-#define le64toh(x) (uint64_t)(x)
-#define letoh64(x) (uint64_t)(x)
-#else
-#define htobe16(x) (uint16_t)(x)
-#define be16toh(x) (uint16_t)(x)
-#define betoh16(x) (uint16_t)(x)
-#define htobe32(x) (uint32_t)(x)
-#define be32toh(x) (uint32_t)(x)
-#define betoh32(x) (uint32_t)(x)
-#define htobe64(x) (uint64_t)(x)
-#define be64toh(x) (uint64_t)(x)
-#define betoh64(x) (uint64_t)(x)
-#define htole16(x) __bswap16(x)
-#define le16toh(x) __bswap16(x)
-#define letoh16(x) __bswap16(x)
-#define htole32(x) __bswap32(x)
-#define le32toh(x) __bswap32(x)
-#define letoh32(x) __bswap32(x)
-#define htole64(x) __bswap64(x)
-#define le64toh(x) __bswap64(x)
-#define letoh64(x) __bswap64(x)
+#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+#define htobe16 __le_bswap16
+#define be16toh __le_bswap16
+#define betoh16 __le_bswap16
+#define htobe32 __le_bswap32
+#define be32toh __le_bswap32
+#define betoh32 __le_bswap32
+#define htobe64 __le_bswap64
+#define be64toh __le_bswap64
+#define betoh64 __le_bswap64
+#define htole16 __be_bswap16
+#define le16toh __be_bswap16
+#define letoh16 __be_bswap16
+#define htole32 __be_bswap32
+#define le32toh __be_bswap32
+#define letoh32 __be_bswap32
+#define htole64 __be_bswap64
+#define le64toh __be_bswap64
+#define letoh64 __be_bswap64
 #endif
 
 #endif
