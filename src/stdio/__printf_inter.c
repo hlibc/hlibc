@@ -325,6 +325,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			signage = 0;
 			pls2spc = 0;
 			hasdot = 0;
+			padd = ' ';
 	}
 	
 	if (flag == 3) { /* dprintf flush */
