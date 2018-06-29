@@ -58,6 +58,78 @@ static uint64_t __bswap64(uint64_t x)
         ((x & 0x00000000000000FFULL) << 56);
 }
 
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint16_t __le_bswap16(uint16_t x)
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return __bswap16(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint32_t __le_bswap32(uint32_t x)
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return __bswap32(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint64_t __le_bswap64(uint64_t x)
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return __bswap64(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint16_t __be_bswap16(uint16_t x)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return __bswap16(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint32_t __be_bswap32(uint32_t x)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return __bswap32(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint64_t __be_bswap64(uint64_t x)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return __bswap64(x);
+#else
+    return x;
+#endif
+}
+
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define htobe16(x) __bswap16(x)
 #define be16toh(x) __bswap16(x)
