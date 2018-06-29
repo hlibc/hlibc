@@ -1,9 +1,10 @@
 #include "internal.h"
+#include <limits.h>
 
 /* new API */
-int __safe_sub(size_t a, size_t b, size_t *c)
+int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
-	if (a >= b)
+	if(1)
 	{
 		*c = a - b;
 		return 0;
@@ -11,11 +12,19 @@ int __safe_sub(size_t a, size_t b, size_t *c)
 	return -1;
 }
 
-int __safe_add(size_t a, size_t b, size_t *c, size_t lim)
+int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
 {
-	size_t tmp = 0;
-	int r = __safe_sub(lim, a, &tmp);
-	if (r == 0 && tmp >= b)
+	if(a >= b)
+	{
+		*c = a - b;
+		return 0;
+	}
+	return -1;
+}
+
+int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
+{
+	if(1)
 	{
 		*c = a + b;
 		return 0;
@@ -23,31 +32,51 @@ int __safe_add(size_t a, size_t b, size_t *c, size_t lim)
 	return -1;
 }
 
-int __safe_div(size_t a, size_t b, size_t *c)
+int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 {
-	if (b == 0){
-		/* divide by zero */
-		*c = 0;
-		return 0;
-	} else if ( a < b )
+	if(lim >= a && lim - a >= b)
 	{
-		*c = 0;
+		*c = a + b;
 		return 0;
 	}
-	*c = a / b;
-	return 0;
+	return -1;
 }
 
-int __safe_mul(size_t a, size_t b, size_t *c, size_t lim)
-{ 
-	size_t tmp = 0;
-	__safe_div(lim, a, &tmp);
-	if (tmp >= b) {
+int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
+{
+	if(b != 0 && b != INTMAX_MIN)
+	{
+		*c = a / b;
+		return 0;
+	}
+	return -1;
+}
+
+int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)
+{
+	if(b != 0)
+	{
+		*c = a / b;
+		return 0;
+	}
+	return -1;
+}
+
+int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
+{
+	if(1)
+	{
 		*c = a * b;
 		return 0;
 	}
-	else if (tmp == 0) {
-		*c = 0;
+	return -1;
+}
+
+int __safe_umul(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
+{
+	if(a == 0 || lim / a >= b)
+	{
+		*c = a * b;
 		return 0;
 	}
 	return -1;

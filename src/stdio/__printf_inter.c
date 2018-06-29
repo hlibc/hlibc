@@ -158,6 +158,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				off = va_arg(ap, int);
 			goto start;
 		case '0':
+			/* d,i,o,u,x,X,a,A,e,E,f,F,g,G */
 			zeropad = 1;
 			padd = '0';
 			++p;
@@ -192,6 +193,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			cval = va_arg(ap, int);
 			goto character;
 		case 's':
+			zeropad = 0;
+			padd = ' ';
 			sval = va_arg(ap, char *);
 			goto string;
 		case 'o':

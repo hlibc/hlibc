@@ -1,6 +1,7 @@
 #!/bin/sh
 
-BASIC_TYPE="	printf-fieldpad
+BASIC_TYPE="	printf-zeropad
+		printf-fieldpad
 		printf-leftadj
 		printf-pad-string
 		printf-field

@@ -13,6 +13,7 @@ author, except for detailed below.
 	Evgeniy Popov
 	Mohammad M. Rakib
 	Eigenfeld Aparicio
+	James Buren
 
 
 hbox hbox/
@@ -23,20 +24,26 @@ Licensed.
 
 musl libc   (src/syscalls/ src/arch_needs_asm/ src/stdio/fmt_fp.c)
 ------------------------------------------------------------------
-The remmants of musl are Copyright © 2005-2012 Rich Felker licensed under
-the MIT license. All files in this area which have no copyright comments 
-are original works Copyright © 2005-2012 Rich Felker, 
+These files are Copyright © 2005-2012 Rich Felker licensed under
+the MIT license.
 
-	Contributors to musllibc
-	------------------------
+	Contributors to musl libc
+	-------------------------
 	Rich Felker
 	Nicholas J. Kain (x86_64 assembly)
 
 
 Mathematics Library (src/libm/)
------------------------------
+------------------------------
 The mathematics library was written at Sun laboratories and is licensed 
-with the MIT licence.
+with no restrictions but the single clause that their copyrights stay 
+intact:
+
+	" * Developed at SunSoft, a Sun Microsystems, Inc. business.
+	  * Permission to use, copy, modify, and distribute this
+	  * software is freely granted, provided that this notice
+	  * is preserved."
+
 
 	Contributors to Sun's fdlibm
 	----------------------------

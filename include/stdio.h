@@ -92,7 +92,7 @@ int sscanf(const char *str, const char *format, ...);
 
 
 /* opaque objects */
-FILE *stdin;
-FILE *stdout;
-FILE *stderr;
+extern FILE *stdin;
+extern FILE *stdout;
+extern FILE *stderr;
 #endif
