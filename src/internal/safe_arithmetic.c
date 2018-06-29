@@ -22,6 +22,16 @@ int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 	return -1;
 }
 
+int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
+{
+	if(b != 0 && b != INTMAX_MIN)
+	{
+		*c = a / b;
+		return 0;
+	}
+	return -1;
+}
+
 int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)
 {
 	if(b != 0)
