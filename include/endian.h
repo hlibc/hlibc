@@ -1,7 +1,9 @@
 #ifndef _ENDIAN_H
 #define _ENDIAN_H
-#include <bits/endian.h>
 #include <stdint.h>
+#ifndef __BYTE_ORDER
+#include <bits/endian.h>
+#endif
 
 #define _HAS_HLIBC_ENDIAN
 #define __LITTLE_ENDIAN 1234
