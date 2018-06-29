@@ -9,7 +9,17 @@ int __safe_usub(unsigned long long a, unsigned long long b, unsigned long long *
 		*c = a - b;
 		return 0;
 	}
-	return 1;
+	return -1;
+}
+
+int __safe_udiv(unsigned long long a, unsigned long long b, unsigned long long *c)
+{
+	if(b != 0)
+	{
+		*c = a / b;
+		return 0;
+	}
+	return -1;
 }
 
 #if 0
