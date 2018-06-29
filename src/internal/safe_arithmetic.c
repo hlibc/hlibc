@@ -1,6 +1,18 @@
 #include "internal.h"
+#include <limits.h>
 
 /* new API */
+int __safe_usub(unsigned long long a, unsigned long long b, unsigned long long *c)
+{
+	if(a >= b)
+	{
+		*c = a - b;
+		return 0;
+	}
+	return 1;
+}
+
+#if 0
 int __safe_sub(size_t a, size_t b, size_t *c)
 {
 	if (a >= b)
@@ -52,6 +64,7 @@ int __safe_mul(size_t a, size_t b, size_t *c, size_t lim)
 	}
 	return -1;
 }
+#endif
 
 /* old API */
 size_t _safe_subtraction(size_t a, size_t b)
