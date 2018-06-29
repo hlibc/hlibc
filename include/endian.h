@@ -23,25 +23,111 @@
 #if __STDC_VERSION__ >= 199901L
 inline
 #endif
-static uint16_t __bswap16(uint16_t __x)
+static uint16_t __bswap16(uint16_t x)
 {
-	return __x<<8 | __x>>8;
+    return
+        ((x & 0xFF00) >> 8) |
+        ((x & 0x00FF) << 8);
 }
 
 #if __STDC_VERSION__ >= 199901L
 inline
 #endif
-static uint32_t __bswap32(uint32_t __x)
+static uint32_t __bswap32(uint32_t x)
 {
-	return __x>>24 | __x>>8&0xff00 | __x<<8&0xff0000 | __x<<24;
+    return
+        ((x & 0xFF000000) >> 24) |
+        ((x & 0x00FF0000) >>  8) |
+        ((x & 0x0000FF00) <<  8) |
+        ((x & 0x000000FF) << 24);
 }
 
 #if __STDC_VERSION__ >= 199901L
 inline
 #endif
-static uint64_t __bswap64(uint64_t __x)
+static uint64_t __bswap64(uint64_t x)
 {
-	return __bswap32(__x)+0ULL<<32 | __bswap32(__x>>32);
+    return
+        ((x & 0xFF00000000000000ULL) >> 56) |
+        ((x & 0x00FF000000000000ULL) >> 40) |
+        ((x & 0x0000FF0000000000ULL) >> 24) |
+        ((x & 0x000000FF00000000ULL) >>  8) |
+        ((x & 0x00000000FF000000ULL) <<  8) |
+        ((x & 0x0000000000FF0000ULL) << 24) |
+        ((x & 0x000000000000FF00ULL) << 40) |
+        ((x & 0x00000000000000FFULL) << 56);
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint16_t __le_bswap16(uint16_t x)
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return __bswap16(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint32_t __le_bswap32(uint32_t x)
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return __bswap32(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint64_t __le_bswap64(uint64_t x)
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return __bswap64(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint16_t __be_bswap16(uint16_t x)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return __bswap16(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint32_t __be_bswap32(uint32_t x)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return __bswap32(x);
+#else
+    return x;
+#endif
+}
+
+#if __STDC_VERSION__ >= 199901L
+inline
+#endif
+static uint64_t __be_bswap64(uint64_t x)
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return __bswap64(x);
+#else
+    return x;
+#endif
 }
 
 #if __BYTE_ORDER == __LITTLE_ENDIAN
