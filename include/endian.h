@@ -23,7 +23,8 @@
 #if __STDC_VERSION__ >= 199901L
 inline
 #endif
-static uint16_t __bswap16(uint16_t x) {
+static uint16_t __bswap16(uint16_t x)
+{
 #ifdef __GNUC__
     return __builtin_bswap16(x);
 #else
@@ -36,7 +37,8 @@ static uint16_t __bswap16(uint16_t x) {
 #if __STDC_VERSION__ >= 199901L
 inline
 #endif
-static uint32_t __bswap32(uint32_t x) {
+static uint32_t __bswap32(uint32_t x)
+{
 #ifdef __GNUC__
     return __builtin_bswap32(x);
 #else
@@ -51,7 +53,8 @@ static uint32_t __bswap32(uint32_t x) {
 #if __STDC_VERSION__ >= 199901L
 inline
 #endif
-static uint64_t __bswap64(uint64_t x) {
+static uint64_t __bswap64(uint64_t x)
+{
 #ifdef __GNUC__
     return __builtin_bswap64(x);
 #else
