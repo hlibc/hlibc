@@ -8,17 +8,19 @@ int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c);
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
 	/*
+		(-a - -b)
 		-500 - -500 == 0
 		A negative minus a negative will always fit
 		as it always seeks to transform toward the negative 
 		operand toward and over 0
 	*/
-	if(a < 0 && b < 0 )
-	{
+	if(a < 0 && b < 0 ) {
 		*c = a - b;
 		return 0;
 	}
+
 	/*
+		(-a - b)
 		-500 - +250 == -750
 		SIZE_MIN = 1000
 		-1000 - -500 == -500
@@ -28,8 +30,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		and if the positive as a negative is less than the result
 		of the minimum minus the left operand then it fits
 	*/
-	if (a < 0 && b > 0)
-	{
+	if (a < 0 && b > 0) {
 		if ((INTMAX_MIN - a) <= -b)
 		{
 			*c = a - b;
@@ -37,17 +38,19 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		}
 		return -1;
 	}
+
 	/*
-		a and b are positive sosubtractions will alwyas fit
+		(a + b)
+		a and b are positive so subtractions will always fit
 	*/
-	if (a > 0 && b > 0)
-	{
+	if (a > 0 && b > 0) {
 		*c = a - b;
 		return 0;
 		
 	}
 	
 	/*
+		(a - -b)
 		a is positive and b is negative so subtractions have the properties 
 		of addition and can use the unsigned variant
 	*/
@@ -60,32 +63,42 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
 {
 	/*
-		a, b 
+		(a + b)
 		this is the conventional case so call out to the unsigned API
 	*/
 	if (a > 0 && b > 0)
 		return __safe_uadd(a, b, c, INTMAX_MAX); 
 		
 	/*
-		-a, -b
+		(-a + -b)
 		-100 + -100 == -200
 		this will cause overflow and needs a check!
+
+		-500 + -250 and lim is -1000
+		-1000  - - 500 == -500
+		-500 < - 250 ... so it fits
+		else it is an overflow
 	*/
-	
+	if (a < 0 && b < 0) {
+		if (INTMAX_MIN - a < b ) {
+			*c = a + b;
+			return 0;
+		}
+		return -1;
+	}
+
 	/*
-		a, -b
+		(a + -b)
 		100 + -900 == -800
 		this should always fit as long as -b is *valid*
 	*/
 	/*
-		-a, b
+		(-a + b)
 		-100 + 1000 == 900
 		a negative plus a postive will always fit 
 	*/
 	*c = a + b;
 	return 0;
-	
-	return -1;
 }
 
 int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
