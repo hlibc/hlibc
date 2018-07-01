@@ -25,8 +25,8 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 	*/
 	if (a < 0 && b > 0)
 	{ 
-		size_t t = INTMAX_MIN;
-		if (t < -b)
+		intmax_t t = INTMAX_MIN - a;
+		if (t <= -b)
 		{
 			*c = a - b;
 			return 0;
