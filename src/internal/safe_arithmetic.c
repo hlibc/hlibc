@@ -4,6 +4,7 @@
 /* new API */
 
 int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim);
+int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c);
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
 	/*
@@ -39,7 +40,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		a and b are positive so call out to the standard API
 	*/
 	if (a > 0 && b > 0)
-		return __safe_uadd(a, b, c, INTMAX_MIN);
+		return __safe_usub(a, b, c);
 	
 	/*
 		a is positive and b is negative so it always fits
@@ -51,23 +52,31 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		
 	return -1;
 }
-
-int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
-{
-	if(1)
-	{
-		*c = a * b;
-		return 0;
-	}
-	return -1;
-}
 int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
 {
-	if(1)
-	{
-		*c = a + b;
-		return 0;
-	}
+	/*
+		a, b 
+		this is the conventional case so call out to the unsigned API
+	*/
+	if (a > 0 && b > 0)
+		return __safe_uadd(a, b, c, INTMAX_MAX); 
+		
+	/*
+		a, -b
+		this should always fit as long as -b is *valid*
+	*/
+	/*
+		-a, b
+		a negative plus a postive will always fit 
+	*/
+	/*
+		-a, -b
+		this tend -a toward 0 and hence always fits
+	*/
+	
+	*c = a + b;
+	return 0;
+	
 	return -1;
 }
 
@@ -76,6 +85,16 @@ int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
 	if(b != 0 && b != INTMAX_MIN)
 	{
 		*c = a / b;
+		return 0;
+	}
+	return -1;
+}
+
+int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
+{
+	if(1)
+	{
+		*c = a * b;
 		return 0;
 	}
 	return -1;
