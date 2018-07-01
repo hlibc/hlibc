@@ -111,13 +111,14 @@ int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
 
 int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 {
-	if (__safe_usub(lim, a, &b) == -1)
-		return -1;
-	if(a >= b) {
+	size_t tmp = 0;
+	//if (__safe_usub(lim, a, &tmp) == -1)
+	//	return -1;
+	//if(a >= tmp) {
 		*c = a + b;
 		return 0;
-	}
-	return -1;
+	//}
+	//return -1;
 }
 
 int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)

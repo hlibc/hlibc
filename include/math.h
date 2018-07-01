@@ -130,6 +130,12 @@ extern int signgam;
 
 #define _HAS_HLIBC_MATH
 double h_cos(double);
+#include <stdint.h>
+int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim);
+int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c);
+int __safe_add(intmax_t a, intmax_t b, intmax_t *c);
+int __safe_sub(intmax_t a, intmax_t b, intmax_t *c);
+
 
 #ifdef __cplusplus
 }
