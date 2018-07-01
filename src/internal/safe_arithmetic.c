@@ -2,6 +2,8 @@
 #include <limits.h>
 
 /* new API */
+
+int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim);
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
 	/*
@@ -20,7 +22,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		flip -250
 		-500 < -250 so it fits 
 		A negative minus a positive needs the positive flipped
-		and if the positive as a negative is less than the original
+		and if the positive as a negative is less than the result
 		then it fits
 	*/
 	if (a < 0 && b > 0)
@@ -33,6 +35,20 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		}
 		return -1;
 	}
+	/*
+		a and b are positive so call out to the standard API
+	*/
+	if (a > 0 && b > 0)
+		return __safe_uadd(a, b, c, INTMAX_MIN);
+	
+	/*
+		a is positive and b is negative so it always fits
+	*/
+	if (a > 0 && b < 0) {
+		*c = a - b;
+		return 0;
+	}
+		
 	return -1;
 }
 
