@@ -4,10 +4,34 @@
 /* new API */
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
-	if(1)
+	/*
+		-500 - -500 == 0
+		A negative minus a negative will always fit
+	*/
+	if(a < 0 && b < 0 )
 	{
 		*c = a - b;
 		return 0;
+	}
+	/*
+		-500 - +250 == -750
+		SIZE_MIN = 1000
+		-1000 - -500 == -500
+		flip -250
+		-500 < -250 so it fits 
+		A negative minus a positive needs the positive flipped
+		and if the positive as a negative is less than the original
+		then it fits
+	*/
+	if (a < 0 && b > 0)
+	{ 
+		size_t t = INTMAX_MIN;
+		if (t < -b)
+		{
+			*c = a - b;
+			return 0;
+		}
+		return -1;
 	}
 	return -1;
 }
@@ -54,7 +78,7 @@ int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 {
 	if (__safe_usub(lim, a, &b) == -1)
 		return -1;
-	if(tmp >= b) {
+	if(a >= b) {
 		*c = a + b;
 		return 0;
 	}
