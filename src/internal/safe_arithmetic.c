@@ -12,29 +12,18 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 	return -1;
 }
 
-int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
-{
-	if(a >= b)
-	{
-		*c = a - b;
-		return 0;
-	}
-	return -1;
-}
-
-int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
+int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 {
 	if(1)
 	{
-		*c = a + b;
+		*c = a * b;
 		return 0;
 	}
 	return -1;
 }
-
-int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
+int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
 {
-	if(lim >= a && lim - a >= b)
+	if(1)
 	{
 		*c = a + b;
 		return 0;
@@ -52,21 +41,31 @@ int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
 	return -1;
 }
 
-int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)
+int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
 {
-	if(b != 0)
-	{
-		*c = a / b;
+	if(a >= b) {
+		*c = a - b;
 		return 0;
 	}
 	return -1;
 }
 
-int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
+int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 {
-	if(1)
+	if (__safe_usub(lim, a, &b) == -1)
+		return -1;
+	if(tmp >= b) {
+		*c = a + b;
+		return 0;
+	}
+	return -1;
+}
+
+int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)
+{
+	if(b != 0)
 	{
-		*c = a * b;
+		*c = a / b;
 		return 0;
 	}
 	return -1;
