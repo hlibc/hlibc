@@ -11,7 +11,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		(-a - -b)
 		-500 - -500 == 0
 		A negative minus a negative will always fit
-		as it always seeks to transform toward the negative 
+		as it always seeks to transform the negative 
 		operand toward and over 0
 	*/
 	if(a < 0 && b < 0 ) {
@@ -113,6 +113,49 @@ int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
 
 int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 {
+	/*
+		(a * b) == c 
+		normal case, check with division
+	*/
+	/*
+		(a * -b) == -c
+		100 * -300
+		-1000 / 100 == -10 
+		-lim / a == -x
+		if (b > x)
+		then a * -b fits into c (negative -c)
+	*/
+	if (a > 0 && b < 0)
+	{
+		intmax_t t = INTMAX_MIN / a;
+		if (b > t)
+		{
+			*c = a * b;
+			return 0;
+		}
+		return -1;
+	}
+	/*
+		(-a * -b) == c
+
+		MIN / -a == x
+		x will go -a time into MIN
+		so if b > -x
+		then a * b will fit
+	*/
+	if (a < 0 && b < 0)
+	{
+		intmax_t t = INTMAX_MIN / a;
+		if (b > -t)
+		{
+			*c = a * b;
+			return 0;
+		}
+		return -1;
+	}
+	/*
+		(-a * b) == -c
+	*/
 	if(1)
 	{
 		*c = a * b;
