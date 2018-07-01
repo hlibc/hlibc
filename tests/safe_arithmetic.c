@@ -60,6 +60,34 @@ int main(void)
 		printf("Success %jd\n", c);
 
 
+	printf("========================================\n");
+	printf("should overflow (INTMAX_MIN - 1)\n");
+	if (__safe_sub(INTMAX_MIN, 1, &c) == -1)
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
+	
+	printf("========================================\n");
+	printf("should not overflow (1 - INTMAX_MAX)\n");
+	if (__safe_sub(1, INTMAX_MAX, &c) == -1)
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
+	
+	printf("========================================\n");
+	printf("should not overflow (1 - INTMAX_MAX -1)\n");
+	if (__safe_sub(1, INTMAX_MAX -1, &c) == -1)
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
+
+	printf("========================================\n");
+	printf("should not overflow (1 - INTMAX_MAX -4)\n");
+	if (__safe_sub(1, INTMAX_MAX -4, &c) == -1)
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
+
 #endif
 	
 	return 0;
