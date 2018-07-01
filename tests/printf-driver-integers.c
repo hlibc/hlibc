@@ -79,6 +79,10 @@ int main(void)
 	len += printf("SSIZE_MAX %zd\n", SSIZE_MAX);
 	len += printf("LLONG_MAX %lld\n", LLONG_MAX);
 	len += printf("LLONG_MIN %lld\n", LLONG_MIN);
+	len += printf("UINTMAX_MAX %ju\n", UINTMAX_MAX);
+	len += printf("INTMAX_MAX %jd\n", INTMAX_MAX);
+	len += printf("INTMAX_MIN %jd\n", INTMAX_MIN);
+
 	printf("length of all strings so far %zu\n", len);
 
 

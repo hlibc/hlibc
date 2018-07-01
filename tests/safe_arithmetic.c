@@ -4,20 +4,20 @@
 #include <stdint.h>
 int main(void)
 {
-	int a = 100;
-	int b = 100;
-	int c = 0;
+	intmax_t a = 100;
+	intmax_t b = 100;
+	intmax_t c = 0;
 
 #ifdef _HAS_HLIBC_MATH
 	if (__safe_add(a, b, &c) == -1)
 		printf("Overflow\n");
 	else
-		printf("Success %d\n", c);
+		printf("Success %jd\n", c);
 	
 	if (__safe_sub(a, b, &c) == -1)
 		printf("Overflow\n");
 	else
-		printf("Success %d\n", c);
+		printf("Success %jd\n", c);
 #endif
 	
 	return 0;

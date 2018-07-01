@@ -39,7 +39,7 @@ static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 	return i + 1;
 }
 
-static size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
+static size_t __uint2str_inter(char *s, uintmax_t n, int base, size_t i)
 {
 	if (n / base) {
 		i = __uint2str_inter(s, n / base, base, i);
@@ -48,7 +48,7 @@ static size_t __uint2str_inter(char *s, size_t n, int base, size_t i)
 	return ++i;
 }
 
-static size_t __int2str_inter(char *s, long long n, int base, size_t i)
+static size_t __int2str_inter(char *s, intmax_t n, int base, size_t i)
 {
 	if (-n / base) {
 		i = __int2str_inter(s, n / base, base, i);
@@ -57,7 +57,7 @@ static size_t __int2str_inter(char *s, long long n, int base, size_t i)
 	return ++i;
 }
 
-static size_t __int2str(char *s, long long n, int base)
+static size_t __int2str(char *s, intmax_t n, int base)
 {
 	size_t i = 0;
 	int toggle = 0;
@@ -71,7 +71,7 @@ static size_t __int2str(char *s, long long n, int base)
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
-static size_t __uint2str(char *s, size_t n, int base)
+static size_t __uint2str(char *s, uintmax_t n, int base)
 {
 	size_t i = 0;
 	return __uint2str_inter(s, n, base, i);
@@ -102,9 +102,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	int cval = 0;
 	char *sval = NULL;
 	size_t len = 0;
-	size_t ii = 0;
-	size_t zuval = 0;
-	long long lval = 0;
+	uintmax_t zuval = 0;
+	intmax_t lval = 0;
 	long double fval = 0;
 
 	/* float precision */
@@ -248,6 +247,18 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 
 			case 'd':
 				lval = va_arg(ap, ssize_t);
+				goto integer;
+			default:
+				goto end;
+			}
+			break;
+		case 'j':
+			switch (*++p) {
+			case 'u':
+				zuval = va_arg(ap, uintmax_t);
+				goto uinteger;
+			case 'd':
+				lval = va_arg(ap, intmax_t);
 				goto integer;
 			default:
 				goto end;
