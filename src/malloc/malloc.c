@@ -89,6 +89,7 @@ static object *morecore(object *last, size_t size)
 	size_t sum = 0; 
 	size_t orig = size;
 	size_t mul = 1;
+	size_t t = 0;
 
 	if (size > chunk_size)
 		mul += (size / chunk_size);
@@ -98,11 +99,12 @@ static object *morecore(object *last, size_t size)
 	else
 		size = (chunk_size * mul);
 
-	if ((sum = _safe_addition(size, sizeof(object), SIZE_MAX)) == 0) {
+	if (__safe_uadd(size, sizeof(object), &t, SIZE_MAX) == -1) {
+		/* FIXME: this probably should set something other than ENOMEM */
 		goto error;
 	}
 
-	if ((o = mmap(o, sum, pt, fs, -1, 0)) == (void *)-1) {
+	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
 		goto error;
 	}
 
@@ -180,11 +182,15 @@ void *realloc(void *ptr, size_t size)
 void *calloc(size_t nmemb, size_t size)
 {
 	void *o;
-	size = _safe_multiply(nmemb, size, (size_t)-1);
-	if (!(o = malloc(size))) {
+	size_t t = 0;
+	if(__safe_umul(nmemb, size, &t, (size_t)-1) == -1) {
+		/* FIXEM: set errno here? */
 		return NULL;
 	}
-	memset(o, 0, size);
+	if (!(o = malloc(t))) {
+		return NULL;
+	}
+	memset(o, 0, t);
 	return o;
 }
 

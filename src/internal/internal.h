@@ -83,6 +83,17 @@ size_t _safe_multiply(size_t, size_t, size_t);
 size_t _safe_division(size_t, size_t);
 size_t _safe_addition(size_t, size_t, size_t);
 size_t _safe_upow(size_t, size_t);
+
+/* new safe arithmetic API */
+int __safe_sub(intmax_t, intmax_t, intmax_t *);
+int __safe_add(intmax_t, intmax_t, intmax_t *);
+int __safe_div(intmax_t, intmax_t, intmax_t *);
+int __safe_mul(intmax_t, intmax_t, intmax_t *);
+int __safe_usub(uintmax_t, uintmax_t, uintmax_t *);
+int __safe_uadd(uintmax_t, uintmax_t, uintmax_t *, uintmax_t);
+int __safe_udiv(uintmax_t, uintmax_t, uintmax_t *);
+int __safe_umul(uintmax_t, uintmax_t, uintmax_t *, uintmax_t);
+
 /* internal __errno_table */
 extern char *__errno_table[];
 /* string to number */
