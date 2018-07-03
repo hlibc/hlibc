@@ -7,6 +7,7 @@ BASIC_TYPE="	printf-zeropad
 		printf-field
 		snprintf-driver
 		stat-driver Makefile
+		lstat-driver Makefile
 		atoll-small
 		strtoll-driver
 		malloc-huge
