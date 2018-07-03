@@ -1,4 +1,4 @@
-CFLAGS += -Wall -Wextra
+#CFLAGS += -Wall -Wextra
 SRCS = $(sort $(wildcard *.c))
 OBJ = $(SRCS:.c=)
 LDLIBS = -lm

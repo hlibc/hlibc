@@ -3,6 +3,7 @@
 #include <string.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -225,6 +226,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			case 'd':
 				lval = va_arg(ap, long);
 				goto integer;
+			case 'o':
+				lval = va_arg(ap, long);
+				base = 8;
+				goto integer;
 			case 'l':
 				switch (*++p) {
 				case 'd':
@@ -244,9 +249,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			case 'u':
 				zuval = va_arg(ap, size_t);
 				goto uinteger;
-
 			case 'd':
 				lval = va_arg(ap, ssize_t);
+				goto integer;
+			case 'o':
+				lval = va_arg(ap, ssize_t);
+				base = 8;
 				goto integer;
 			default:
 				goto end;
