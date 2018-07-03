@@ -17,6 +17,14 @@ typedef struct object
 	int free;
 } object;
 
+typedef struct freed
+{
+        size_t size;
+        struct object *next;
+        struct object *prev;
+        int free;
+} freed;
+
 static object *base = NULL;
 
 static object *delmiddle(object *o)
@@ -184,7 +192,7 @@ void *calloc(size_t nmemb, size_t size)
 	void *o;
 	size_t t = 0;
 	if(__safe_umul(nmemb, size, &t, (size_t)-1) == -1) {
-		/* FIXEM: set errno here? */
+		/* FIXME: set errno here? */
 		return NULL;
 	}
 	if (!(o = malloc(t))) {
