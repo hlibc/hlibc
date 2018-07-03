@@ -90,7 +90,8 @@ tryldflag () {
 
 STACK_ALIGNMENT=
 CFLAGS_C99FSE=
-CFLAGS_AUTO="-Wall -Wextra"
+#CFLAGS_AUTO="-Wall -Wextra"
+CFLAGS_AUTO=
 LDFLAGS_AUTO=
 prefix=
 exec_prefix=
