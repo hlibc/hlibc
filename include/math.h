@@ -81,34 +81,16 @@ int __signbitl(long double);
 	sizeof(x) == sizeof(double) ? (int)(__DOUBLE_BITS(x)>>63) : \
 	__signbitl(x) )
 
-#define isunordered(x,y) (isnan((x)) ? ((void)(y),1) : isnan((y)))
 
-#if __STDC_VERSION__ >= 199901L
-inline
-#endif
-static int __isrel(long double __x, long double __y, int __rel)
-{
-	if (isunordered(__x, __y)) return 0;
-	if (__rel==-2) return __x < __y;
-	if (__rel==2) return __x > __y;
-	if (__rel==-1) return __x <= __y;
-	if (__rel==1) return __x >= __y;
-	return __x != __y;
-}
-
-#define isless(x,y) __isrel((x), (y), -2)
-#define islessequal(x,y) __isrel((x), (y), -1)
-#define islessgreater(x,y) __isrel((x), (y), 0)
-#define isgreaterequal(x,y) __isrel((x), (y), 1)
-#define isgreater(x,y) __isrel((x), (y), 2)
-
-double      cos(double);
-double      fabs(double);
+double cos(double);
+double fabs(double);
 long double frexpl(long double value, int *);
-double      pow(double, double);
-double      scalbn(double, int);
-double      sin(double);
-double      sqrt(double);
+double pow(double, double);
+double scalbn(double, int);
+double sin(double);
+double sqrt(double);
+double floor(double);
+double frexp(double, int *);
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)
 #define MAXFLOAT        3.40282347e+38F
