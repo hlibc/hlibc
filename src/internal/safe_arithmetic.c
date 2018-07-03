@@ -1,6 +1,16 @@
 #include "internal.h"
 #include <limits.h>
 
+struct __safe {
+	int ret;
+	intmax_t num;
+} __safe;
+
+struct __usafe {
+	int ret;
+	uintmax_t num;
+} __usafe;
+
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
 	/*
@@ -59,7 +69,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		of addition and can use the unsigned variant
 	*/
 	if (a > 0 && b < 0) {
-		return __safe_uadd(a, b, c, INTMAX_MAX);
+		return __safe_uadd(a, b, (uintmax_t *)c, INTMAX_MAX);
 	}
 		
 	return -1;
@@ -179,7 +189,7 @@ int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
 
 int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 {
-	size_t tmp = 0;
+	uintmax_t tmp = 0;
 	if (__safe_usub(lim, a, &tmp) == -1)
 		return -1;
 	else if(tmp >= b) {

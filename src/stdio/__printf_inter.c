@@ -263,10 +263,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		case 'j':
 			switch (*++p) {
 			case 'u':
-				zuval = va_arg(ap, uintmax_t);
+				//zuval = va_arg(ap, uintmax_t);
+				zuval = va_arg(ap, unsigned long long);
 				goto uinteger;
 			case 'd':
-				lval = va_arg(ap, intmax_t);
+				//lval = va_arg(ap, intmax_t);
+				lval = va_arg(ap, long long);
 				goto integer;
 			default:
 				goto end;
