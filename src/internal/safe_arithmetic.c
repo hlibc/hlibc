@@ -1,15 +1,9 @@
 #include "internal.h"
 #include <limits.h>
 
-struct __safe {
-	int ret;
-	intmax_t num;
-} __safe;
-
-struct __usafe {
-	int ret;
-	uintmax_t num;
-} __usafe;
+/*
+it's unsafe if the divident is INT_MIN and the divisor is -1
+*/
 
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
