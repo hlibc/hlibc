@@ -4,12 +4,10 @@ DESCRIPTION:
 ------------
 
 	hlibc is an experimental libc targeted at the linux kernel's syscall
-	ABI. It is a standalone libc which supports the i386, x86_64 and arm 
-	architectures. hlibc can be compiled with either gcc or the llvm
-	clang compiler.
+	ABI. It is a standalone libc which supports the i386, x86_64, arm 
+	(32bit arm v7) and aarch64 (64 bit arm v8) architectures. 
 
-	hlibc has experimental ports for mips and aarch64.
-
+	hlibc has specific compiler support for gcc and clang.
 
 BUILDING:
 ---------
@@ -33,6 +31,17 @@ BUILDING:
 	hlibc only supports static linking at this time.
 
 
+	include/
+		Architecture agnostic headers for /usr/include
+
+	src/
+		The libc source code
+
+	arch/
+		Architecture specific information
+
+	crt/
+		crt stuffs
 
 	hbox/
 		A small busybox like set of POSIX utilities.
@@ -47,9 +56,16 @@ AUTOMATIC TESTING:
 	Use the following instructions to retrieve, build and run hlibc 
 	and the hlibc test suite.
 
-		git clone https://git.zv.io/r/hlibc.git
+		git clone https://git.hlibc.xyz/lab/hlibc
 		cd hlibc
 		make gcctest
+
+	Or to test with clang:
+
+		git clone https://git.hlibc.xyz/lab/hlibc
+		cd hlibc
+		make clangtest
+		
 
 	If all ran successfully there should be no significant errors and
 	a confirmation notice containing the results of the test suite 
@@ -72,71 +88,26 @@ AUTOMATIC TESTING:
 
 	If you wish to add a new test to the test suite simply put the program
 	under tests/ and it will be compiled along with the other tests. To
-	have the test automatically ran with the hlibc testsuite then add the
+	have the test automatically ran with the hlibc test suite then add the
 	title of its binary to BASIC_TYPE= at the top of tools/build.sh. This
 	method is for tests that produce output as stdout and are then compared
 	with the output of the same test compiled against the host. If the test
 	does not use stdout or is unsuitable for running against the host as a
 	control medium then it must be scripted into ./tools/build.sh by hand.
 
-	Two duplicate test directories are created with the test suite, These
-	duplicate test directories are compiled against the default host libc
-	and used as control mediums to diff the output of the same tests
+	Two duplicate test directories are created by the test suite, The
+	duplicate test directory is compiled against the default host libc
+	and used as control medium to diff the output of the same tests
 	compiled against hlibc:
 
-		control/*.c (links to tests/*.c)
-		hbox-control/*.c (links to hbox/*.c/)
+		control/*.c --> links to tests/*.c
+		hbox-control/*.c  --> links to hbox/*.c
 
-
-USING LLVM/CLANG:
------------------
-
-	Clang does work with hlibc. However, the wrapper script is still
-	experimental. It can be automatically tested by running;
-
-		make clangtest
-
-
-ROADMAP:
---------
-
-	Add random() so that the arbsh/arbprec library can be built using hlibc.
-
-	Write more tests in C, add them to tests/ and tools/build.sh.
-
-	Add an fdopen() function and redesign popen() to use it. 
-
-	Redesign the syscall interface to use unique code and start removing the
-	remnants of musllibc/.
-
-	Rewrite getopt(), This getopt version was written by Henry Spencer and
-	is not unique to hlibc.
-
-	Address proper switching between unbuffered, line buffered and buffered
-	modes inside of __fillbuf.c and __flushbuf.c. Register them before main
-	and then with the internal exit() function.
-
-	Fix the experimental MIPS port. Popen and stat are not working 
-	correctly.
-
-	Finish the aarch64 port.
-
-	Write tempnam and mktemp for stdio.
-	
 
 REVISION CONTROL:
 -----------------
 
 	https://git.hlibc.xyz/lab/hlibc
-
-
-WEB HOME:
----------
-
-	hlibc is in the process of redesigning our web home. In the meantime,
-	this will be its location, and releases can be retrieved from there:
-
-	http://hlibc.xyz/
 
 
 CONTACT:
@@ -162,36 +133,10 @@ RELENG:
 		RELENG_SSH="user@host:www"
 
 
-DEVELOPERS:
------------
-
-	One of the simplest ways to contribute to hlibc is to make patches
-	using `git'. They can be constructed as follows:
-
-		git add src/path/to/work.c
-		git commit -m "something new added"
-		git format-patch -1 --stdout > work.patch
-
-
-REFERENCES:
------------
-
-	https://www.corsix.org/content/converting-floats-to-strings-part-1
-
-	https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
-
-	https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Warning-Options
-
-	http://lolengine.net/blog/2011/12/21/better-function-approximations
-    
-	http://lolengine.net/blog/2011/9/17/playing-with-the-cpu-pipeline
-
-	Russ Cox does really nice research on regular expressions:
-	https://swtch.com/~rsc/regexp/regexp1.html
-
-
 RELEASES:
 ---------
+
+	http://hlibc.xyz/
 
 	http://hlibc.xyz/hlibc-0.1a.tar.gz
 
