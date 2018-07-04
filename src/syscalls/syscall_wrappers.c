@@ -647,7 +647,7 @@ int atexit(void (*func)(void))
 }
 
 void __funcs_on_exit();
-
+void __destroy_malloc(void);
 void exit(int code)
 {
 	__funcs_on_exit();
