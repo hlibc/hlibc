@@ -6,8 +6,6 @@ BASIC_TYPE="	printf-zeropad
 		printf-pad-string
 		printf-field
 		snprintf-driver
-		stat-driver Makefile
-		lstat-driver Makefile
 		atoll-small
 		strtoll-driver
 		malloc-huge
@@ -42,7 +40,9 @@ BASIC_TYPE="	printf-zeropad
 		fwrite
 		strchr-driver
 "
-
+COULD_FAIL="	stat-driver
+		lstat-driver
+"
 HBOX_TYPE="	gsh ./hbox/gsh.sh
 "
 # ls -R hbox
@@ -108,6 +108,18 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 		echo RETVAL="1" > tests/retval
+		displaydiff
+		
+	fi
+done
+
+printf "%s" "$COULD_FAIL" | while read -r i
+do	./tests/${i} > "${SUF}/diff2"
+	./control/${i} > "${SUF}/diff3"
+	checkifempty "${SUF}/diff2"
+	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+	then	printf "%s\n" "\`${i}' compared equal to its control method"
+	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 		displaydiff
 		
 	fi

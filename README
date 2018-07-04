@@ -38,10 +38,10 @@ BUILDING:
 		The libc source code
 
 	arch/
-		Architecture specific information
+		Architecture specific headers.
 
 	crt/
-		crt stuffs
+		Crt stuffs.
 
 	hbox/
 		A small busybox like set of POSIX utilities.

@@ -18,8 +18,8 @@ OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap -D_GNU_SOURCE -static"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap -D_GNU_SOURCE -static"
+GCC_WRAP = CC="$(prefix)/bin/gcc-wrap"
+CLANG_WRAP = CC="$(prefix)/bin/clang-wrap"
 
 LDFLAGS =
 CPPFLAGS =
