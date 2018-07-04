@@ -2,6 +2,12 @@
  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+#ifdef MINSIGSTKSZ
+#undef MINSIGSTKSZ
+#endif
+#ifdef SIGSTKSZ
+#undef SIGSTKSZ
+#endif
 #define MINSIGSTKSZ 6144
 #define SIGSTKSZ 12288
 #endif
