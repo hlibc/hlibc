@@ -107,7 +107,7 @@ static object *morecore(object *last, size_t size)
 	else
 		size = (chunk_size * mul);
 
-	if (__safe_uadd(size, sizeof(object), (uintmax_t*)&t, SIZE_MAX) == -1) {
+	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
 		/* FIXME: this probably should set something other than ENOMEM */
 		goto error;
 	}
@@ -191,7 +191,7 @@ void *calloc(size_t nmemb, size_t size)
 {
 	void *o;
 	size_t t = 0;
-	if(__safe_umul(nmemb, size, (uintmax_t*)&t, (size_t)-1) == -1) {
+	if(__safe_umul_sz(nmemb, size, &t, (size_t)-1) == -1) {
 		/* FIXME: set errno here? */
 		return NULL;
 	}

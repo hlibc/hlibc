@@ -93,6 +93,10 @@ int __safe_usub(uintmax_t, uintmax_t, uintmax_t *);
 int __safe_uadd(uintmax_t, uintmax_t, uintmax_t *, uintmax_t);
 int __safe_udiv(uintmax_t, uintmax_t, uintmax_t *);
 int __safe_umul(uintmax_t, uintmax_t, uintmax_t *, uintmax_t);
+int __safe_usub_sz(size_t, size_t, size_t *);     
+int __safe_uadd_sz(size_t, size_t, size_t *, size_t);
+int __safe_udiv_sz(size_t, size_t, size_t *);
+int __safe_umul_sz(size_t, size_t, size_t *, size_t);
 
 /* internal __errno_table */
 extern char *__errno_table[];

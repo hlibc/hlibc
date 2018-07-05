@@ -171,45 +171,75 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	}
 	return -1;
 }
-
-int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
-{
-	if(a >= b) {
-		*c = a - b;
-		return 0;
-	}
+/* define the bodies of the unsigned safe arithmetic functions as macros */
+#define __safe_usubinter \
+	if(a >= b) { \
+		*c = a - b; \
+		return 0;  \
+	} \
 	return -1;
+
+#define __safe_umulinter \
+	if(a == 0 || lim / a >= b) \
+	{ \
+		*c = a * b; \
+		return 0; \
+	} \
+	return -1;
+
+#define __safe_udivinter \
+	if(b != 0) \
+	{ \
+		*c = a / b; \
+		return 0; \
+	} \
+	return -1; \
+
+#define __safe_uaddinter \
+	if(lim - a >= b) { \
+		*c = a + b; \
+		return 0; \
+	} \
+	return -1;
+
+/* apply the unsigned safe macros to various size types */
+int __safe_usub(uintmax_t a, uintmax_t b, uintmax_t *c)
+{ 
+	__safe_usubinter;
 }
 
 int __safe_uadd(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
-{
-	uintmax_t tmp = 0;
-	if (__safe_usub(lim, a, &tmp) == -1)
-		return -1;
-	else if(tmp >= b) {
-		*c = a + b;
-		return 0;
-	}
-	return -1;
+{ 
+	__safe_uaddinter;
 }
 
 int __safe_udiv(uintmax_t a, uintmax_t b, uintmax_t *c)
 {
-	if(b != 0)
-	{
-		*c = a / b;
-		return 0;
-	}
-	return -1;
+	__safe_udivinter;
 }
 
 int __safe_umul(uintmax_t a, uintmax_t b, uintmax_t *c, uintmax_t lim)
 {
-	if(a == 0 || lim / a >= b)
-	{
-		*c = a * b;
-		return 0;
-	}
-	return -1;
+	__safe_umulinter;
+}
+
+int __safe_usub_sz(size_t a, size_t b, size_t *c)
+{
+	__safe_usubinter;
+}
+
+int __safe_uadd_sz(size_t a, size_t b, size_t *c, size_t lim)
+{
+	__safe_uaddinter;
+}
+
+int __safe_udiv_sz(size_t a, size_t b, size_t *c)
+{
+	__safe_udivinter;
+}
+
+int __safe_umul_sz(size_t a, size_t b, size_t *c, size_t lim)
+{
+	__safe_umulinter;
 }
 
