@@ -69,37 +69,6 @@ union ldshape {
 #error Unsupported long double representation
 #endif
 
-/*
-#ifdef LDBL_MANT_DIG == 113 && LDBL_MAX_EXP == 16384 && __BYTE_ORDER == __LITTLE_ENDIAN
-union ldshape {
-        long double f;
-        struct {
-                uint64_t lo;
-                uint32_t mid;
-                uint16_t top;
-                uint16_t se;
-        } i;
-        struct {
-                uint64_t lo;
-                uint64_t hi;
-        } i2;
-};
-#elif LDBL_MANT_DIG == 113 && LDBL_MAX_EXP == 16384 && __BYTE_ORDER == __BIG_ENDIAN
-union ldshape {
-        long double f;
-        struct {
-                uint16_t se;
-                uint16_t top;
-                uint32_t mid;
-                uint64_t lo;
-        } i;
-        struct {
-                uint64_t hi;
-                uint64_t lo;
-        } i2;
-};
-#endif
-*/
 #define FORCE_EVAL(x) do {                          \
 	if (sizeof(x) == sizeof(float)) {           \
 		volatile float __x;                 \
