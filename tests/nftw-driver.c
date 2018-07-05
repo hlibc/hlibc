@@ -47,7 +47,7 @@ display_info(const char *fpath, const struct stat *sb,
 			printf("?"); break;
 	}
 
-	printf(" %d", (intmax_t)sb->st_size);
+	printf(" %ld", (intmax_t)sb->st_size);
 	printf(" %d", ftwbuf->base);
 	printf(" %d", ftwbuf->level);
 	printf(" %s", fpath);

@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdint.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -88,7 +89,7 @@ static void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c 
 
 int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
 { 
-	const char *p = NULL;
+	char *p = NULL;
 	size_t i = 0;
 	/* this should probably be INT_MAX */
 	size_t bound = (size_t)-1;
@@ -136,7 +137,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		f = __dprintf_buffer;
 	}
 
-	for (p = fmt; *p && i < bound; p++) {
+	for (p = (char*)fmt; *p && i < bound; p++) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			goto end;
@@ -263,12 +264,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		case 'j':
 			switch (*++p) {
 			case 'u':
-				//zuval = va_arg(ap, uintmax_t);
-				zuval = va_arg(ap, unsigned long long);
+				zuval = va_arg(ap, uintmax_t);
+				//zuval = va_arg(ap, unsigned long long int);
 				goto uinteger;
 			case 'd':
-				//lval = va_arg(ap, intmax_t);
-				lval = va_arg(ap, long long);
+				lval = va_arg(ap, intmax_t);
+				//lval = va_arg(ap, long);
 				goto integer;
 			default:
 				goto end;

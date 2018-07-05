@@ -342,7 +342,7 @@ void prntstats(char *file, lstype g)
 	octtoperm(sb.st_mode);
 	printf(" ");
 	if (g.inode == 1)
-		printf("%-8ld ", sb.st_ino);
+		printf("%-8zu ", sb.st_ino);
 	printf("%-3ld ", sb.st_nlink);
 	printf("%ld %ld ", (long int)sb.st_uid, (long int)sb.st_gid);
 	printf("%8lld ", (long long int)sb.st_size);

@@ -40,9 +40,12 @@ BASIC_TYPE="	printf-zeropad
 		fwrite
 		strchr-driver
 "
-COULD_FAIL="	stat-driver
-		lstat-driver
+
+# COULD_FAIL is a like a BASIC_TYPE with no error checking
+COULD_FAIL="	stat-driver .
+		lstat-driver .
 "
+
 HBOX_TYPE="	gsh ./hbox/gsh.sh
 "
 # ls -R hbox

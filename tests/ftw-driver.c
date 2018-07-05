@@ -42,7 +42,7 @@ display_info(const char *fpath, const struct stat *sb,
 			printf("?"); break;
 	}
 
-	printf(" %d", (intmax_t)sb->st_size);
+	printf(" %lld", (long long)sb->st_size);
 	printf(" %s", fpath);
 	printf(" %s\n", ppname);
 

@@ -4,11 +4,12 @@
 
 int main(void)
 {
+
+#ifdef _HAS_HLIBC_MATH
+	
 	intmax_t a = 100;
 	intmax_t b = 100;
 	intmax_t c = 0;
-
-#ifdef _HAS_HLIBC_MATH
 	
 	printf("========================================\n");
 	printf("should equal 200 (100 + 100)\n");
