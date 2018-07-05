@@ -9,7 +9,7 @@ struct stat {
         unsigned long __pad;
         off_t st_size;
         blksize_t st_blksize;
-        int __pad2;
+        //int __pad2; // this padding breaks hlibc
         blkcnt_t st_blocks;
         struct timespec st_atim;
         struct timespec st_mtim;
