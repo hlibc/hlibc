@@ -4,7 +4,6 @@ _start:
 	mov lr,#0
 	ldr a2,[sp],#4
 	mov a3,sp
-	ldr a4,=_fini
 	str fp,[sp,#-4]!
 	str a1,[sp,#-4]!
 	str a4,[sp,#-4]!
