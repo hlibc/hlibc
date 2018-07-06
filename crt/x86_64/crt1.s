@@ -1,6 +1,4 @@
-/* Written 2011 Nicholas J. Kain, released as Public Domain */
-.weak _init
-.weak _fini
+/* Written 2011 Nicholas J. Kain, released as Public Domain */ 
 .text
 .global _start
 _start:
@@ -9,8 +7,6 @@ _start:
 	pop %rsi        /* 2nd arg: argc */
 	mov %rsp,%rdx   /* 3rd arg: argv */
 	andq $-16,%rsp  /* align stack pointer */
-	mov $_fini,%r8  /* 5th arg: fini/dtors function */
-	mov $_init,%rcx /* 4th arg: init/ctors function */
 	mov $main,%rdi  /* 1st arg: application entry ip */
 	call __libc_start_main /* hlibc init will run the program */
 1:	jmp 1b
