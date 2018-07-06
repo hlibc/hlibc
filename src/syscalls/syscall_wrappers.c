@@ -42,10 +42,7 @@ int brk(void *);
 void *sbrk(intptr_t);
 
 struct __libc {
-	size_t *auxv;
 	int (*atexit)(void (*)(void));
-	void (*fini)(void);
-	void (*ldso_fini)(void);
 };
 
 #ifndef LIBC_H
@@ -435,27 +432,11 @@ char *getenv(const char *name)
 	return NULL;
 }
 
-int __libc_start_main(
-	int (*main)(int, char **, char **), int argc, char **argv,
-	int (*init)(int, char **, char **), void (*fini)(void),
-	void (*ldso_fini)(void))
+int __libc_start_main(int (*main)(int, char **, char **), int argc, char **argv)
 {
-	char **envp = argv+argc+1, **auxv = envp;
-
-	/* assign the environment from envp */
+	char **envp = argv+argc+1;
 	__environ = envp;
-	do auxv++; while (*auxv);
-	libc.auxv = (void *)++auxv;
-	libc.ldso_fini = ldso_fini;
-	libc.fini = fini;
-
-	/* ssp would go here if it was supported */
-
-	/* Execute constructors (static) linked into the application */
-	if (init) init(argc, argv, envp);
-
-	
-	/* Pass control to to application */
+	/* __ssp */
 	exit(main(argc, argv, envp));
 	return 0;
 }
@@ -653,8 +634,6 @@ void exit(int code)
 	__funcs_on_exit();
 	fflush(NULL);
 	__destroy_malloc();
-	if (libc.fini) libc.fini();
-	if (libc.ldso_fini) libc.ldso_fini();
 	_Exit(code);
 	for(;;);
 }
