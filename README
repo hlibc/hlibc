@@ -4,15 +4,16 @@ DESCRIPTION:
 ------------
 
 	hlibc is an experimental libc targeted at the linux kernel's syscall
-	ABI. It is a standalone libc which supports the i386, x86_64, arm 
-	(32bit arm v7) and aarch64 (64 bit arm v8) architectures. 
+	ABI. It is a standalone libc which supports the i386, x86_64, arm and
+	aarch64 architectures. 
 
 	hlibc has specific compiler support for gcc and clang.
+
 
 BUILDING:
 ---------
 
-	hlibc contains a shell wrapper for gcc called `gcc-wrap`. This allows it 
+	hlibc contains a shell wrapper for gcc called `gcc-wrap`. This allows it
 	to be easily installed and used from your home directory without the 
 	need for root privilege.
 

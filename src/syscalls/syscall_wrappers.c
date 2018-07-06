@@ -432,18 +432,7 @@ char *getenv(const char *name)
 	return NULL;
 }
 
-int __libc_start_main(int (*main)(int, char **, char **), int argc, char **argv)
-{
-	char **envp = argv+argc+1;
-	__environ = envp;
-	/* __ssp */
-	exit(main(argc, argv, envp));
-	return 0;
-}
-
-extern char **__environ;
 char **__env_map;
-
 int __putenv(char *s, int a)
 {
 	int i=0, j=0;

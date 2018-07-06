@@ -17,14 +17,6 @@ typedef struct object
 	int free;
 } object;
 
-typedef struct freed
-{
-        size_t size;
-        struct object *next;
-        struct object *prev;
-        int free;
-} freed;
-
 static object *base = NULL;
 
 static object *delmiddle(object *o)
