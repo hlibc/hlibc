@@ -52,22 +52,6 @@ JOBS="1"
 TOOLING="$(pwd)/usr"
 SUF="$(pwd)/logs"
 RETVAL="0"
-GREEN="\033[32m"
-RED="\033[31m"
-RESET="\033[0m"
-
-hasansi()
-{
-	case $TERM in
-		ansi);;
-		xterm);;
-		*)export RED=""
-		export GREEN=""
-		export RESET=""
-		;;
-	esac
-
-}
 
 checkifempty()
 {
@@ -121,15 +105,10 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
 	checkifempty "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-	then	printf "$GREEN"
-		printf "%s\n" "\`${i}' compared equal to its control method"
-		printf "$RESET"
-	else	printf "$RED"
-		printf "%s\n" "##${i} failed to compare equal to its control method"
-		printf "$RESET"
+	then	printf "%s\n" "\`${i}' compared equal to its control method"
+	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 		echo RETVAL="1" > tests/retval
 		displaydiff
-		
 	fi
 done
 
