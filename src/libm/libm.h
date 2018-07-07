@@ -16,8 +16,6 @@
 #include <stdint.h>
 #include <float.h>
 #include <math.h>
-#include <complex.h>
-//#include "longdbl.h"
 
 union fshape {
 	float value;

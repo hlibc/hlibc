@@ -19,10 +19,6 @@ typedef unsigned int tcflag_t;
 int tcgetattr (int, struct termios *);
 int tcsetattr (int, int, const struct termios *);
 
-#ifdef _GNU_SOURCE
-void cfmakeraw(struct termios *);
-int cfsetspeed(struct termios *, speed_t);
-#endif
 
 #ifdef __cplusplus
 }

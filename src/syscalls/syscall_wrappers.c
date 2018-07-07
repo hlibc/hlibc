@@ -18,23 +18,16 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <sys/uio.h>
 #include <sys/utsname.h>
 #include <sys/wait.h>
+#include <sys/wait.h> 
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-#include <sys/wait.h> 
-#include <stdint.h>
-#include <stdarg.h>
-#include <errno.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 long __syscall_ret(unsigned long);
 

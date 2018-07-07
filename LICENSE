@@ -23,15 +23,10 @@ hbox is copyrighted Copyright © 2015-2018 CM Graff and MIT
 Licensed.
 
 
-musl libc   (src/syscalls/ src/arch_needs_asm/ src/stdio/fmt_fp.c)
-------------------------------------------------------------------
+musl libc   (src/syscalls/  src/stdio/fmt_fp.c)
+-----------------------------------------------
 These files are Copyright © 2005-2012 Rich Felker licensed under
 the MIT license.
-
-	Contributors to musl libc
-	-------------------------
-	Rich Felker
-	Nicholas J. Kain (x86_64 assembly)
 
 
 Mathematics Library (src/libm/)

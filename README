@@ -133,6 +133,13 @@ RELENG:
 		RELENG_DIR="www/" \
 		RELENG_SSH="user@host"
 
+COPYING:
+--------
+
+	Please see the attached LICENSE file for the list of contributors and
+	copying detsils.
+	
+
 
 RELEASES:
 ---------

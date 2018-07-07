@@ -13,8 +13,7 @@ void mkdir_verbose(char *, mode_t, int);
 void drmake(char *, mode_t, int, int);
 void mkdirerror(char *, int);
 int main (int argc, char *argv[]) 
-{ 
-
+{
 	mode_t mode = 0755; 
 	int i, j, k;
 	i = j = k = 0;
