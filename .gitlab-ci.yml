@@ -87,11 +87,11 @@ gcc45__i686__clang:
 #    - ppc64
 #  script: "make clangtest"
 
-#100core__aarch64__clang:
-#  tags:
-#    - 100core
-#    - aarch64
-#  script: "make clangtest"
+100core__aarch64__clang:
+  tags:
+    - 100core
+    - aarch64
+  script: "make clangtest"
 
 alpine__x86_64__clang:
   tags:
@@ -105,10 +105,10 @@ alpine__i386__clang:
     - i386
   script: "make clangtest"
 
-debian__armel__clang:
-  tags:
-    - debian
-    - armel
-  script: "make clangtest"
+#debian__armel__clang:
+#  tags:
+#    - debian
+#    - armel
+#  script: "make clangtest"
 
 # clang
