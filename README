@@ -130,8 +130,8 @@ RELENG:
 
 		make release RELENG="hlibc-0.1x" \
 		RELENG_MIR="http://mirror/" \
-		RELENG_DIR="public_html/" \
-		RELENG_SSH="user@host:www"
+		RELENG_DIR="www/" \
+		RELENG_SSH="user@host"
 
 
 RELEASES:
@@ -146,3 +146,4 @@ RELEASES:
 	http://hlibc.xyz/hlibc-0.1c.tar.gz
 
 	http://hlibc.xyz/hlibc-0.1d.tar.gz
+	http://hlibc.xyz/hlibc-0.1e.tar.gz
