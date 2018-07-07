@@ -11,7 +11,7 @@
 #include <grp.h>
 
 /* 
-	Copyright 2015-2018, C. Graff "ls"
+	Copyright 2015-2018, CM. Graff "ls"
 */ 
 
 /* structs */
@@ -126,7 +126,7 @@ void list_dirs(char *argvv, lstype g)
 	size_t factor = 0;
 	size_t refactor = 0;
 	size_t c = 0;
-	static size_t outs = 10024;
+	static size_t outs = 4096;
 
 	if (g.output == NULL)
 	{
@@ -259,74 +259,74 @@ void octtoperm(int octal)
 	switch (octal & S_IFMT)
 	{
 		case S_IFBLK:
-			printf("b");
+			putchar('b');
 			break;
 		case S_IFCHR:
-			printf("c");
+			putchar('c');
 			break;
 		case S_IFDIR:
-			printf("d");
+			putchar('d');
 			break;
 		case S_IFIFO:
-			printf("p");
+			putchar('p');
 			break;
 		case S_IFLNK:
-			printf("l");
+			putchar('l');
 			break;
 		case S_IFREG:
-			printf("-");
+			putchar('-');
 			break;
 		case S_IFSOCK:
-			printf("S");
+			putchar('S');
 			break;
 		default:
-			printf("?");
+			putchar('?');
 			break;
 
 	}
 
 	if (octal & S_IRUSR)
-		printf("r");
+		putchar('r');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IWUSR)
-		printf("w");
+		putchar('w');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IXUSR)
-		printf("x");
+		putchar('x');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IRGRP)
-		printf("r");
+		putchar('r');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IWGRP)
-		printf("w");
+		putchar('w');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IXGRP)
-		printf("x");
+		putchar('x');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IROTH)
-		printf("r");
+		putchar('r');
 	else
-		printf("-");
+		putchar('-');
 	if (octal & S_IWOTH)
-		printf("w");
+		putchar('w');
 	else
-		printf("-");
+		putchar('-');
 
 	if (octal & S_ISVTX && octal & S_IXOTH)
-		printf("t");
+		putchar('t');
 	else if (octal & S_ISVTX)
-		printf("T");
+		putchar('T');
 	else if (octal & S_IXOTH)
-		printf("x");
+		putchar('x');
 	else
-		printf("-");
-	printf(" ");
+		putchar('-');
+	putchar(' ');
 }
 
 int compare(const void *a, const void *b)

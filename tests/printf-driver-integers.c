@@ -85,7 +85,6 @@ int main(void)
 
 	printf("length of all strings so far %zu\n", len);
 
-
 	return 0;
 }
 
