@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <errno.h>
 
 char *_tol_driver(const char *s, int base, long long *ans)
 { 
@@ -39,10 +40,12 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	long long neg = -1;
 	uint8_t temp = 0;
 
-	if (base > 36)
-		base = 36; // error? 
-	else if (base == 1)
-		base = 0;
+	if (base > 36){
+		errno = EINVAL;
+		return NULL;
+	}
+	else if (base == 1 && base == 0)
+		base = 10;
 
 	while (isspace(s[j])) {
 		++j;
