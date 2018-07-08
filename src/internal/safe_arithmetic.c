@@ -2,15 +2,14 @@
 #include <limits.h>
 
 /*
-it's unsafe if the divident is INT_MIN and the divisor is -1
+it's unsafe if the dividend is INT_MIN and the divisor is -1
 */
 
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
 	/* either argument is 0 so it fits */
 	if (a == 0 || b == 0) {
-                *c = a - b;
-                return 0;
+		goto safe;
         }
 
 	/*
@@ -21,8 +20,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		operand toward and over 0
 	*/
 	if(a < 0 && b < 0 ) {
-		*c = a - b;
-		return 0;
+		goto safe;
 	}
 
 	/*
@@ -45,12 +43,8 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		of the minimum minus the left operand then it fits
 	*/
 	if (a < 0 && b > 0) {
-		*c = a - b;
-		return 0;
-		if ((INTMAX_MIN - a) <= -b)
-		{
-			*c = a - b;
-			return 0;
+		if ((INTMAX_MIN - a) <= -b) {
+			goto safe;
 		}
 		return -1;
 	}
@@ -60,9 +54,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		a and b are positive so subtractions will always fit
 	*/
 	if (a > 0 && b > 0) {
-		*c = a - b;
-		return 0;
-		
+		goto safe;
 	}
 	
 	/*
@@ -75,6 +67,10 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 	}
 		
 	return -1;
+
+	safe:
+	*c = a - b;
+	return 0;
 }
 int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
 {
