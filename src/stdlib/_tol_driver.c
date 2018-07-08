@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <errno.h>
-
+#include <limits.h>
+#include "../internal/internal.h"
 static uint8_t __glph[] = { 
 	/* v    useless filler until the 1st isalnum  */
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -38,7 +39,9 @@ char *_utol_driver(const char *s, int base, unsigned long long *ans)
 	size_t i = 0;
 	size_t j = 0;
 	unsigned long long ret = 0;
+	unsigned long long solution = 0;
 	uint8_t temp = 0;
+
 
 	if (base > 36 && base < 0){
 		errno = EINVAL;
@@ -77,7 +80,15 @@ char *_utol_driver(const char *s, int base, unsigned long long *ans)
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;
-		ret = (base * ret) + temp;
+		//ret = (base * ret) + temp;
+		if (__safe_umul(base, ret, &solution, ULONG_MAX) == -1) {
+			errno = ERANGE;
+			return NULL;
+		}
+		if (__safe_uadd(temp, solution, &ret, ULONG_MAX) == -1) {
+			errno = ERANGE;
+			return NULL;
+		}
 	}
 	*ans = ret;
 	if (i > j)
@@ -92,6 +103,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	size_t j = 0;
 	long long ret = 0;
 	long long neg = -1;
+	long long solution = 0;
 	uint8_t temp = 0;
 
 	if (base > 36 && base < 0){
@@ -141,9 +153,19 @@ char *_tol_driver(const char *s, int base, long long *ans)
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;
-		ret = (base * ret) - temp;
+		if(__safe_mul(base, ret, &solution) == -1) {
+			errno = ERANGE;
+			return NULL;
+		}
+		if(__safe_sub(solution, temp, &ret) == -1) {
+			errno = ERANGE;
+			return NULL;
+		}
 	}
-	*ans = ret * neg;
+	if(__safe_mul(ret, neg, ans) == -1) {
+		errno = ERANGE;
+		return NULL;
+	}
 	if (i > j)
 		return (char *)s + i;
 	else

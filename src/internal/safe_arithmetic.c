@@ -7,6 +7,12 @@ it's unsafe if the divident is INT_MIN and the divisor is -1
 
 int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 {
+	/* either argument is 0 so it fits */
+	if (a == 0 || b == 0) {
+                *c = a - b;
+                return 0;
+        }
+
 	/*
 		(-a - -b)
 		-500 - -500 == 0
@@ -39,6 +45,8 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 		of the minimum minus the left operand then it fits
 	*/
 	if (a < 0 && b > 0) {
+		*c = a - b;
+		return 0;
 		if ((INTMAX_MIN - a) <= -b)
 		{
 			*c = a - b;
