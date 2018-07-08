@@ -203,6 +203,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			zuval = va_arg(ap, unsigned int);
 			goto uinteger;
 		case 'd':
+		case 'i':
 			lval = va_arg(ap, int);
 			goto integer;
 		case 'x':
@@ -225,6 +226,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 		case 'l':
 			switch (*++p) {
 			case 'd':
+			case 'i':
 				lval = va_arg(ap, long);
 				goto integer;
 			case 'o':
@@ -234,6 +236,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			case 'l':
 				switch (*++p) {
 				case 'd':
+				case 'i':
 					lval = va_arg(ap, long long);
 					goto integer;
 				case 'u':
@@ -254,6 +257,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				zuval = va_arg(ap, size_t);
 				goto uinteger;
 			case 'd':
+			case 'i':
 				lval = va_arg(ap, ssize_t);
 				goto integer;
 			case 'o':
@@ -271,6 +275,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				//zuval = va_arg(ap, unsigned long long int);
 				goto uinteger;
 			case 'd':
+			case 'i':
 				lval = va_arg(ap, intmax_t);
 				//lval = va_arg(ap, long);
 				goto integer;
