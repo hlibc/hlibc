@@ -81,11 +81,11 @@ char *_utol_driver(const char *s, int base, unsigned long long *ans)
 		if (temp >= base)
 			break;
 		//ret = (base * ret) + temp;
-		if (__safe_umul(base, ret, &solution, ULONG_MAX) == -1) {
+		if (__safe_umul(base, ret, &solution, ULLONG_MAX) == -1) {
 			errno = ERANGE;
 			return NULL;
 		}
-		if (__safe_uadd(temp, solution, &ret, ULONG_MAX) == -1) {
+		if (__safe_uadd(temp, solution, &ret, ULLONG_MAX) == -1) {
 			errno = ERANGE;
 			return NULL;
 		}
@@ -153,19 +153,28 @@ char *_tol_driver(const char *s, int base, long long *ans)
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;
+	
 		if(__safe_mul(base, ret, &solution) == -1) {
 			errno = ERANGE;
 			return NULL;
 		}
+		
+		//solution = base * ret;
 		if(__safe_sub(solution, temp, &ret) == -1) {
 			errno = ERANGE;
 			return NULL;
 		}
+		
+		//ret = solution - temp;
+		//ret = (base * ret) - temp;
 	}
+
 	if(__safe_mul(ret, neg, ans) == -1) {
 		errno = ERANGE;
 		return NULL;
 	}
+
+	//*ans = ret * neg;
 	if (i > j)
 		return (char *)s + i;
 	else

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
 int main(void)
 {
@@ -20,6 +21,17 @@ int main(void)
         ans = strtoll(s4, &s4, 19);
         printf("%x\n", (unsigned int)ans);
 	printf("%x\n", 0x2F4);
+
+	long long a = LLONG_MAX;
+	char string[1024] = { 0 };
+	char *s = string;
+	sprintf(s, "%lld", a);
+	ans = strtol(s, &s, 10);
+	printf("%lld\n", ans);
+	a = LLONG_MIN;
+	sprintf(s, "%lld", a);
+        ans = strtol(s, &s, 10);
+        printf("%lld\n", ans);
 	return 0;
 }
 

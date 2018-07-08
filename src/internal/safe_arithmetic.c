@@ -140,7 +140,7 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	if (a > 0 && b < 0)
 	{
 		intmax_t t = INTMAX_MIN / a;
-		if (b > t)
+		if (b >= t)
 		{
 			*c = a * b;
 			return 0;
@@ -158,7 +158,7 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	if (a < 0 && b < 0)
 	{
 		intmax_t t = INTMAX_MIN / a;
-		if (b > -t)
+		if (b >= -t)
 		{
 			*c = a * b;
 			return 0;
