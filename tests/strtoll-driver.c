@@ -26,11 +26,11 @@ int main(void)
 	char string[1024] = { 0 };
 	char *s = string;
 	sprintf(s, "%lld", a);
-	ans = strtol(s, &s, 10);
+	ans = strtoll(s, &s, 10);
 	printf("%lld\n", ans);
 	a = LLONG_MIN;
 	sprintf(s, "%lld", a);
-        ans = strtol(s, &s, 10);
+        ans = strtoll(s, &s, 10);
         printf("%lld\n", ans);
 	return 0;
 }
