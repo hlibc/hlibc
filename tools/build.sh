@@ -25,8 +25,8 @@ BASIC_TYPE="	stat-driver .
 		printf-driver-integers
 		strstr-driver
 		strstr-effectiveness2
-		realloc-filetreewalk /usr
-		popen-driver du /usr
+		realloc-filetreewalk include
+		popen-driver du include
 		puts-driver
 		strerror-driver
 		pow_test
@@ -131,8 +131,8 @@ then	. tests/retval
 fi
 
 # unique tests that don't work as BASIC_TYPEs
-./control/popen-to-file "du /usr" "${SUF}/diff2" 2>"${SUF}/testerr"
-./tests/popen-to-file "du /usr" "${SUF}/diff3" 2>"${SUF}/testerr"
+./control/popen-to-file "du include" "${SUF}/diff2" 2>"${SUF}/testerr"
+./tests/popen-to-file "du include" "${SUF}/diff3" 2>"${SUF}/testerr"
 checkifempty "${SUF}/diff2"
 if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file and compared equal to its control method"
