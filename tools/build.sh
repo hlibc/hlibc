@@ -18,7 +18,6 @@ BASIC_TYPE="	stat-driver .
 		atoi
 		atol
 		atoll
-		environ
 		getenv-driver
 		hcreate-driver
 		printf-driver
@@ -46,6 +45,10 @@ BASIC_TYPE="	stat-driver .
 
 HBOX_TYPE="	gsh ./hbox/gsh.sh
 "
+
+COULD_FAIL="	environ
+"
+
 # ls -R hbox
 
 DISPLAYDIFF="1"
@@ -109,6 +112,17 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	then	printf "%s\n" "\`${i}' compared equal to its control method"
 	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 		echo RETVAL="1" > tests/retval
+		displaydiff
+	fi
+done
+
+printf "%s" "$COULD_FAIL" | while read -r i
+do	./tests/${i} > "${SUF}/diff2"
+	./control/${i} > "${SUF}/diff3"
+	checkifempty "${SUF}/diff2"
+	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
+	then	printf "%s\n" "\`${i}' compared equal to its control method"
+	else	printf "%s\n" "##${i} failed to compare equal to its control method"
 		displaydiff
 	fi
 done
