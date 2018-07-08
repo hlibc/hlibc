@@ -236,6 +236,9 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				case 'd':
 					lval = va_arg(ap, long long);
 					goto integer;
+				case 'u':
+					zuval = va_arg(ap, unsigned long long);
+					goto uinteger;
 				}
 				goto end;
 			case 'f':

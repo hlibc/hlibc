@@ -3,9 +3,7 @@
 #include <stdint.h>
 #include <errno.h>
 
-char *_tol_driver(const char *s, int base, long long *ans)
-{ 
-	static uint8_t glph[] = { 
+static uint8_t __glph[] = { 
 	/* v    useless filler until the 1st isalnum  */
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -33,7 +31,63 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	'\041', '\042', '\043', '\000', '\000', '\000',
 	'\000', '\000', '\000', '\000', '\000', '\000',
 	'\000', '\000', '\000' };
+
+
+char *_utol_driver(const char *s, int base, unsigned long long *ans)
+{
+	size_t i = 0;
+	size_t j = 0;
+	unsigned long long ret = 0;
+	uint8_t temp = 0;
+
+	if (base > 36 && base < 0){
+		errno = EINVAL;
+		return NULL;
+	}
+	else if (base == 1 && base == 0)
+		base = 10;
+
+	while (isspace(s[j])) {
+		++j;
+	}
 	
+	switch (s[j]) {
+	case '0':
+		if (base == 16) {
+			switch (s[j + 1]) {
+			case 'x':
+				j += 2;
+				break;
+			case 'X':
+				j += 2;
+				break;
+			default:
+				break;
+			}
+		}else if (base == 0){
+			++j;
+			base = 8;
+		}
+	default:
+		break;
+	}
+
+	for (i=j; s[i] && isalnum(s[i]) ; ++i) {
+		temp = __glph[(int)s[i]];
+		/* break if char val lies outside of the base's range */
+		if (temp >= base)
+			break;
+		ret = (base * ret) + temp;
+	}
+	*ans = ret;
+	if (i > j)
+		return (char *)s + i;
+	else
+		return (char *)s;
+}
+
+char *_tol_driver(const char *s, int base, long long *ans)
+{
 	size_t i = 0;
 	size_t j = 0;
 	long long ret = 0;
@@ -83,7 +137,7 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	}
 
 	for (i=j; s[i] && isalnum(s[i]) ; ++i) {
-		temp = glph[(int)s[i]];
+		temp = __glph[(int)s[i]];
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;

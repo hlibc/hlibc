@@ -9,6 +9,7 @@ BASIC_TYPE="	stat-driver .
 		printf-field
 		snprintf-driver
 		atoll-small
+		strtoull-driver
 		strtoll-driver
 		malloc-huge
 		ctype
