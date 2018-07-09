@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <limits.h>
 #include "../internal/internal.h"
+
 static uint8_t __glph[] = { 
 	/* v    useless filler until the 1st isalnum  */
 	'\000', '\000', '\000', '\000', '\000', '\000',
@@ -80,14 +81,15 @@ char *_utol_driver(const char *s, int base, unsigned long long *ans)
 		/* break if char val lies outside of the base's range */
 		if (temp >= base)
 			break;
-		//ret = (base * ret) + temp;
 		if (__safe_umul(base, ret, &solution, ULLONG_MAX) == -1) {
 			errno = ERANGE;
-			return NULL;
+			ret = ULLONG_MAX;
+			break;
 		}
 		if (__safe_uadd(temp, solution, &ret, ULLONG_MAX) == -1) {
 			errno = ERANGE;
-			return NULL;
+			ret = ULLONG_MAX;
+			break;
 		}
 	}
 	*ans = ret;
@@ -156,25 +158,27 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	
 		if(__safe_mul(base, ret, &solution) == -1) {
 			errno = ERANGE;
-			return NULL;
+			*ans = LLONG_MAX;
+			if (neg)
+				*ans = LLONG_MIN;
+			goto end;
 		}
-		
-		//solution = base * ret;
 		if(__safe_sub(solution, temp, &ret) == -1) {
 			errno = ERANGE;
-			return NULL;
+			*ans = LLONG_MAX;
+			if (neg)
+				*ans = LLONG_MIN;
+			goto end;
 		}
-		
-		//ret = solution - temp;
-		//ret = (base * ret) - temp;
 	}
 
 	if(__safe_mul(ret, neg, ans) == -1) {
 		errno = ERANGE;
-		return NULL;
+		*ans = LLONG_MAX;
+		if (neg)
+			*ans = LLONG_MIN;
 	}
-
-	//*ans = ret * neg;
+	end:
 	if (i > j)
 		return (char *)s + i;
 	else

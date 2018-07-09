@@ -36,7 +36,7 @@ typedef uint16_t uint_least16_t;
 typedef uint32_t uint_least32_t;
 typedef uint64_t uint_least64_t;
 
-typedef long long          intmax_t;
+typedef long long intmax_t;
 typedef unsigned long long uintmax_t;
 
 #if !defined __cplusplus || defined __STDC_LIMIT_MACROS
