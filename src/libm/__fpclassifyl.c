@@ -3,6 +3,7 @@
 #if LDBL_MANT_DIG == 53 && LDBL_MAX_EXP == 1024
 int __fpclassifyl(long double x)
 {
+	/* __fpclassify is defined as a macro inside libm.h */
 	return __fpclassify(x);
 }
 #elif LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384
