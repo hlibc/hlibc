@@ -19,15 +19,15 @@
 
 enum state {
   E_START = 0,
-  E_NEXT,          // the header is processed, now turn to next node in list
+  E_NEXT,	  // the header is processed, now turn to next node in list
   E_DISCARD,       // the header node dismatches the pattern, discard it
-  E_STORE,         // the header node mathes the pattern, store it
-  E_SCOPE,         // process "["
+  E_STORE,	 // the header node mathes the pattern, store it
+  E_SCOPE,	 // process "["
   E_ASTERISK,      // process "*"
   E_GLOB_NOSPACE,  // malloc failed
   E_GLOB_ABORTED,  // read error
   E_GLOB_NOMATCH,  // list size is 0
-  E_END            // pattern_pos points to the end of pattern
+  E_END	    // pattern_pos points to the end of pattern
 };
 
 struct path_node {
@@ -82,7 +82,7 @@ static enum state iterate_entries(const char * path, struct path_list * list) {
     // processing.yes this occupies more space, but simplifies the code.
     size_t pathlength = strlen(path) + strlen(direntry->d_name) + 1;
     struct path_node * node =
-        (struct path_node*)malloc(sizeof(struct path_node) + pathlength);
+	(struct path_node*)malloc(sizeof(struct path_node) + pathlength);
     if (node == NULL) {
       closedir(list->dir);
       return E_GLOB_NOSPACE;
@@ -145,7 +145,7 @@ static enum state glob_store(struct path_list * list) {
   if (list->allocated_count <= list->next_accepted_pos) {
     list->allocated_count = list->next_accepted_pos + 16;
     char ** paths = realloc(list->pglob->gl_pathv,
-                            list->allocated_count * sizeof(char*));
+			    list->allocated_count * sizeof(char*));
     if (paths == NULL) {
       return E_GLOB_NOSPACE;
     }
@@ -191,26 +191,26 @@ static enum state glob_next(struct path_list * list) {
   struct path_node * head = list->head;
   // fprintf(stderr, "\t\tprocessing %s\n", head->path_name);
   while (*head->path_pos != '\0' &&
-         *head->pattern_pos != '\0') {
+	 *head->pattern_pos != '\0') {
     switch(*head->pattern_pos) {
       case '?':
-        ++head->path_pos;
-        ++head->pattern_pos;
-        break;
+	++head->path_pos;
+	++head->pattern_pos;
+	break;
       case '[':
-        return E_SCOPE;
+	return E_SCOPE;
       case '*':
-        return E_ASTERISK;
+	return E_ASTERISK;
       case '\\':
-        fprintf(stderr, "got this\n");
+	fprintf(stderr, "got this\n");
       default:
-        if (*head->path_pos != *head->pattern_pos) {
-          return E_DISCARD;  // dismatch
-        } else {
-          ++head->path_pos;
-          ++head->pattern_pos;
-        }
-        break;
+	if (*head->path_pos != *head->pattern_pos) {
+	  return E_DISCARD;  // dismatch
+	} else {
+	  ++head->path_pos;
+	  ++head->pattern_pos;
+	}
+	break;
     }
   }
 
@@ -231,10 +231,10 @@ static enum state glob_error_read_error(struct path_list * list) {
 }
 
 static int candidate_list_init(struct path_list * list,
-                                const char * pattern,
-                                int flags,
-                                int (*errfunc)(const char *, int),
-                                glob_t * pglob) {
+				const char * pattern,
+				int flags,
+				int (*errfunc)(const char *, int),
+				glob_t * pglob) {
   list->head = NULL;
   list->tail = &list->head;
   list->errfunc = errfunc;
@@ -259,7 +259,7 @@ static int candidate_list_init(struct path_list * list,
 
   if (list->next_accepted_pos > 0) {
     char ** paths = realloc(list->pglob->gl_pathv,
-                            list->next_accepted_pos * sizeof(char*));
+			    list->next_accepted_pos * sizeof(char*));
     if (paths == NULL) {
       return GLOB_NOSPACE;
     }
@@ -267,7 +267,7 @@ static int candidate_list_init(struct path_list * list,
     // initialize the reserved slots
     if ((flags & GLOB_APPEND) == 0) {
       for (size_t i = 0; i < list->pglob->gl_offs; ++i) {
-        paths[i] = NULL;
+	paths[i] = NULL;
       }
     }
 
@@ -298,9 +298,9 @@ static void state_processor_init(struct pattern_state * states, int flags) {
 }
 
 int glob(const char *pattern,
-         int flags,
-         int (*errfunc)(const char *, int),
-         glob_t *pglob) {
+	 int flags,
+	 int (*errfunc)(const char *, int),
+	 glob_t *pglob) {
   struct path_list list;
   int ret = candidate_list_init(&list, pattern, flags, errfunc, pglob);
   if (ret != 0) {

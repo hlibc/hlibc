@@ -5,10 +5,10 @@
 int main(void)
 {
 	char *s1 = "   -12315299'end of the string has noise'";
-	long long ans = 0; 
+	long long ans = 0;
 	ans = strtoll(s1, &s1, 10);
 	printf("%lld\n", ans);
-	printf("end of string== %s\n", s1); 
+	printf("end of string== %s\n", s1);
 	char *s2 = "0x2F4";
 	ans = strtoll(s2, &s2, 16);
 	printf("%x\n", (unsigned int)ans);

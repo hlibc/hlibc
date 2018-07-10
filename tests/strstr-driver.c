@@ -15,7 +15,7 @@ void parseurl(char *argv)
 		host += 3;
 	}
 	if ((page = strstr(host, "/")))
-		*page++ = '\0'; 
+		*page++ = '\0';
 
 	printf("Attempting an [%s] protocol on [%s] to retrieve [%s]\n", type, host, page);
 	

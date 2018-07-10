@@ -14,13 +14,13 @@ int main(void)
 	strcpy(string1, string2);
 	
 	while ((host = strstr(string1, "://"))!=NULL)
-        {
-                *host = '\0';
-                host += 3;
+	{
+		*host = '\0';
+		host += 3;
 		write(1, host, strlen(host));
 		write(1, "\n", 1);
 		string1 = host;
 		write(1, "was here\n", 9);
-        }
+	}
 	return 0;
 }

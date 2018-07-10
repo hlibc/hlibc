@@ -6,7 +6,7 @@ void simplecat(FILE *fp, FILE *out)
 { 
 	int c = 0;
 	while ((c = getc(fp)) != -1) 
-		putc(c, out); 
+		putc(c, out);
 }
 
 int main(int argc, char *argv[])
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 		if (!(fp = fopen(argv[1], "r")))
 			return 1;
 		if (!(fp2 = fopen(argv[2], "w")))
-                        return 1;
+			return 1;
 		simplecat(fp, fp2);
 		fclose(fp);
 		fclose(fp2);

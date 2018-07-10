@@ -10,8 +10,8 @@ void _start(void)
 
 	__asm__ __volatile__
 		("xor  %%rbp , %%rbp \n" /* rbp:undefined -> mark as zero 0 (ABI) */
-		 "pop  %3            \n"
-		 "pop  %1            \n" /* 2nd arg: argc */
+		 "pop  %3	    \n"
+		 "pop  %1	    \n" /* 2nd arg: argc */
 		 "mov  %%rsp , %2    \n" /* 3rd arg: argv */
 		 "andq $-16  , %%rsp \n" /* align stack pointer */
 		 "mov  $main , %0    \n" /* 1st arg: application entry ip */

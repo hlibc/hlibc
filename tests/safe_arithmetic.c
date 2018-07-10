@@ -21,23 +21,23 @@ int main(void)
 	printf("========================================\n");
 	printf("should overflow (INTMAX_MAX + 100)\n");
 	if (__safe_add(INTMAX_MAX, b, &c) == -1)
-                printf("Overflow\n");
-        else
-                printf("Success %jd\n", c);
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
 
 	printf("========================================\n");
 	printf("should overflow (INTMAX_MIN + -1)\n");
 	if (__safe_add(INTMAX_MIN, -1, &c) == -1)
-                printf("Overflow\n");
-        else
-                printf("Success %jd\n", c);
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
 
 	printf("========================================\n");
 	printf("should not overflow ((INTMAX_MIN +100) + -99)\n");
 	if (__safe_add(INTMAX_MIN + 100, -99, &c) == -1)
-                printf("Overflow\n");
-        else
-                printf("Success %jd\n", c);
+		printf("Overflow\n");
+	else
+		printf("Success %jd\n", c);
 
 	printf("========================================\n");
 	printf("should equal zero (100 - 100)\n");

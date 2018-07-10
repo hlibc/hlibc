@@ -16,7 +16,7 @@ cargo of sponges instead of salt.  The Ass, again playing the \
 fool, fell down on purpose when he reached the stream, but the \
 sponges became swollen with water, greatly increasing his load. \
 And thus his trick recoiled on him, for he now carried on his \
-back a double burden."; 
+back a double burden.";
 
 int main(int argc, char ** argv) {
     char * ret = index(fable, 'e');

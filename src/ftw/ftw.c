@@ -125,8 +125,8 @@ static int walk(const char *path, struct name_list *list)
 }
 
 static int ftw_internal(const char *path,
-                        int (*fn)(const char *name, const struct stat *ptr, int flag),
-                        struct name_list *list)
+			int (*fn)(const char *name, const struct stat *ptr, int flag),
+			struct name_list *list)
 {
 	struct stat buf;
 	int flag = 0;
@@ -185,8 +185,8 @@ static int ftw_internal(const char *path,
 }
 
 int ftw(const char *path,
-        int (*fn)(const char *, const struct stat *ptr, int flag),
-        int ndirs)
+	int (*fn)(const char *, const struct stat *ptr, int flag),
+	int ndirs)
 {
 	struct name_list list;
 	struct name_node *node = NULL;

@@ -22,16 +22,16 @@ int main(int argc, char *argv[])
 int find_pattern(char *path, size_t tot, size_t last)
 { 
 	DIR *dir;
-	struct dirent *d; 
+	struct dirent *d;
 	char *spath = NULL;
-	size_t dlen = 0; 
+	size_t dlen = 0;
 	
 	if ((dir = opendir(path))) 
 	{
-		d = readdir(dir); 
+		d = readdir(dir);
 		while (d) 
 		{ 
-			dlen = strlen(d->d_name); 
+			dlen = strlen(d->d_name);
 			
 			last = (tot + dlen + 2); /* +2 = '/' + '\0' */
 			spath = realloc(spath, last);
@@ -48,8 +48,8 @@ int find_pattern(char *path, size_t tot, size_t last)
 			if ( d->d_type == DT_DIR &&
 			   ( strcmp( ".", d->d_name)) &&
 			   ( strcmp( "..", d->d_name))) 
-				find_pattern(spath, tot, last); 
-			d = readdir(dir); 
+				find_pattern(spath, tot, last);
+			d = readdir(dir);
 		}
 		
 	}

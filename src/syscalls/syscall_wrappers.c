@@ -569,8 +569,8 @@ void __funcs_on_exit()
 			continue;
 		func = head->f[i];
 		arg = head->a[i];
-		head->f[i] = 0; 
-		func(arg); 
+		head->f[i] = 0;
+		func(arg);
 	}
 }
 

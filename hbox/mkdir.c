@@ -14,7 +14,7 @@ void drmake(char *, mode_t, int, int);
 void mkdirerror(char *, int);
 int main (int argc, char *argv[]) 
 {
-	mode_t mode = 0755; 
+	mode_t mode = 0755;
 	int i, j, k;
 	i = j = k = 0;
 
@@ -24,14 +24,14 @@ int main (int argc, char *argv[])
 				mode = atoll(optarg);
 				break;
 			case 'p': 
-				k = 1; 
+				k = 1;
 				break;
 			case 'v': 
 				j = 1;
 				break;
 			case 'h': 
-				mkdirerror("Usage mkdir -pvm:\n", 0); 
-				break; 
+				mkdirerror("Usage mkdir -pvm:\n", 0);
+				break;
 			default: 
 				break;
 		}
@@ -47,17 +47,17 @@ int main (int argc, char *argv[])
 }
 void drmake(char *array, mode_t mode, int verbose, int parents)
 {
-	size_t len, index = 0; 
+	size_t len, index = 0;
 	len = index = strlen(array);
 	if ( parents == 0 )
 	{ 
-		mkdir_verbose(array, mode, verbose); 
+		mkdir_verbose(array, mode, verbose);
 	      	return;
 	}
 
 	while (--index - 1) 
 		if ( array[index] == '/' )
-			array[index] = '\0'; 
+			array[index] = '\0';
 
 	for ( ;--len - 1 ; index++)
 	{
@@ -65,7 +65,7 @@ void drmake(char *array, mode_t mode, int verbose, int parents)
 		{ 
 			mkdir_verbose(array, mode, verbose);
 			while ( array[index] == '\0' ) 
-		       		 array[index++] = '/'; 
+		       		 array[index++] = '/';
 		} 
 	}
 }

@@ -8,8 +8,8 @@ int main(void)
 
     while ((ch = getchar()) != '1')
     {
-        putchar(ch);
-        fflush(stdout);
+	putchar(ch);
+	fflush(stdout);
     }
 
     return 0;

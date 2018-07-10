@@ -9,7 +9,7 @@ int main(void)
 	write(1, message, len);
 	write(1, "\n", 1);
 	message = strerror(E2BIG);
-        len =strlen(message);
-        write(1, message, len);
+	len =strlen(message);
+	write(1, message, len);
 	return 0;
 }

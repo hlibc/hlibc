@@ -86,7 +86,7 @@ static object *morecore(object *last, size_t size)
 	object *o = NULL;
 	int pt = PROT_READ | PROT_WRITE;
 	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
-	size_t sum = 0; 
+	size_t sum = 0;
 	size_t orig = size;
 	size_t mul = 1;
 	size_t t = 0;

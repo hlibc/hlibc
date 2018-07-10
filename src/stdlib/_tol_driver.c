@@ -88,7 +88,7 @@ char *__tol_inter(const char *s, int base, long long *ans)
 		break;
 	case '+':
 		++j;
-		break; 
+		break;
 	default:
 		break;
 	}

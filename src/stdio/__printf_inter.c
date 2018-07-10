@@ -29,7 +29,7 @@ static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 static size_t __printf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
-	putc(x, o); 
+	putc(x, o);
 	return i + 1;
 }
 

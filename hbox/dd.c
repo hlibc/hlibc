@@ -41,7 +41,7 @@ struct glb {
 
 size_t mltplrs(char *);
 void dd_main();
-void writeout(char *, char *, char *, int, int); 
+void writeout(char *, char *, char *, int, int);
 size_t convert(size_t);
 void swabchar(char *, size_t, size_t, size_t);
 void blockdata(char *, char *, size_t, size_t, int);
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
 	dd_main();
 
-	return 0; 
+	return 0;
 }
 
 
@@ -256,7 +256,7 @@ struct tables {
 	'\334', '\335', '\336', '\337', '\352', '\353', '\354', '\355',
 	'\356', '\357', '\372', '\373', '\374', '\375', '\376', '\377' 
 	
-}}; 
+}};
 
 
 size_t convert(size_t c)
@@ -270,14 +270,14 @@ size_t convert(size_t c)
 	if ( ucase == 1 )
 		c = toupper(c);
 	if ( lcase == 1 )
-		c = tolower(c); 
+		c = tolower(c);
 	if ( ascii ) 
 		c = tables.ascii[c];
 	if ( ebcdic ) 
 		c = tables.ebcdic[c];
 	if ( ibm ) 
 		c = tables.ibm[c];
-	return c; 
+	return c;
 }
 
 
@@ -305,9 +305,9 @@ void swabchar(char *buf, size_t i, size_t n, size_t ibs)
 
 void blockdata(char *buf, char *rotary, size_t b, size_t i, int output)
 {
-	static size_t inaline = 0; 
+	static size_t inaline = 0;
 	size_t obs = glb.numbs[1];
-	size_t cbs = glb.numbs[3]; 
+	size_t cbs = glb.numbs[3];
 
 
 	if ( buf[i] == '\n' )
@@ -347,27 +347,27 @@ void dd_main()
 
 
 	int input = STDIN_FILENO;
-	int output = STDOUT_FILENO; 
+	int output = STDOUT_FILENO;
 
 	size_t ibs = glb.numbs[0];
-	size_t obs = glb.numbs[1]; 
+	size_t obs = glb.numbs[1];
 	
 	size_t cbs = glb.numbs[3];
 	
-	size_t bs = 512; 
+	size_t bs = 512;
 	
 
 	size_t skip = glb.numbs[4];
-	size_t seek = glb.numbs[5]; 
+	size_t seek = glb.numbs[5];
 
 
 	/* 1 Check for source file */
 	if ( glb.opt[0] != NULL )
-		input = open(glb.opt[0], O_RDONLY); 
+		input = open(glb.opt[0], O_RDONLY);
 
 	/* 2 Check for dest file */ 
 	if ( glb.opt[1] != NULL ) 
-		output = open(glb.opt[1], O_CREAT|O_RDWR, S_IRUSR|S_IWUSR); 
+		output = open(glb.opt[1], O_CREAT|O_RDWR, S_IRUSR|S_IWUSR);
 
 	/* 3 Check that source and dest were valid */
 	if (input == -1 || output == -1 )
@@ -379,7 +379,7 @@ void dd_main()
 	if ( ibs == 0 )
 		glb.numbs[0] = ibs = bs;
 	if ( obs == 0 )
-		glb.numbs[1] = obs = bs; 
+		glb.numbs[1] = obs = bs;
 
 	/* 5 Create a buffer that corresponds to the maximum ibs= and obs=  */ 
 	if (!(buf = malloc((sizeof(char) * ibs + 15 ))))
@@ -398,7 +398,7 @@ void dd_main()
 	/* 7 "seek" to user specified coordinates on output file  */ 
 	if ( seek != 0 ) // seek= 
 		if ( lseek(output, (off_t)seek * obs, SEEK_SET) == -1 )
-			cutilerror("Bad lseek()\n", 1); 
+			cutilerror("Bad lseek()\n", 1);
 
 	/* 8 Perform the actual data transfer */ 
 	writeout(buf, rotary, cbsbuf, input, output);
@@ -410,7 +410,7 @@ void dd_main()
 
 	/* 10 Close all file descriptors, and free memory*/
 	if (input != STDIN_FILENO )
-		close(input); 
+		close(input);
 	if (output != STDOUT_FILENO )
 		close(output);
 //	if (buf) 
@@ -422,11 +422,11 @@ void dd_main()
 
 void writeout(char *buf, char *rotary, char *cbsbuf, int input, int output)
 {
-	static size_t i, b, n; 
+	static size_t i, b, n;
 	size_t end = glb.numbs[6];
 	size_t ibs = glb.numbs[0];
 	size_t obs = glb.numbs[1];
-	size_t cbs = glb.numbs[3]; 
+	size_t cbs = glb.numbs[3];
 	size_t count = 0;
 
 	int sync = glb.convs[10];
@@ -439,11 +439,11 @@ void writeout(char *buf, char *rotary, char *cbsbuf, int input, int output)
 	int ucase = glb.convs[6];
 	int conversion;
 
-	int swab = glb.convs[7]; 
+	int swab = glb.convs[7];
 	char padchar = '\0';
 
-	size_t q = 0; 
-	size_t a = 0; 
+	size_t q = 0;
+	size_t a = 0;
 
 	if (block)
 		padchar = ' ';
@@ -458,13 +458,13 @@ void writeout(char *buf, char *rotary, char *cbsbuf, int input, int output)
 	while ((n = read(input, buf, ibs)) > 0)
 	{ 
 		if ( end != 0 && count == end) 
-       		       	return; 
+       		       	return;
 
 	       	++count;
-		i = 0; 
+		i = 0;
 
 		while ( sync && n < ibs ) 
-			buf[(++n) - 1] = padchar; 
+			buf[(++n) - 1] = padchar;
 
 		while ( i < n )
 		{ 
@@ -473,10 +473,10 @@ void writeout(char *buf, char *rotary, char *cbsbuf, int input, int output)
 				buf[i] = convert(buf[i]);
 
 			if (swab)
-				swabchar(buf, i, n, ibs); 
+				swabchar(buf, i, n, ibs);
 
 			if (block)
-				blockdata(buf, rotary, b, i, output); 
+				blockdata(buf, rotary, b, i, output);
 
 			else if (unblock)
 			{
@@ -523,7 +523,7 @@ void writeout(char *buf, char *rotary, char *cbsbuf, int input, int output)
 	}
 	/* handle partial blocks (needs improved)*/
 	if ( b != 0 )
-		write(output, rotary, b); 
+		write(output, rotary, b);
 
 }
 

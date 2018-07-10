@@ -31,9 +31,9 @@ struct name_list {
 };
 
 static struct name_node * new_item(const char *name,
-                                   int flag,
-                                   const struct stat * statbuf,
-                                   const struct FTW * ftwbuf)
+				   int flag,
+				   const struct stat * statbuf,
+				   const struct FTW * ftwbuf)
 {
 	struct name_node *node = (struct name_node*)malloc(sizeof(struct name_node));
 	if (node == NULL) {
@@ -93,8 +93,8 @@ static int get_type(const char *path, int flags, struct stat * statbuf)
 }
 
 static int init_name_list(const char *path,
-                          int flags,
-                          struct name_list *list)
+			  int flags,
+			  struct name_list *list)
 {
 	struct stat statbuf;
 	struct FTW ftwbuf = {0, 0};
@@ -142,8 +142,8 @@ static int deinit_name_list(struct name_list *list)
 }
 
 static int push(const char *name,
-                const struct FTW * ftwbuf,
-                struct name_list *list)
+		const struct FTW * ftwbuf,
+		struct name_list *list)
 {
 	struct name_node *node = NULL;
 	struct stat statbuf;
@@ -180,8 +180,8 @@ static struct name_node * pop(struct name_list * list)
 }
 
 static int walk(const char *path,
-                const struct FTW * topftw,
-                struct name_list *list)
+		const struct FTW * topftw,
+		struct name_list *list)
 {
 	struct FTW ftwbuf;
 	char * full_path = NULL;
@@ -242,8 +242,8 @@ static int change_dir(struct name_node *node, struct name_list *list)
 }
 
 static int nftw_internal(struct name_node *node,
-                         int (*fn)(const char *, const struct stat *, int, struct FTW *),
-                         struct name_list *list)
+			 int (*fn)(const char *, const struct stat *, int, struct FTW *),
+			 struct name_list *list)
 {
 	int ret = 0;
 	if ((list->flags & FTW_DEPTH) == FTW_DEPTH &&
@@ -280,9 +280,9 @@ static int nftw_internal(struct name_node *node,
 }
 
 int nftw(const char *path,
-         int (*fn)(const char *, const struct stat *, int, struct FTW *),
-         int fd_limit,
-         int flags)
+	 int (*fn)(const char *, const struct stat *, int, struct FTW *),
+	 int fd_limit,
+	 int flags)
 {
 	struct name_list list;
 	struct name_node *node = NULL;
