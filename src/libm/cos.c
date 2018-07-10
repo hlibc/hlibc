@@ -13,8 +13,8 @@
  * Return cosine function of x.
  *
  * kernel function:
- *      __sin_kernel           ... sine function on [-pi/4,pi/4]
- *      __cos_kernel           ... cosine function on [-pi/4,pi/4]
+ *      __sin_kernel	   ... sine function on [-pi/4,pi/4]
+ *      __cos_kernel	   ... cosine function on [-pi/4,pi/4]
  *      __rem_pio2      ... argument reduction routine
  *
  * Method.
@@ -23,12 +23,12 @@
  *      in [-pi/4 , +pi/4], and let n = k mod 4.
  *      We have
  *
- *          n        sin(x)      cos(x)        tan(x)
+ *	  n	sin(x)      cos(x)	tan(x)
  *     ----------------------------------------------------------
- *          0          S           C             T
- *          1          C          -S            -1/T
- *          2         -S          -C             T
- *          3         -C           S            -1/T
+ *	  0	  S	   C	     T
+ *	  1	  C	  -S	    -1/T
+ *	  2	 -S	  -C	     T
+ *	  3	 -C	   S	    -1/T
  *     ----------------------------------------------------------
  *
  * Special cases:

@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 		}
 
 	argv += optind;
-	argc -= optind; 
+	argc -= optind;
 
 	if (argc == 0)
 		cathead(STDIN_FILENO, lines, 0);
@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
 	while (*(argv)) 
 		cathead(open(*argv++, O_RDONLY), lines, 1);
 
-	return 0; 
+	return 0;
 } 
 
 void cathead(int source, size_t end, int opened)
 {
-	size_t i, j; 
+	size_t i, j;
 	ssize_t ret = 0;
 	char buf[4096];
 	size_t len = 0;
@@ -53,7 +53,7 @@ void cathead(int source, size_t end, int opened)
 		{
 			if (buf[i] == '\n')
 				++j;
-			++i; 
+			++i;
 			if (j == end) 
 			{
 				write(STDOUT_FILENO, buf, i);

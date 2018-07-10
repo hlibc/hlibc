@@ -12,7 +12,7 @@ char *rindex(const char *s, int c)
     if (*s == c) {
       target = (char*)s;
       if (*s != '\0') {
-          ++s;
+	  ++s;
       }
     }
   } while (*s != '\0');

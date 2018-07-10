@@ -9,7 +9,7 @@ int main(void)
 	char *pch = strstr(s, "my");
 
 	if (strncmp("myfriend", pch, strlen(s)) == 0) return 0;
-	else                                         return 1;
+	else					 return 1;
 
 	return 0;
 }

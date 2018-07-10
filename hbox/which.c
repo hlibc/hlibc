@@ -9,7 +9,7 @@ void which(char *, int);
 
 int main (int argc, char *argv[])
 { 
-	int o, all; 
+	int o, all;
 	all = 0;
 	while ((o = getopt (argc, argv, "ah")) != -1)
 		switch (o) {
@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
 	argc -= optind;
 
 	while ( *argv ) 
-		which(*argv++, all); 
+		which(*argv++, all);
 
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 /*
-        Copyright 2017 Adrian Parvin D. Ouano
+	Copyright 2017 Adrian Parvin D. Ouano
 */
 ldiv_t ldiv(long numerator, long denominator)
 {

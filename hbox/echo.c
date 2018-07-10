@@ -2,7 +2,7 @@
 
 /* Copyright 2015, C. Graff  "echo" */
 
-void prtoctesc(char **, int []); 
+void prtoctesc(char **, int []);
 
 int main(int argc, char *argv[])
 { 
@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
 			while ( *(*argv + 1 ) != '\0' && opt[2] == 1)
 			{ 
 				if ( *(*argv  + 1) == 'e' ) 
-					opt[0] = 1; 
+					opt[0] = 1;
 				else if ( *(*argv + 1) == 'n' ) 
-					opt[1] = 1; 
+					opt[1] = 1;
 				else 
-					opt[0] = opt[1] = opt[2] = 0; 
+					opt[0] = opt[1] = opt[2] = 0;
 				++*argv;
 			} 
 		} 
@@ -29,14 +29,14 @@ int main(int argc, char *argv[])
 			 break;
 
 		if ( opt[2] == 1 ) 
-			++argv; 
+			++argv;
 
 		if ( opt[2] == 0 )
 		{
 			while ( **argv)
-			    --*argv; 
+			    --*argv;
 			++*argv;
-			break; 
+			break;
 		}
 	} 
 	  
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 					case '\\' :
 						printf("\\");
 					      	++*argv;
-						break; 
+						break;
 					case '0' : 
 						prtoctesc(argv, opt);
 						break;
@@ -92,11 +92,11 @@ int main(int argc, char *argv[])
 			}
 			else 
 				printf("%c", **argv);
-			++*argv; 
+			++*argv;
 		} 
 		++argv;
 		if ( *argv )
-			printf(" "); 
+			printf(" ");
 	} 
 	if ( opt[1] != 1 )
 		printf("\n");

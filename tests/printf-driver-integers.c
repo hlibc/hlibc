@@ -20,11 +20,11 @@ int main(void)
 	char string1[1000] = { 0 };
 	long ltest = 23459999;
 	char *format = "%zu/%d/%s==%zu / %d / %s%c-%c-%c-%ctt%ld\n";
-	size_t len = 0; 
+	size_t len = 0;
 	size_t hold = SIZE_MAX;
 	size_t t1[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
 	ssize_t t2[22] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-	ssize_t t3[22] = {-0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20 }; 
+	ssize_t t3[22] = {-0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20 };
 
 	len = printf("This is a string containing only text to help debug the ret val of printf\n");
 	printf("%zu was the length of the last test\n", len);
@@ -70,20 +70,20 @@ int main(void)
 
 
 
-	len += printf("%zu\n", (size_t)-1); 
+	len += printf("%zu\n", (size_t)-1);
 	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[0], t1[1],t1[2],t1[3],t1[4],t1[5],t1[6],t1[7],t1[8],t1[9],t1[10]);
-	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[11], t1[12],t1[13],t1[14],t1[15],t1[16],t1[17],t1[18],t1[19],t1[20]); 
-	len += printf("d %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t2[0], t2[1],t2[2],t2[3],t2[4],t2[5],t2[6],t2[7],t2[8],t2[9],t2[10]); 
-	len += printf("i %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi\n", t2[0], t2[1],t2[2],t2[3],t2[4],t2[5],t2[6],t2[7],t2[8],t2[9],t2[10]); 
+	len += printf("%zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", t1[11], t1[12],t1[13],t1[14],t1[15],t1[16],t1[17],t1[18],t1[19],t1[20]);
+	len += printf("d %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t2[0], t2[1],t2[2],t2[3],t2[4],t2[5],t2[6],t2[7],t2[8],t2[9],t2[10]);
+	len += printf("i %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi\n", t2[0], t2[1],t2[2],t2[3],t2[4],t2[5],t2[6],t2[7],t2[8],t2[9],t2[10]);
 	len += printf("start negatives\n");
 	len += printf("d %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[0], t3[1], t3[2],t3[3],t3[4],t3[5],t3[6],t3[7],t3[8],t3[9],t3[10]);
-	len += printf("d %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]); 
+	len += printf("d %zd %zd %zd %zd %zd %zd %zd %zd %zd %zd\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]);
 	len += printf("i %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi\n", t3[0], t3[1], t3[2],t3[3],t3[4],t3[5],t3[6],t3[7],t3[8],t3[9],t3[10]);
 	len += printf("i %zi %zi %zi %zi %zi %zi %zi %zi %zi %zi\n", t3[11], t3[12],t3[13],t3[14],t3[15],t3[16],t3[17],t3[18],t3[19],t3[20]); 	
 	len += printf("LONG_MAX d %zd\n", LONG_MAX);
-	len += printf("LONG_MIN d %zd\n", LONG_MIN); 
+	len += printf("LONG_MIN d %zd\n", LONG_MIN);
 	len += printf("LONG_MAX i %zi\n", LONG_MAX);
-	len += printf("LONG_MIN i %zi\n", LONG_MIN); 
+	len += printf("LONG_MIN i %zi\n", LONG_MIN);
 	len += printf("SIZE_MAX %zu\n", hold);
 	len += printf("SSIZE_MAX %zd\n", SSIZE_MAX);
 	len += printf("LLONG_MAX d %lld\n", LLONG_MAX);

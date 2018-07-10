@@ -2,9 +2,9 @@
 
 int main(void)
 {
-    int ch; 
+    int ch;
     while ((ch = getchar()) != '1')
-        putchar(ch); 
+	putchar(ch);
    
     ungetc('+', stdin);
 

@@ -13,7 +13,7 @@ struct hd {
 	int nb;
 } hd = { 0, 0, 0, 0 };
 
-void countsyms(int, int *); 
+void countsyms(int, int *);
 void wc_print(int *);
 void wc_total(int *);
 
@@ -21,7 +21,7 @@ void wc_total(int *);
 int main(int argc, char *argv[])
 { 
 
-	int opt[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
+	int opt[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	
 	++argv;
 	--argc;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 				*(opt) = *(opt+3) = 1;
 			else if ( *(*argv + 1) == 'm' ) 
 			{
-				*(opt) = *(opt+4) = *(opt+9) = 1; 
+				*(opt) = *(opt+4) = *(opt+9) = 1;
 			}
 			else
 				return 0;
@@ -56,16 +56,16 @@ int main(int argc, char *argv[])
 	}
 	while  (*(argv)) 
 	{
-		countsyms(open(*argv,O_RDONLY), opt); 
+		countsyms(open(*argv,O_RDONLY), opt);
 		wc_print(opt);
 		printf("%s\n", *argv);
-		++argv; 
+		++argv;
 	}
 	
 	if ( argc == 2 )
 		wc_total(opt);
 	
-	return 0; 
+	return 0;
 }
 
 void countsyms(int source, int *opt)
@@ -75,8 +75,8 @@ void countsyms(int source, int *opt)
 
 	*(opt+5) = *(opt+6) = *(opt+7) = *(opt+8) = 0;
 
-	size_t i, j, k; 
-	i = j = k = 0; 
+	size_t i, j, k;
+	i = j = k = 0;
 	char buf[BUFSIZ];
 
 	while ((i = read(source, buf, BUFSIZ)) > 0) 
@@ -86,12 +86,12 @@ void countsyms(int source, int *opt)
 			if ( *(buf+j) >= 0) 
 			{
 				++hd.nb;
-				++*(opt+8); 
+				++*(opt+8);
 			}
 	
 			switch(*(buf+j)){ 
 				case '\n' : 
-					k = 0; 
+					k = 0;
 					++*(opt+5); // newlines
 					++hd.nl; // global newlines
 					break;
@@ -117,14 +117,14 @@ void countsyms(int source, int *opt)
 						++hd.nw; // global words
 						k = 1; // state
 					}
-					break; 
+					break;
 			} 
-			++j; 
+			++j;
 		} 
 		*(opt+7) += i;
 		hd.nc += i;
 	} 
-	close(source); 
+	close(source);
 } 
 
 void wc_print(int *opt)
@@ -136,7 +136,7 @@ void wc_print(int *opt)
 	if ( *(opt) == 0 || *(opt+3) == 1 ) 
 		printf("%6d  ", *(opt+7));
 	if ( *(opt) == 1 && *(opt+9) == 1 )  
-		printf("%6d  ", *(opt+8)); 
+		printf("%6d  ", *(opt+8));
 }
 
 void wc_total(int *opt)

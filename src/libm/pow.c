@@ -10,13 +10,13 @@
  */
 /* pow(x,y) return x**y
  *
- *                    n
+ *		    n
  * Method:  Let x =  2   * (1+f)
  *      1. Compute and return log2(x) in two pieces:
- *              log2(x) = w1 + w2,
- *         where w1 has 53-24 = 29 bit trailing zeros.
+ *	      log2(x) = w1 + w2,
+ *	 where w1 has 53-24 = 29 bit trailing zeros.
  *      2. Perform y*log2(x) = n+y' by simulating muti-precision
- *         arithmetic, where |y'|<=0.5.
+ *	 arithmetic, where |y'|<=0.5.
  *      3. Return x**y = 2**n*exp(y'*log2)
  *
  * Special cases:
@@ -28,10 +28,10 @@
  *      6.  +-(|x| > 1) **  -INF is +0
  *      7.  +-(|x| < 1) **  +INF is +0
  *      8.  +-(|x| < 1) **  -INF is +INF
- *      9.  -1          ** +-INF is 1
- *      10. +0 ** (+anything except 0, NAN)               is +0
+ *      9.  -1	  ** +-INF is 1
+ *      10. +0 ** (+anything except 0, NAN)	       is +0
  *      11. -0 ** (+anything except 0, NAN, odd integer)  is +0
- *      12. +0 ** (-anything except 0, NAN)               is +INF, raise divbyzero
+ *      12. +0 ** (-anything except 0, NAN)	       is +INF, raise divbyzero
  *      13. -0 ** (-anything except 0, NAN, odd integer)  is +INF, raise divbyzero
  *      14. -0 ** (+odd integer) is -0
  *      15. -0 ** (-odd integer) is -INF, raise divbyzero
@@ -46,7 +46,7 @@
  *
  * Accuracy:
  *      pow(x,y) returns x**y nearly rounded. In particular
- *                      pow(integer,integer)
+ *		      pow(integer,integer)
  *      always returns the correct integer provided it is
  *      representable.
  *
@@ -143,7 +143,7 @@ double pow(double x, double y)
 				return 1.0;
 			else if (ix >= 0x3ff00000) /* (|x|>1)**+-inf = inf,0 */
 				return hy >= 0 ? y : 0.0;
-			else                       /* (|x|<1)**+-inf = 0,inf */
+			else		       /* (|x|<1)**+-inf = 0,inf */
 				return hy >= 0 ? 0.0 : -y;
 		}
 		if (iy == 0x3ff00000)    /* y is +-1 */
@@ -167,7 +167,7 @@ double pow(double x, double y)
 				if (((ix-0x3ff00000)|yisint) == 0) {
 					z = (z-z)/(z-z); /* (-1)**non-int is NaN */
 				} else if (yisint == 1)
-					z = -z;          /* (x<0)**odd = -(|x|**odd) */
+					z = -z;	  /* (x<0)**odd = -(|x|**odd) */
 			}
 			return z;
 		}
@@ -228,7 +228,7 @@ double pow(double x, double y)
 		SET_HIGH_WORD(ax, ix);
 
 		/* compute ss = s_h+s_l = (x-1)/(x+1) or (x-1.5)/(x+1.5) */
-		u = ax - bp[k];        /* bp[0]=1.0, bp[1]=1.5 */
+		u = ax - bp[k];	/* bp[0]=1.0, bp[1]=1.5 */
 		v = 1.0/(ax+bp[k]);
 		ss = u*v;
 		s_h = ss;
@@ -253,7 +253,7 @@ double pow(double x, double y)
 		p_h = u + v;
 		SET_LOW_WORD(p_h, 0);
 		p_l = v - (p_h-u);
-		z_h = cp_h*p_h;        /* cp_h+cp_l = 2/(3*log2) */
+		z_h = cp_h*p_h;	/* cp_h+cp_l = 2/(3*log2) */
 		z_l = cp_l*p_h+p_l*cp + dp_l[k];
 		/* log2(ax) = (ss+..)*2/(3*log2) = n + dp_h + z_h + z_l */
 		t = (double)n;
@@ -269,16 +269,16 @@ double pow(double x, double y)
 	p_h = y1*t1;
 	z = p_l + p_h;
 	EXTRACT_WORDS(j, i, z);
-	if (j >= 0x40900000) {                      /* z >= 1024 */
-		if (((j-0x40900000)|i) != 0)        /* if z > 1024 */
-			return s*huge*huge;         /* overflow */
+	if (j >= 0x40900000) {		      /* z >= 1024 */
+		if (((j-0x40900000)|i) != 0)	/* if z > 1024 */
+			return s*huge*huge;	 /* overflow */
 		if (p_l + ovt > z - p_h)
-			return s*huge*huge;         /* overflow */
+			return s*huge*huge;	 /* overflow */
 	} else if ((j&0x7fffffff) >= 0x4090cc00) {  /* z <= -1075 */  // FIXME: instead of abs(j) use unsigned j
-		if (((j-0xc090cc00)|i) != 0)        /* z < -1075 */
-			return s*tiny*tiny;         /* underflow */
+		if (((j-0xc090cc00)|i) != 0)	/* z < -1075 */
+			return s*tiny*tiny;	 /* underflow */
 		if (p_l <= z - p_h)
-			return s*tiny*tiny;         /* underflow */
+			return s*tiny*tiny;	 /* underflow */
 	}
 	/*
 	 * compute 2**(p_h+p_l)

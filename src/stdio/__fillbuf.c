@@ -4,7 +4,7 @@
 int __fillbuf(FILE *o)
 {
 	size_t bufsize = BUFSIZ;
-	ssize_t ret = 0; 
+	ssize_t ret = 0;
 	if (o->read && o->eof || o->err)
 		return EOF;
 	if (o->unbuf)

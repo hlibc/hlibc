@@ -38,7 +38,7 @@ FILE *fopen(const char *name, const char *mode)
 			o->write = 1;
 			switch (*mode) {
 			case '+':
-				outfile &= ~O_TRUNC; 
+				outfile &= ~O_TRUNC;
 				seek = SEEK_END;
 				break;
 			default:

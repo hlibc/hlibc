@@ -19,33 +19,33 @@
  *      1. Since cos(-x) = cos(x), we need only to consider positive x.
  *      2. if x < 2^-27 (hx<0x3e400000 0), return 1 with inexact if x!=0.
  *      3. cos(x) is approximated by a polynomial of degree 14 on
- *         [0,pi/4]
- *                                       4            14
- *              cos(x) ~ 1 - x*x/2 + C1*x + ... + C6*x
- *         where the remez error is
+ *	 [0,pi/4]
+ *				       4	    14
+ *	      cos(x) ~ 1 - x*x/2 + C1*x + ... + C6*x
+ *	 where the remez error is
  *
- *      |              2     4     6     8     10    12     14 |     -58
+ *      |	      2     4     6     8     10    12     14 |     -58
  *      |cos(x)-(1-.5*x +C1*x +C2*x +C3*x +C4*x +C5*x  +C6*x  )| <= 2
- *      |                                                      |
+ *      |						      |
  *
- *                     4     6     8     10    12     14
+ *		     4     6     8     10    12     14
  *      4. let r = C1*x +C2*x +C3*x +C4*x +C5*x  +C6*x  , then
- *             cos(x) ~ 1 - x*x/2 + r
- *         since cos(x+y) ~ cos(x) - sin(x)*y
- *                        ~ cos(x) - x*y,
- *         a correction term is necessary in cos(x) and hence
- *              cos(x+y) = 1 - (x*x/2 - (r - x*y))
- *         For better accuracy, rearrange to
- *              cos(x+y) ~ w + (tmp + (r-x*y))
- *         where w = 1 - x*x/2 and tmp is a tiny correction term
- *         (1 - x*x/2 == w + tmp exactly in infinite precision).
- *         The exactness of w + tmp in infinite precision depends on w
- *         and tmp having the same precision as x.  If they have extra
- *         precision due to compiler bugs, then the extra precision is
- *         only good provided it is retained in all terms of the final
- *         expression for cos().  Retention happens in all cases tested
- *         under FreeBSD, so don't pessimize things by forcibly clipping
- *         any extra precision in w.
+ *	     cos(x) ~ 1 - x*x/2 + r
+ *	 since cos(x+y) ~ cos(x) - sin(x)*y
+ *			~ cos(x) - x*y,
+ *	 a correction term is necessary in cos(x) and hence
+ *	      cos(x+y) = 1 - (x*x/2 - (r - x*y))
+ *	 For better accuracy, rearrange to
+ *	      cos(x+y) ~ w + (tmp + (r-x*y))
+ *	 where w = 1 - x*x/2 and tmp is a tiny correction term
+ *	 (1 - x*x/2 == w + tmp exactly in infinite precision).
+ *	 The exactness of w + tmp in infinite precision depends on w
+ *	 and tmp having the same precision as x.  If they have extra
+ *	 precision due to compiler bugs, then the extra precision is
+ *	 only good provided it is retained in all terms of the final
+ *	 expression for cos().  Retention happens in all cases tested
+ *	 under FreeBSD, so don't pessimize things by forcibly clipping
+ *	 any extra precision in w.
  */
 
 #include "libm.h"

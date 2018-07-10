@@ -16,50 +16,50 @@ int main(int argc, char *argv[])
 	int o;
 	unsigned int opt[4] = { 0, 10, 0, 0};
 	while ((o = getopt (argc, argv, "c:fn:")) != -1)
-                switch (o) { 
+		switch (o) { 
 			case 'f': 
-				*(opt+3) = 1; 
-                                break;
+				*(opt+3) = 1;
+				break;
 			case 'c': 
-				*(opt) = 2; 
+				*(opt) = 2;
 				if ((*optarg) == '-' )
-                                {
-                                        *(opt) = 2;
-                                        ++optarg;
-                                } 
+				{
+					*(opt) = 2;
+					++optarg;
+				} 
 				else if ((*optarg) == '+' )
-                                {
-                                        *(opt) = 3;
-                                        ++optarg;
-                                } 
-                                *(opt+2) = atoi(optarg); 
-                                break;
+				{
+					*(opt) = 3;
+					++optarg;
+				} 
+				*(opt+2) = atoi(optarg);
+				break;
 			case 'n': 
-				*(opt) = 0; 
+				*(opt) = 0;
 				if ((*optarg) == '-' )
 				{ 
 					*(opt) = 0;
 					++optarg;
 				} 
 				else if ((*optarg) == '+' )
-                                { 
-					*(opt) = 1; 
-                                        ++optarg;
-                                } 
-				*(opt+1) = atoi(optarg); 
-				break; 
-                        default: 
+				{ 
+					*(opt) = 1;
+					++optarg;
+				} 
+				*(opt+1) = atoi(optarg);
 				break;
-                }
+			default: 
+				break;
+		}
 
-        argv += optind;
-        argc -= optind;
+	argv += optind;
+	argc -= optind;
 	
 	if ( argc == 0 ) 
 		cattail(STDIN_FILENO, opt);
-        while  (*(argv))
+	while  (*(argv))
 		cattail(open(*argv++,O_RDONLY), opt);
-	return 0; 
+	return 0;
 }
 
 void cattail(int source, unsigned int *opt)
@@ -79,7 +79,7 @@ void cattail(int source, unsigned int *opt)
 	if ((source == -1))
 		return;
 
-	seekto = z = i = j = n = 0; 
+	seekto = z = i = j = n = 0;
 
 	while (*(opt) != 3 && (i = read(source, buf, BUFSIZ)) > 0)
 	{ 
@@ -89,7 +89,7 @@ void cattail(int source, unsigned int *opt)
 			{
 				if(!(loci = realloc(loci, sizeof(int) * (n + 3))))
 					exit(1);
-				*(loci+n++) = z; 
+				*(loci+n++) = z;
 			}
 			++j;
 			++z;
@@ -99,22 +99,22 @@ void cattail(int source, unsigned int *opt)
 	if ( buf[j - 1] != '\n' )
 		compensate = 1;
 
-        if ( *(opt) == 0 ) 
+	if ( *(opt) == 0 ) 
 	{
 		if ( n > *(opt+1) - 1) 
 			seekto = loci[n - *(opt+1) ] + compensate;
 		else
-			seekto = loci[n] ; 
+			seekto = loci[n] ;
 	}
 	else if ( *(opt) == 1 )
 	{ 
 		if ( *(opt+1) == 1 )
 			seekto = 0;
 		else 
-			seekto = loci[*(opt+1) - 2] +1; 
+			seekto = loci[*(opt+1) - 2] +1;
 	} 
 	else if ( *(opt) == 2 ) 
-		seekto = z - *(opt+2); 
+		seekto = z - *(opt+2);
 	else if ( *(opt) == 3 ) 
 		seekto = *(opt+2) -1;
 
@@ -124,7 +124,7 @@ void cattail(int source, unsigned int *opt)
 	while ( 1 )
 	{ 
 		while ((i = read(source, buf, BUFSIZ)) > 0) 
-               		write(STDOUT_FILENO, buf, i); 
+	       		write(STDOUT_FILENO, buf, i);
 	
 		if ( *(opt+3) != 1 ) // not -f
 			break;

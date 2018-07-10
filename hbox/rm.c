@@ -10,12 +10,12 @@
 
 
 
-int query(char *, char *, int *); 
+int query(char *, char *, int *);
 int remove_pattern(char *, size_t, int *);
 
 int main(int argc, char *argv[])
 { 
-	int recur = 0; 
+	int recur = 0;
 	int opt[2] = { 0, 0 };
 
 	++argv;
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 			else if ( *(*argv + 1) == 'R' )
 				recur = 1;
 			else if ( *(*argv + 1) == 'f' ) 
-				opt[1] = 1; 
+				opt[1] = 1;
 			else if ( *(*argv + 1) == 'i' )
 			      	opt[0] = 1;
 			else if ( *(*argv + 1) == 'h' )
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 				return 0;
 			}
 			else
-				return 0; 
+				return 0;
 
 			++*argv;
 		}
@@ -67,7 +67,7 @@ int remove_pattern(char *path, size_t len, int *opt)
 	DIR *dir;
 	struct dirent *dentry;
 	char *spath = malloc(1);
-	size_t dlen = 0; 
+	size_t dlen = 0;
 
 	if ( ( dir = opendir(path) ) )
 	{
@@ -91,15 +91,15 @@ int remove_pattern(char *path, size_t len, int *opt)
 				if (query("Remove ", spath, opt))
 					remove(spath);
 			}
-			dentry = readdir(dir); 
+			dentry = readdir(dir);
 		}
 		free(spath);
-		closedir(dir); 
+		closedir(dir);
 	}
 	else 
 		return 0;
 
-	return 1; 
+	return 1;
 }
 
 

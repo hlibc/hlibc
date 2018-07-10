@@ -10,7 +10,7 @@ int __safe_sub(intmax_t a, intmax_t b, intmax_t *c)
 	/* either argument is 0 so it fits */
 	if (a == 0 || b == 0) {
 		goto safe;
-        }
+	}
 
 	/*
 		(-a - -b)
@@ -79,7 +79,7 @@ int __safe_add(intmax_t a, intmax_t b, intmax_t *c)
 		this is the conventional case so call out to the unsigned API
 	*/
 	if (a > 0 && b > 0)
-		return __safe_uadd(a, b, c, INTMAX_MAX); 
+		return __safe_uadd(a, b, c, INTMAX_MAX);
 		
 	/*
 		(-a + -b)

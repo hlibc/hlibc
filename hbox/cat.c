@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	while  (*++argv) 
 		if (concatenate(open(*argv, O_RDONLY), 1) == -1)
 			return 1;
-	return 0; 
+	return 0;
 }
 
 int concatenate(int source, int opened)

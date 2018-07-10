@@ -6,25 +6,25 @@
 
 int main(int argc, char *argv[])
 { 
-	struct timespec timea, timeb; 
+	struct timespec timea, timeb;
 	double j;
-	long k; 
+	long k;
 
 	while ( *++argv && argc ) 
 	{
 		j = (atof(*argv) * 1000000000);
 		while ( **argv != '\0' ) 
-			++*argv; 
+			++*argv;
 
 		switch ( *--(*argv)){
 			case 'm': 
-				j *= 60; 
+				j *= 60;
 				break;
 			case 'h': 
-				j *= 60*60; 
+				j *= 60*60;
 				break;
 			case 'd': 
-				j *= 60*60*24; 
+				j *= 60*60*24;
 				break;
 			default:
 				break;
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 		k = j;
 		timea.tv_sec = (k / 1000000000);
 		timea.tv_nsec = (k % 1000000000);
-		nanosleep(&timea , &timeb); 
+		nanosleep(&timea , &timeb);
 	}
 	return 0;
 } 
