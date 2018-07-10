@@ -122,6 +122,8 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	switch (s[j]) {
 	case '-':
 		neg = 1;
+		++j;
+		break;
 	case '+':
 		++j;
 		break; 
@@ -159,14 +161,14 @@ char *_tol_driver(const char *s, int base, long long *ans)
 		if(__safe_mul(base, ret, &solution) == -1) {
 			errno = ERANGE;
 			*ans = LLONG_MAX;
-			if (neg)
+			if (neg == 1)
 				*ans = LLONG_MIN;
 			goto end;
 		}
 		if(__safe_sub(solution, temp, &ret) == -1) {
 			errno = ERANGE;
 			*ans = LLONG_MAX;
-			if (neg)
+			if (neg == 1)
 				*ans = LLONG_MIN;
 			goto end;
 		}
@@ -175,8 +177,9 @@ char *_tol_driver(const char *s, int base, long long *ans)
 	if(__safe_mul(ret, neg, ans) == -1) {
 		errno = ERANGE;
 		*ans = LLONG_MAX;
-		if (neg)
+		if (neg == 1)
 			*ans = LLONG_MIN;
+	
 	}
 	end:
 	if (i > j)
