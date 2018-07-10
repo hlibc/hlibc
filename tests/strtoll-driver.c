@@ -17,7 +17,7 @@ int main(void)
 	ans = strtoll(s3, &s3, 16);
 	printf("%x\n", (unsigned int)ans);
 	printf("%x\n", 0x2F4);
-	char *s4 = "0s2ff4cb6";
+	char *s4 = "0x2ff4cb6";
 	ans = strtoll(s4, &s4, 19);
 	printf("%x\n", (unsigned int)ans);
 	printf("%x\n", 0x2F4);

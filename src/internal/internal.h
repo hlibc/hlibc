@@ -101,5 +101,5 @@ int __safe_umul_sz(size_t, size_t, size_t *, size_t);
 /* internal __errno_table */
 extern char *__errno_table[];
 /* string to number */
-char *_tol_driver(const char *, int, long long *);
+char *__tol_inter(const char *, int, long long *);
 #endif

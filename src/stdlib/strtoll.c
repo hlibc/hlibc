@@ -1,13 +1,13 @@
 #include <ctype.h>
 #include <stdlib.h>
-char *_tol_driver(const char *s, int base, long long *ans);
+char *__tol_inter(const char *s, int base, long long *ans);
 long long strtoll(const char *s, char **end, int base)
 {
         long long ans = 0;
 	if (end)
-    	    *end = _tol_driver(s, base, &ans);
+    	    *end = __tol_inter(s, base, &ans);
 	else
-		_tol_driver(s, base, &ans);
+		__tol_inter(s, base, &ans);
         return ans;
 }
 
