@@ -1088,15 +1088,28 @@ int main(void)
 		flt += step;
 		printf("%lf ", flt);
 	}
-	step = 12387234825347.238476234;
+	step = 12387234825347.234234;
 
+	flt = 0.0;
 	while (flt < 2737823462873468234.29349234 )
 	{
 		flt += step;
-		/* this a known failure rangewhen comparing with glibc on x86_64 */
-		if ( flt < 24774469650695.476562 && flt > 24774469650695.476563)
+		// this is a known failure range
+		if ( flt < 24774469650695.476562 || flt > 24774469650695.476563)
 			printf("%lf\n", flt);
 	}
+	
+	step = .0000238523;
+	flt = 47.234234242131;
+	while (flt < 48.234234242131)
+	{
+		flt += step;
+		if (flt < 47.768406 || flt > 48.225751) // a known failure range 
+		if (flt < 47.311062 || flt > 47.748705)
+		if (flt < 47.271658 || flt > 47.291361)
+		printf("%lf\n", flt);
+	}
+	
 
 	step = 1.123;
 	flt = FLT_MAX - 1024;
@@ -1120,6 +1133,8 @@ int main(void)
 	printf("25347623.2387452323462387234 %lf\n", 25347623.2387452323462387234);
 	printf("3234.2387234872 %lf\n", 3234.2387234872);
 	printf("83.284623847628372323 %lf\n", 83.284623847628372323);
+
+	printf("234.3807638673498767645683265327537965 %.12lf\n", 234.3807638673498767645683265327537965);
 	
 	return 0;
 }

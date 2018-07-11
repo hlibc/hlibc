@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdint.h>
+#include <float.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -91,12 +92,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 { 
 	char *p = NULL;
 	size_t i = 0;
-	/* this should probably be INT_MAX */
-	size_t bound = (size_t)-1;
+	size_t bound = INT_MAX;
 	int base = 10;
 
 	/* Hold converted numerical strings */
-	char converted[BUFSIZ] = { 0 };
+	char converted[LDBL_MANT_DIG];
+	converted[0] = 0;
 	size_t convlen = 0;
 	size_t j = 0;
 	__f f;
@@ -159,7 +160,6 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				off = va_arg(ap, int);
 			goto start;
 		case '0':
-			/* d,i,o,u,x,X,a,A,e,E,f,F,g,G */
 			zeropad = 1;
 			padd = '0';
 			++p;
@@ -317,7 +317,6 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			}
 			if (leftadj == 1 && j < padding)
 				__padding(j, padding, f, i, padd, str, fp);
-			memset(converted, 0, convlen);
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
@@ -329,11 +328,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			}
 			if (leftadj == 1 && j < padding)
 				__padding(j, padding, f, i, padd, str, fp);
-			memset(converted, 0, convlen);
 			goto end;
 		floating:
-			// ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
-			convlen = fmt_fp(converted, fval, 19, 6, ZERO_PAD|LEFT_ADJ, 'f');
+			/* 	fmt_fp accepts the following flags:
+				ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED
+			*/
+			convlen = fmt_fp(converted, fval, 19, precision, ZERO_PAD|LEFT_ADJ, 'f');
 			for (j = 0; convlen--; ++j) {
 				if (converted[j] == '.') {
 					if (convlen > precision) {
@@ -343,6 +343,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 				i = f(i, converted[j], str, fp);
 			}
 		end:
+			converted[0] = 0;
 			precision = 6;
 			off = INT_MAX;
 			base = 10;
@@ -357,7 +358,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	}
 	
 	if (flag == 3) { /* dprintf flush */
-		f(i, -1, str, fp);
+		f(i, -1, str, fp); /* don't incr for dprintf flushing */
 	}else if (flag > 0) {
 		if (flag == 2)
 			f(bound, 0, str, fp);
