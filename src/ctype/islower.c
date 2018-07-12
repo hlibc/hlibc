@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include "../internal/internal.h"
 
 int islower(int x)
 {

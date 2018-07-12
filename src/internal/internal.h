@@ -96,6 +96,7 @@ int __isalnum[256];
 int __islower[256];
 int __isupper[256];
 int __isdigit[256];
+int __isxdigit[256];
 
 /* internal __errno_table */
 extern char *__errno_table[];
