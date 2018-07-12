@@ -196,8 +196,7 @@ then	printf "%s\n" "\`getline-driver compared equal to its control method"
 else	printf "%s\n" "##getline-driver failed to read lines from file" 
 	#RETVAL="1"
 	displaydiff
-fi 
-
+fi
 printf "============================================================\n"
 
 exit "$RETVAL"

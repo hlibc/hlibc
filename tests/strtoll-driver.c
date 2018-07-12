@@ -21,6 +21,12 @@ int main(void)
 	ans = strtoll(s4, &s4, 19);
 	printf("%x\n", (unsigned int)ans);
 	printf("%x\n", 0x2F4);
+	printf("123 ====\n");
+	char *s5 = "123";
+	ans = strtoll(s5, &s5, 10);
+	printf("%lld\n", (unsigned int)ans);
+	printf("%lld\n", 123ll);
+printf("123 ====\n");
 
 	printf("testing strtoll's ability to handle full numerical ranges..\n");
 	long long a = LLONG_MAX;
