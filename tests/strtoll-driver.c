@@ -52,6 +52,13 @@ int main(void)
 		printf("ERANGE was set by strtol\n");
 	printf("%lld\n", ans);
 	printf("above should be LLONG_MIN which is = %lld\n", LLONG_MIN);
+
+	char *b = "0x00080000";
+	char *c = "0x00950000";
+	ans = strtoll(b, &b, 16);
+	printf("%x\n", ans);
+	ans = strtoll(c, &c, 16);
+	printf("%x\n", ans);
 	return 0;
 }
 
