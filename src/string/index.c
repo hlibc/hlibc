@@ -1,16 +1,11 @@
 #include <string.h>
 /*
 	Copyright 2016 Evgeniy Popov
+	Modified by CM Graff in 2018 to just use strchr
 */
 
 char *index(const char *s, int c)
 {
-	size_t i = 0;
-	while (s[i] != c && s[i] != '\0') {
-		++i;
-	}
-	if (s[i] != c && c != '\0') {
-		return NULL;
-	}
-	return (char *)s + i;
+        return strchr(s, c);
 }
+

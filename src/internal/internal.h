@@ -78,12 +78,6 @@ int fmt_fp(char *, long double, int, int, int, int);
 #define GROUPED    (1U<<'\''-' ')
 #define FLAGMASK (ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED)
 
-/* safe arithmetic */
-size_t _safe_multiply(size_t, size_t, size_t);
-size_t _safe_division(size_t, size_t);
-size_t _safe_addition(size_t, size_t, size_t);
-size_t _safe_upow(size_t, size_t);
-
 /* new safe arithmetic API */
 int __safe_sub(intmax_t, intmax_t, intmax_t *);
 int __safe_add(intmax_t, intmax_t, intmax_t *);
