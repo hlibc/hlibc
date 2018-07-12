@@ -25,7 +25,7 @@ LDFLAGS =
 CPPFLAGS =
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
 CFLAGS_ALL = $(CFLAGS_C99FSE)
-CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./musllibc/internal -I./include -I./arch/$(ARCH)
+CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
 AR      = $(CROSS_COMPILE)ar
@@ -102,7 +102,7 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc $(STACK_PROTECTOR) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@ 
+	printf '#!/bin/sh\nexec gcc $(STACK_PROTECTOR) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%

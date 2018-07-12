@@ -78,13 +78,7 @@ int fmt_fp(char *, long double, int, int, int, int);
 #define GROUPED    (1U<<'\''-' ')
 #define FLAGMASK (ALT_FORM|ZERO_PAD|LEFT_ADJ|PAD_POS|MARK_POS|GROUPED)
 
-/* safe arithmetic */
-size_t _safe_multiply(size_t, size_t, size_t);
-size_t _safe_division(size_t, size_t);
-size_t _safe_addition(size_t, size_t, size_t);
-size_t _safe_upow(size_t, size_t);
-
-/* new safe arithmetic API */
+/* safe arithmetic API */
 int __safe_sub(intmax_t, intmax_t, intmax_t *);
 int __safe_add(intmax_t, intmax_t, intmax_t *);
 int __safe_div(intmax_t, intmax_t, intmax_t *);
@@ -97,6 +91,11 @@ int __safe_usub_sz(size_t, size_t, size_t *);
 int __safe_uadd_sz(size_t, size_t, size_t *, size_t);
 int __safe_udiv_sz(size_t, size_t, size_t *);
 int __safe_umul_sz(size_t, size_t, size_t *, size_t);
+/* internal conversion tables */
+int __isalnum[256];
+int __islower[256];
+int __isupper[256];
+int __isdigit[256];
 
 /* internal __errno_table */
 extern char *__errno_table[];
