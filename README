@@ -28,7 +28,6 @@ BUILDING:
 		/home/$USER/buildarea/bin/gcc-wrap hello.c
 
 
-
 	hlibc only supports static linking at this time.
 
 
@@ -133,18 +132,16 @@ RELENG:
 		RELENG_DIR="www/" \
 		RELENG_SSH="user@host"
 
+
 COPYING:
 --------
 
 	Please see the attached LICENSE file for the list of contributors and
 	copying detsils.
-	
 
 
 RELEASES:
 ---------
-
-	http://hlibc.xyz/
 
 	http://hlibc.xyz/hlibc-0.1a.tar.gz
 
@@ -153,4 +150,6 @@ RELEASES:
 	http://hlibc.xyz/hlibc-0.1c.tar.gz
 
 	http://hlibc.xyz/hlibc-0.1d.tar.gz
+
 	http://hlibc.xyz/hlibc-0.1e.tar.gz
+

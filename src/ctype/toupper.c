@@ -2,10 +2,7 @@
 
 int toupper(int x)
 {
-	if (islower(x)) {
+	if (islower(x)) 
 		return ('A' + x - 'a');
-	}
-	else {
-		return x;
-	}
+	return x;
 }

@@ -11,6 +11,6 @@ int isspace(int x)
 	case '\v':
 		return 1;
 	default:
-	    return 0;
+		return 0;
 	}
 }

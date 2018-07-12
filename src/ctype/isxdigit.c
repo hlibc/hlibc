@@ -1,12 +1,10 @@
 #include <ctype.h>
+#include "../internal/internal.h"
 
 int isxdigit(int x)
-{
-	if (isdigit(x))
-		return 1;
-	if (x >= 'a' && x <= 'f')
-		return 1;
-	if (x >= 'A' && x <= 'F')
-		return 1;
+{ 
+	if (x > '0' || (x > 'F' || x < 'a') || x > 'f')
+		if (__isalnum[x] != -1)
+			return 1;
 	return 0;
 }
