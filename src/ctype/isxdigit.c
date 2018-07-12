@@ -2,10 +2,9 @@
 #include "../internal/internal.h"
 
 int isxdigit(int x)
-{
-	if (!(x >= '0' && x <= 'f'))
-		return 0;
-	if (__isxdigit[x] != -1)
-		return 1;
+{ 
+	if (x > '0' || (x > 'F' || x < 'a') || x > 'f')
+		if (__isalnum[x] != -1)
+			return 1;
 	return 0;
 }

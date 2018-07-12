@@ -35,5 +35,10 @@ int main(void)
 	ctype_driver("isxdigit", 12, isxdigit, xdigit);
 	ctype_driver("isblank", 2, isblank, blank);
 
+	ctype_driver("isalpha", 0, isalpha, punct);
+	ctype_driver("isdigit", 0, isdigit, alpha);
+	ctype_driver("isdigit", 0, isdigit, white);
+	ctype_driver("isdigit", 0, isdigit, punct);
+
 	return 0;
 }
