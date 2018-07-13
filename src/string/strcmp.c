@@ -1,11 +1,7 @@
 #include <string.h>
 
-int strcmp(const char *s, const char *t)
+int strcmp(const char *l, const char *r)
 {
-	for (; *s == *t; s++, t++) {
-		if (*s == '\0') {
-			return 0;
-		}
-	}
-	return *s - *t;
+	for (; *l==*r && *l && *r; l++, r++);
+	return *(unsigned char *)l - *(unsigned char *)r;
 }

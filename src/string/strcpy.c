@@ -1,10 +1,12 @@
-#include <stddef.h>
 #include <string.h>
 
-char *strcpy(char *s, const char *t)
-{
-	for (; (*s = *t); s++, t++) {
-		;
-	}
-	return s;
+
+
+char *strcpy(char *dest, const char *src)
+{ 
+	const unsigned char *s = src;
+	unsigned char *d = dest;
+	while ((*d++ = *s++));
+	return dest;
+
 }

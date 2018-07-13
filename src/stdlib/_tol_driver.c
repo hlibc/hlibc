@@ -127,8 +127,6 @@ char *__utol_inter(const char *s, int base, unsigned long long *ans)
 	__detect_base(s, &base, &j);
 	
 	for (i=j;;++i) {
-		if (isalnum(s[i]) == 0)
-			break;
 		if ((temp = __isalnum[(int)s[i]]) == -1)
 			break;
 		if (temp >= base) {

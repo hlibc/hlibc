@@ -125,6 +125,12 @@ int __safe_div(intmax_t a, intmax_t b, intmax_t *c)
 
 int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 {
+	
+	if (a == 0 || b == 0)
+	{
+		*c = 0;
+		return 0;
+	}
 	/*
 		(a * b) == c 
 		normal case, check with division
@@ -139,6 +145,11 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	*/
 	if (a > 0 && b < 0)
 	{
+		if (a == -1)
+		{
+			*c = a * b;
+			return 0;
+		}
 		intmax_t t = INTMAX_MIN / a;
 		if (b >= t)
 		{
@@ -157,6 +168,11 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	*/
 	if (a < 0 && b < 0)
 	{
+		if (a == -1)
+		{
+			*c = a * b;
+			return 0;
+		}
 		intmax_t t = INTMAX_MIN / a;
 		if (b >= -t)
 		{
