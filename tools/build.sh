@@ -49,6 +49,9 @@ HBOX_TYPE="	gsh ./hbox/gsh.sh
 COULD_FAIL="	environ
 "
 
+NEW="		stdio_strtol_cross_proof
+"
+
 # ls -R hbox
 
 DISPLAYDIFF="1"
@@ -86,6 +89,11 @@ for i in tests/*.c
 do ln "$i" "control/$(basename "$i")"
 done
 
+
+for i in new-tests/*.c
+do ln "$i" "control/$(basename "$i")"
+done
+
 ln tests/Makefile control/Makefile
 
 for i in hbox/*.c
@@ -116,9 +124,9 @@ do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i}
 	fi
 done
 
-printf "%s" "$COULD_FAIL" | while read -r i
-do	./tests/${i} > "${SUF}/diff2"
-	./control/${i} > "${SUF}/diff3"
+printf "%s" "$NEW" | while read -r i
+do	./new-tests/${i} > "${SUF}/diff2"
+	./new-tests/${i} > "${SUF}/diff3"
 	checkifempty "${SUF}/diff2"
 	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
 	then	printf "%s\n" "\`${i}' compared equal to its control method"

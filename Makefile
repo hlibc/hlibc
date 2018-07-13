@@ -125,12 +125,16 @@ gcctests:
 	cd hbox-control/ && make
 	cd tests/ && $(GCC_WRAP) make
 	cd control && make
+	cd new-tests && $(GCC_WRAP) make
+	cd new-tests-control/ && make
 
 clangtests:
 	cd hbox/ && $(CLANG_WRAP) make
 	cd hbox-control/ && make
 	cd tests/ && $(CLANG_WRAP) make
 	cd control && make
+	cd new-tests && $(CLANG_WRAP) make
+	cd new-tests-control/ && make
 
 gcctest:
 	./tools/build.sh gcctests gcc
