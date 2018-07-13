@@ -7,7 +7,7 @@ int main(void)
 {
 	// these tests are derived from the dietlibc and glibc ones --cmg
 	char *c;
-	char *sl 
+	char *s;
 
 	if(strtoll(s="123",&c,0)==123 && c==s+3)printf("worked\n");else printf("failed\n"); 
 	if(strtoll(s="123" ,&c,0)==123)printf("worked\n");else printf("failed\n"); 

@@ -2,16 +2,14 @@
 
 int main(void)
 {
-    int ch;
+	int ch;
+	ungetc('+', stdin);
+	ungetc('|', stdin);
 
-    ungetc('+', stdin);
-    ungetc('|', stdin);
-
-    while ((ch = getchar()) != '1')
-    {
-	putchar(ch);
-	fflush(stdout);
-    }
-
-    return 0;
+	while ((ch = getchar()) != '1')
+	{
+		putchar(ch);
+		fflush(stdout);
+	}
+	return 0;
 }

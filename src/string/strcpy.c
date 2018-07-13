@@ -3,7 +3,7 @@
 
 char *strcpy(char *s, const char *t)
 {
-	for (; (*s = *t) != '\0'; s++, t++) {
+	for (; (*s = *t); s++, t++) {
 		;
 	}
 	return s;
