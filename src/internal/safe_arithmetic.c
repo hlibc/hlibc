@@ -145,7 +145,7 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	*/
 	if (a > 0 && b < 0)
 	{
-		if (a == -1)
+		if (a == -1) // FIXME!
 		{
 			*c = a * b;
 			return 0;
@@ -168,7 +168,7 @@ int __safe_mul(intmax_t a, intmax_t b, intmax_t *c)
 	*/
 	if (a < 0 && b < 0)
 	{
-		if (a == -1)
+		if (a == -1) // FIXME
 		{
 			*c = a * b;
 			return 0;

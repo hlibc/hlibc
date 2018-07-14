@@ -67,6 +67,7 @@ clean:
 cleantest:
 	cd tests/ && make clean
 	cd hbox/ && make clean
+	cd new-tests/ && make clean
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
