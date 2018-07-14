@@ -21,7 +21,7 @@ static void __detect_base(const char *s, int *base, size_t *j)
 			default:
 				break;
 			}
-		}else { //if (*base == 0){ 
+		}else {
 			++*j;
 			*base = 8;
 		}
