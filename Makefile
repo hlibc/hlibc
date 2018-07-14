@@ -57,17 +57,11 @@ clean:
 	-$(RM) -rf include/bits
 	-$(RM) -f config.mak
 	-$(RM) -rf usr logs
-	-$(RM) -f test_*
 	-$(RM) -f tools/clang-wrap
-	-$(RM) -r control
-	-$(RM) -r hbox-control
-	-$(RM) -r tests/retval
 	-$(MAKE) cleantest
 
 cleantest:
-	cd tests/ && make clean
-	cd hbox/ && make clean
-	cd new-tests/ && make clean
+	cd hlibc-test && make clean
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
@@ -121,27 +115,11 @@ $(DESTDIR)$(syslibdir):
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
-gcctests:
-	cd hbox && $(GCC_WRAP) make
-	cd hbox-control/ && make
-	cd tests/ && $(GCC_WRAP) make
-	cd control && make
-	cd new-tests && $(GCC_WRAP) make
-	cd new-tests-control/ && make
-
-clangtests:
-	cd hbox/ && $(CLANG_WRAP) make
-	cd hbox-control/ && make
-	cd tests/ && $(CLANG_WRAP) make
-	cd control && make
-	cd new-tests && $(CLANG_WRAP) make
-	cd new-tests-control/ && make
-
 gcctest:
-	./tools/build.sh gcctests gcc
+	./hlibc-test/build.sh gcc
 
 clangtest:
-	./tools/build.sh clangtests clang
+	./hlibc-test/build.sh clang
 
 release:
 	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
