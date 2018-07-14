@@ -25,8 +25,8 @@ int main(void)
 	char *s5 = "123";
 	ans = strtoll(s5, &s5, 10);
 	printf("%lld\n", (unsigned int)ans);
-	printf("%lld\n", 123ll);
-printf("123 ====\n");
+	printf("%lld\n", 123);
+	printf("123 ====\n");
 
 	printf("testing strtoll's ability to handle full numerical ranges..\n");
 	long long a = LLONG_MAX;
