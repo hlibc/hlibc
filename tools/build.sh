@@ -1,210 +1,23 @@
-#!/bin/sh
+CC="$1" ./configure --prefix="${2}" --enable-gcc-wrapper --disable-shared
 
-BASIC_TYPE="	stat-driver .
-		lstat-driver .
-		printf-zeropad
-		printf-fieldpad
-		printf-leftadj
-		printf-pad-string
-		printf-field
-		snprintf-driver
-		atoll-small
-		strtoull-driver
-		strtoll-driver
-		malloc-huge
-		ctype
-		malloc-unique-pointer
-		getline-driver
-		atoi
-		atol
-		atoll
-		getenv-driver
-		hcreate-driver
-		printf-driver
-		printf-driver-integers
-		strstr-driver
-		strstr-effectiveness2
-		realloc-filetreewalk include
-		popen-driver du include
-		puts-driver
-		strerror-driver
-		pow_test
-		getopt -ao arg path path
-		getopt -a -o arg path path
-		getopt -o arg -a path path
-		getopt -a -o arg -- path path
-		getopt -a -oarg path path
-		getopt -aoarg path path
-		strsep-driver
-		index
-		memmove
-		time
-		fwrite
-		strchr-driver
-"
-
-HBOX_TYPE="	gsh ./hbox/gsh.sh
-"
-
-COULD_FAIL="	environ
-"
-
-NEW="		stdio_strtol_cross_proof
-"
-
-# ls -R hbox
-
-DISPLAYDIFF="1"
-JOBS="1"
-TOOLING="$(pwd)/usr"
-SUF="$(pwd)/logs"
-RETVAL="0"
-
-checkifempty()
-{
-	if [ ! -s "$1" ]
-	then    printf "%s\n" "empty test file, something went wrong!!"
-		printf "%s\n" "Returning failure for the entire test suite!!"
-		RETVAL=1
-	fi
-}
-
-displaydiff()
-{
-	if [ "$DISPLAYDIFF" = "1" ]
-	then	grep '^<' "${SUF}/testerr" | tail
-		grep '^>' "${SUF}/testerr" | tail
-	fi
-}
-
-make clean
-
-CC="$2" ./configure --prefix="${TOOLING}" --enable-gcc-wrapper --disable-shared
-
-mkdir -p "${SUF}"
-mkdir -p control
-mkdir -p hbox-control
-
-for i in tests/*.c
-do ln "$i" "control/$(basename "$i")"
-done
-
-
-for i in new-tests/*.c
-do ln "$i" "control/$(basename "$i")"
-done
-
-ln tests/Makefile control/Makefile
-
-for i in hbox/*.c
-do ln "$i" "hbox-control/$(basename "$i")"
-done
-ln hbox/Makefile hbox-control/Makefile
-
-CC="$2" make "-j${JOBS}"
+CC="$1" make
 
 make install
 
-printf "==========COMPILING TESTS ===================================\n"
-make "$1"
-printf "=============================================================\n"
-printf "==========TEST RESULT START==================================\n"
+git clone https://git.hlibc.xyz/lab/hlibc-test.git
+
+./hlibc-test/build.sh $1 ${2}/bin/${1}-wrap
+
+exit
+
+wget https://ftp.gnu.org/gnu/bc/bc-1.03.tar.gz
+
+tar -xf bc-1.03.tar.gz
+
+cd bc-1.03
+
+CC=${2}/bin/${1}-wrap make
+
+echo "1234567*1234567" | ./bc -l
 
 
-
-printf "%s" "$BASIC_TYPE" | while read -r i
-do	./tests/${i} > "${SUF}/diff2"	# don't quote ./tests/{i} or ./control/{i} 
-	./control/${i} > "${SUF}/diff3"	# so that they can be expanded as arguments
-	checkifempty "${SUF}/diff2"
-	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-	then	printf "%s\n" "\`${i}' compared equal to its control method"
-	else	printf "%s\n" "##${i} failed to compare equal to its control method"
-		echo RETVAL="1" > tests/retval
-		displaydiff
-	fi
-done
-
-printf "%s" "$NEW" | while read -r i
-do	./new-tests/${i} > "${SUF}/diff2"
-	./new-tests/${i} > "${SUF}/diff3"
-	checkifempty "${SUF}/diff2"
-	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-	then	printf "%s\n" "\`${i}' compared equal to its control method"
-	else	printf "%s\n" "##${i} failed to compare equal to its control method"
-		displaydiff
-	fi
-done
-
-printf "%s" "$HBOX_TYPE" | while read -r i
-do	./hbox/${i} > "${SUF}/diff2"
-	./hbox-control/${i} > "${SUF}/diff3"
-	checkifempty "${SUF}/diff2"
-	if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-	then	printf "%s\n" "\`[POSIX system hbox] ${i}' compared equal to its control method"
-	else	printf "%s\n" "##[POSIX system hbox] ${i} failed to compare equal to its control method"
-		displaydiff
-		
-	fi
-done 
-
-if [ -f tests/retval ]
-then	. tests/retval
-	rm tests/retval
-fi
-
-# unique tests that don't work as BASIC_TYPEs
-./control/popen-to-file "du include" "${SUF}/diff2" 2>"${SUF}/testerr"
-./tests/popen-to-file "du include" "${SUF}/diff3" 2>"${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`popen-to-file' test ran \`du' on a dir, output to a file and compared equal to its control method"
-else	printf "%s\n" "##popen-to-file driver failed to output to a file" 
-	RETVAL="1"
-	displaydiff
-fi
-
-dd if=/dev/urandom of="${SUF}/diff2" bs=1M count=12 2>"${SUF}/testerr"
-./tests/putc-driver "${SUF}/diff2" "${SUF}/diff3" 2>"${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`putc-driver' test utility successfully created and copied a large file of urandom data"
-else	printf "%s\n" "##putc-driver was unable to create and copy a large file of urandom data"
-	RETVAL="1"
-fi
-
-./control/ftw-driver /tmp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
-./tests/ftw-driver /tmp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`ftw-driver compared equal to its control method"
-else	printf "%s\n" "##ftw-driver failed to output to a file" 
-	#RETVAL="1"
-	displaydiff
-fi
-
-./control/nftw-driver /tmp dmcp | sort > "${SUF}/diff2" 2> "${SUF}/testerr"
-./tests/nftw-driver /tmp dmcp | sort > "${SUF}/diff3" 2> "${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`nftw-driver compared equal to its control method"
-else	printf "%s\n" "##nftw-driver failed to output to a file" 
-	#RETVAL="1"
-	displaydiff
-fi
-
-for i in `seq 1 256`
-do	printf "%s" "ABCD" >> "${SUF}/test.txt"
-done
-printf "%s" "EEEE" >> "${SUF}/test.txt"
-./control/getline-driver "${SUF}/test.txt" > "${SUF}/diff2" 2> "${SUF}/testerr"
-./tests/getline-driver "${SUF}/test.txt" > "${SUF}/diff3" 2> "${SUF}/testerr"
-checkifempty "${SUF}/diff2"
-if diff "${SUF}/diff2" "${SUF}/diff3" 2>&1 > "${SUF}/testerr"
-then	printf "%s\n" "\`getline-driver compared equal to its control method"
-else	printf "%s\n" "##getline-driver failed to read lines from file" 
-	#RETVAL="1"
-	displaydiff
-fi
-printf "============================================================\n"
-
-exit "$RETVAL"
