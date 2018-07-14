@@ -60,8 +60,12 @@ clean:
 	-$(RM) -f tools/clang-wrap
 	-$(MAKE) cleantest
 
+cleanall:
+	-rm -rf bc-1.03/ bc-1.03.tar.gz hlibc-test/
+
 cleantest:
 	cd hlibc-test && make clean
+	cd bc-1.03 && make distclean
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
