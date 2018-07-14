@@ -42,8 +42,8 @@ ALL_TOOLS = tools/gcc-wrap
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh $(prefix) $(libdir)
-	-cp tools/clang-wrap $(DESTDIR)$(bindir)
+	-./tools/create_wrappers.sh $(prefix) $(libdir) > $(DESTDIR)/$(bindir)/clang-wrap
+	-chmod +x $(DESTDIR)/$(bindir)/clang-wrap
 
 clean:
 	-$(RM) -f crt/*.o
@@ -58,7 +58,7 @@ clean:
 	-$(RM) -f tools/clang-wrap
 
 cleanall:
-	-rm -rf tests
+	-rm -rf system-root
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
@@ -112,10 +112,10 @@ lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
 gcctest:
-	./tools/build.sh gcc $(PWD)/tests/
+	./tools/build.sh gcc $(PWD)/system-root/
 
 clangtest:
-	./tools/build.sh clang $(PWD)/tests/
+	./tools/build.sh clang $(PWD)/system-root/
 
 release:
 	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
@@ -129,5 +129,5 @@ release:
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
-.PHONY: all clean install tests control
+.PHONY: all clean install
 
