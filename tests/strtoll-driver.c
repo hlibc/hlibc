@@ -21,6 +21,12 @@ int main(void)
 	ans = strtoll(s4, &s4, 19);
 	printf("%x\n", (unsigned int)ans);
 	printf("%x\n", 0x2F4);
+	printf("123 ====\n");
+	char *s5 = "123";
+	ans = strtoll(s5, &s5, 10);
+	printf("%lld\n", ans);
+	printf("%lld\n", 123ll);
+	printf("123 ====\n");
 
 	printf("testing strtoll's ability to handle full numerical ranges..\n");
 	long long a = LLONG_MAX;
@@ -52,6 +58,13 @@ int main(void)
 		printf("ERANGE was set by strtol\n");
 	printf("%lld\n", ans);
 	printf("above should be LLONG_MIN which is = %lld\n", LLONG_MIN);
+
+	char *b = "0x00080000";
+	char *c = "0x00950000";
+	ans = strtoll(b, &b, 16);
+	printf("%x\n", ans);
+	ans = strtoll(c, &c, 16);
+	printf("%x\n", ans);
 	return 0;
 }
 

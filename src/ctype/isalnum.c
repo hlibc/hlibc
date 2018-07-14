@@ -3,7 +3,7 @@
 
 int isalnum(int x)
 {
-	if (!(x >= 0 && x <= 255))
+	if (!(x >= '0' && x <= 'z'))
 		return 0;
 	if(__isalnum[x] != -1)
 		return 1;

@@ -21,7 +21,7 @@ static void __detect_base(const char *s, int *base, size_t *j)
 			default:
 				break;
 			}
-		}else if (*base == 0){ 
+		}else {
 			++*j;
 			*base = 8;
 		}
@@ -43,7 +43,7 @@ char *__tol_inter(const char *s, int base, long long *ans)
 		errno = EINVAL;
 		return NULL;
 	}
-	else if (base == 1 && base == 0)
+	else if (base == 1 || base == 0)
 		base = 10;
 
 	/* eat up whitespace */
@@ -117,7 +117,7 @@ char *__utol_inter(const char *s, int base, unsigned long long *ans)
 		errno = EINVAL;
 		return NULL;
 	}
-	else if (base == 1 && base == 0)
+	else if (base == 1 || base == 0)
 		base = 10;
 
 	while (isspace(s[j])) {

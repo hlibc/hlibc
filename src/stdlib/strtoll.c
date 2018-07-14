@@ -5,7 +5,7 @@ long long strtoll(const char *s, char **end, int base)
 {
 	long long ans = 0;
 	if (end)
-    	    *end = __tol_inter(s, base, &ans);
+		*end = __tol_inter(s, base, &ans);
 	else
 		__tol_inter(s, base, &ans);
 	return ans;
