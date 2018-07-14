@@ -116,10 +116,10 @@ lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
 gcctest:
-	./hlibc-test/build.sh gcc
+	./tools/build.sh gcc $(PWD)/usr
 
 clangtest:
-	./hlibc-test/build.sh clang
+	./tools/build.sh clang $(PWD)/usr
 
 release:
 	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
