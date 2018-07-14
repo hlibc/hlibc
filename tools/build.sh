@@ -6,6 +6,8 @@ CC="$1" ./configure --prefix="${2}" --enable-gcc-wrapper --disable-shared
 CC="$1" make
 make install
 
+mkdir tests
+cd tests
 
 # retrieve and build hlibc-test (passing it two compilers(libc) to compare)
 git clone https://git.hlibc.xyz/lab/hlibc-test.git
