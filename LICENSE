@@ -18,12 +18,6 @@ author, except for detailed below.
 	Xnrand (grumble)
 
 
-hbox hbox/
------------
-hbox is copyrighted Copyright © 2015-2018 CM Graff and MIT
-Licensed.
-
-
 musl libc   (src/syscalls/  src/stdio/fmt_fp.c)
 -----------------------------------------------
 These files are Copyright © 2005-2012 Rich Felker licensed under

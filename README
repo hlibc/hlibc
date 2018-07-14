@@ -31,77 +31,17 @@ BUILDING:
 	hlibc only supports static linking at this time.
 
 
-	include/
-		Architecture agnostic headers for /usr/include
+TESTING:
+-------
 
-	src/
-		The libc source code
+	Test with gcc:
 
-	arch/
-		Architecture specific headers.
-
-	crt/
-		Crt stuffs.
-
-	hbox/
-		A small busybox like set of POSIX utilities.
-
-	tests/
-		A set of C run time tests.
-
-
-AUTOMATIC TESTING:
-------------------
-	
-	Use the following instructions to retrieve, build and run hlibc 
-	and the hlibc test suite.
-
-		git clone https://git.hlibc.xyz/lab/hlibc
-		cd hlibc
 		make gcctest
 
-	Or to test with clang:
 
-		git clone https://git.hlibc.xyz/lab/hlibc
-		cd hlibc
+	Test with clang:
+
 		make clangtest
-		
-
-	If all ran successfully there should be no significant errors and
-	a confirmation notice containing the results of the test suite 
-	will be printed to screen looking something like this:
-
-		==========COMPILING TESTS ===================================
-		=============================================================
-		==========TEST RESULT START==================================
-		`atoll-small' compared equal to its control method
-		`strtoll-driver' compared equal to its control method
-		`malloc-huge' compared equal to its control method
-		`ctype' compared equal to its control method
-		`malloc-unique-pointer' compared equal to its control method
-		`getline-driver' compared equal to its control method
-		`atoi' compared equal to its control method
-		 ...
-
-	If any compiler or linker errors occur within this report then the libc
-	has changed and likely regressed or otherwise lost a functionality.
-
-	If you wish to add a new test to the test suite simply put the program
-	under tests/ and it will be compiled along with the other tests. To
-	have the test automatically ran with the hlibc test suite then add the
-	title of its binary to BASIC_TYPE= at the top of tools/build.sh. This
-	method is for tests that produce output as stdout and are then compared
-	with the output of the same test compiled against the host. If the test
-	does not use stdout or is unsuitable for running against the host as a
-	control medium then it must be scripted into ./tools/build.sh by hand.
-
-	Two duplicate test directories are created by the test suite, The
-	duplicate test directory is compiled against the default host libc
-	and used as control medium to diff the output of the same tests
-	compiled against hlibc:
-
-		control/*.c --> links to tests/*.c
-		hbox-control/*.c  --> links to hbox/*.c
 
 
 REVISION CONTROL:

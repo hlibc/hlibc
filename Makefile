@@ -1,7 +1,7 @@
 # configure outputs to config.mak and this Makefile uses config.mak so
 # changes here may be lost. use GNU make
 
-RELENG ?= hlibc-0.1e
+RELENG ?= hlibc-0.10
 RELENG_MIR ?= http://hlibc.xyz
 RELENG_DIR ?= www
 RELENG_SSH ?= webuser@hlibc.xyz
