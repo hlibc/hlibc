@@ -20,8 +20,8 @@ CFLAGS_ALL = $(CFLAGS_C99FSE)
 CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
-AR      = $(CROSS_COMPILE)ar
-RANLIB  = $(CROSS_COMPILE)ranlib
+AR = $(CROSS_COMPILE)ar
+RANLIB = $(CROSS_COMPILE)ranlib
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
 EMPTY_LIB_NAMES = m
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
@@ -50,6 +50,7 @@ clean:
 	-$(RM) -f config.mak
 	-$(RM) -rf usr logs
 	-$(RM) -f tools/clang-wrap
+	-$(MAKE) -C system-root/hlibc-test/
 
 cleanall:
 	-rm -rf system-root

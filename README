@@ -5,43 +5,41 @@ DESCRIPTION:
 
 	hlibc is an experimental libc targeted at the linux kernel's syscall
 	ABI. It is a standalone libc which supports the i386, x86_64, arm and
-	aarch64 architectures. 
+	aarch64 architectures.
 
-	hlibc has specific compiler support for gcc and clang.
+	hlibc is a freestanding implementation with a subset of the POSIX, C99
+	and C11 hosted implementation requirements. The mathematics library is
+	a minimalistic fork of Sun fdlibm focused on IEEE-754-2008 floating
+	point research and the study of fdlibm's core components.
 
 
 BUILDING:
 ---------
 
-	hlibc contains a shell wrapper for gcc called `gcc-wrap`. This allows it
-	to be easily installed and used from your home directory without the 
-	need for root privilege.
+	hlibc contains creates a wrapper for gcc or clang that redirects the
+	compiler's linking options ergo allowing hlibc to be installed and
+	used without root privilege.
 
 		git clone https://git.hlibc.xyz/lab/hlibc
-		cd hlibc 
-		./configure --prefix=/home/$USER/buildarea 
-		make 
-		make install
+		cd hlibc
 
-	Test the installation:
-
+	Instructions for gcc:
+		CC=gcc ./configure --prefix=/home/$USER/buildarea 
+		CC=gcc make && make install
 		/home/$USER/buildarea/bin/gcc-wrap hello.c
 
+	Instructions for clang:
 
-	hlibc only supports static linking at this time.
-
+		CC=clang ./configure --prefix=/home/$USER/buildarea
+		CC=clang make && make install
+		/home/$USER/buildarea/bin/clang-wrap hello.c
 
 TESTING:
--------
+--------
 
-	Test with gcc:
+	To download, build and run the hlibc-test test suite invoke:
 
-		make gcctest
-
-
-	Test with clang:
-
-		make clangtest
+		make gcctest|clangtest
 
 
 REVISION CONTROL:
@@ -62,22 +60,11 @@ IRC:
 	#hlibc on irc.freenode.net
 
 
-RELENG:
--------
-
-	A release can be engineered by running:
-
-		make release RELENG="hlibc-0.1x" \
-		RELENG_MIR="http://mirror/" \
-		RELENG_DIR="www/" \
-		RELENG_SSH="user@host"
-
-
 COPYING:
 --------
 
 	Please see the attached LICENSE file for the list of contributors and
-	copying detsils.
+	copying details.
 
 
 RELEASES:
