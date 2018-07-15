@@ -1,0 +1,24 @@
+#/bin/sh
+
+SUB_VERSION="$(cat tools/.version)"
+echo "$(( ${SUB_VERSION} + 1 ))" > tools/.version
+RELENG=hlibc-0.${SUB_VERSION}
+RELENG_MIR=http://hlibc.xyz
+RELENG_DIR=www
+RELENG_SSH=webuser@hlibc.xyz
+
+printf "\t%s\n\n" "${RELENG_MIR}/${RELENG}.tar.gz" >> README
+
+(
+	cd ../
+	cp -r hlibc-unstable "${RELENG}"
+	tar -czf "${RELENG}.tar.gz" "${RELENG}"
+	scp "${RELENG}.tar.gz" "${RELENG_SSH}:${RELENG_DIR}"
+)
+
+ssh "${RELENG_SSH}" -f "cd ${RELENG_DIR} && md5sum ${RELENG}.tar.gz >> CHECKSUMS"
+git add README Makefile tools/.release tools/.version
+git commit -m "Release ${RELENG}."
+git push origin hlibc-unstable
+
+
