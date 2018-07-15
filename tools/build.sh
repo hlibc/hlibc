@@ -21,7 +21,7 @@ git clone https://git.hlibc.xyz/lab/hlibc-test.git
 
 echo "Building GNU bc-1.03 .."
 (
-	cd bc-1.03 && {
+	[ -d bc-1.03 ] && cd bc-1.03 && {
 	sed 's/.*getopt.*//g' proto.h > bak # this is broken in bc-1.03
 	mv bak proto.h
 
@@ -36,5 +36,6 @@ echo "Building GNU bc-1.03 .."
 	}
 )
 
+exit 0
 
 
