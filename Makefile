@@ -1,9 +1,3 @@
-
-RELENG ?= hlibc-0.10
-RELENG_MIR ?= http://hlibc.xyz
-RELENG_DIR ?= www
-RELENG_SSH ?= webuser@hlibc.xyz
-
 exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
 prefix = /usr/local/hlibc
@@ -118,14 +112,8 @@ clangtest:
 	./tools/build.sh clang $(PWD)/system-root/
 
 release:
-	printf "\t%s\n" "$(RELENG_MIR)/$(RELENG).tar.gz" >> README
-	cd ../ && cp -r hlibc $(RELENG)
-	cd ../ && tar -czf $(RELENG).tar.gz $(RELENG)
-	cd ../ && scp $(RELENG).tar.gz $(RELENG_SSH):$(RELENG_DIR)
-	ssh $(RELENG_SSH) -f 'cd $(RELENG_DIR) && md5sum $(RELENG).tar.gz >> CHECKSUMS'
-	git add README Makefile
-	git commit -m "release $(RELENG)"
-	git push origin master
+	./tools/.release
+
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 
