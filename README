@@ -3,15 +3,13 @@ hlibc
 DESCRIPTION:
 ------------
 
-	hlibc is an experimental libc targeted at the linux kernel's syscall
-	ABI. It is a standalone libc which supports the i386, x86_64, arm and
-	aarch64 architectures.
-
-	hlibc is a freestanding implementation with a subset of the POSIX, C99
+	hlibc is a freestanding libc that implements a subset of the POSIX, C99
 	and C11 hosted implementation requirements. The mathematics library is
 	a minimalistic fork of Sun fdlibm focused on IEEE-754-2008 floating
 	point research and the study of fdlibm's core components.
 
+	hlibc is targeted at the linux kernel's syscall ABI and currently
+	supports the i386, x86_64, arm and aarch64 architectures.
 
 BUILDING:
 ---------
@@ -33,6 +31,7 @@ BUILDING:
 		CC=clang ./configure --prefix=/home/$USER/buildarea
 		CC=clang make && make install
 		/home/$USER/buildarea/bin/clang-wrap hello.c
+
 
 TESTING:
 --------
