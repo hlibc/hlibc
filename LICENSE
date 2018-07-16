@@ -26,14 +26,13 @@ the MIT license.
 
 Mathematics Library (src/libm/)
 ------------------------------
-The mathematics library was written at Sun laboratories and is licensed 
-with no restrictions but the single clause that their copyrights stay 
-intact:
+The mathematics library was written at Sun laboratories and is "licensed"
+with no restrictions but the following clause:
 
-	" * Developed at SunSoft, a Sun Microsystems, Inc. business.
-	  * Permission to use, copy, modify, and distribute this
-	  * software is freely granted, provided that this notice
-	  * is preserved."
+	"* Developed at SunSoft, a Sun Microsystems, Inc. business.
+	 * Permission to use, copy, modify, and distribute this
+	 * software is freely granted, provided that this notice
+	 * is preserved."
 
 
 	Contributors to Sun's fdlibm
