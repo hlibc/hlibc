@@ -1,4 +1,4 @@
-# Usage: ./tools/build.sh gcc $(pwd)/usr
+# Usage: ./tools/build.sh gcc $(pwd)/system-root
 
 # Build and install hlibc
 make clean
