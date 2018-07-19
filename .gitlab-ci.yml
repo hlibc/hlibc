@@ -2,6 +2,7 @@ variables:
   GIT_STRATEGY: clone
 
 # gcc
+
 gcc113__aarch64__gcc:
   tags:
     - debian
@@ -43,6 +44,8 @@ debian__armel__gcc:
     - debian
     - armel
   script: "make gcctest"
+
+# clang 
 
 gcc75__x86_64__clang:
   tags:
