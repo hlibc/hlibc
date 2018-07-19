@@ -1,8 +1,5 @@
 #ifndef _SYS_SYSCALL_H
 #define _SYS_SYSCALL_H
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 long __syscall_ret(unsigned long);
 long __syscall(long, ...);
@@ -26,7 +23,4 @@ long syscall(long, ...);
 #define __syscall(...) __SYSCALL_DISP(__syscall,__VA_ARGS__)
 #define syscall(...) __syscall_ret(__syscall(__VA_ARGS__))
 
-#ifdef __cplusplus
-}
-#endif
 #endif

@@ -9,10 +9,6 @@ SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
-# test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap"
-
 LDFLAGS =
 CPPFLAGS =
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
@@ -20,8 +16,8 @@ CFLAGS_ALL = $(CFLAGS_C99FSE)
 CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
-AR      = $(CROSS_COMPILE)ar
-RANLIB  = $(CROSS_COMPILE)ranlib
+AR = $(CROSS_COMPILE)ar
+RANLIB = $(CROSS_COMPILE)ranlib
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
 EMPTY_LIB_NAMES = m
 EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
@@ -29,15 +25,13 @@ CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 TOOL_LIBS = lib/gcc-wrap.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/gcc-wrap
+ALL_TOOLS = tools/gcc-wrap tools/clang-wrap
 
 -include config.mak
 
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh $(prefix) $(libdir) > $(DESTDIR)/$(bindir)/clang-wrap
-	-chmod +x $(DESTDIR)/$(bindir)/clang-wrap
 
 clean:
 	-$(RM) -f crt/*.o
@@ -50,6 +44,7 @@ clean:
 	-$(RM) -f config.mak
 	-$(RM) -rf usr logs
 	-$(RM) -f tools/clang-wrap
+	-$(MAKE) -C system-root/hlibc-test/
 
 cleanall:
 	-rm -rf system-root
@@ -87,7 +82,11 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc $(STACK_PROTECTOR) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	printf '#!/bin/sh\nexec gcc -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	chmod +x $@
+
+tools/clang-wrap: config.mak
+	printf '#!/bin/sh\nclang -D_GNU_SOURCE -fno-stack-protector -static -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' > $@
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%

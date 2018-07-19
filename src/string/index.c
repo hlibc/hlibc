@@ -6,6 +6,6 @@
 
 char *index(const char *s, int c)
 {
-        return strchr(s, c);
+	return strchr(s, c);
 }
 
