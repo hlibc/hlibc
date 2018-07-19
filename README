@@ -11,12 +11,13 @@ DESCRIPTION:
 	hlibc is targeted at the linux kernel's syscall ABI and currently
 	supports the i386, x86_64, arm and aarch64 architectures.
 
+
 BUILDING:
 ---------
 
-	hlibc contains creates a wrapper for gcc or clang that redirects the
-	compiler's linking options ergo allowing hlibc to be installed and
-	used without root privilege.
+	hlibc creates a wrapper for gcc or clang that redirects the compiler's 
+	linking options allowing hlibc to be installed and used without
+	root privilege.
 
 		git clone https://git.hlibc.xyz/lab/hlibc
 		cd hlibc
