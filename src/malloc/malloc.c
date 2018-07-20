@@ -15,6 +15,13 @@ typedef struct object
 	int free;
 } object;
 
+typedef struct freelist
+{ 
+	struct object *next;
+	struct object *prev;
+	struct object *freenode;
+}freelist;
+
 static object *base = NULL;
 static object *head = NULL;
 
@@ -40,14 +47,12 @@ static object *find_free(size_t size)
 {
 	object *o;
 	object *ret = NULL;
-	unsigned int perform = 3;
 
 	for (o = base; o ; o = o->next) {
 		if (o->free == 1 && o->size >= size && ret == NULL) {
 			ret = o;
 			break;
-		}else if (o->free == 1 && perform) { 
-			perform--;
+		}else if (o->free == 1) {
 			o = __delmiddle(o); 
 		}
 	}
