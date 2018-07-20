@@ -7,9 +7,6 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-static const size_t chunk_size = 8192;
-
-
 typedef struct object
 {
 	size_t size;
@@ -21,6 +18,8 @@ typedef struct object
 static object *base = NULL;
 static object *head = NULL;
 
+static const size_t chunk_size = 8192;
+
 static object *delmiddle(object *o)
 {
 	object *tmp = o->prev;
@@ -30,59 +29,32 @@ static object *delmiddle(object *o)
 	return tmp;
 }
 
-static object *delhead(object *o)
-{
-	object *tmp = o->next;
-	o->next->prev = NULL;
-	munmap(o, o->size + sizeof(object));
-	/* "base" must be reset if the head of the list is deleted */
-	base = tmp;
-	return tmp;
-}
-
-static object *deltail(object *o)
-{
-	object *tmp = o->prev;
-	o->prev->next = NULL;
-	munmap(o, o->size + sizeof(object));
-	return tmp;
-}
-
-static object *eliminate(object *o)
-{
-	if (o->free == 1) {
-		if (o->next == NULL) {
-			o = deltail(o);
-		}
-		else if (o->prev == NULL) {
-			o = delhead(o);
-		}
-		else {
-			o = delmiddle(o);
-		}
-	}
+static object *__delmiddle(object *o)
+{ 
+	if (o->next && o->prev && o != head && o != base)
+		o = delmiddle(o);
 	return o;
 }
 
-static object *find_free(object **last, size_t size)
+static object *find_free(size_t size)
 {
 	object *o;
-	int set = 0;
 	object *ret = NULL;
+	unsigned int perform = 3;
+
 	for (o = base; o ; o = o->next) {
-		if (o->free == 1 && o->size >= size && set == 0) { 
-			set = 1;
-		}else if (o->free == 1)
-			o = eliminate(o);
-		/* lag one link behind */
-		if (set == 0) {
-			*last = o;
+		if (o->free == 1 && o->size >= size && ret == NULL) {
+			ret = o;
+			break;
+		}else if (o->free == 1 && perform) { 
+			perform--;
+			o = __delmiddle(o); 
 		}
 	}
-	return NULL;
+	return ret;
 }
 
-static object *morecore(object *last, size_t size)
+static object *morecore(size_t size)
 {
 	object *o = NULL;
 	int pt = PROT_READ | PROT_WRITE;
@@ -91,6 +63,7 @@ static object *morecore(object *last, size_t size)
 	size_t orig = size;
 	size_t mul = 1;
 	size_t t = 0;
+	object *last = head;
 
 	if (size > chunk_size)
 		mul += (size / chunk_size);
@@ -101,7 +74,6 @@ static object *morecore(object *last, size_t size)
 		size = (chunk_size * mul);
 
 	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
-		/* FIXME: this probably should set something other than ENOMEM */
 		goto error;
 	}
 
@@ -112,11 +84,11 @@ static object *morecore(object *last, size_t size)
 	if (last) {
 		last->next = o;
 	}
+
 	o->size = size;
 	o->next = NULL;
-	o->prev = last;
-	o->free = 0;
-
+	o->prev = last; 
+	head = o;
 	return o;
 
 	error:
@@ -127,25 +99,15 @@ static object *morecore(object *last, size_t size)
 void *malloc(size_t size)
 {
 	object *o;
-	object *last;
-
-	if (!base) {
-		if (!(o = morecore(NULL, size))) {
+	if (!(o = find_free(size))) {
+		if (!(o = morecore(size))) {
 			return NULL;
 		}
+	}
+	if (!base)
 		base = o;
-	}
-	else {
-		last = base;
-		if (!(o = find_free(&last, size))) {
-			if (!(o = morecore(last, size))) {
-				return NULL;
-			}
-		}
-		else {
-			o->free = 0;
-		}
-	}
+
+	o->free = 0;
 	return (o + 1);
 }
 
@@ -155,6 +117,9 @@ void free(void *ptr)
 	if (!ptr) {
 		return;
 	}
+	/*
+		This object should be added to the free list 
+	*/
 	o = (object *)ptr - 1;
 	o->free = 1;
 }
@@ -176,7 +141,7 @@ void *realloc(void *ptr, size_t size)
 		return NULL;
 	}
 
-	memcpy(ret, ptr, o->size + sizeof(object));
+	memcpy(ret, ptr, o->size);
 	free(ptr);
 	return ret;
 }
@@ -185,8 +150,7 @@ void *calloc(size_t nmemb, size_t size)
 {
 	void *o;
 	size_t t = 0;
-	if(__safe_umul_sz(nmemb, size, &t, (size_t)-1) == -1) {
-		/* FIXME: set errno here? */
+	if(__safe_umul_sz(nmemb, size, &t, (size_t)-1) == -1) { 
 		return NULL;
 	}
 	if (!(o = malloc(t))) {
@@ -200,9 +164,16 @@ void __destroy_malloc()
 {
 	object *o = NULL;
 	for (o = base; o; o = o->next) {
-		o = eliminate(o);
+		o = __delmiddle(o);
 	}
+
 	if (base) {
 		munmap(base, base->size + sizeof(object));
+
+	}
+	return;
+	if (head) {
+		munmap(head, head->size + sizeof(object));
 	}
 }
+
