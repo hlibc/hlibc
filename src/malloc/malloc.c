@@ -9,6 +9,7 @@
 
 static const size_t chunk_size = 8192;
 
+
 typedef struct object
 {
 	size_t size;
@@ -18,6 +19,7 @@ typedef struct object
 } object;
 
 static object *base = NULL;
+static object *head = NULL;
 
 static object *delmiddle(object *o)
 {
@@ -66,15 +68,14 @@ static object *find_free(object **last, size_t size)
 {
 	object *o;
 	int set = 0;
+	object *ret = NULL;
 	for (o = base; o ; o = o->next) {
-		if (o->free == 1 && o->size >= size && set == 0) {
+		if (o->free == 1 && o->size >= size && set == 0) { 
 			set = 1;
 		}else if (o->free == 1)
 			o = eliminate(o);
 		/* lag one link behind */
-		if (set == 0)
-		{
-			//o->free = 0;
+		if (set == 0) {
 			*last = o;
 		}
 	}
@@ -115,6 +116,7 @@ static object *morecore(object *last, size_t size)
 	o->next = NULL;
 	o->prev = last;
 	o->free = 0;
+
 	return o;
 
 	error:
