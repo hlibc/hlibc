@@ -17,13 +17,17 @@ typedef struct object
 
 typedef struct freelist
 { 
-	struct object *next;
-	struct object *prev;
+	struct freelist *next;
+	struct freelist *prev;
 	struct object *freenode;
 }freelist;
 
 static object *base = NULL;
 static object *head = NULL;
+
+
+static freelist *fbase = NULL;
+static freelist *fhead = NULL;
 
 static const size_t chunk_size = 8192;
 
@@ -101,6 +105,29 @@ static object *morecore(size_t size)
 	return NULL;
 }
 
+static freelist *addfreenode(freelist *unused, object *node)
+{ 
+	freelist *o = NULL;
+	int pt = PROT_READ | PROT_WRITE;
+	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
+	size_t t = sizeof(freelist);
+	freelist *last = fhead;
+	
+	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
+		return NULL;
+	}
+	
+	if (last) {
+		last->next = o;
+	}
+	o->next = NULL;
+	o->prev = last;
+	o->freenode = node;
+	fhead = o;
+	return o;
+}
+
+
 void *malloc(size_t size)
 {
 	object *o;
@@ -127,6 +154,7 @@ void free(void *ptr)
 	*/
 	o = (object *)ptr - 1;
 	o->free = 1;
+	addfreenode(NULL, o);
 }
 
 void *realloc(void *ptr, size_t size)
