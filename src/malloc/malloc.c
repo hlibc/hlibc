@@ -69,16 +69,16 @@ static object *find_free(object **last, size_t size)
 	for (o = base; o ; o = o->next) {
 		if (o->free == 1 && o->size >= size && set == 0) {
 			set = 1;
-		}else 
+		}else if (o->free == 1)
 			o = eliminate(o);
 		/* lag one link behind */
 		if (set == 0)
 		{
-			o->free = 0;
+			//o->free = 0;
 			*last = o;
 		}
 	}
-	return o;
+	return NULL;
 }
 
 static object *morecore(object *last, size_t size)
