@@ -12,7 +12,6 @@ typedef struct object
 	size_t size;
 	struct object *next;
 	struct object *prev;
-	int free;
 } object;
 
 typedef struct freelist
@@ -47,17 +46,35 @@ static object *__delmiddle(object *o)
 	return o;
 }
 
-static object *find_free(size_t size)
+static freelist *delfreenode(freelist *o)
 {
-	object *o;
+	freelist *tmp = o->prev;
+	o->prev->next = o->next;
+	o->next->prev = o->prev;
+	munmap(o, sizeof(freelist) + 4096);
+	return tmp;
+}
+
+static freelist *__delfreenode(freelist *o)
+{ 
+	if (o->next && o->prev && o != fhead && o != fbase)
+		o = delfreenode(o);
+	return o;
+}
+
+static object *find_freenode(size_t size)
+{
+	freelist *o;
 	object *ret = NULL;
 
-	for (o = base; o ; o = o->next) {
-		if (o->free == 1 && o->size >= size && ret == NULL) {
-			ret = o;
+	for (o = fbase; o ; o = o->next) {
+		if (o->freenode->size >= size && ret == NULL) {
+			ret = o->freenode; 
+			//__delfreenode(o);
 			break;
-		}else if (o->free == 1) {
-			o = __delmiddle(o); 
+		}else  { 
+			;//__delmiddle(o->freenode);
+			//o = __delfreenode(o);
 		}
 	}
 	return ret;
@@ -110,7 +127,7 @@ static freelist *addfreenode(freelist *unused, object *node)
 	freelist *o = NULL;
 	int pt = PROT_READ | PROT_WRITE;
 	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
-	size_t t = sizeof(freelist);
+	size_t t = sizeof(freelist) + 4096;
 	freelist *last = fhead;
 	
 	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
@@ -124,6 +141,8 @@ static freelist *addfreenode(freelist *unused, object *node)
 	o->prev = last;
 	o->freenode = node;
 	fhead = o;
+	if (!(fbase))
+		fbase = o;
 	return o;
 }
 
@@ -131,15 +150,16 @@ static freelist *addfreenode(freelist *unused, object *node)
 void *malloc(size_t size)
 {
 	object *o;
-	if (!(o = find_free(size))) {
+	if (!(o = find_freenode(size))) {
 		if (!(o = morecore(size))) {
 			return NULL;
 		}
 	}
 	if (!base)
 		base = o;
+	if (!head)
+		head = o;
 
-	o->free = 0;
 	return (o + 1);
 }
 
@@ -153,7 +173,6 @@ void free(void *ptr)
 		This object should be added to the free list 
 	*/
 	o = (object *)ptr - 1;
-	o->free = 1;
 	addfreenode(NULL, o);
 }
 
