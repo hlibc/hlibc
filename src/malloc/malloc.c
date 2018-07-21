@@ -19,6 +19,10 @@ typedef struct freelist
 	struct freelist *next;
 	struct freelist *prev;
 	struct object *freenode;
+	intptr_t nodaddr;
+	uintptr_t val;
+	uintptr_t nval;
+	uintptr_t pval;
 }freelist;
 
 static object *base = NULL;
@@ -67,14 +71,15 @@ static object *find_freenode(size_t size)
 	freelist *o;
 	object *ret = NULL;
 
-	for (o = fbase; o ; o = o->next) {
-		if (o->freenode->size >= size && ret == NULL) {
-			ret = o->freenode; 
-			//__delfreenode(o);
-			break;
+	for (o = fbase; o ; o = (freelist*)o->nval) {
+		object *t = (object*)o->val;
+		if (t->size >= size && ret == NULL) {
+			ret = t;
+			o = __delfreenode(o);
+			
 		}else  { 
-			;//__delmiddle(o->freenode);
-			//o = __delfreenode(o);
+			//__delmiddle(t);
+			o = __delfreenode(o);
 		}
 	}
 	return ret;
@@ -140,6 +145,9 @@ static freelist *addfreenode(freelist *unused, object *node)
 	o->next = NULL;
 	o->prev = last;
 	o->freenode = node;
+	o->val = (uintptr_t)&node;
+	o->nval = 0;
+	o->pval = (uintptr_t)&last;
 	fhead = o;
 	if (!(fbase))
 		fbase = o;
