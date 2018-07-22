@@ -63,20 +63,17 @@ static object *findfree(size_t size)
 	flist *o = NULL;
 
 	for (o = fbase; o ; o = o->next) { 
-		t =o->node;
-		if (t && t->size >= size && o != fbase && o != fhead)
+		t = o->node;
+		if (t == NULL || o == fbase || o == fhead)
+			continue;
+		if (t->size >= size )
 		{
 			o = delmiddle(o);
 			ret = t;
 			break;
 		}else {
-			if (o != fbase && o != fhead)
-			{
-				munmap(t, t->size + sizeof(object));
-				o = delmiddle(o);
-				if (o == fhead|| o == fbase)
-					break;
-			}
+			munmap(t, t->size + sizeof(object));
+			o = delmiddle(o);
 		}
 	}
 	return ret;
