@@ -98,10 +98,10 @@ int __isalnum[256];
 extern char *__errno_table[];
 /* string to number */
 char *__tol_inter(const char *, int, long long *);
-#define MAGLIM 512
 
-extern uintptr_t reftable[MAGLIM];
-extern int used[MAGLIM];
+
+//extern uintptr_t reftable[MAGLIM];
+//extern int used[MAGLIM];
 void initmag(void);
 int fprintf(FILE *, const char *, ...);
 #endif
