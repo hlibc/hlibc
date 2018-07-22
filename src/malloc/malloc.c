@@ -9,80 +9,59 @@
 
 typedef struct object
 {
-	size_t size;
-	struct object *next;
-	struct object *prev;
-} object;
-
-typedef struct freelist
-{ 
-	struct freelist *next;
-	struct freelist *prev;
-	struct object *freenode;
-	intptr_t nodaddr;
-	uintptr_t val;
-	uintptr_t nval;
-	uintptr_t pval;
-}freelist;
-
-static object *base = NULL;
-static object *head = NULL;
-
-
-static freelist *fbase = NULL;
-static freelist *fhead = NULL;
+	size_t size; 
+} object; 
 
 static const size_t chunk_size = 8192;
-
-static object *delmiddle(object *o)
+static int usedl = 0;
+void initmag(void)
 {
-	object *tmp = o->prev;
-	o->prev->next = o->next;
-	o->next->prev = o->prev;
-	munmap(o, o->size + sizeof(object));
-	return tmp;
+	size_t i = 0;
+	usedl = 0;
+        for (i=0; i <MAGLIM; ++i)
+        { 
+                reftable[i] = 0;
+                used[i] = 0;
+	}
 }
 
-static object *__delmiddle(object *o)
-{ 
-	if (o->next && o->prev && o != head && o != base)
-		o = delmiddle(o);
-	return o;
-}
-
-static freelist *delfreenode(freelist *o)
+void addmag(object *o)
 {
-	freelist *tmp = o->prev;
-	o->prev->next = o->next;
-	o->next->prev = o->prev;
-	munmap(o, sizeof(freelist) + 4096);
-	return tmp;
-}
-
-static freelist *__delfreenode(freelist *o)
-{ 
-	if (o->next && o->prev && o != fhead && o != fbase)
-		o = delfreenode(o);
-	return o;
-}
-
-static object *find_freenode(size_t size)
-{
-	freelist *o;
-	object *ret = NULL;
-
-	for (o = fbase; o ; o = (freelist*)o->nval) {
-		object *t = (object*)o->val;
-		if (t->size >= size && ret == NULL) {
-			ret = t;
-			o = __delfreenode(o);
-			
-		}else  { 
-			//__delmiddle(t);
-			o = __delfreenode(o);
+	size_t i = 0;
+	for (i=0; i <MAGLIM; ++i)
+	{ 
+		if(used[i] == 0)
+		{ 
+			reftable[i] = (uintptr_t)&*o;
+			used[i] = 1;
+			break;
 		}
+	} 
+}
+
+object *usemag(size_t size)
+{ 
+	size_t i = 0;
+	object *ret = NULL; 
+	object *t = NULL; 
+	for (i=0; i <MAGLIM; ++i)
+	{ 
+		if (used[i] == 0)
+			continue; 
+		t = (object *)reftable[i];
+		if (t && t->size >= size && ret == NULL) {
+			ret = t;
+                        used[i] = 0;
+                        reftable[i] = 0; 
+		}
+		else if (t && t->size) { 
+			munmap (t, t->size + sizeof(object));
+			used[i] = 0;
+			reftable[i] = 0;
+		} 
 	}
 	return ret;
+	
 }
 
 static object *morecore(size_t size)
@@ -93,33 +72,13 @@ static object *morecore(size_t size)
 	size_t sum = 0;
 	size_t orig = size;
 	size_t mul = 1;
-	size_t t = 0;
-	object *last = head;
+	size_t t = 0; 
+	usedl = 1; 
 
-	if (size > chunk_size)
-		mul += (size / chunk_size);
-
-	if ((size_t)-1 / chunk_size < mul)
-		size = orig;
-	else
-		size = (chunk_size * mul);
-
-	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
+	if ((o = mmap(o, size + sizeof(object), pt, fs, -1, 0)) == (void *)-1) {
 		goto error;
-	}
-
-	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
-		goto error;
-	}
-
-	if (last) {
-		last->next = o;
-	}
-
+	} 
 	o->size = size;
-	o->next = NULL;
-	o->prev = last; 
-	head = o;
 	return o;
 
 	error:
@@ -127,46 +86,19 @@ static object *morecore(size_t size)
 	return NULL;
 }
 
-static freelist *addfreenode(freelist *unused, object *node)
-{ 
-	freelist *o = NULL;
-	int pt = PROT_READ | PROT_WRITE;
-	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
-	size_t t = sizeof(freelist) + 4096;
-	freelist *last = fhead;
-	
-	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
-		return NULL;
-	}
-	
-	if (last) {
-		last->next = o;
-	}
-	o->next = NULL;
-	o->prev = last;
-	o->freenode = node;
-	o->val = (uintptr_t)&node;
-	o->nval = 0;
-	o->pval = (uintptr_t)&last;
-	fhead = o;
-	if (!(fbase))
-		fbase = o;
-	return o;
-}
-
-
 void *malloc(size_t size)
 {
-	object *o;
-	if (!(o = find_freenode(size))) {
+	object *o; 
+	if (usedl == 0) {
+		initmag(); 
+		usedl = 1;
+
+	}
+	if (!(o = usemag(size))) {
 		if (!(o = morecore(size))) {
 			return NULL;
 		}
 	}
-	if (!base)
-		base = o;
-	if (!head)
-		head = o;
 
 	return (o + 1);
 }
@@ -177,11 +109,9 @@ void free(void *ptr)
 	if (!ptr) {
 		return;
 	}
-	/*
-		This object should be added to the free list 
-	*/
 	o = (object *)ptr - 1;
-	addfreenode(NULL, o);
+	addmag(o);
+	return;
 }
 
 void *realloc(void *ptr, size_t size)
@@ -222,18 +152,6 @@ void *calloc(size_t nmemb, size_t size)
 
 void __destroy_malloc()
 {
-	object *o = NULL;
-	for (o = base; o; o = o->next) {
-		o = __delmiddle(o);
-	}
-
-	if (base) {
-		munmap(base, base->size + sizeof(object));
-
-	}
-	return;
-	if (head) {
-		munmap(head, head->size + sizeof(object));
-	}
+	return; 
 }
 
