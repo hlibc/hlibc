@@ -1,17 +1,55 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 
-/*
-	Two list model:
-	morecore adds to the master list
+#define MAXWORD 100
 
-	free() adds to the free list (or free table)
+struct tnode {
+	char *word;
+	int count;
+	struct tnode *left;
+	struct tnode *right;
+};
 
-	delnode deletes a node contained with the free list
-	from the master list and the free list. 
+struct tnode *addtree(struct tnode *, char *);
+void treeprint(struct tnode *);
+int getword(char *, int);
 
-*/
+struct tnode *talloc(void);
+
+/* addtree: add a node with w, at or below p */
+struct tnode *addtree(struct tnode *p, char *w)
+{
+	int cond;
+	if (p == NULL) {
+		/* a new word has arrived */
+		p = talloc();
+		/* make a new node */
+		p->word = strdup(w);
+		p->count = 1;
+		p->left = p->right = NULL;
+	} else if ((cond = strcmp(w, p->word)) == 0)
+		p->count++;
+		/* repeated word */
+	else if (cond < 0)
+		/* less than into left subtree */
+		p->left = addtree(p->left, w);
+	else
+		/* greater than into right subtree */
+		p->right = addtree(p->right, w);
+	return p;
+}
+
+#include <stdlib.h>
+/* talloc: make a tnode */
+struct tnode *talloc(void)
+{
+return (struct tnode *) malloc(sizeof(struct tnode));
+}
+
 struct nlist { 
 	struct nlist *next; 
 	char *name; 
