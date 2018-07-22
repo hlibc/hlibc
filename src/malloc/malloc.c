@@ -7,6 +7,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
+
 typedef struct object
 {
 	size_t size; 
@@ -34,9 +35,9 @@ static flist *delmiddle(flist *o)
 static int addfreenode(object *node)
 {
 	flist *o = NULL;
-	const int pt = PROT_READ | PROT_WRITE;
-	const int fs = MAP_PRIVATE | MAP_ANONYMOUS;
-	size_t t = sizeof(flist *);
+	static const int pt = PROT_READ | PROT_WRITE;
+	static const int fs = MAP_PRIVATE | MAP_ANONYMOUS;
+	size_t t = sizeof(flist);
 	flist *last = fhead;
 
 	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
@@ -82,8 +83,8 @@ static object *findfree(size_t size)
 static object *morecore(size_t size)
 {
 	object *o = NULL;
-	const int pt = PROT_READ | PROT_WRITE;
-	const int fs = MAP_PRIVATE | MAP_ANONYMOUS;
+	static const int pt = PROT_READ | PROT_WRITE;
+	static const int fs = MAP_PRIVATE | MAP_ANONYMOUS;
 
 	if ((o = mmap(o, size + sizeof(object), pt, fs, -1, 0)) == (void *)-1) {
 		goto error;
