@@ -21,13 +21,37 @@ typedef struct flist
 	object *node;
 }flist;
 
+typedef struct chain
+{ 
+	flist **magazine;
+	flist **_fhead;
+}chain;
+
+chain *tchain;
+
+
 // shoot for a 64 unit granularity [512, 32768]
 #define HASH 16777216
 #define WRAP 32768
 #define HASHSIZE 512
 
-static flist *hashtab[HASHSIZE];
-static flist *_fhead[HASHSIZE];
+//static flist *magazine[HASHSIZE];
+//static flist *_fhead[HASHSIZE]; 
+
+static flist **magazine;
+static flist **_fhead; 
+
+static int initialized = 0;
+
+static void initmag(void)
+{
+	if (initialized == 0)
+	{
+		magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
+		_fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
+	}
+	initialized = 1;
+}
 
 static size_t hash(size_t i)
 { 
@@ -61,8 +85,8 @@ static int addfreenode(object *node)
 	o->prev = last;
 	o->node = node; 
 	_fhead[hashv] = o;
-	if (!(hashtab[hashv])) { 
-		 hashtab[hashv] = o;
+	if (!(magazine[hashv])) { 
+		 magazine[hashv] = o;
 	}
 	return 0;
 }
@@ -74,17 +98,16 @@ static object *findfree(size_t size)
 	size_t i = hash(size);
 	flist *o = NULL;
 
-	for (; i < HASHSIZE && ret == NULL; ++i, d = 1) {
-		for (o = hashtab[i]; o ; o = o->next) {
+	for (; i < HASHSIZE && ret == NULL; ++i) {
+		for (o = magazine[i]; o ; o = o->next) {
 			t = o->node;
-			if (t == NULL || o == _fhead[i] || o == hashtab[i])
+			if (t == NULL || o == _fhead[i] || o == magazine[i])
 				continue;
 			if (t->size >= size && ret == NULL) {
 				o = delmiddle(o);
 				ret = t;
 				break;
 			}else {
-				
 				o = delmiddle(o);
 				munmap(t, t->size + sizeof(object));
 			}
@@ -128,6 +151,7 @@ static object *morecore(size_t size)
 
 void *malloc(size_t size)
 {
+	initmag();
 	object *o;
 	if (!(o = findfree(size))) {
 		if (!(o = morecore(size))) {
