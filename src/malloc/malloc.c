@@ -57,9 +57,11 @@ static void * __mmap_inter(size_t size)
 
 static int addfreenode(object *node)
 {
+	size_t hashv = hash(node->size);
 	flist *o = NULL; 
+	flist *flast = _fhead[hashv];
 	flist *last = fhead;
-	flist *n= hashtab[hash(node->size)];
+	flist *n= hashtab[hashv];
 
 	if (!(o = __mmap_inter(sizeof(flist)))) {
 		return 1;
@@ -72,6 +74,7 @@ static int addfreenode(object *node)
 	o->prev = last;
 	o->node = node;
 	fhead = o;
+	_fhead[hashv] = o;
 	if (!(fbase)) {
 		fbase = o; 
 	}
@@ -83,6 +86,9 @@ static object *findfree(size_t size)
 	object *t = NULL;
 	object *ret = NULL;
 	flist *o = NULL;
+
+	size_t hashv = hash(size);
+	flist *oo = hashtab[hashv];
 
 	for (o = fbase; o ; o = o->next) { 
 		t = o->node;
