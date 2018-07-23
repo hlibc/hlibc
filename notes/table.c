@@ -50,6 +50,7 @@ struct tnode *talloc(void)
 return (struct tnode *) malloc(sizeof(struct tnode));
 }
 
+
 struct nlist { 
 	struct nlist *next; 
 	char *name; 

@@ -99,9 +99,7 @@ extern char *__errno_table[];
 /* string to number */
 char *__tol_inter(const char *, int, long long *);
 
+/* a simple wrapper for mmap */
+void *__mmap_inter(size_t);
 
-//extern uintptr_t reftable[MAGLIM];
-//extern int used[MAGLIM];
-void initmag(void);
-int fprintf(FILE *, const char *, ...);
 #endif

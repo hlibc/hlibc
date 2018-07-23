@@ -6,17 +6,9 @@
 #include <stdint.h>
 #include <sys/mman.h>
 #include <errno.h>
-/*
-	2^16 = 65536
-	65536/512 = 128 
 
-	2^21 = 2097152
-	2097152 / 512 = 4096
-
-	2^22 = 4194304
-	4194304 / 512 = 8192
-*/
 static const size_t chunk_size = 512;
+
 typedef struct object
 {
 	size_t size; 
@@ -24,24 +16,23 @@ typedef struct object
 
 typedef struct flist
 {
-	struct flist *next; 
-	struct flist *prev; 
+	struct flist *next;
+	struct flist *prev;
 	object *node;
 }flist;
 
-
-#define HASH 2097152
-#define HASHSIZE (HASH / 512)
+// shoot for a 64 unit granularity [512, 32768]
+#define HASH 16777216
+#define WRAP 32768
+#define HASHSIZE 512
 
 static flist *hashtab[HASHSIZE];
 static flist *_fhead[HASHSIZE];
-static flist *_fbase[HASHSIZE];
-
 
 static size_t hash(size_t i)
 { 
-	i %= HASH;
-	return i / 512;
+	i %= HASH; // this should call a new table
+	return i / WRAP;
 }
 
 static flist *delmiddle(flist *o)
@@ -51,17 +42,6 @@ static flist *delmiddle(flist *o)
 	o->next->prev = o->prev;
 	munmap(o, sizeof(flist));
 	return tmp;
-}
-
-static void * __mmap_inter(size_t size)
-{
-	static const int pt = PROT_READ | PROT_WRITE;
-	static const int fs = MAP_PRIVATE | MAP_ANONYMOUS;
-	void *o = NULL;
-	if ((o = mmap(o, size, pt, fs, -1, 0)) == (void *)-1) {
-		return NULL;
-	}
-	return o;
 }
 
 static int addfreenode(object *node)
@@ -82,8 +62,7 @@ static int addfreenode(object *node)
 	o->node = node; 
 	_fhead[hashv] = o;
 	if (!(hashtab[hashv])) { 
-		 hashtab[hashv] = o; 
-		_fbase[hashv] = o;
+		 hashtab[hashv] = o;
 	}
 	return 0;
 }
@@ -92,22 +71,20 @@ static object *findfree(size_t size)
 {
 	object *t = NULL;
 	object *ret = NULL; 
-	size_t hashv = hash(size);
+	size_t i = hash(size);
 	flist *o = NULL;
-	
-	size_t i = hashv;
 
-
-	for (; i < HASHSIZE && ret == NULL; ++i) {
+	for (; i < HASHSIZE && ret == NULL; ++i, d = 1) {
 		for (o = hashtab[i]; o ; o = o->next) {
 			t = o->node;
-			if (t == NULL || o == _fhead[i] || o == _fbase[i])
+			if (t == NULL || o == _fhead[i] || o == hashtab[i])
 				continue;
-			if (t->size >= size) {
+			if (t->size >= size && ret == NULL) {
 				o = delmiddle(o);
 				ret = t;
 				break;
 			}else {
+				
 				o = delmiddle(o);
 				munmap(t, t->size + sizeof(object));
 			}
@@ -121,22 +98,22 @@ static object *morecore(size_t size)
 	object *o = NULL; 
 
 	size_t sum = 0;
-        size_t orig = size;
-        size_t mul = 1;
-        size_t t = 0;
+	size_t orig = size;
+	size_t mul = 1;
+	size_t t = 0;
 
-        if (size > chunk_size)
-                mul += (size / chunk_size);
+	if (size > chunk_size)
+		mul += (size / chunk_size);
 
-        if ((size_t)-1 / chunk_size < mul)
-                size = orig;
-        else
-                size = (chunk_size * mul);
+	if ((size_t)-1 / chunk_size < mul)
+		size = orig;
+	else {
+		size = (chunk_size * mul);
+	}
 
-        if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
-                /* FIXME: this probably should set something other than ENOMEM */
-                goto error;
-        }
+	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
+		goto error;
+	}
 
 	if (!(o = __mmap_inter(size + sizeof(object)))) {
 		goto error;
@@ -205,21 +182,5 @@ void *calloc(size_t nmemb, size_t size)
 	}
 	memset(o, 0, t);
 	return o;
-}
-
-
-static object *lookup(size_t i)
-{
-	flist *o = NULL;
-	object *t = NULL;
-
-	for (o = hashtab[hash(i)]; o != NULL; o = o->next) {
-		t = o->node;
-		if (t->size >= i) {
-			delmiddle(o);
-			return t;
-		}
-	}
-	return NULL;
 }
 
