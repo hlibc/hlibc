@@ -19,6 +19,19 @@ typedef struct flist
 	object *node;
 }flist;
 
+#define HASHSIZE 512
+
+static struct flist *hashtab[HASHSIZE];
+static struct flist *_fhead[HASHSIZE];
+static struct flist *_fbase[HASHSIZE];
+
+
+size_t hash(size_t i)
+{
+        return (i + 31) % HASHSIZE;
+}
+
+
 static flist *fbase = NULL;
 static flist *fhead = NULL;
 
@@ -46,6 +59,7 @@ static int addfreenode(object *node)
 {
 	flist *o = NULL; 
 	flist *last = fhead;
+	flist *n= hashtab[hash(node->size)];
 
 	if (!(o = __mmap_inter(sizeof(flist)))) {
 		return 1;
@@ -74,14 +88,13 @@ static object *findfree(size_t size)
 		t = o->node;
 		if (t == NULL || o == fbase || o == fhead)
 			continue;
-		if (t->size >= size )
-		{
+		if (t->size >= size) {
 			o = delmiddle(o);
 			ret = t;
 			break;
 		}else {
-			munmap(t, t->size + sizeof(object));
 			o = delmiddle(o);
+			munmap(t, t->size + sizeof(object));
 		}
 	}
 	return ret;
@@ -157,5 +170,21 @@ void *calloc(size_t nmemb, size_t size)
 	}
 	memset(o, 0, t);
 	return o;
+}
+
+
+static object *lookup(size_t i)
+{
+	flist *o = NULL;
+	object *t = NULL;
+
+	for (o = hashtab[hash(i)]; o != NULL; o = o->next) {
+		t = o->node;
+		if (t->size >= i) {
+			delmiddle(o);
+			return t;
+		}
+	}
+	return NULL;
 }
 
