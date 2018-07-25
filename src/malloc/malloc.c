@@ -7,85 +7,135 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-static const size_t chunk_size = 8192;
 
 typedef struct object
 {
-	size_t size;
-	struct object *next;
-	struct object *prev;
-	int free;
+	size_t size; 
 } object;
 
-static object *base = NULL;
-
-static object *delmiddle(object *o)
+typedef struct flist
 {
-	object *tmp = o->prev;
+	struct flist *next;
+	struct flist *prev;
+	object *node;
+}flist;
+
+typedef struct chain
+{ 
+	flist **magazine;
+	flist **_fhead;
+}chain;
+
+static chain **tchain; 
+
+// shoot for a 64 unit granularity [512, 32768]
+#define HASH 16777216
+#define WRAP 32768
+#define HASHSIZE 512
+#define CHAINLEN 256
+static const size_t chunk_size = 512;
+
+
+static size_t magno(size_t i)
+{
+	return i / HASH;
+}
+
+static size_t hash(size_t i)
+{
+	return i / WRAP;
+}
+
+static void initmag(size_t i)
+{
+	size_t z = magno(i);
+	static char once = 0;
+
+	if (!tchain)
+		tchain = __mmap_inter(sizeof(chain *) * CHAINLEN);
+
+	chain *c = tchain[z]; 
+	if (c == NULL) {
+		c = __mmap_inter(sizeof (chain));
+	}
+
+	if (!c->magazine)
+	{
+		c->magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
+		c->_fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
+	
+	}
+	tchain[z] = c;
+}
+
+static flist *delmiddle(flist *o)
+{
+	flist *tmp = o->prev;
 	o->prev->next = o->next;
 	o->next->prev = o->prev;
-	munmap(o, o->size + sizeof(object));
+	munmap(o, sizeof(flist));
 	return tmp;
 }
 
-static object *delhead(object *o)
+static int addfreenode(object *node)
 {
-	object *tmp = o->next;
-	o->next->prev = NULL;
-	munmap(o, o->size + sizeof(object));
-	/* "base" must be reset if the head of the list is deleted */
-	base = tmp;
-	return tmp;
+	size_t hashv = hash(node->size);
+	flist *o = NULL; 
+	size_t z = magno(node->size);
+	chain *c = tchain[z];
+	flist *last = c->_fhead[hashv]; 
+
+	if (!(o = __mmap_inter(sizeof(flist)))) {
+		return 1;
+	}
+
+	if (last) {
+		last->next = o;
+	}
+	o->next = NULL;
+	o->prev = last;
+	o->node = node; 
+	c->_fhead[hashv] = o;
+	if (!(c->magazine[hashv])) { 
+		 c->magazine[hashv] = o;
+	}
+	tchain[z] = c;
+	return 0;
 }
 
-static object *deltail(object *o)
+static object *findfree(size_t size)
 {
-	object *tmp = o->prev;
-	o->prev->next = NULL;
-	munmap(o, o->size + sizeof(object));
-	return tmp;
-}
+	object *t = NULL;
+	object *ret = NULL; 
+	size_t i = hash(size);
+	size_t z = magno(size);
+	flist *o = NULL;
+	chain *c = tchain[z];
 
-static object *eliminate(object *o)
-{
-	if (o->free == 1) {
-		if (o->next == NULL) {
-			o = deltail(o);
-		}
-		else if (o->prev == NULL) {
-			o = delhead(o);
-		}
-		else {
-			o = delmiddle(o);
+	for (; i < HASHSIZE && ret == NULL; ++i) {
+		for (o = c->magazine[i]; o ; o = o->next) {
+			t = o->node;
+			if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
+				continue;
+			if (t->size >= size && ret == NULL) {
+				o = delmiddle(o);
+				ret = t;
+				break;
+			}else {
+				o = delmiddle(o);
+				munmap(t, t->size + sizeof(object));
+				t = NULL;
+			}
 		}
 	}
-	return o;
+	tchain[z] = c;
+	return ret;
 }
 
-static object *find_free(object **last, size_t size)
+static object *morecore(size_t size)
 {
-	object *o;
-	int set = 0;
-	for (o = base; o ; o = o->next) {
-		if (o->free == 1 && o->size >= size && set == 0) {
-			set = 1;
-		}else 
-			o = eliminate(o);
-		/* lag one link behind */
-		if (set == 0)
-		{
-			o->free = 0;
-			*last = o;
-		}
-	}
-	return o;
-}
+	object *o = NULL; 
 
-static object *morecore(object *last, size_t size)
-{
-	object *o = NULL;
-	int pt = PROT_READ | PROT_WRITE;
-	int fs = MAP_PRIVATE | MAP_ANONYMOUS;
 	size_t sum = 0;
 	size_t orig = size;
 	size_t mul = 1;
@@ -96,25 +146,18 @@ static object *morecore(object *last, size_t size)
 
 	if ((size_t)-1 / chunk_size < mul)
 		size = orig;
-	else
+	else {
 		size = (chunk_size * mul);
+	}
 
 	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
-		/* FIXME: this probably should set something other than ENOMEM */
 		goto error;
 	}
 
-	if ((o = mmap(o, t, pt, fs, -1, 0)) == (void *)-1) {
+	if (!(o = __mmap_inter(size + sizeof(object)))) {
 		goto error;
-	}
-
-	if (last) {
-		last->next = o;
-	}
+	} 
 	o->size = size;
-	o->next = NULL;
-	o->prev = last;
-	o->free = 0;
 	return o;
 
 	error:
@@ -124,26 +167,14 @@ static object *morecore(object *last, size_t size)
 
 void *malloc(size_t size)
 {
+	initmag(size);
 	object *o;
-	object *last;
-
-	if (!base) {
-		if (!(o = morecore(NULL, size))) {
+	if (!(o = findfree(size))) {
+		if (!(o = morecore(size))) {
 			return NULL;
 		}
-		base = o;
 	}
-	else {
-		last = base;
-		if (!(o = find_free(&last, size))) {
-			if (!(o = morecore(last, size))) {
-				return NULL;
-			}
-		}
-		else {
-			o->free = 0;
-		}
-	}
+
 	return (o + 1);
 }
 
@@ -154,7 +185,7 @@ void free(void *ptr)
 		return;
 	}
 	o = (object *)ptr - 1;
-	o->free = 1;
+	addfreenode(o);
 }
 
 void *realloc(void *ptr, size_t size)
@@ -183,8 +214,7 @@ void *calloc(size_t nmemb, size_t size)
 {
 	void *o;
 	size_t t = 0;
-	if(__safe_umul_sz(nmemb, size, &t, (size_t)-1) == -1) {
-		/* FIXME: set errno here? */
+	if(__safe_umul_sz(nmemb, size, &t, (size_t)-1) == -1) { 
 		return NULL;
 	}
 	if (!(o = malloc(t))) {
@@ -194,13 +224,3 @@ void *calloc(size_t nmemb, size_t size)
 	return o;
 }
 
-void __destroy_malloc()
-{
-	object *o = NULL;
-	for (o = base; o; o = o->next) {
-		o = eliminate(o);
-	}
-	if (base) {
-		munmap(base, base->size + sizeof(object));
-	}
-}

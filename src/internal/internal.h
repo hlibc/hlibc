@@ -98,4 +98,8 @@ int __isalnum[256];
 extern char *__errno_table[];
 /* string to number */
 char *__tol_inter(const char *, int, long long *);
+
+/* a simple wrapper for mmap */
+void *__mmap_inter(size_t);
+
 #endif
