@@ -7,7 +7,6 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-static const size_t chunk_size = 512;
 
 typedef struct object
 {
@@ -25,47 +24,49 @@ typedef struct chain
 { 
 	flist **magazine;
 	flist **_fhead;
-	int init
 }chain;
 
-static chain __t[256];
-
+static chain **tchain; 
 
 // shoot for a 64 unit granularity [512, 32768]
 #define HASH 16777216
 #define WRAP 32768
 #define HASHSIZE 512
+#define CHAINLEN 256
+static const size_t chunk_size = 512;
 
-//static flist *magazine[HASHSIZE];
-//static flist *_fhead[HASHSIZE]; 
-
-static flist **magazine;
-static flist **_fhead; 
-
-static int initialized = 0;
 
 static size_t magno(size_t i)
 {
 	return i / HASH;
 }
-static void initmag(size_t i)
-{
-	size_t z = magno(i);
-	if (__t[z].init == 0)
-	{
-		__t[z].magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
-		__t[z]._fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
-		__t[z].init = 1;
-	}
-
-}
 
 static size_t hash(size_t i)
-{ 
-	//i %= HASH; // this should call a new table
+{
 	return i / WRAP;
 }
 
+static void initmag(size_t i)
+{
+	size_t z = magno(i);
+	static char once = 0;
+
+	if (!tchain)
+		tchain = __mmap_inter(sizeof(chain *) * CHAINLEN);
+
+	chain *c = tchain[z]; 
+	if (c == NULL) {
+		c = __mmap_inter(sizeof (chain));
+	}
+
+	if (!c->magazine)
+	{
+		c->magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
+		c->_fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
+	
+	}
+	tchain[z] = c;
+}
 
 static flist *delmiddle(flist *o)
 {
@@ -81,7 +82,8 @@ static int addfreenode(object *node)
 	size_t hashv = hash(node->size);
 	flist *o = NULL; 
 	size_t z = magno(node->size);
-	flist *last = __t[z]._fhead[hashv]; 
+	chain *c = tchain[z];
+	flist *last = c->_fhead[hashv]; 
 
 	if (!(o = __mmap_inter(sizeof(flist)))) {
 		return 1;
@@ -93,10 +95,11 @@ static int addfreenode(object *node)
 	o->next = NULL;
 	o->prev = last;
 	o->node = node; 
-	__t[z]._fhead[hashv] = o;
-	if (!(__t[z].magazine[hashv])) { 
-		 __t[z].magazine[hashv] = o;
+	c->_fhead[hashv] = o;
+	if (!(c->magazine[hashv])) { 
+		 c->magazine[hashv] = o;
 	}
+	tchain[z] = c;
 	return 0;
 }
 
@@ -107,11 +110,12 @@ static object *findfree(size_t size)
 	size_t i = hash(size);
 	size_t z = magno(size);
 	flist *o = NULL;
+	chain *c = tchain[z];
 
 	for (; i < HASHSIZE && ret == NULL; ++i) {
-		for (o = __t[z].magazine[i]; o ; o = o->next) {
+		for (o = c->magazine[i]; o ; o = o->next) {
 			t = o->node;
-			if (t == NULL || o == __t[z]._fhead[i] || o == __t[z].magazine[i])
+			if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
 				continue;
 			if (t->size >= size && ret == NULL) {
 				o = delmiddle(o);
@@ -120,9 +124,11 @@ static object *findfree(size_t size)
 			}else {
 				o = delmiddle(o);
 				munmap(t, t->size + sizeof(object));
+				t = NULL;
 			}
 		}
 	}
+	tchain[z] = c;
 	return ret;
 }
 
