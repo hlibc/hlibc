@@ -25,9 +25,10 @@ typedef struct chain
 { 
 	flist **magazine;
 	flist **_fhead;
+	int init
 }chain;
 
-chain *tchain;
+static chain __t[256];
 
 
 // shoot for a 64 unit granularity [512, 32768]
@@ -43,21 +44,28 @@ static flist **_fhead;
 
 static int initialized = 0;
 
-static void initmag(void)
+static size_t magno(size_t i)
 {
-	if (initialized == 0)
+	return i / HASH;
+}
+static void initmag(size_t i)
+{
+	size_t z = magno(i);
+	if (__t[z].init == 0)
 	{
-		magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
-		_fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
+		__t[z].magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
+		__t[z]._fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
+		__t[z].init = 1;
 	}
-	initialized = 1;
+
 }
 
 static size_t hash(size_t i)
 { 
-	i %= HASH; // this should call a new table
+	//i %= HASH; // this should call a new table
 	return i / WRAP;
 }
+
 
 static flist *delmiddle(flist *o)
 {
@@ -72,7 +80,8 @@ static int addfreenode(object *node)
 {
 	size_t hashv = hash(node->size);
 	flist *o = NULL; 
-	flist *last = _fhead[hashv]; 
+	size_t z = magno(node->size);
+	flist *last = __t[z]._fhead[hashv]; 
 
 	if (!(o = __mmap_inter(sizeof(flist)))) {
 		return 1;
@@ -84,9 +93,9 @@ static int addfreenode(object *node)
 	o->next = NULL;
 	o->prev = last;
 	o->node = node; 
-	_fhead[hashv] = o;
-	if (!(magazine[hashv])) { 
-		 magazine[hashv] = o;
+	__t[z]._fhead[hashv] = o;
+	if (!(__t[z].magazine[hashv])) { 
+		 __t[z].magazine[hashv] = o;
 	}
 	return 0;
 }
@@ -96,12 +105,13 @@ static object *findfree(size_t size)
 	object *t = NULL;
 	object *ret = NULL; 
 	size_t i = hash(size);
+	size_t z = magno(size);
 	flist *o = NULL;
 
 	for (; i < HASHSIZE && ret == NULL; ++i) {
-		for (o = magazine[i]; o ; o = o->next) {
+		for (o = __t[z].magazine[i]; o ; o = o->next) {
 			t = o->node;
-			if (t == NULL || o == _fhead[i] || o == magazine[i])
+			if (t == NULL || o == __t[z]._fhead[i] || o == __t[z].magazine[i])
 				continue;
 			if (t->size >= size && ret == NULL) {
 				o = delmiddle(o);
@@ -151,7 +161,7 @@ static object *morecore(size_t size)
 
 void *malloc(size_t size)
 {
-	initmag();
+	initmag(size);
 	object *o;
 	if (!(o = findfree(size))) {
 		if (!(o = morecore(size))) {
