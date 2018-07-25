@@ -1,0 +1,81 @@
+variables:
+  GIT_STRATEGY: clone
+
+# gcc
+
+#gcc113__aarch64__gcc:
+#  tags:
+#    - debian
+#    - aarch64
+#  script: "make gcctest"
+
+#gcc75__x86_64__gcc:
+#  tags:
+#    - debian
+#    - x86_64
+#  script: "make gcctest"
+
+#gcc45__i686__gcc:
+#  tags:
+#    - debian
+#    - i686
+#  script: "make gcctest"
+
+96core__aarch64__gcc:
+  tags:
+    - 96core
+    - aarch64
+  script: "make gcctest"
+
+alpine__x86_64__gcc:
+  tags:
+    - alpine
+    - x86_64
+  script: "make gcctest"
+
+alpine__i386__gcc:
+  tags:
+    - alpine
+    - i386
+  script: "make gcctest"
+
+#debian__armel__gcc:
+#  tags:
+#    - debian
+#    - armel
+#  script: "make gcctest"
+
+# clang 
+
+#gcc75__x86_64__clang:
+#  tags:
+#    - debian
+#    - x86_64
+#  script: "make clangtest"
+
+#gcc45__i686__clang:
+#  tags:
+#    - debian
+#    - i686
+#  script: "make clangtest"
+
+96core__aarch64__clang:
+  tags:
+    - 96core
+    - aarch64
+  script: "make clangtest"
+
+alpine__x86_64__clang:
+  tags:
+    - alpine
+    - x86_64
+  script: "make clangtest"
+
+alpine__i386__clang:
+  tags:
+    - alpine
+    - i386
+  script: "make clangtest"
+
+
+
