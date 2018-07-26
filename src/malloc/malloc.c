@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <sys/mman.h>
 #include <errno.h>
-
+#include <limits.h>
 
 typedef struct object
 {
@@ -29,12 +29,12 @@ typedef struct chain
 static chain **tchain; 
 
 // shoot for a 64 unit granularity [512, 32768]
-#define HASH 16777216
-#define WRAP 32768
-#define HASHSIZE 512
-#define CHAINLEN 256
-static const size_t chunk_size = 512;
+#define HASHSIZE UINT_MAX / (256*512*64) // 512
+#define CHAINLEN UINT_MAX / (256*512*128) // 256
+#define WRAP UINT_MAX / (HASHSIZE*CHAINLEN) // 32768
+#define HASH UINT_MAX / CHAINLEN // 16777216
 
+static const size_t chunk_size = 8096;
 
 static size_t magno(size_t i)
 {
@@ -49,7 +49,6 @@ static size_t hash(size_t i)
 static void initmag(size_t i)
 {
 	size_t z = magno(i);
-	static char once = 0;
 
 	if (!tchain)
 		tchain = __mmap_inter(sizeof(chain *) * CHAINLEN);
@@ -110,25 +109,30 @@ static object *findfree(size_t size)
 	size_t i = hash(size);
 	size_t z = magno(size);
 	flist *o = NULL;
-	chain *c = tchain[z];
-
-	for (; i < HASHSIZE && ret == NULL; ++i) {
-		for (o = c->magazine[i]; o ; o = o->next) {
-			t = o->node;
-			if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
-				continue;
-			if (t->size >= size && ret == NULL) {
-				o = delmiddle(o);
-				ret = t;
-				break;
-			}else {
-				o = delmiddle(o);
-				munmap(t, t->size + sizeof(object));
-				t = NULL;
+	chain *c;
+	
+	for (; z < CHAINLEN && ret == NULL; ++z) {
+		c = tchain[z];
+		 for (; c && i < HASHSIZE && ret == NULL; ++i) {
+			for (o = c->magazine[i]; o ; o = o->next) {
+				t = o->node;
+				if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
+					continue;
+				if (t->size >= size && ret == NULL) {
+					o = delmiddle(o);
+					ret = t;
+					break;
+				}else {
+					o = delmiddle(o);
+					munmap(t, t->size + sizeof(object));
+					t = NULL;
+				}
 			}
 		}
+		i = 0;
+		tchain[z] = c;
 	}
-	tchain[z] = c;
+	
 	return ret;
 }
 
@@ -167,9 +171,14 @@ static object *morecore(size_t size)
 
 void *malloc(size_t size)
 {
+	if (size >= UINT_MAX)
+	{
+		goto core;
+	}
 	initmag(size);
 	object *o;
 	if (!(o = findfree(size))) {
+		core:
 		if (!(o = morecore(size))) {
 			return NULL;
 		}
@@ -185,6 +194,8 @@ void free(void *ptr)
 		return;
 	}
 	o = (object *)ptr - 1;
+	if (o->size >= UINT_MAX)
+		munmap(o, o->size);
 	addfreenode(o);
 }
 
