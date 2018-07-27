@@ -10,8 +10,8 @@ OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
 # test suite
-GCC_WRAP = CC="$(prefix)/bin/gcc-wrap"
-CLANG_WRAP = CC="$(prefix)/bin/clang-wrap"
+#GCC_WRAP = CC="$(prefix)/bin/gcc-wrap"
+#CLANG_WRAP = CC="$(prefix)/bin/clang-wrap"
 
 LDFLAGS =
 CPPFLAGS =
@@ -29,15 +29,15 @@ CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 TOOL_LIBS = lib/gcc-wrap.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/gcc-wrap
+ALL_TOOLS = tools/gcc-wrap tools/clang-wrap
 
 -include config.mak
 
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	-./tools/create_wrappers.sh $(prefix) $(libdir) > $(DESTDIR)/$(bindir)/clang-wrap
-	-chmod +x $(DESTDIR)/$(bindir)/clang-wrap
+	#-./tools/create_wrappers.sh $(prefix) $(libdir) > $(DESTDIR)/$(bindir)/clang-wrap
+	#-chmod +x $(DESTDIR)/$(bindir)/clang-wrap
 
 clean:
 	-$(RM) -f crt/*.o
@@ -90,6 +90,12 @@ lib/%.o: crt/%.o
 tools/gcc-wrap: config.mak
 	printf '#!/bin/sh\nexec gcc $(STACK_PROTECTOR) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
 	chmod +x $@
+
+tools/clang-wrap:
+	printf '#!/bin/sh\nclang -D_GNU_SOURCE -fno-stack-protector -static -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' > $@
+	chmod +x $@
+
+
 
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
