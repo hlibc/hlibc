@@ -10,4 +10,6 @@ lib/gcc-wrap.specs
 tests/a.out
 tools/clang-wrap
 tools/gcc-wrap
+cscope.out
+cscope.files
 

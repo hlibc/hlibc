@@ -25,6 +25,7 @@
 #include <sys/utsname.h>
 #include <sys/wait.h>
 #include <sys/wait.h> 
+#include <sys/exit.h>
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
@@ -545,85 +546,6 @@ void __assert_fail(const char *expr, const char *file, int line, const char *fun
 	fprintf(stderr, "Assertion failed: %s (%s: %s: %d)\n", expr, file, func, line);
 	fflush(NULL);
 	abort();
-}
-
-#define COUNT 32
-
-static struct fl
-{
-	struct fl *next;
-	void (*f[COUNT])(void *);
-	void *a[COUNT];
-} builtin, *head;
-
-void __funcs_on_exit()
-{
-	int i;
-	void (*func)(void *), *arg;
-
-	for (; head; head=head->next)
-	{
-		for (i=COUNT-1; i>=0 && !head->f[i]; i--)
-			;
-		if (i<0) 
-			continue;
-		func = head->f[i];
-		arg = head->a[i];
-		head->f[i] = 0;
-		func(arg);
-	}
-}
-
-int __cxa_atexit(void (*func)(void *), void *arg)
-{
-	int i;
-	/* Defer initialization of head so it can be in BSS */
-	if (!head) head = &builtin;
-
-	/* If the current function list is full, add a new one */
-	if (head->f[COUNT-1])
-	{
-		struct fl *new_fl = calloc(sizeof(struct fl), 1);
-		if (!new_fl) 
-			return -1;
-	
-		new_fl->next = head;
-		head = new_fl;
-	}
-
-	/* Append function to the list. */
-	for (i=0; i<COUNT && head->f[i]; i++)
-		;
-	head->f[i] = func;
-	head->a[i] = arg;
-	return 0;
-}
-
-static void call(void *p)
-{
-	((void (*)(void))(uintptr_t)p)();
-}
-
-int atexit(void (*func)(void))
-{
-	return __cxa_atexit(call, (void *)(uintptr_t)func);
-}
-
-void __funcs_on_exit();
-
-void exit(int code)
-{
-	__funcs_on_exit();
-	fflush(NULL);
-
-	_Exit(code);
-	for(;;);
-}
-
-void _Exit(int ec)
-{
-	__syscall(SYS_exit_group, ec);
-	__syscall(SYS_exit, ec);
 }
 
 int raise(int sig)
