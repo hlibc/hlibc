@@ -25,7 +25,6 @@
 #include <sys/utsname.h>
 #include <sys/wait.h>
 #include <sys/wait.h> 
-#include <sys/exit.h>
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
@@ -128,11 +127,6 @@ int dup2(int old, int new)
 int dup(int fd)
 {
 	return __syscall(SYS_dup, fd);
-}
-
-void _exit(int status)
-{
-	_Exit(status);
 }
 
 int ftruncate(int fd, off_t length)

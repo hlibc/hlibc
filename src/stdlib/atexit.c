@@ -37,7 +37,7 @@ void __funcs_on_exit()
  * __cxa_atexit: Add the given function pointer to the array of function
  * pointers that are called by the exit of the main() function.
  */
-int __cxa_atexit(void (*func)(void *), void *arg)
+static int __cxa_atexit(void (*func)(void *), void *arg)
 {
 	int i;
 	/* Defer initialization of head so it can be in BSS */
@@ -65,6 +65,12 @@ int atexit(void (*func)(void))
 	return __cxa_atexit(call, (void *)(uintptr_t)func);
 }
 
+static void _Exit(int ec)
+{
+	__syscall(SYS_exit_group, ec);
+	__syscall(SYS_exit, ec);
+}
+
 void exit(int code)
 {
 	__funcs_on_exit();
@@ -72,11 +78,5 @@ void exit(int code)
 
 	_Exit(code);
 	for(;;);
-}
-
-void _Exit(int ec)
-{
-	__syscall(SYS_exit_group, ec);
-	__syscall(SYS_exit, ec);
 }
 

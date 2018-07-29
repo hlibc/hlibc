@@ -42,7 +42,6 @@ void free (void *);
 void abort (void);
 int atexit (void (*) (void));
 void exit (int);
-void _Exit (int);
 
 char *getenv (const char *);
 
