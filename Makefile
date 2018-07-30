@@ -9,10 +9,6 @@ SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
-# test suite
-#GCC_WRAP = CC="$(prefix)/bin/gcc-wrap"
-#CLANG_WRAP = CC="$(prefix)/bin/clang-wrap"
-
 LDFLAGS =
 CPPFLAGS =
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
@@ -33,41 +29,35 @@ ALL_TOOLS = tools/gcc-wrap tools/clang-wrap
 
 -include config.mak
 
+WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
+
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
-	#-./tools/create_wrappers.sh $(prefix) $(libdir) > $(DESTDIR)/$(bindir)/clang-wrap
-	#-chmod +x $(DESTDIR)/$(bindir)/clang-wrap
 
 clean:
 	-$(RM) -f crt/*.o
 	-$(RM) -f $(OBJS)
-	-$(RM) -f $(LOBJS)
 	-$(RM) -f $(ALL_LIBS) lib/*.[ao]
 	-$(RM) -f $(ALL_TOOLS)
 	-$(RM) -f $(GENH) 
 	-$(RM) -rf include/bits
 	-$(RM) -f config.mak
-	-$(RM) -rf usr logs
-	-$(RM) -f tools/clang-wrap
 	-$(MAKE) -C system-root/hlibc-test/
 
 cleanall:
 	-rm -rf system-root
 
 include/bits:
-	@test "$(ARCH)" || echo "\n\tPlease set ARCH in config.mak before running make "
-	@test "$(ARCH)" || echo "\tor use the ./configure script."
-	@test "$(ARCH)" || { echo "\tRun 'make gcctest|clangtest' to invoke the test suite\n\n" ; exit 1 ; }
+	@test "$(ARCH)" || echo "\n\tPlease run ./configure first\n"
+	@test "$(ARCH)" || echo "\tOr use 'make gcctest|clangtest' to invoke the test suite\n"
+	@test "$(ARCH)" || exit 1
 	cp -r arch/$(ARCH)/bits include/
 
 include/bits/alltypes.h.sh: include/bits
 
 include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
-
-#%.o: $(ARCH)/%.c
-#	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
 
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
@@ -88,14 +78,14 @@ lib/%.o: crt/%.o
 	cp $< $@
 
 tools/gcc-wrap: config.mak
-	printf '#!/bin/sh\nexec gcc $(STACK_PROTECTOR) -fno-stack-protector -static -D_GNU_SOURCE "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" > $@
+	printf '#!/bin/sh\n' > $@
+	printf 'exec gcc $(WRAP_OPT) "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" >> $@
 	chmod +x $@
 
-tools/clang-wrap:
-	printf '#!/bin/sh\nclang -D_GNU_SOURCE -fno-stack-protector -static -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' > $@
+tools/clang-wrap: config.mak
+	printf '#!/bin/sh\n' > $@
+	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
 	chmod +x $@
-
-
 
 $(DESTDIR)$(bindir)/%: tools/%
 	install -D $< $@
@@ -113,14 +103,13 @@ lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
 gcctest:
-	./tools/build.sh gcc $(PWD)/system-root/
+	CFLAGS="" ./tools/build.sh gcc $(PWD)/system-root/
 
 clangtest:
-	./tools/build.sh clang $(PWD)/system-root/
+	CFLAGS="" ./tools/build.sh clang $(PWD)/system-root/
 
 release:
 	./tools/.release
-
 
 .PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
 

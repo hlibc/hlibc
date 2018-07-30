@@ -1,12 +1,14 @@
-/* Written 2011 Nicholas J. Kain, released as Public Domain */ 
-.text
+/* Copyright 2018, Adrian Parvin D. Ouano */
+/* Copyright 2018, CM Graff */
+
 .global _start
-_start:
-	xor %rbp,%rbp   /* rbp:undefined -> mark as zero 0 (ABI) */
-	mov %rdx,%r9    /* 6th arg: ptr to register with atexit() */
-	pop %rsi        /* 2nd arg: argc */
-	mov %rsp,%rdx   /* 3rd arg: argv */
-	andq $-16,%rsp  /* align stack pointer */
-	mov $main,%rdi  /* 1st arg: application entry ip */
-	call __libc_start_main /* hlibc init will run the program */
-1:	jmp 1b
+_start: 
+	subq $8, %rsp
+	xor %rbp, %rbp
+	pop %rax
+	pop %rsi
+	mov %rsp, %rdx
+	andq $-16, %rsp
+	mov $main, %rdi
+	call __libc_start_main
+
