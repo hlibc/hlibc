@@ -615,7 +615,6 @@ void exit(int code)
 {
 	__funcs_on_exit();
 	fflush(NULL);
-
 	_Exit(code);
 	for(;;);
 }
