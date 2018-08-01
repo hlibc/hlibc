@@ -16,7 +16,7 @@ author, except for detailed below.
 	Eigenfeld Aparicio
 	James Buren
 	Xnrand (grumble)
-    Nicholas Chambers (uplime)
+	Nicholas Chambers (uplime)
 
 
 musl libc   (src/syscalls/  src/stdio/fmt_fp.c)
