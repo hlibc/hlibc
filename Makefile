@@ -79,7 +79,7 @@ lib/%.o: crt/%.o
 
 tools/gcc-wrap: config.mak
 	printf '#!/bin/sh\n' > $@
-	printf 'exec gcc $(WRAP_OPT) "$$@" -specs "%s/gcc-wrap.specs"\n' "$(libdir)" >> $@
+	printf 'exec gcc $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
 	chmod +x $@
 
 tools/clang-wrap: config.mak
