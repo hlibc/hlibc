@@ -17,10 +17,10 @@ cat <<EOF
 libgcc.a%s %:if-exists(libgcc_eh.a%s)
 
 *startfile:
-%{!shared: $libdir/crt1.o} $libdir/crti.o %{shared|pie:crtbeginS.o%s;:crtbeginS.o%s}
+$libdir/crt1.o $libdir/crti.o %{crtbeginS.o}
 
 *endfile:
-%{shared|pie:crtendS.o%s;:crtendS.o%s} $libdir/crtn.o
+%{crtendS.o} $libdir/crtn.o
 
 %rename link old_link
 
