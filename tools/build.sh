@@ -10,7 +10,7 @@ cd "${2}"
 
 # retrieve and build hlibc-test (passing it two compilers(libc) to compare)
 git clone https://git.hlibc.xyz/lab/hlibc-test.git
-./hlibc-test/build.sh "${1}" "${2}/bin/${1}-wrap"
+./hlibc-test/build.sh "${1}" "${2}/bin/compiler"
 
 exit 0
 

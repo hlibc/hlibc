@@ -25,19 +25,19 @@ variables:
   tags:
     - 96core
     - aarch64
-  script: "make gcctest"
+  script: "CC=gcc make test"
 
 alpine__x86_64__gcc:
   tags:
     - alpine
     - x86_64
-  script: "make gcctest"
+  script: "CC=gcc make test"
 
 alpine__i386__gcc:
   tags:
     - alpine
     - i386
-  script: "make gcctest"
+  script: "CC=gcc make test"
 
 #debian__armel__gcc:
 #  tags:
@@ -63,19 +63,19 @@ alpine__i386__gcc:
   tags:
     - 96core
     - aarch64
-  script: "make clangtest"
+  script: "CC=clang make test"
 
 alpine__x86_64__clang:
   tags:
     - alpine
     - x86_64
-  script: "make clangtest"
+  script: "CC=clang make test"
 
 alpine__i386__clang:
   tags:
     - alpine
     - i386
-  script: "make clangtest"
+  script: "CC=clang make test"
 
 
 
