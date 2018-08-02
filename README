@@ -14,24 +14,21 @@ DESCRIPTION:
 
 BUILDING:
 ---------
+	
+	hlibc creates a wrapper for gcc or clang named "compiler" which
+	redirects linking options allowing hlibc to be installed and used
+	without root privilege.
 
-	hlibc creates a wrapper for gcc or clang that redirects the compiler's 
-	linking options allowing hlibc to be installed and used without
-	root privilege.
 
 		git clone https://git.hlibc.xyz/lab/hlibc
+
 		cd hlibc
+		./configure --prefix=/home/$USER/buildarea
+		make
+		make install
 
-	Instructions for gcc:
-		CC=gcc ./configure --prefix=/home/$USER/buildarea 
-		CC=gcc make && make install
-		/home/$USER/buildarea/bin/gcc-wrap hello.c
+		/home/$USER/buildarea/bin/compiler hello.c
 
-	Instructions for clang:
-
-		CC=clang ./configure --prefix=/home/$USER/buildarea
-		CC=clang make && make install
-		/home/$USER/buildarea/bin/clang-wrap hello.c
 
 
 TESTING:
@@ -39,7 +36,8 @@ TESTING:
 
 	To download, build and run the hlibc-test test suite invoke:
 
-		make gcctest|clangtest
+		make test
+
 
 
 REVISION CONTROL:
@@ -69,16 +67,6 @@ COPYING:
 
 RELEASES:
 ---------
-
-	http://hlibc.xyz/hlibc-0.1a.tar.gz
-
-	http://hlibc.xyz/hlibc-0.1b.tar.gz
-
-	http://hlibc.xyz/hlibc-0.1c.tar.gz
-
-	http://hlibc.xyz/hlibc-0.1d.tar.gz
-
-	http://hlibc.xyz/hlibc-0.1e.tar.gz
 
 	http://hlibc.xyz/hlibc-0.10.tar.gz
 
