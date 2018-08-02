@@ -2,31 +2,10 @@
 
 usage () {
 cat <<EOF
-Usage: $0 [OPTION]... [VAR=VALUE]... [TARGET]
 
-To assign environment variables (e.g., CC, CFLAGS...), specify them as
-VAR=VALUE.  See below for descriptions of some of the useful variables.
+hlibc 2018, CM Graff et al.
 
-Defaults for the options are specified in brackets.
-
-Installation directories:
-  --prefix=PREFIX         main installation prefix [/usr/local/hlibc]
-  --exec-prefix=EPREFIX   installation prefix for executable files [PREFIX]
-
-Fine tuning of the installation directories:
-  --bindir=DIR            user executables [EPREFIX/bin]
-  --libdir=DIR            library files for the linker [PREFIX/lib]
-  --includedir=DIR        include files for the C compiler [PREFIX/include]
-  --syslibdir=DIR         location for the dynamic linker [/lib]
-
-System types:
-  --target=TARGET         configure to run on target TARGET [detected]
-
-Some influential environment variables:
-  CC                      C compiler command [detected]
-  CFLAGS                  C compiler flags [-Os -pipe ...]
-
-Use these variables to override the choices made by configure.
+  --prefix=PREFIX         main installation prefix [/usr/local/hlibc] 
 
 EOF
 exit 0
@@ -109,23 +88,6 @@ for arg ; do
 	case "$arg" in
 		--help) usage ;;
 		--prefix=*) prefix=${arg#*=} ;;
-		--exec-prefix=*) exec_prefix=${arg#*=} ;;
-		--bindir=*) bindir=${arg#*=} ;;
-		--libdir=*) libdir=${arg#*=} ;;
-		--includedir=*) includedir=${arg#*=} ;;
-		--syslibdir=*) syslibdir=${arg#*=} ;;
-		--enable-shared|--enable-shared=yes) shared=yes ;;
-		--disable-shared|--enable-shared=no) shared=no ;;
-		--enable-static|--enable-static=yes) static=yes ;;
-		--disable-static|--enable-static=no) static=no ;;
-		--enable-debug|--enable-debug=yes) debug=yes ;;
-		--disable-debug|--enable-debug=no) debug=no ;;
-		--enable-warnings|--enable-warnings=yes) warnings=yes ;;
-		--disable-warnings|--enable-warnings=no) warnings=no ;;
-		--enable-gcc-wrapper|--enable-gcc-wrapper=yes) wrapper=yes ;;
-		--disable-gcc-wrapper|--enable-gcc-wrapper=no) wrapper=no ;;
-		--enable-*|--disable-*|--with-*|--without-*|--*dir=*|--build=*) ;;
-		--host=*|--target=*) target=${arg#*=} ;;
 		-* ) echo "$0: unknown option $arg" ;;
 		CC=*) CC=${arg#*=} ;;
 		CFLAGS=*) CFLAGS=${arg#*=} ;;
@@ -164,6 +126,7 @@ printf "checking for C compiler... "
 trycc gcc
 trycc c99
 trycc cc
+trycc clang
 printf "%s\n" "$CC"
 test -n "$CC" || { echo "$0: cannot find a C compiler" ; exit 1 ; }
 
@@ -191,11 +154,7 @@ esac
 #
 tryflag CFLAGS_C99FSE -std=c99
 tryflag CFLAGS_C99FSE -nostdinc
-tryflag CFLAGS_C99FSE -ffreestanding \
-|| tryflag CFLAGS_C99FSE -fno-builtin
-tryflag CFLAGS_C99FSE -fexcess-precision=standard \
-|| { test "$ARCH" = i386 && tryflag CFLAGS_C99FSE -ffloat-store ; }
-tryflag CFLAGS_C99FSE -frounding-math
+tryflag CFLAGS_C99FSE -ffreestanding
 
 #
 # Setup basic default CFLAGS: debug, optimization, and -pipe

@@ -1,4 +1,3 @@
-exec_prefix = /usr/local
 bindir = $(exec_prefix)/bin
 prefix = /usr/local/hlibc
 includedir = $(prefix)/include
@@ -79,6 +78,8 @@ lib/%.o: crt/%.o
 
 tools/compiler: config.mak
 	printf '#!/bin/sh\n' > $@
+	printf 'printf "cc = "\n' >> $@
+	printf 'set -x\n' >> $@
 ifdef ($(CC_IS_CLANG)
 	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
 else
