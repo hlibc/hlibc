@@ -25,7 +25,7 @@ CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 TOOL_LIBS = lib/gcc-wrap.specs
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/gcc-wrap tools/clang-wrap
+ALL_TOOLS = tools/compiler
 
 -include config.mak
 
@@ -50,7 +50,7 @@ cleanall:
 
 include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease run ./configure first\n"
-	@test "$(ARCH)" || echo "\tOr use 'make gcctest|clangtest' to invoke the test suite\n"
+	@test "$(ARCH)" || echo "\tOr use 'make test' to invoke the test suite\n"
 	@test "$(ARCH)" || exit 1
 	cp -r arch/$(ARCH)/bits include/
 
@@ -77,14 +77,13 @@ $(EMPTY_LIBS):
 lib/%.o: crt/%.o
 	cp $< $@
 
-tools/gcc-wrap: config.mak
+tools/compiler: config.mak
 	printf '#!/bin/sh\n' > $@
-	printf 'exec gcc $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
-	chmod +x $@
-
-tools/clang-wrap: config.mak
-	printf '#!/bin/sh\n' > $@
+ifdef ($(CC_IS_CLANG)
 	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
+else
+	printf 'exec gcc $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
+endif
 	chmod +x $@
 
 $(DESTDIR)$(bindir)/%: tools/%
@@ -102,11 +101,8 @@ $(DESTDIR)$(syslibdir):
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
-gcctest:
-	CFLAGS="" ./tools/build.sh gcc $(PWD)/system-root/
-
-clangtest:
-	CFLAGS="" ./tools/build.sh clang $(PWD)/system-root/
+test:
+	./tools/build.sh $(CC) $(PWD)/system-root/
 
 release:
 	./tools/.release
