@@ -1,5 +1,16 @@
 #include "../internal/internal.h"
 
+/* This table is used for strtol and part of ctypes
+   it basically just converts characters to numbers
+   or returns a -1 if they are not 0-9, a-z or A-Z.
+   The table is hence suited for handling numerical 
+   conversions for up to base 36 inclusive.
+   Octal values are used so as to produce a nicely
+   formatted columnar list (as they accept leading
+   zeros). The decimal or hex values may be used
+   instead.
+*/
+
 int __isalnum[256] = {
 	-001, -001, -001, -001, -001, -001, -001, -001,
 	-001, -001, -001, -001, -001, -001, -001, -001,
