@@ -30,6 +30,11 @@ BUILDING:
 		/home/$USER/buildarea/bin/compiler hello.c
 
 
+	If all went as expected then `compiler' will link against hlibc's
+	libc.a and header files, completely excluding those of the host. Run
+	`readelf -a' on the resulting binary and inspect the output to ensure
+	that it was not contaminated by the host libc.
+	
 
 TESTING:
 --------
