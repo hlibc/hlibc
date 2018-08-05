@@ -11,6 +11,7 @@
 # specs file.
 # For clang a different method is used and this file has no effect.
 
+
 incdir=$1
 libdir=$2
 ldso=$3
@@ -42,8 +43,11 @@ $libdir/crt1.o $libdir/crti.o %{crtbeginS.o}
 
 *esp_link:
 
+
 *esp_options:
 
+
 *esp_cpp_options:
+
 
 EOF
