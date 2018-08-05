@@ -42,7 +42,6 @@ clean:
 	-$(RM) -f $(GENH) 
 	-$(RM) -rf include/bits
 	-$(RM) -f config.mak
-	-$(MAKE) -C system-root/hlibc-test/
 
 cleanall:
 	-rm -rf system-root
@@ -103,6 +102,8 @@ lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
 test:
+	-$(MAKE) -C system-root/hlibc-test/
+	-$(RM) -rf system-root/bin system-root/lib system-root/include
 	./tools/build.sh $(CC) $(PWD)/system-root/
 
 release:

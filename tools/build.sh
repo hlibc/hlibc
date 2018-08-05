@@ -2,7 +2,7 @@
 
 # Build and install hlibc
 make clean
-CC="$1" ./configure --prefix="${2}" --enable-gcc-wrapper --disable-shared
+CC="$1" ./configure --prefix="${2}"
 CC="$1" make
 make install
 
