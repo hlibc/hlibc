@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+</pre><dt><strong>hlibc</strong></dt><pre>
+
+</pre><dt><strong>DESCRIPTION:</strong></dt><pre>
+</pre><hr><pre>
+
+	hlibc is a freestanding libc that implements a subset of the POSIX, C99
+	and C11 hosted implementation requirements. The mathematics library is
+	a minimalistic fork of Sun fdlibm focused on IEEE-754-2008 floating
+	point research and the study of fdlibm's core components.
+
+	hlibc is targeted at the linux kernel's syscall ABI and currently
+	supports the i386, x86_64, arm and aarch64 architectures.
+
+
+</pre><dt><strong>BUILDING:</strong></dt><pre>
+</pre><hr><pre>
+	
+	hlibc creates a wrapper for gcc or clang named "compiler" which
+	redirects linking options allowing hlibc to be installed and used
+	without root privilege.
+
+
+		git clone <a href="https://git.hlibc.xyz/lab/hlibc">https://git.hlibc.xyz/lab/hlibc</a>
+
+		cd hlibc
+		./configure --prefix=/home/$USER/buildarea
+		make
+		make install
+
+		/home/$USER/buildarea/bin/compiler hello.c
+
+
+	If all went as expected then `compiler' will link against hlibc's
+	libc.a and header files, completely excluding those of the host. Run
+	`readelf -a' on the resulting binary and inspect the output to ensure
+	that it was not contaminated by the host libc.
+	
+
+</pre><dt><strong>TESTING:</strong></dt><pre>
+</pre><hr><pre>
+
+	To download, build and run the hlibc-test test suite invoke:
+
+		make test
+
+
+
+</pre><dt><strong>REVISION CONTROL:</strong></dt><pre>
+</pre><hr><pre>
+
+	<a href="https://git.hlibc.xyz/lab/hlibc">https://git.hlibc.xyz/lab/hlibc</a>
+
+
+</pre><dt><strong>CONTACT:</strong></dt><pre>
+</pre><hr><pre>
+
+	<a href="mailto:cm0graff@gmail.com">cm0graff@gmail.com</a>
+
+
+</pre><dt><strong>IRC:</strong></dt><pre>
+</pre><hr><pre>
+
+	#hlibc on irc.freenode.net
+
+
+</pre><dt><strong>COPYING:</strong></dt><pre>
+</pre><hr><pre>
+
+	Please see the attached LICENSE file for the list of contributors and
+	copying details.
+
+
+</pre><dt><strong>RELEASES:</strong></dt><pre>
+</pre><hr><pre>
+
+	<a href="http://hlibc.xyz/hlibc-0.10.tar.gz">http://hlibc.xyz/hlibc-0.10.tar.gz</a>
+
+	<a href="http://hlibc.xyz/hlibc-0.12.tar.gz">http://hlibc.xyz/hlibc-0.12.tar.gz</a>
+
+</pre>
