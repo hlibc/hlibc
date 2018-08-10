@@ -12,5 +12,4 @@ cd "${2}"
 git clone https://git.hlibc.xyz/lab/hlibc-test.git
 ./hlibc-test/build.sh "${1}" "${2}/bin/compiler"
 
-exit 0
 
