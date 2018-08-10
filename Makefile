@@ -79,7 +79,7 @@ tools/compiler: config.mak
 	printf '#!/bin/sh\n' > $@
 	printf 'printf "cc = "\n' >> $@
 	printf 'set -x\n' >> $@
-ifdef ($(CC_IS_CLANG)
+ifeq ($(CC_IS_CLANG),yes)
 	printf 'clang $(DISABLE_PIE) $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
 else
 	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@

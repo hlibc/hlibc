@@ -230,7 +230,9 @@ exec 1>&3 3>&-
 
 # Ad hoc handling of transparent compiler script
 case "$CC" in
-	*clang*) echo "CC_IS_CLANG =" >> config.mak;;
+	*clang*) echo "CC_IS_CLANG = yes" >> config.mak
+		echo "" >> config.mak
+	;;
 esac
 
 printf "done\n"
