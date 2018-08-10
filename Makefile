@@ -101,7 +101,7 @@ lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includedir)" "$(libdir)"  > $@
 
 test:
-	-$(MAKE) -C system-root/hlibc-test/
+	-$(MAKE) -C system-root/hlibc-test/ clean
 	-$(RM) -rf system-root/bin system-root/lib system-root/include
 	./tools/build.sh $(CC) $(PWD)/system-root/
 
