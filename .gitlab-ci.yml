@@ -77,5 +77,9 @@ alpine__i386__clang:
     - i386
   script: "CC=clang make test"
 
-
+debian__armel__clang:
+  tags:
+    - debian
+    - armel
+  script: "CC=clang make test"
 
