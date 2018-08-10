@@ -18,8 +18,7 @@ CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
 AR = $(CROSS_COMPILE)ar
 RANLIB = $(CROSS_COMPILE)ranlib
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
-EMPTY_LIB_NAMES = m
-EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
+EMPTY_LIBS = lib/libm.a
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 STATIC_LIBS = lib/libc.a
 TOOL_LIBS = lib/gcc-wrap.specs
@@ -80,7 +79,7 @@ tools/compiler: config.mak
 	printf 'printf "cc = "\n' >> $@
 	printf 'set -x\n' >> $@
 ifeq ($(CC_IS_CLANG),yes)
-	printf 'clang $(DISABLE_PIE) $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
+	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
 else
 	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
 endif
