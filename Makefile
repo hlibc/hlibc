@@ -80,9 +80,9 @@ tools/compiler: config.mak
 	printf 'printf "cc = "\n' >> $@
 	printf 'set -x\n' >> $@
 ifdef ($(CC_IS_CLANG)
-	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
+	printf 'clang $(DISABLE_PIE) $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
 else
-	printf 'exec gcc $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
+	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
 endif
 	chmod +x $@
 

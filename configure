@@ -190,8 +190,8 @@ fi
 
 # Some patched GCC builds have these defaults messed up...
 tryflag CFLAGS_AUTO -fno-stack-protector
-tryflag STACK_PROTECTOR -fno-pie
-tryflag STACK_PROTECTOR -no-pie
+tryflag DISABLE_PIE -fno-pie
+tryflag DISABLE_PIE  -no-pie
 tryldflag LDFLAGS_AUTO -Wl,--hash-style=sysv
 
 
@@ -218,7 +218,7 @@ CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
 CPPFLAGS = $CPPFLAGS
 LDFLAGS = $LDFLAGS_AUTO $LDFLAGS
-STACK_PROTECTOR = $STACK_PROTECTOR
+DISABLE_PIE = $DISABLE_PIE
 
 EOF
 test "x$static" = xno && echo "STATIC_LIBS ="
