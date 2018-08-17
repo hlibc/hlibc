@@ -1,18 +1,57 @@
 #!/bin/sh
 
+# This script uses sed to create an index.html from a human readable README
+# The format should adhere to the following rules:
+# 
+# title
+# 
+# section title
+# underline
+#
+#
+# 	The body descriptions must be tab indented
+#
+#	hyperlinks are marked up if they do _not_ have trailing /
+#	https://hlibc.xyz
+#
+# 	Anything with a trailing / is trated and marked up as a
+#	directory.
+#
+#	/
+#		/home/
+#			/graff/
+#				/hlibc/
+#				/bin/
+#			/hexing/
+#				/bin/
+#
+#
+#	email addresses such as cm0graff@gmail.com will be marked up
+#
+#
+#
+# section title 
+# underline
+#
+#	tab indented body ...
+#	...
+#
+#
+
+
 set -xe
 
+# sed -i is not in posix, so we emulate it for convenience
 sed_minus_i()
 {
-	# sed -i is not in posix, so emulate it for convenience
+	
 	TMPFILE=temp
 	cp "$2" "$TMPFILE"
 	sed "$1" "$TMPFILE" > "$2"
 	rm "$TMPFILE"
 }
 
-
-text2html3()
+txt2html()
 {
 	FILE=$1
 	printf '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">\n' > ${FILE}.html
@@ -35,7 +74,7 @@ text2html3()
 	sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><hr><pre>/g' ${FILE}.html
 }
 
-text2html3 $1
+txt2html $1
 
 mv README.html index.html
 

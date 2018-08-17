@@ -11,13 +11,25 @@ EOF
 exit 0
 }
 
-# Helper functions
+echo () {
+	printf "%s\n" "$*";
+}
 
-echo () { printf "%s\n" "$*" ; }
-fail () { echo "$*" ; exit 1 ; }
-fnmatch () { eval "case \"\$2\" in $1) return 0 ;; *) return 1 ;; esac" ; }
-cmdexists () { type "$1" >/dev/null 2>&1 ; }
-trycc () { test -z "$CC" && cmdexists "$1" && CC=$1 ; }
+fail () {
+	echo "$*"; exit 1;
+}
+
+fnmatch () { 
+	eval "case \"\$2\" in $1) return 0 ;; *) return 1 ;; esac" ; 
+}
+
+cmdexists () { 
+	type "$1" >/dev/null 2>&1 ; 
+}
+
+trycc () { 
+	test -z "$CC" && cmdexists "$1" && CC=$1 ; 
+}
 
 setdir () {
 	if eval "test -z \"\${$1}\""
@@ -104,9 +116,8 @@ setdir libdir '$(prefix)/lib'
 setdir includedir '$(prefix)/include'
 setdir syslibdir '/lib'
 
-#
-# Get a temp filename we can use
-#
+
+# tempfile
 i=0
 set -C
 while :
@@ -118,9 +129,8 @@ done
 set +C
 trap 'rm "$tmpc"' EXIT INT QUIT TERM HUP
 
-#
-# Find a C compiler to use
-#
+
+# find a compiler
 printf "checking for C compiler... "
 trycc gcc
 trycc c99
@@ -129,16 +139,12 @@ trycc clang
 printf "%s\n" "$CC"
 test -n "$CC" || { echo "$0: cannot find a C compiler" ; exit 1 ; }
 
-#
-# Find the target architecture
-#
+
+# Find target architecture
 printf "checking target system type... "
 test -n "$target" || target=$("$CC" -dumpmachine 2>/dev/null) || target=unknown
 printf "%s\n" "$target"
 
-#
-# Convert to just ARCH
-#
 case "$target" in
 	arm*) ARCH=arm ;;
 	aarch64*) ARCH=aarch64 ;;
@@ -148,28 +154,20 @@ case "$target" in
 	*) fail "$0: unknown or unsupported target \"$target\"" ;;
 esac
 
-#
+
 # Try to get a conforming C99 freestanding environment
-#
 tryflag CFLAGS_C99FSE -std=c99
 tryflag CFLAGS_C99FSE -nostdinc
 tryflag CFLAGS_C99FSE -ffreestanding
 
-#
-# Setup basic default CFLAGS: debug, optimization, and -pipe
-#
+# Setup basic default CFLAGS: debug, optimization, and -pipe 
 if ! fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS"
 then	tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
 fi
 test "x$debug" = xyes && CFLAGS_AUTO="-g"
 tryflag CFLAGS_AUTO -pipe
 
-#
-# On x86, make sure we don't have incompatible instruction set
-# extensions enabled by default. This is bad for making static binaries.
-# We cheat and use i486 rather than i386 because i386 really does not
-# work anyway (issues with atomic ops).
-#
+# nasty i486 hack
 if test "$ARCH" = "i386"
 then	fnmatch '-march=*|*\ -march=*' "$CFLAGS" || tryflag CFLAGS_AUTO -march=i486
 	fnmatch '-mtune=*|*\ -mtune=*' "$CFLAGS" || tryflag CFLAGS_AUTO -mtune=generic
@@ -182,7 +180,7 @@ tryflag DISABLE_PIE -fno-pie
 tryflag DISABLE_PIE  -no-pie
 tryldflag LDFLAGS_AUTO -Wl,--hash-style=sysv
 
-printf "generating the config.mak (to be sourced by Makefile)... "
+printf "Generating a config.mak for the main Makefile\n"
 
 exec 3>&1 1>config.mak
 
