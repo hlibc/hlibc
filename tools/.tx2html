@@ -14,7 +14,7 @@
 #	hyperlinks are marked up if they do _not_ have trailing /
 #	https://hlibc.xyz
 #
-# 	Anything with a trailing / is trated and marked up as a
+# 	Anything with a trailing / is treated and marked up as a
 #	directory.
 #
 #	/
@@ -74,8 +74,8 @@ txt2html()
 	sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><hr><pre>/g' ${FILE}.html
 }
 
-txt2html $1
+txt2html index.html
 
-mv README.html index.html
+
 
 
