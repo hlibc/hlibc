@@ -1,7 +1,5 @@
 hlibc
 
-DESCRIPTION:
-------------
 
 	hlibc is a freestanding libc that implements a subset of the POSIX, C99
 	and C11 hosted implementation requirements. The mathematics library is
@@ -20,7 +18,7 @@ BUILDING:
 	without root privilege.
 
 
-		git clone https://git.hlibc.xyz/lab/hlibc
+		git clone https://github.com/hlibc/hlibc
 
 		cd hlibc
 		./configure --prefix=/home/$USER/buildarea
@@ -57,7 +55,7 @@ TESTING:
 	retrieved automatically when `make test' is invoked. If for some reason
 	you want it separately it can be downloaded from:
 
-		https://git.hlibc.xyz/lab/hlibc-test
+		https://github.com/hlibc/hlibc-test
 
 
 WEB HOME:
@@ -77,15 +75,7 @@ WEB HOME:
 REVISION CONTROL:
 -----------------
 
-	hlibc uses a continuous integration CI and git repository framework
-	powered by gitlab.
-
-	https://git.hlibc.xyz/lab/hlibc
-
-	There are a number of machines hooked up to the CI with publicly
-	available test results. If there is a particular distribution you'd
-	like to see hlibc automatically tested on please let us know.
-
+	https://github.com/hlibc/hlibc
 
 CONTACT:
 --------
@@ -111,7 +101,7 @@ SPONSORS:
 RELEASES:
 ---------
 
-	http://hlibc.xyz/hlibc-0.10.tar.gz
+	No releases are available at this time.
 
-	http://hlibc.xyz/hlibc-0.12.tar.gz
+
 
