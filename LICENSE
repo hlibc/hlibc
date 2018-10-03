@@ -51,6 +51,9 @@ Crt files (crt/)
 ----------------
 Public domain crt files from musl-0.9.0 
 
+caveat:
+	The aarch64 crt files are copyright CM Graff 2017 and
+	Adrian Parvin D. Ouano 2017
 
 
 MIT LICENSE:
