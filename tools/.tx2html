@@ -54,27 +54,27 @@ sed_minus_i()
 txt2html()
 {
 	FILE=$1
-	printf '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">\n' > ${FILE}.html
-	cat $FILE >> ${FILE}.html
-	printf '</pre>\n' >> ${FILE}.html
+	printf '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">\n' > index.html
+	cat $FILE >> index.html
+	printf '</pre>\n' >> index.html
 	# mark up directories
-	sed_minus_i 's/\([a-Z,0-9,/,-,.,_]*\/\)$/<a href="&">&<\/a>/g' ${FILE}.html
+	sed_minus_i 's/\([a-Z,0-9,/,-,.,_]*\/\)$/<a href="&">&<\/a>/g' index.html
 	# mark up hyper links
-	sed_minus_i 's/\(http.*\)/<a href="&">&<\/a>/g' ${FILE}.html
+	sed_minus_i 's/\(http.*\)/<a href="&">&<\/a>/g' index.html
 	# mark up mailing links
-	sed_minus_i 's/\([a-Z,0-9,.,-]*@.*\)/<a href="mailto:&">&<\/a>/g' ${FILE}.html
+	sed_minus_i 's/\([a-Z,0-9,.,-]*@.*\)/<a href="mailto:&">&<\/a>/g' index.html
 	# If the title occurs on the first line then make it attr strong
-	sed_minus_i 's/\(^[^\t][a-Z].*\)/<\/pre><dt><strong>&<\/strong><\/dt><pre>/' ${FILE}.html
-	#sed_minus_i 's/\(^[^\t][a-Z].*\)/<strong>&<\/strong>/' ${FILE}.html
+	sed_minus_i 's/\(^[^\t][a-Z].*\)/<\/pre><dt><strong>&<\/strong><\/dt><pre>/' index.html
+	#sed_minus_i 's/\(^[^\t][a-Z].*\)/<strong>&<\/strong>/' index.html
 	# mark up anything that does not begin with a tab
-	sed_minus_i 's/\(^[^\t][a-Z].*\)/<\/pre><dt>&<\/dt><pre>/g' ${FILE}.html
-	#sed_minus_i 's/\(^[^\t][a-Z].*\)/<\/pre>&<pre>/g' ${FILE}.html
+	sed_minus_i 's/\(^[^\t][a-Z].*\)/<\/pre><dt>&<\/dt><pre>/g' index.html
+	#sed_minus_i 's/\(^[^\t][a-Z].*\)/<\/pre>&<pre>/g' index.html
 	# mark up underlines
-	#sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><dd><hr><\/dd><pre>/g' ${FILE}.html
-	sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><hr><pre>/g' ${FILE}.html
+	#sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><dd><hr><\/dd><pre>/g' index.html
+	sed_minus_i 's/\(^[^\t]-.*\)/<\/pre><hr><pre>/g' index.html
 }
 
-txt2html index.html
+txt2html README
 
 
 
