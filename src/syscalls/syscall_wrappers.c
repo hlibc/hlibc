@@ -72,7 +72,8 @@ int dup2(int old, int new)
 #else
 	if (old==new) {
 		r = __syscall(SYS_fcntl, old, F_GETFD);
-		if (r >= 0) return old;
+		if (r >= 0)
+			return old;
 	} else {
 		while ((r=__syscall(SYS_dup3, old, new, 0))==-EBUSY);
 	}
@@ -93,8 +94,10 @@ int ftruncate(int fd, off_t length)
 char *getcwd(char *buf, size_t size)
 {
 	char tmp[PATH_MAX];
-	if (!buf) buf = tmp, size = PATH_MAX;
-	if (__syscall(SYS_getcwd, buf, size) < 0) return 0;
+	if (!buf)
+		buf = tmp, size = PATH_MAX;
+	if (__syscall(SYS_getcwd, buf, size) < 0)
+		return 0;
 	return buf == tmp ? strdup(buf) : buf;
 }
 
@@ -334,7 +337,8 @@ struct dirent *readdir(DIR *dir)
 	
 	if (dir->buf_pos >= dir->buf_end) {
 		int len = getdents(dir->fd, (void *)dir->buf, sizeof dir->buf);
-		if (len <= 0) return 0;
+		if (len <= 0) 
+			return 0;
 		dir->buf_end = len;
 		dir->buf_pos = 0;
 	}
@@ -497,9 +501,12 @@ int fcntl(int fd, int cmd, ...)
 	va_start(ap, cmd);
 	arg = va_arg(ap, long);
 	va_end(ap);
-	if (cmd == F_SETFL) arg |= O_LARGEFILE;
-	if (cmd == F_SETLKW) return __syscall(SYS_fcntl, fd, cmd, arg);
-	if (cmd == F_GETOWN) return __syscall(SYS_fcntl, fd, cmd, arg);
+	if (cmd == F_SETFL)
+		arg |= O_LARGEFILE;
+	if (cmd == F_SETLKW)
+		return __syscall(SYS_fcntl, fd, cmd, arg);
+	if (cmd == F_GETOWN)
+		return __syscall(SYS_fcntl, fd, cmd, arg);
 	return __syscall(SYS_fcntl, fd, cmd, arg);
 }
 
@@ -609,7 +616,8 @@ int mount(const char *special, const char *dir, const char *fstype, unsigned lon
 void *sbrk(intptr_t inc)
 {
 	unsigned long cur = __syscall(SYS_brk, 0);
-	if (inc && __syscall(SYS_brk, cur+inc) != cur+inc) return (void *)-1;
+	if (inc && __syscall(SYS_brk, cur+inc) != cur+inc)
+		return (void *)-1;
 	return (void *)cur;
 }
 
@@ -621,7 +629,8 @@ pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
 int getpriority(int which, id_t who)
 {
 	int ret = __syscall(SYS_getpriority, which, who);
-	if (ret < 0) return ret;
+	if (ret < 0)
+		return ret;
 	return 20-ret;
 }
 
@@ -667,14 +676,6 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	ret = (void *)__syscall(SYS_mmap, start, len, prot, flags, fd, off);
 #endif
 	return ret;
-}
-
-int mprotect(void *addr, size_t len, int prot)
-{
-	size_t start, end;
-	start = (size_t)addr & -PAGE_SIZE;
-	end = (size_t)((char *)addr + len + PAGE_SIZE-1) & -PAGE_SIZE;
-	return __syscall(SYS_mprotect, start, end-start, prot);
 }
 
 int msync(void *start, size_t len, int flags)
@@ -805,14 +806,6 @@ int poll(struct pollfd *fds, nfds_t n, int timeout)
 		&((struct timespec){ .tv_sec = timeout/1000,
 		.tv_nsec = timeout%1000*1000000 }) : 0, 0, _NSIG/8);
 #endif
-}
-
-int pselect(int n, fd_set *rfds, fd_set *wfds, fd_set *efds, const struct timespec *ts, const sigset_t *mask)
-{
-	long data[2] = { (long)mask, 8 };
-	struct timespec ts_tmp;
-	if (ts) ts_tmp = *ts;
-	return __syscall(SYS_pselect6, n, rfds, wfds, efds, ts ? &ts_tmp : 0, data);
 }
 
 int select(int n, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *tv)
