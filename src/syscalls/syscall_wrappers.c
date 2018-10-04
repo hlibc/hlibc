@@ -24,10 +24,11 @@
 #include <sys/uio.h>
 #include <sys/utsname.h>
 #include <sys/wait.h>
-#include <sys/wait.h> 
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
+
+extern char **__environ;
 
 long __syscall_ret(unsigned long);
 
@@ -356,7 +357,7 @@ struct dirent *readdir(DIR *dir)
 	return de;
 }
 
-extern char **__environ;
+
 
 int clearenv()
 {
@@ -787,8 +788,6 @@ int execlp(const char *file, const char *argv0, ...)
 		return execvp(file, argv);
 	}
 }
-
-extern char **__environ;
 
 int execv(const char *path, char *const argv[])
 {
