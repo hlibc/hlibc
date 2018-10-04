@@ -13,7 +13,6 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
-#include <sys/mount.h>
 #include <sys/resource.h>
 #include <sys/select.h>
 #include <sys/socket.h>
@@ -21,7 +20,6 @@
 #include <sys/syscall.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/uio.h>
 #include <sys/utsname.h>
 #include <sys/wait.h>
 #include <termios.h>
@@ -118,17 +116,6 @@ gid_t getgid(void)
 int getgroups(int count, gid_t list[])
 {
 	return __syscall(SYS_getgroups, count, list);
-}
-
-int gethostname(char *name, size_t len)
-{
-	size_t i;
-	struct utsname uts;
-	if (uname(&uts)) return -1;
-	if (len > sizeof uts.nodename) len = sizeof uts.nodename;
-	for (i=0; i<len && (name[i] = uts.nodename[i]); i++);
-	if (i==len) name[i-1] = 0;
-	return 0;
 }
 
 char *getlogin(void)
