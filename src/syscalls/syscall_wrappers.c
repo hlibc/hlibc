@@ -1,7 +1,6 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <fenv.h>
 #include <limits.h>
 #include <poll.h>
 #include <signal.h>
@@ -367,115 +366,6 @@ char *getenv(const char *name)
 	return NULL;
 }
 
-char **__env_map;
-int __putenv(char *s, int a)
-{
-	int i=0, j=0;
-	char *end = strchr(s, '=');
-	size_t l = end-s+1;
-	char **newenv = 0;
-	char **newmap = 0;
-	static char **oldenv;
-	
-	if (!end || l == 1) return -1;
-	for (; __environ[i] && memcmp(s, __environ[i], l); i++);
-	if (a) {
-		if (!__env_map) {
-			__env_map = calloc(2, sizeof(char *));
-			if (__env_map) __env_map[0] = s;
-		} else {
-			for (; __env_map[j] && __env_map[j] != __environ[i]; j++);
-			if (!__env_map[j]) {
-				newmap = realloc(__env_map, sizeof(char *)*(j+2));
-				if (newmap) {
-					__env_map = newmap;
-					__env_map[j] = s;
-					__env_map[j+1] = NULL;
-				}
-			} else {
-				free(__env_map[j]);
-			}
-		}
-	}
-	if (!__environ[i]) {
-		newenv = malloc(sizeof(char *)*(i+2));
-		if (!newenv) {
-			if (a && __env_map) __env_map[j] = 0;
-			return -1;
-		}
-		memcpy(newenv, __environ, sizeof(char *)*i);
-		newenv[i] = s;
-		newenv[i+1] = 0;
-		__environ = newenv;
-		free(oldenv);
-		oldenv = __environ;
-	}
-
-	__environ[i] = s;
-	return 0;
-}
-
-int putenv(char *s)
-{
-	return __putenv(s, 0);
-}
-
-int __putenv(char *s, int a);
-
-int setenv(const char *var, const char *value, int overwrite)
-{
-	char *s;
-	int l1, l2;
-
-	if (!var || !*var || strchr(var, '=')) {
-		errno = EINVAL;
-		return -1;
-	}
-	if (!overwrite && getenv(var)) return 0;
-
-	l1 = strlen(var);
-	l2 = strlen(value);
-	s = malloc(l1+l2+2);
-	memcpy(s, var, l1);
-	s[l1] = '=';
-	memcpy(s+l1+1, value, l2);
-	s[l1+l2+1] = 0;
-	if (__putenv(s, 1)) {
-		free(s);
-		errno = ENOMEM;
-		return -1;
-	}
-	return 0;
-}
-
-
-extern char **__env_map;
-
-int unsetenv(const char *name)
-{
-	int i, j;
-	size_t l = strlen(name);
-
-	if (!*name || strchr(name, '=')) {
-		errno = EINVAL;
-		return -1;
-	}
-again:
-	for (i=0; __environ[i] && (memcmp(name, __environ[i], l) || __environ[i][l] != '='); i++);
-	if (__environ[i]) {
-		if (__env_map) {
-			for (j=0; __env_map[j] && __env_map[j] != __environ[i]; j++);
-			free (__env_map[j]);
-			for (; __env_map[j]; j++)
-				__env_map[j] = __env_map[j+1];
-		}
-		for (; __environ[i]; i++)
-			__environ[i] = __environ[i+1];
-		goto again;
-	}
-	return 0;
-}
-
 void abort(void)
 {
 	//raise(SIGABRT);
@@ -534,68 +424,6 @@ int open(const char *filename, int flags, ...)
 	return __syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
 #endif
 
-}
-
-int fegetexceptflag(fexcept_t *fp, int mask)
-{
-	*fp = fetestexcept(mask);
-	return 0;
-}
-
-int feholdexcept(fenv_t *envp)
-{
-	fegetenv(envp);
-	return 0;
-}
-
-int feclearexcept(int mask)
-{
-	return 0;
-}
-
-int feraiseexcept(int mask)
-{
-	return 0;
-}
-
-int fetestexcept(int mask)
-{
-	return 0;
-}
-
-int fegetround(void)
-{
-	return 0;
-}
-
-int fesetround(int r)
-{
-	return 0;
-}
-
-int fegetenv(fenv_t *envp)
-{
-	return 0;
-}
-
-int fesetenv(const fenv_t *envp)
-{
-	return 0;
-}
-
-int fesetexceptflag(const fexcept_t *fp, int mask)
-{
-	feclearexcept(~*fp & mask);
-	feraiseexcept(*fp & mask);
-	return 0;
-}
-
-int feupdateenv(const fenv_t *envp)
-{
-	int ex = fetestexcept(FE_ALL_EXCEPT);
-	fesetenv(envp);
-	feraiseexcept(ex);
-	return 0;
 }
 
 int brk(void *end)
@@ -915,7 +743,6 @@ int nanosleep(const struct timespec *req, struct timespec *rem)
 {
 	return __syscall(SYS_nanosleep, req, rem);
 }
-
 
 long __syscall_ret(unsigned long r)
 {
