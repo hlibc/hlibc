@@ -357,8 +357,6 @@ struct dirent *readdir(DIR *dir)
 	return de;
 }
 
-
-
 int clearenv()
 {
 	__environ[0] = 0;
@@ -459,7 +457,7 @@ int setenv(const char *var, const char *value, int overwrite)
 	return 0;
 }
 
-extern char **__environ;
+
 extern char **__env_map;
 
 int unsetenv(const char *name)
@@ -606,12 +604,6 @@ int feupdateenv(const fenv_t *envp)
 	return 0;
 }
 
-/*
-void _start()
-{
-	_Exit(1);
-}
-*/
 int brk(void *end)
 {
 	return -(__syscall(SYS_brk, end) != (unsigned long)end);
@@ -749,46 +741,6 @@ int execl(const char *path, const char *argv0, ...)
 	}
 }
 
-int execle(const char *path, const char *argv0, ...)
-{
-	int argc;
-	va_list ap;
-	va_start(ap, argv0);
-	for (argc=1; va_arg(ap, const char *); argc++);
-	va_end(ap);
-	{
-		int i;
-		char *argv[argc+1];
-		char **envp;
-		va_start(ap, argv0);
-		argv[0] = (char *)argv0;
-		for (i=1; i<argc; i++)
-			argv[i] = va_arg(ap, char *);
-		argv[i] = NULL;
-		envp = va_arg(ap, char **);
-		return execve(path, argv, envp);
-	}
-}
-
-int execlp(const char *file, const char *argv0, ...)
-{
-	int argc;
-	va_list ap;
-	va_start(ap, argv0);
-	for (argc=1; va_arg(ap, const char *); argc++);
-	va_end(ap);
-	{
-		int i;
-		char *argv[argc+1];
-		va_start(ap, argv0);
-		argv[0] = (char *)argv0;
-		for (i=1; i<argc; i++)
-			argv[i] = va_arg(ap, char *);
-		argv[i] = NULL;
-		return execvp(file, argv);
-	}
-}
-
 int execv(const char *path, char *const argv[])
 {
 	return execve(path, argv, __environ);
@@ -805,12 +757,14 @@ int execvp(const char *file, char *const argv[])
 	size_t l, k;
 
 	errno = ENOENT;
-	if (!*file) return -1;
+	if (!*file)
+		return -1;
 
 	if (strchr(file, '/'))
 		return execv(file, argv);
 
-	if (!path) path = "/usr/local/bin:/bin:/usr/bin";
+	if (!path)
+		path = "/usr/local/bin:/bin:/usr/bin";
 	k = strnlen(file, NAME_MAX+1);
 	if (k > NAME_MAX) {
 		errno = ENAMETOOLONG;
@@ -821,17 +775,21 @@ int execvp(const char *file, char *const argv[])
 	for(p=path; ; p=z) {
 		char b[l+k+1];
 		z = strchr(p, ':');
-		if (!z) z = p+strlen(p);
+		if (!z)
+			z = p+strlen(p);
 		if (z-p >= l) {
-			if (!*z++) break;
+			if (!*z++)
+				break;
 			continue;
 		}
 		memcpy(b, p, z-p);
 		b[z-p] = '/';
 		memcpy(b+(z-p)+(z>p), file, k+1);
 		execv(b, argv);
-		if (errno != ENOENT) return -1;
-		if (!*z++) break;
+		if (errno != ENOENT)
+			return -1;
+		if (!*z++)
+			break;
 	}
 	return -1;
 }
