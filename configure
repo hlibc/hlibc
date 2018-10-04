@@ -12,11 +12,12 @@ exit 0
 }
 
 print () {
-	printf "%s\n" "$*";
+	printf "%s\n" "$*"
 }
 
 fail () {
-	print "$*"; exit 1;
+	print "$*"
+	exit 1
 }
 
 fnmatch () { 
@@ -24,11 +25,11 @@ fnmatch () {
 }
 
 cmdexists () { 
-	type "$1" >/dev/null 2>&1 ; 
+	type "$1" >/dev/null 2>&1
 }
 
 trycc () { 
-	test -z "$CC" && cmdexists "$1" && CC=$1 ; 
+	test -z "$CC" && cmdexists "$1" && CC=$1
 }
 
 setdir () {
