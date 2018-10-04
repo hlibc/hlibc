@@ -61,7 +61,8 @@ TESTING:
 WEB HOME:
 ---------
 
-	http://hlibc.xyz
+	hlibc does not currently have a web home. The instructions below
+	are however valid and will be relevant when a new domain is obtained.
 
 	The hlibc web home is a simple site which is automatically generated 
 	from a shell script using the hlibc README so that the content is
