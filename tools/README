@@ -1,0 +1,3 @@
+The tools/ directory contains various configuration tools which are used to
+build and/or run hlibc. It is only tangentially related to the libc itself.
+
