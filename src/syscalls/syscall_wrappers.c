@@ -792,3 +792,4 @@ time_t time(time_t *t)
 	if (t) *t = ts.tv_sec;
 	return ts.tv_sec;
 }
+

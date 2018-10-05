@@ -1,8 +1,7 @@
 /*
 	Copyright 2010 Rich Felker
 
-	Heavily modified Dand hence copyrighted additionally as folows:
-	Copyright 2017 Christopher M. Graff
+	Modifications to this file are Copyright 2017 Christopher M. Graff
 */
 #include "../internal/internal.h"
 #include <stdint.h>
