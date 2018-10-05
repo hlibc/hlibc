@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# hlibc configure script
+
 print()
 {
 	printf -- "%s\n" "$*"
@@ -36,7 +38,7 @@ inspect_compiler()
 	printf "trying %s .. " "$2"
 	print "long y = 1;" > "$temporary_file"
 	print "double z = 0;" >> "$temporary_file"
-	if "$CC" "$2" -c -o .useless "$temporary_file" 2> .useless
+	if "$CC" "$2" -c -o .temporary "$temporary_file" 2> .temporary
 	then	print "yes"
 		eval "$1=\"\${$1} \$2\""
 		eval "$1=\${$1# }"
@@ -170,7 +172,7 @@ case "$CC" in
 esac
 
 # clean up and report
-rm "$temporary_file" .useless
+rm "$temporary_file" .temporary
 
 print "done"
 
