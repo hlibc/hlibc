@@ -10,6 +10,25 @@ hlibc
 	supports the i386, x86_64, arm and aarch64 architectures.
 
 
+	hlibc focuses primarily on algorithmic correctness and effectiveness
+	for the sake of educational purposes. Unlike many smaller libc's, hlibc
+	has correct getc/putc semantics which are designed to eliminate short
+	read and writes. hlibc borroms a few hundred lines of code from modern
+	libc in order to handle the basic case of printing IEEE floats in a
+	correct manner.
+
+	Because hlibc does not need to be installed in order to be used it
+	is well suited toward use in the classroom or as a tool for
+	understanding how more complex libc might work.
+
+	The simplicity of hlibc should allow for it to be easily ported to new
+	operating systems.
+
+	As much as possible, linux and glibc specific functionalities are
+	from hlibc. Instead, hlibc focuses on supplying functions which are
+	described in the POSIX, C99 and C11 standards.
+
+
 BUILDING:
 ---------
 	
