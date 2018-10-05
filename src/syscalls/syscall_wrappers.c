@@ -698,20 +698,21 @@ int mkdirat(int fd, const char *path, mode_t mode)
 {
 	return __syscall(SYS_mkdirat, fd, path, mode);
 }
-
+#ifdef SYS_mknodat
 int mkfifoat(int fd, const char *path, mode_t mode)
 {
 	return mknodat(fd, path, mode | S_IFIFO, 0);
 }
 
-int mkfifo(const char *path, mode_t mode)
-{
-	return mknod(path, mode | S_IFIFO, 0);
-}
-
 int mknodat(int fd, const char *path, mode_t mode, dev_t dev)
 {
 	return __syscall(SYS_mknodat, fd, path, mode, dev & 0xffff);
+}
+#endif
+
+int mkfifo(const char *path, mode_t mode)
+{
+	return mknod(path, mode | S_IFIFO, 0);
 }
 
 mode_t umask(mode_t mode)
