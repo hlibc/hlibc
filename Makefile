@@ -1,8 +1,10 @@
-bindir = $(exec_prefix)/bin
+# hlibc makefile
+
+binaries = $(exec_prefix)/bin
 prefix = /usr/local/hlibc
-includedir = $(prefix)/include
-libdir = $(prefix)/lib
-syslibdir = /lib
+includes = $(prefix)/include
+libraries = $(prefix)/lib
+syslibraries = /lib
 
 SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
@@ -17,10 +19,11 @@ CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
 AR = ar
 RANLIB = ranlib
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
-EMPTY_LIBS = lib/libm.a
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
-STATIC_LIBS = lib/libc.a
 TOOL_LIBS = lib/gcc-wrap.specs
+EMPTY_LIBS = lib/libm.a
+STATIC_LIBS = lib/libc.a
+
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
 ALL_TOOLS = tools/compiler
 
@@ -30,7 +33,7 @@ WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
 
 all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
-install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libdir)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includedir)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(bindir)/%)
+install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libraries)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includes)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(binaries)/%)
 
 clean:
 	-$(RM) -f crt/*.o
@@ -80,24 +83,24 @@ tools/compiler: config.mak
 ifeq ($(CC_IS_CLANG),yes)
 	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >> $@
 else
-	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libdir)" >> $@
+	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libraries)" >> $@
 endif
 	chmod +x $@
 
-$(DESTDIR)$(bindir)/%: tools/%
+$(DESTDIR)$(binaries)/%: tools/%
 	install -D $< $@
 
-$(DESTDIR)$(libdir)/%: lib/%
+$(DESTDIR)$(libraries)/%: lib/%
 	install -D -m 644 $< $@
 
-$(DESTDIR)$(includedir)/%: include/%
+$(DESTDIR)$(includes)/%: include/%
 	install -D -m 644 $< $@
 
-$(DESTDIR)$(syslibdir):
-	install -d -m 755 $(DESTDIR)$(syslibdir)
+$(DESTDIR)$(syslibraries):
+	install -d -m 755 $(DESTDIR)$(syslibraries)
 
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
-	sh $< "$(includedir)" "$(libdir)"  > $@
+	sh $< "$(includes)" "$(libraries)"  > $@
 
 test:
 	-$(MAKE) -C system-root/hlibc-test/ clean

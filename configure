@@ -49,7 +49,7 @@ inspect_compiler()
 CFLAGS_C99FSE=
 CFLAGS_AUTO=
 prefix="/usr/local/hlibc"
-target=
+architecture=
 
 for i in "$@"
 do	case "$i" in
@@ -77,12 +77,12 @@ do	case "$i" in
 	esac
 done
 
-# extrapolate everything from the installation prefix
+# extrapolate the installation prefix
 exec_prefix="${prefix}"
-bindir="${prefix}/bin"
-libdir="${prefix}/lib"
-includedir="${prefix}/include"
-syslibdir="/lib"
+binaries="${prefix}/bin"
+libraries="${prefix}/lib"
+includes="${prefix}/include"
+syslibraries="/lib"
 
 # tempfile
 temporary_file="./temporary_work_file"
@@ -104,21 +104,21 @@ fi
 
 # Find target architecture
 printf "Automatically detecting the computer architecture: "
-target=$("$CC" -dumpmachine 2>/dev/null)
-print "$target"
+architecture=$("$CC" -dumpmachine 2>/dev/null)
+print "$architecture"
 
-case "$target" in
+case "$architecture" in
 	arm*)
-		ARCH=arm
+		ARCH="arm"
 		;;
 	aarch64*)
-		ARCH=aarch64
+		ARCH="aarch64"
 		;;
-	i?86*)
-		ARCH=i386
+	i*86*)
+		ARCH="i386"
 		;;
 	x86_64*)
-		ARCH=x86_64
+		ARCH="x86_64"
 		;; 
 	*)
 		fatal "Unknown architecture !!"
@@ -132,7 +132,6 @@ inspect_compiler CFLAGS_C99FSE -nostdinc
 inspect_compiler CFLAGS_AUTO -pipe
 inspect_compiler CFLAGS_AUTO -Os
 
-
 # nasty i486 hack
 if test "$ARCH" = "i386"
 then	inspect_compiler CFLAGS_AUTO -march=i486
@@ -144,6 +143,7 @@ inspect_compiler CFLAGS_AUTO -fno-stack-protector
 inspect_compiler DISABLE_PIE -fno-pie
 inspect_compiler DISABLE_PIE -no-pie
 
+# create the config.mak
 print "Generating a config.mak for the main Makefile"
 
 print "
@@ -151,10 +151,10 @@ print "
 ARCH = $ARCH
 prefix = $prefix
 exec_prefix = $exec_prefix
-bindir = $bindir
-libdir = $libdir
-includedir = $includedir
-syslibdir = $syslibdir
+binaries = $binaries
+libraries = $libraries
+includes = $includes
+syslibraries = $syslibraries
 CC = $CC
 CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
@@ -168,6 +168,9 @@ case "$CC" in
 		print "" >> config.mak
 		;;
 esac
+
+# clean up and report
 rm "$temporary_file" .useless
+
 print "done"
 
