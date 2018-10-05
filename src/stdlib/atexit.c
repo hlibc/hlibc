@@ -79,7 +79,9 @@ void exit(int code)
 
 void _Exit(int ec)
 {
+#ifdef SYS_exit_group
 	__syscall(SYS_exit_group, ec);
+#endif
 	__syscall(SYS_exit, ec);
 }
 
