@@ -543,7 +543,8 @@ int execl(const char *path, const char *argv0, ...)
 	int argc;
 	va_list ap;
 	va_start(ap, argv0);
-	for (argc=1; va_arg(ap, const char *); argc++);
+	for (argc=1; va_arg(ap, const char *); argc++)
+		;
 	va_end(ap);
 	{
 		int i;
@@ -766,7 +767,7 @@ long syscall(long n, ...)
 	e=va_arg(ap, long);
 	f=va_arg(ap, long);
 	va_end(ap);
-	return __syscall_ret(syscall(n, a, b, c, d, e, f));
+	return __syscall_ret(__syscall(n, a, b, c, d, e, f));
 }
 
 int clock_gettime(clockid_t clk, struct timespec *ts)

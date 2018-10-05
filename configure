@@ -1,28 +1,23 @@
 #!/bin/sh
 
-menu () {
-cat <<EOF
-
-hlibc 2018, CM Graff et al.
-
-  --prefix=PREFIX         main installation prefix [/usr/local/hlibc] 
-
-EOF
-exit 0
+print()
+{
+	printf -- "%s\n" "$*"
 }
 
-print () {
-	printf -- "%s\n" "$*"
+menu()
+{
+print "hlibc 2016-2018, CM Graff et al.
+
+	--prefix=PREFIX         main installation prefix [/usr/local/hlibc] 
+"
+exit 0
 }
 
 fatal()
 {
         (>&2 print "fatal" "$*")
         exit 1
-}
-
-fnmatch () { 
-	eval "case \"\$2\" in $1) return 0 ;; *) return 1 ;; esac" ; 
 }
 
 detectcommand()
@@ -36,17 +31,12 @@ detectcommand()
         fi
 }
 
-setdir () {
-	if eval "test -z \"\${$1}\""
-	then	eval "$1=\$2"
-	else	eval "fnmatch '*/' \"\${$1}\"" && eval "$1=\${$1%/}"
-	fi
-}
-
-inspect_compiler () {
-	printf "trying %s... " "$2"
-	print "typedef int x;" > "$tmpc"
-	if "$CC" "$2" -c -o /dev/null "$tmpc" 2>/dev/null
+inspect_compiler()
+{
+	printf "trying %s .. " "$2"
+	print "long y = 1;" > "$temporary_file"
+	print "double z = 0;" >> "$temporary_file"
+	if "$CC" "$2" -c -o .useless "$temporary_file" 2> .useless
 	then	print "yes"
 		eval "$1=\"\${$1} \$2\""
 		eval "$1=\${$1# }"
@@ -58,48 +48,45 @@ inspect_compiler () {
 
 CFLAGS_C99FSE=
 CFLAGS_AUTO=
-prefix=
-exec_prefix=
-bindir=
-libdir=
-includedir=
-syslibdir=
+prefix="/usr/local/hlibc"
 target=
 
-for arg ; do
-	case "$arg" in
-		--help) menu
+for i in "$@"
+do	case "$i" in
+		--help)
+			menu
 			;;
-		--prefix=*) prefix=${arg#*=}
+		--prefix=*)
+			prefix=${i#*=}
 			;;
-		-* ) print "$0: unknown option $arg"
+		--* )
+			fatal "$i not recognized!!"
 			;;
-		CC=*) CC=${arg#*=}
+		CC=*)
+			CC=${i#*=}
 			;;
-		CFLAGS=*) CFLAGS=${arg#*=}
+		CFLAGS=*)
+			CFLAGS=${i#*=}
 			;;
-		CPPFLAGS=*) CPPFLAGS=${arg#*=}
+		CPPFLAGS=*)
+			CPPFLAGS=${i#*=}
 			;;
-		LDFLAGS=*) LDFLAGS=${arg#*=}
-			;;
-		*=*)
-			;;
-		*) target=$arg
+		*)
+			fatal "$i is not a valid option !!"
 			;;
 	esac
 done
 
-setdir prefix /usr/local/hlibc
-setdir exec_prefix '$(prefix)'
-setdir bindir '$(exec_prefix)/bin'
-setdir libdir '$(prefix)/lib'
-setdir includedir '$(prefix)/include'
-setdir syslibdir '/lib'
-
+# extrapolate everything from the installation prefix
+exec_prefix="${prefix}"
+bindir="${prefix}/bin"
+libdir="${prefix}/lib"
+includedir="${prefix}/include"
+syslibdir="/lib"
 
 # tempfile
-tmpc="./temporary_work_file"
-[ -f "${tmpc}" ] && rm "$tmpc"
+temporary_file="./temporary_work_file"
+[ -f "${temporary_file}" ] && rm "$temporary_file"
 
 print "Attempting to detect a C compiler ..."
 if [ -z "${CC}" ]
@@ -132,16 +119,13 @@ case "$target" in
 		;;
 	x86_64*)
 		ARCH=x86_64
-		;;
-	unknown)
-		fatal "Architecture not found!!"
-		;;
+		;; 
 	*)
 		fatal "Unknown architecture !!"
 		;;
 esac
 
-# Try to get a conforming C99 freestanding environment
+# Obtain a freestanding C99 env
 inspect_compiler CFLAGS_C99FSE -std=c99
 inspect_compiler CFLAGS_C99FSE -nostdinc
 inspect_compiler CFLAGS_C99FSE -ffreestanding
@@ -154,7 +138,7 @@ then	inspect_compiler CFLAGS_AUTO -march=i486
 	inspect_compiler CFLAGS_AUTO -mtune=generic
 fi
 
-# Some patched GCC builds have these defaults messed up...
+# correct broken compiler installations
 inspect_compiler CFLAGS_AUTO -fno-stack-protector
 inspect_compiler DISABLE_PIE -fno-pie
 inspect_compiler DISABLE_PIE -no-pie
@@ -173,17 +157,16 @@ syslibdir = $syslibdir
 CC = $CC
 CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
-LDFLAGS = $LDFLAGS_AUTO $LDFLAGS
 DISABLE_PIE = $DISABLE_PIE
 " > config.mak
 
-# Ad hoc handling of transparent compiler script
+# Adjust the compiler wrapper if clang is being used
 case "$CC" in
 	*clang*)
 		print "CC_IS_CLANG = yes" >> config.mak
 		print "" >> config.mak
 		;;
 esac
-rm "$tmpc"
+rm "$temporary_file" .useless
 print "done"
 
