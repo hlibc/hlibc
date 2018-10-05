@@ -1,0 +1,4 @@
+The crt/ directory contains architecture specific assembly code for the
+C run time. The C run time contains the mechanisms which load "main()"
+for the standard C library.
+
