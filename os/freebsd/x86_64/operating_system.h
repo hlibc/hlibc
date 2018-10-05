@@ -13,7 +13,7 @@
 #define		SYS_null	11	
 #define		SYS_chdir	12	
 #define		SYS_fchdir	13	
-#define		SYS_mk	14
+#define		SYS_mk		14
 #define		SYS_chmod	15	
 #define		SYS_chown	16	
 #define		SYS_null	17	
@@ -40,7 +40,7 @@
 #define		SYS_stat	38	
 #define		SYS_getppid	39	
 #define		SYS_lstat	40	
-#define		SYS_dup	41		
+#define		SYS_dup		41		
 #define		SYS_pipe	42	
 #define		SYS_getegid	43	
 #define		SYS_profile	44	
@@ -348,13 +348,13 @@
 #define		SYS_null	346	
 #define		SYS_acl_get_file	347	
 #define		SYS_acl_set_file	348	
-#define		SYS_acl_get_fd	349	
-#define		SYS_acl_set_fd	350	
+#define		SYS_acl_get_fd		349	
+#define		SYS_acl_set_fd		350	
 #define		SYS_acl_delete_file	351	
 #define		SYS_acl_delete_fd	352	
 #define		SYS_acl_check_file	353	
 #define		SYS_acl_check_fd	354	
-#define		SYS_extattrctl	355	
+#define		SYS_extattrctl		355	
 #define		SYS_extattr_set_file	356	
 #define		SYS_extattr_get_file	357	
 #define		SYS_extattr_delete_file	358	
@@ -460,7 +460,7 @@
 #define		SYS_mq_setattr	458	
 #define		SYS_mq_timedreceive	459	
 #define		SYS_mq_timedsend	460	
-#define		SYS_mq_	461
+#define		SYS_mq_		461
 #define		SYS_mq_unlink	462	
 #define		SYS_null	463	
 #define		SYS_null	464	
@@ -470,7 +470,7 @@
 #define		SYS_null	468	
 #define		SYS_null	469	
 #define		SYS_null	470	
-#define		SYS_sctp_peeloff	471	
+#define		SYS_sctp_peeloff		471	
 #define		SYS_sctp_generic_sendmsg	472	
 #define		SYS_sctp_generic_sendmsg_iov	473	
 #define		SYS_sctp_generic_recvmsg	474	
@@ -497,7 +497,7 @@
 #define		SYS_linkat	495	
 #define		SYS_mkdirat	496	
 #define		SYS_mkfifoat	497	
-#define		SYS_mk	498
+#define		SYS_mk		498
 #define		SYS_openat_rwtc	499	
 #define		SYS_readlinkat	500	
 #define		SYS_renameat	501	
@@ -558,7 +558,7 @@
 #define		SYS_fstatfs	556	
 #define		SYS_getfsstat	557	
 #define		SYS_fhstatfs	558	
-#define		SYS_mk	559
+#define		SYS_mk		559
 #define		SYS_kevent	560	
 #define		SYS_null	561	
 #define		SYS_null	562	
