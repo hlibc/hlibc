@@ -1,565 +1,565 @@
-
-0	SYS_NULL	
-1	SYS_EXIT	
-2	SYS_FORK	
-3	SYS_READ	
-4	SYS_WRITE	
-5	SYS_OPEN_RWTC	
-6	SYS_CLOSE	
-7	SYS_WAIT4	
-8	SYS_CREAT	
-9	SYS_LINK	
-10	SYS_UNLINK	
-11	SYS_NULL	
-12	SYS_CHDIR	
-13	SYS_FCHDIR	
-14	SYS_MK
-15	SYS_CHMOD	
-16	SYS_CHOWN	
-17	SYS_NULL	
-18	SYS_GETFSSTAT	
-19	SYS_LSEEK	
-20	SYS_GETPID	
-21	SYS_MOUNT	
-22	SYS_UMOUNT	
-23	SYS_SETUID	
-24	SYS_GETUID	
-25	SYS_GETEUID	
-26	SYS_PTRACE	
-27	SYS_RECVMSG	
-28	SYS_SENDMSG	
-29	SYS_RECVFROM	
-30	SYS_ACCEPT	
-31	SYS_GETPEERNAME	
-32	SYS_GETSOCKNAME	
-33	SYS_ACCESS	
-34	SYS_CHFLAGS	
-35	SYS_FCHFLAGS	
-36	SYS_SYNC	
-37	SYS_KILL	
-38	SYS_STAT	
-39	SYS_GETPPID	
-40	SYS_LSTAT	
-41	SYS_DUP		
-42	SYS_PIPE	
-43	SYS_GETEGID	
-44	SYS_PROFILE	
-45	SYS_KTRACE	
-46	SYS_SIGACTION	
-47	SYS_GETGID	
-48	SYS_SIGPROCMASK	
-49	SYS_GETLOGIN	
-50	SYS_SETLOGIN	
-51	SYS_ACCT	
-52	SYS_SIGPENDING	
-53	SYS_SIGALTSTACK	
-54	SYS_IOCTL	
-55	SYS_REBOOT	
-56	SYS_REVOKE	
-57	SYS_SYMLINK	
-58	SYS_READLINK	
-59	SYS_EXECVE	
-60	SYS_UMASK	
-61	SYS_CHROOT	
-62	SYS_FSTAT	
-63	SYS_NULL	
-64	SYS_NULL	
-65	SYS_MSYNC	
-66	SYS_VFORK	
-67	SYS_NULL	
-68	SYS_NULL	
-69	SYS_SBRK	
-70	SYS_SSTK	
-71	SYS_MMAP	
-72	SYS_O_VADVISE	
-73	SYS_MUNMAP	
-74	SYS_MPROTECT	
-75	SYS_MADVISE	
-76	SYS_NULL	
-77	SYS_NULL	
-78	SYS_MINCORE	
-79	SYS_GETGROUPS	
-80	SYS_SETGROUPS	
-81	SYS_GETPGRP	
-82	SYS_SETPGRP	
-83	SYS_SETITIMER	
-84	SYS_WAIT4	
-85	SYS_SWAPON	
-86	SYS_GETITIMER	
-87	SYS_SYSCTL	
-88	SYS_SYSCTL	
-89	SYS_GETDTABLESIZE	
-90	SYS_DUP2	
-91	SYS_NULL	
-92	SYS_FCNTL	
-93	SYS_SELECT	
-94	SYS_NULL	
-95	SYS_FSYNC	
-96	SYS_SETPRIORITY	
-97	SYS_SOCKET	
-98	SYS_CONNECT	
-99	SYS_ACCEPT	
-100	SYS_GETPRIORITY	
-101	SYS_SEND	
-102	SYS_RECV	
-103	SYS_SIGRETURN	
-104	SYS_BIND	
-105	SYS_SETSOCKOPT	
-106	SYS_LISTEN	
-107	SYS_NULL	
-108	SYS_NULL	
-109	SYS_NULL	
-110	SYS_NULL	
-111	SYS_NULL	
-112	SYS_NULL	
-113	SYS_RECVMSG	
-114	SYS_SENDMSG	
-115	SYS_NULL	
-116	SYS_GETTIMEOFDAY	
-117	SYS_GETRUSAGE	
-118	SYS_GETSOCKOPT	
-119	SYS_NULL	
-120	SYS_READV	
-121	SYS_WRITEV	
-122	SYS_SETTIMEOFDAY	
-123	SYS_FCHOWN	
-124	SYS_FCHMOD	
-125	SYS_RECVFROM	
-126	SYS_SETREUID	
-127	SYS_SETREGID	
-128	SYS_RENAME	
-129	SYS_TRUNCATE	
-130	SYS_FTRUNCATE	
-131	SYS_FLOCK	
-132	SYS_MKFIFO	
-133	SYS_SENDTO	
-134	SYS_SHUTDOWN	
-135	SYS_SOCKETPAIR	
-136	SYS_MKDIR	
-137	SYS_RMDIR	
-138	SYS_UTIMES	
-139	SYS_NULL	
-140	SYS_ADJTIME	
-141	SYS_GETPEERNAME	
-142	SYS_SYSCTL	
-143	SYS_SYSCTL	
-144	SYS_GETRLIMIT	
-145	SYS_SETRLIMIT	
-146	SYS_KILLPG	
-147	SYS_SETSID	
-148	SYS_QUOTACTL	
-149	SYS_O_QUOTA	
-150	SYS_GETSOCKNAME	
-151	SYS_NULL	
-152	SYS_NULL	
-153	SYS_NULL	
-154	SYS_NULL	
-155	SYS_NFS_SVC	
-156	SYS_GETDIRENTRIES	
-157	SYS_STATFS	
-158	SYS_FSTATFS	
-159	SYS_NULL	
-160	SYS_LGETFH	
-161	SYS_NFS_GETFH	
-162	SYS_SYSCTL	
-163	SYS_SYSCTL	
-164	SYS_NULL	
-165	SYS_SYSARCH	
-166	SYS_RTPRIO	
-167	SYS_NULL	
-168	SYS_NULL	
-169	SYS_SEMSYS	
-170	SYS_MSGSYS	
-171	SYS_SHMSYS	
-172	SYS_NULL	
-173	SYS_PREAD	
-174	SYS_PWRITE	
-175	SYS_SETFIB	
-176	SYS_NTP_ADJTIME	
-177	SYS_NULL	
-178	SYS_NULL	
-179	SYS_NULL	
-180	SYS_NULL	
-181	SYS_SETGID	
-182	SYS_SETEGID	
-183	SYS_SETEUID	
-184	SYS_NULL	
-185	SYS_NULL	
-186	SYS_NULL	
-187	SYS_NULL	
-188	SYS_STAT	
-189	SYS_FSTAT	
-190	SYS_LSTAT	
-191	SYS_PATHCONF	
-192	SYS_FPATHCONF	
-193	SYS_NULL	
-194	SYS_GETRLIMIT	
-195	SYS_SETRLIMIT	
-196	SYS_GETDIRENTRIES	
-197	SYS_MMAP	
-198	SYS_NULL	
-199	SYS_LSEEK	
-200	SYS_TRUNCATE	
-201	SYS_FTRUNCATE	
-202	SYS_SYSCTL	
-203	SYS_MLOCK	
-204	SYS_MUNLOCK	
-205	SYS_UNDELETE	
-206	SYS_FUTIMES	
-207	SYS_GETPGID	
-208	SYS_NULL	
-209	SYS_POLL	
-210	SYS_NULL	
-211	SYS_NULL	
-212	SYS_NULL	
-213	SYS_NULL	
-214	SYS_NULL	
-215	SYS_NULL	
-216	SYS_NULL	
-217	SYS_NULL	
-218	SYS_NULL	
-219	SYS_NULL	
-220	SYS_SEMCTL	
-221	SYS_SEMGET	
-222	SYS_SEMOP	
-223	SYS_NULL	
-224	SYS_MSGCTL	
-225	SYS_MSGGET	
-226	SYS_MSGSND	
-227	SYS_MSGRCV	
-228	SYS_SHMAT	
-229	SYS_SHMCTL	
-230	SYS_SHMDT	
-231	SYS_SHMGET	
-232	SYS_NULL	
-233	SYS_CLOCK_SETTIME	
-234	SYS_NULL	
-235	SYS_NULL	
-236	SYS_NULL	
-237	SYS_NULL	
-238	SYS_NULL	
-239	SYS_NULL	
-240	SYS_NULL	
-241	SYS_NULL	
-242	SYS_NULL	
-243	SYS_NULL	
-244	SYS_NULL	
-245	SYS_NULL	
-246	SYS_NULL	
-247	SYS_NULL	
-248	SYS_NULL	
-249	SYS_NULL	
-250	SYS_MINHERIT	
-251	SYS_RFORK	
-252	SYS_POLL	
-253	SYS_ISSETUGID	
-254	SYS_LCHOWN	
-255	SYS_AIO_READ	
-256	SYS_AIO_WRITE	
-257	SYS_LIO_LISTIO	
-258	SYS_NULL	
-259	SYS_NULL	
-260	SYS_NULL	
-261	SYS_NULL	
-262	SYS_NULL	
-263	SYS_NULL	
-264	SYS_NULL	
-265	SYS_NULL	
-266	SYS_NULL	
-267	SYS_NULL	
-268	SYS_NULL	
-269	SYS_NULL	
-270	SYS_NULL	
-271	SYS_NULL	
-272	SYS_O_GETDENTS	
-273	SYS_NULL	
-274	SYS_LCHMOD	
-275	SYS_NULL	
-276	SYS_LUTIMES	
-277	SYS_NULL	
-278	SYS_STAT	
-279	SYS_FSTAT	
-280	SYS_LSTAT	
-281	SYS_NULL	
-282	SYS_NULL	
-283	SYS_NULL	
-284	SYS_NULL	
-285	SYS_NULL	
-286	SYS_NULL	
-287	SYS_NULL	
-288	SYS_NULL	
-289	SYS_PREADV	
-290	SYS_PWRITEV	
-291	SYS_NULL	
-292	SYS_NULL	
-293	SYS_NULL	
-294	SYS_NULL	
-295	SYS_NULL	
-296	SYS_NULL	
-297	SYS_FHSTATFS	
-298	SYS_FHOPEN	
-299	SYS_FHSTAT	
-300	SYS_NULL	
-301	SYS_NULL	
-302	SYS_NULL	
-303	SYS_NULL	
-304	SYS_MODLOAD	
-305	SYS_MODUNLOAD	
-306	SYS_NULL	
-307	SYS_NULL	
-308	SYS_NULL	
-309	SYS_NULL	
-310	SYS_GETSID	
-311	SYS_SETRESUID	
-312	SYS_SETRESGID	
-313	SYS_NULL	
-314	SYS_AIO_RETURN	
-315	SYS_AIO_SUSPEND	
-316	SYS_AIO_CANCEL	
-317	SYS_AIO_ERROR	
-318	SYS_AIO_READ	
-319	SYS_AIO_WRITE	
-320	SYS_LIO_LISTIO	
-321	SYS_NULL	
-322	SYS_NULL	
-323	SYS_NULL	
-324	SYS_MLOCKALL	
-325	SYS_MUNLOCKALL	
-326	SYS_GETCWD	
-327	SYS_NULL	
-328	SYS_NULL	
-329	SYS_NULL	
-330	SYS_NULL	
-331	SYS_NULL	
-332	SYS_NULL	
-333	SYS_NULL	
-334	SYS_NULL	
-335	SYS_NULL	
-336	SYS_SENDFILE	
-337	SYS_NULL	
-338	SYS_JAIL	
-339	SYS_NULL	
-340	SYS_SIGPROCMASK	
-341	SYS_SIGSUSPEND	
-342	SYS_SIGACTION	
-343	SYS_SIGPENDING	
-344	SYS_SIGRETURN	
-345	SYS_SIGWAIT	
-346	SYS_NULL	
-347	SYS_ACL_GET_FILE	
-348	SYS_ACL_SET_FILE	
-349	SYS_ACL_GET_FD	
-350	SYS_ACL_SET_FD	
-351	SYS_ACL_DELETE_FILE	
-352	SYS_ACL_DELETE_FD	
-353	SYS_ACL_CHECK_FILE	
-354	SYS_ACL_CHECK_FD	
-355	SYS_EXTATTRCTL	
-356	SYS_EXTATTR_SET_FILE	
-357	SYS_EXTATTR_GET_FILE	
-358	SYS_EXTATTR_DELETE_FILE	
-359	SYS_AIO_WAITCOMPLETE	
-360	SYS_GETRESUID	
-361	SYS_GETRESGID	
-362	SYS_KQUEUE	
-363	SYS_KEVENT	
-364	SYS_NULL	
-365	SYS_NULL	
-366	SYS_NULL	
-367	SYS_NULL	
-368	SYS_NULL	
-369	SYS_NULL	
-370	SYS_NULL	
-371	SYS_EXTATTR_SET_FD	
-372	SYS_EXTATTR_GET_FD	
-373	SYS_EXTATTR_DELETE_FD	
-374	SYS_SETUGID	
-375	SYS_NULL	
-376	SYS_EACCESS	
-377	SYS_NULL	
-378	SYS_NMOUNT	
-379	SYS_NULL	
-380	SYS_NULL	
-381	SYS_NULL	
-382	SYS_NULL	
-383	SYS_NULL	
-384	SYS_NULL	
-385	SYS_NULL	
-386	SYS_NULL	
-387	SYS_NULL	
-388	SYS_NULL	
-389	SYS_NULL	
-390	SYS_NULL	
-391	SYS_LCHFLAGS	
-392	SYS_NULL	
-393	SYS_SENDFILE	
-394	SYS_NULL	
-395	SYS_GETFSSTAT	
-396	SYS_STATFS	
-397	SYS_FSTATFS	
-398	SYS_FHSTATFS	
-399	SYS_NULL	
-400	SYS_SEMCLOSE	
-401	SYS_SEMPOST	
-402	SYS_SEMWAIT	
-403	SYS_SEMTRYWAIT	
-404	SYS_SEMINIT	
-405	SYS_SEMOPEN	
-406	SYS_SEMUNLINK	
-407	SYS_SEMGETVALUE	
-408	SYS_SEMDESTROY	
-409	SYS_NULL	
-410	SYS_NULL	
-411	SYS_NULL	
-412	SYS_EXTATTR_SET_LINK	
-413	SYS_EXTATTR_GET_LINK	
-414	SYS_EXTATTR_DELETE_LINK	
-415	SYS_NULL	
-416	SYS_SIGACTION	
-417	SYS_SIGRETURN	
-418	SYS_NULL	
-419	SYS_NULL	
-420	SYS_NULL	
-421	SYS_NULL	
-422	SYS_NULL	
-423	SYS_NULL	
-424	SYS_SWAPOFF	
-425	SYS_ACL_GET_LINK	
-426	SYS_ACL_SET_LINK	
-427	SYS_ACL_DELETE_LINK	
-428	SYS_ACL_CHECK_LINK	
-429	SYS_SIGWAIT	
-430	SYS_THR_CREATE	
-431	SYS_THR_EXIT	
-432	SYS_NULL	
-433	SYS_THR_KILL	
-434	SYS_NULL	
-435	SYS_NULL	
-436	SYS_JAIL_ATTACH	
-437	SYS_EXTATTR_LIST_FD	
-438	SYS_EXTATTR_LIST_FILE	
-439	SYS_EXTATTR_LIST_LINK	
-440	SYS_NULL	
-441	SYS_SEMWAIT	
-442	SYS_NULL	
-443	SYS_NULL	
-444	SYS_MODUNLOAD	
-445	SYS_AUDIT	
-446	SYS_AUDITON	
-447	SYS_GETAUID	
-448	SYS_SETAUID	
-449	SYS_GETAUDIT	
-450	SYS_SETAUDIT	
-451	SYS_GETAUDIT_ADDR	
-452	SYS_SETAUDIT_ADDR	
-453	SYS_AUDITCTL	
-454	SYS_NULL	
-455	SYS_THR_NEW	
-456	SYS_NULL	
-457	SYS_MQ_OPEN	
-458	SYS_MQ_SETATTR	
-459	SYS_MQ_TIMEDRECEIVE	
-460	SYS_MQ_TIMEDSEND	
-461	SYS_MQ_
-462	SYS_MQ_UNLINK	
-463	SYS_NULL	
-464	SYS_NULL	
-465	SYS_AIO_FSYNC	
-466	SYS_RTPRIO	
-467	SYS_NULL	
-468	SYS_NULL	
-469	SYS_NULL	
-470	SYS_NULL	
-471	SYS_SCTP_PEELOFF	
-472	SYS_SCTP_GENERIC_SENDMSG	
-473	SYS_SCTP_GENERIC_SENDMSG_IOV	
-474	SYS_SCTP_GENERIC_RECVMSG	
-475	SYS_PREAD	
-476	SYS_PWRITE	
-477	SYS_MMAP	
-478	SYS_LSEEK	
-479	SYS_TRUNCATE	
-480	SYS_FTRUNCATE	
-481	SYS_THR_KILL2	
-482	SYS_SHMOPEN	
-483	SYS_SHMUNLINK	
-484	SYS_NULL	
-485	SYS_NULL	
-486	SYS_NULL	
-487	SYS_NULL	
-488	SYS_NULL	
-489	SYS_FACCESSAT	
-490	SYS_FCHMODAT	
-491	SYS_FCHOWNAT	
-492	SYS_FEXECVE	
-493	SYS_FSTATAT	
-494	SYS_FUTIMESAT	
-495	SYS_LINKAT	
-496	SYS_MKDIRAT	
-497	SYS_MKFIFOAT	
-498	SYS_MK
-499	SYS_OPENAT_RWTC	
-500	SYS_READLINKAT	
-501	SYS_RENAMEAT	
-502	SYS_SYMLINKAT	
-503	SYS_UNLINKAT	
-504	SYS_POSIX_OPENPT	
-505	SYS_NULL	
-506	SYS_JAIL_GET	
-507	SYS_JAIL_SET	
-508	SYS_JAIL_REMOVE	
-509	SYS_CLOSEFROM	
-510	SYS_SEMCTL	
-511	SYS_MSGCTL	
-512	SYS_SHMCTL	
-513	SYS_LPATHCONF	
-514	SYS_NULL	
-515	SYS_CAP_RIGHTS_GET	
-516	SYS_CAP_ENTER	
-517	SYS_CAP_GETMODE	
-518	SYS_PDFORK	
-519	SYS_PDKILL	
-520	SYS_PDGETPID	
-521	SYS_PDWAIT	
-522	SYS_SELECT	
-523	SYS_GETLOGINCLASS	
-524	SYS_SETLOGINCLASS	
-525	SYS_NULL	
-526	SYS_NULL	
-527	SYS_NULL	
-528	SYS_NULL	
-529	SYS_NULL	
-530	SYS_POSIX_FALLOCATE	
-531	SYS_POSIX_FADVISE	
-532	SYS_WAIT6	
-533	SYS_CAP_RIGHTS_LIMIT	
-534	SYS_CAP_IOCTLS_LIMIT	
-535	SYS_CAP_IOCTLS_GET	
-536	SYS_CAP_FCNTLS_LIMIT	
-537	SYS_CAP_FCNTLS_GET	
-538	SYS_BINDAT	
-539	SYS_CONNECTAT	
-540	SYS_CHFLAGSAT	
-541	SYS_ACCEPT	
-542	SYS_PIPE	
-543	SYS_AIO_MLOCK	
-544	SYS_PROCCTL	
-545	SYS_POLL	
-546	SYS_FUTIMES	
-547	SYS_FUTIMESAT	
-548	SYS_NULL	
-549	SYS_NULL	
-550	SYS_FSYNC	
-551	SYS_FSTAT	
-552	SYS_FSTATAT	
-553	SYS_FHSTAT	
-554	SYS_GETDIRENTRIES 
-555	SYS_STATFS	
-556	SYS_FSTATFS	
-557	SYS_GETFSSTAT	
-558	SYS_FHSTATFS	
-559	SYS_MK
-560	SYS_KEVENT	
-561	SYS_NULL	
-562	SYS_NULL	
-563	SYS_NULL	
+			
+#define		SYS_null	0	
+#define		SYS_exit	1	
+#define		SYS_fork	2	
+#define		SYS_read	3	
+#define		SYS_write	4	
+#define		SYS_open_rwtc	5	
+#define		SYS_close	6	
+#define		SYS_wait4	7	
+#define		SYS_creat	8	
+#define		SYS_link	9	
+#define		SYS_unlink	10	
+#define		SYS_null	11	
+#define		SYS_chdir	12	
+#define		SYS_fchdir	13	
+#define		SYS_mk	14
+#define		SYS_chmod	15	
+#define		SYS_chown	16	
+#define		SYS_null	17	
+#define		SYS_getfsstat	18	
+#define		SYS_lseek	19	
+#define		SYS_getpid	20	
+#define		SYS_mount	21	
+#define		SYS_umount	22	
+#define		SYS_setuid	23	
+#define		SYS_getuid	24	
+#define		SYS_geteuid	25	
+#define		SYS_ptrace	26	
+#define		SYS_recvmsg	27	
+#define		SYS_sendmsg	28	
+#define		SYS_recvfrom	29	
+#define		SYS_accept	30	
+#define		SYS_getpeername	31	
+#define		SYS_getsockname	32	
+#define		SYS_access	33	
+#define		SYS_chflags	34	
+#define		SYS_fchflags	35	
+#define		SYS_sync	36	
+#define		SYS_kill	37	
+#define		SYS_stat	38	
+#define		SYS_getppid	39	
+#define		SYS_lstat	40	
+#define		SYS_dup	41		
+#define		SYS_pipe	42	
+#define		SYS_getegid	43	
+#define		SYS_profile	44	
+#define		SYS_ktrace	45	
+#define		SYS_sigaction	46	
+#define		SYS_getgid	47	
+#define		SYS_sigprocmask	48	
+#define		SYS_getlogin	49	
+#define		SYS_setlogin	50	
+#define		SYS_acct	51	
+#define		SYS_sigpending	52	
+#define		SYS_sigaltstack	53	
+#define		SYS_ioctl	54	
+#define		SYS_reboot	55	
+#define		SYS_revoke	56	
+#define		SYS_symlink	57	
+#define		SYS_readlink	58	
+#define		SYS_execve	59	
+#define		SYS_umask	60	
+#define		SYS_chroot	61	
+#define		SYS_fstat	62	
+#define		SYS_null	63	
+#define		SYS_null	64	
+#define		SYS_msync	65	
+#define		SYS_vfork	66	
+#define		SYS_null	67	
+#define		SYS_null	68	
+#define		SYS_sbrk	69	
+#define		SYS_sstk	70	
+#define		SYS_mmap	71	
+#define		SYS_o_vadvise	72	
+#define		SYS_munmap	73	
+#define		SYS_mprotect	74	
+#define		SYS_madvise	75	
+#define		SYS_null	76	
+#define		SYS_null	77	
+#define		SYS_mincore	78	
+#define		SYS_getgroups	79	
+#define		SYS_setgroups	80	
+#define		SYS_getpgrp	81	
+#define		SYS_setpgrp	82	
+#define		SYS_setitimer	83	
+#define		SYS_wait4	84	
+#define		SYS_swapon	85	
+#define		SYS_getitimer	86	
+#define		SYS_sysctl	87	
+#define		SYS_sysctl	88	
+#define		SYS_getdtablesize	89	
+#define		SYS_dup2	90	
+#define		SYS_null	91	
+#define		SYS_fcntl	92	
+#define		SYS_select	93	
+#define		SYS_null	94	
+#define		SYS_fsync	95	
+#define		SYS_setpriority	96	
+#define		SYS_socket	97	
+#define		SYS_connect	98	
+#define		SYS_accept	99	
+#define		SYS_getpriority	100	
+#define		SYS_send	101	
+#define		SYS_recv	102	
+#define		SYS_sigreturn	103	
+#define		SYS_bind	104	
+#define		SYS_setsockopt	105	
+#define		SYS_listen	106	
+#define		SYS_null	107	
+#define		SYS_null	108	
+#define		SYS_null	109	
+#define		SYS_null	110	
+#define		SYS_null	111	
+#define		SYS_null	112	
+#define		SYS_recvmsg	113	
+#define		SYS_sendmsg	114	
+#define		SYS_null	115	
+#define		SYS_gettimeofday	116	
+#define		SYS_getrusage	117	
+#define		SYS_getsockopt	118	
+#define		SYS_null	119	
+#define		SYS_readv	120	
+#define		SYS_writev	121	
+#define		SYS_settimeofday	122	
+#define		SYS_fchown	123	
+#define		SYS_fchmod	124	
+#define		SYS_recvfrom	125	
+#define		SYS_setreuid	126	
+#define		SYS_setregid	127	
+#define		SYS_rename	128	
+#define		SYS_truncate	129	
+#define		SYS_ftruncate	130	
+#define		SYS_flock	131	
+#define		SYS_mkfifo	132	
+#define		SYS_sendto	133	
+#define		SYS_shutdown	134	
+#define		SYS_socketpair	135	
+#define		SYS_mkdir	136	
+#define		SYS_rmdir	137	
+#define		SYS_utimes	138	
+#define		SYS_null	139	
+#define		SYS_adjtime	140	
+#define		SYS_getpeername	141	
+#define		SYS_sysctl	142	
+#define		SYS_sysctl	143	
+#define		SYS_getrlimit	144	
+#define		SYS_setrlimit	145	
+#define		SYS_killpg	146	
+#define		SYS_setsid	147	
+#define		SYS_quotactl	148	
+#define		SYS_o_quota	149	
+#define		SYS_getsockname	150	
+#define		SYS_null	151	
+#define		SYS_null	152	
+#define		SYS_null	153	
+#define		SYS_null	154	
+#define		SYS_nfs_svc	155	
+#define		SYS_getdirentries	156	
+#define		SYS_statfs	157	
+#define		SYS_fstatfs	158	
+#define		SYS_null	159	
+#define		SYS_lgetfh	160	
+#define		SYS_nfs_getfh	161	
+#define		SYS_sysctl	162	
+#define		SYS_sysctl	163	
+#define		SYS_null	164	
+#define		SYS_sysarch	165	
+#define		SYS_rtprio	166	
+#define		SYS_null	167	
+#define		SYS_null	168	
+#define		SYS_semsys	169	
+#define		SYS_msgsys	170	
+#define		SYS_shmsys	171	
+#define		SYS_null	172	
+#define		SYS_pread	173	
+#define		SYS_pwrite	174	
+#define		SYS_setfib	175	
+#define		SYS_ntp_adjtime	176	
+#define		SYS_null	177	
+#define		SYS_null	178	
+#define		SYS_null	179	
+#define		SYS_null	180	
+#define		SYS_setgid	181	
+#define		SYS_setegid	182	
+#define		SYS_seteuid	183	
+#define		SYS_null	184	
+#define		SYS_null	185	
+#define		SYS_null	186	
+#define		SYS_null	187	
+#define		SYS_stat	188	
+#define		SYS_fstat	189	
+#define		SYS_lstat	190	
+#define		SYS_pathconf	191	
+#define		SYS_fpathconf	192	
+#define		SYS_null	193	
+#define		SYS_getrlimit	194	
+#define		SYS_setrlimit	195	
+#define		SYS_getdirentries	196	
+#define		SYS_mmap	197	
+#define		SYS_null	198	
+#define		SYS_lseek	199	
+#define		SYS_truncate	200	
+#define		SYS_ftruncate	201	
+#define		SYS_sysctl	202	
+#define		SYS_mlock	203	
+#define		SYS_munlock	204	
+#define		SYS_undelete	205	
+#define		SYS_futimes	206	
+#define		SYS_getpgid	207	
+#define		SYS_null	208	
+#define		SYS_poll	209	
+#define		SYS_null	210	
+#define		SYS_null	211	
+#define		SYS_null	212	
+#define		SYS_null	213	
+#define		SYS_null	214	
+#define		SYS_null	215	
+#define		SYS_null	216	
+#define		SYS_null	217	
+#define		SYS_null	218	
+#define		SYS_null	219	
+#define		SYS_semctl	220	
+#define		SYS_semget	221	
+#define		SYS_semop	222	
+#define		SYS_null	223	
+#define		SYS_msgctl	224	
+#define		SYS_msgget	225	
+#define		SYS_msgsnd	226	
+#define		SYS_msgrcv	227	
+#define		SYS_shmat	228	
+#define		SYS_shmctl	229	
+#define		SYS_shmdt	230	
+#define		SYS_shmget	231	
+#define		SYS_null	232	
+#define		SYS_clock_settime	233	
+#define		SYS_null	234	
+#define		SYS_null	235	
+#define		SYS_null	236	
+#define		SYS_null	237	
+#define		SYS_null	238	
+#define		SYS_null	239	
+#define		SYS_null	240	
+#define		SYS_null	241	
+#define		SYS_null	242	
+#define		SYS_null	243	
+#define		SYS_null	244	
+#define		SYS_null	245	
+#define		SYS_null	246	
+#define		SYS_null	247	
+#define		SYS_null	248	
+#define		SYS_null	249	
+#define		SYS_minherit	250	
+#define		SYS_rfork	251	
+#define		SYS_poll	252	
+#define		SYS_issetugid	253	
+#define		SYS_lchown	254	
+#define		SYS_aio_read	255	
+#define		SYS_aio_write	256	
+#define		SYS_lio_listio	257	
+#define		SYS_null	258	
+#define		SYS_null	259	
+#define		SYS_null	260	
+#define		SYS_null	261	
+#define		SYS_null	262	
+#define		SYS_null	263	
+#define		SYS_null	264	
+#define		SYS_null	265	
+#define		SYS_null	266	
+#define		SYS_null	267	
+#define		SYS_null	268	
+#define		SYS_null	269	
+#define		SYS_null	270	
+#define		SYS_null	271	
+#define		SYS_o_getdents	272	
+#define		SYS_null	273	
+#define		SYS_lchmod	274	
+#define		SYS_null	275	
+#define		SYS_lutimes	276	
+#define		SYS_null	277	
+#define		SYS_stat	278	
+#define		SYS_fstat	279	
+#define		SYS_lstat	280	
+#define		SYS_null	281	
+#define		SYS_null	282	
+#define		SYS_null	283	
+#define		SYS_null	284	
+#define		SYS_null	285	
+#define		SYS_null	286	
+#define		SYS_null	287	
+#define		SYS_null	288	
+#define		SYS_preadv	289	
+#define		SYS_pwritev	290	
+#define		SYS_null	291	
+#define		SYS_null	292	
+#define		SYS_null	293	
+#define		SYS_null	294	
+#define		SYS_null	295	
+#define		SYS_null	296	
+#define		SYS_fhstatfs	297	
+#define		SYS_fhopen	298	
+#define		SYS_fhstat	299	
+#define		SYS_null	300	
+#define		SYS_null	301	
+#define		SYS_null	302	
+#define		SYS_null	303	
+#define		SYS_modload	304	
+#define		SYS_modunload	305	
+#define		SYS_null	306	
+#define		SYS_null	307	
+#define		SYS_null	308	
+#define		SYS_null	309	
+#define		SYS_getsid	310	
+#define		SYS_setresuid	311	
+#define		SYS_setresgid	312	
+#define		SYS_null	313	
+#define		SYS_aio_return	314	
+#define		SYS_aio_suspend	315	
+#define		SYS_aio_cancel	316	
+#define		SYS_aio_error	317	
+#define		SYS_aio_read	318	
+#define		SYS_aio_write	319	
+#define		SYS_lio_listio	320	
+#define		SYS_null	321	
+#define		SYS_null	322	
+#define		SYS_null	323	
+#define		SYS_mlockall	324	
+#define		SYS_munlockall	325	
+#define		SYS_getcwd	326	
+#define		SYS_null	327	
+#define		SYS_null	328	
+#define		SYS_null	329	
+#define		SYS_null	330	
+#define		SYS_null	331	
+#define		SYS_null	332	
+#define		SYS_null	333	
+#define		SYS_null	334	
+#define		SYS_null	335	
+#define		SYS_sendfile	336	
+#define		SYS_null	337	
+#define		SYS_jail	338	
+#define		SYS_null	339	
+#define		SYS_sigprocmask	340	
+#define		SYS_sigsuspend	341	
+#define		SYS_sigaction	342	
+#define		SYS_sigpending	343	
+#define		SYS_sigreturn	344	
+#define		SYS_sigwait	345	
+#define		SYS_null	346	
+#define		SYS_acl_get_file	347	
+#define		SYS_acl_set_file	348	
+#define		SYS_acl_get_fd	349	
+#define		SYS_acl_set_fd	350	
+#define		SYS_acl_delete_file	351	
+#define		SYS_acl_delete_fd	352	
+#define		SYS_acl_check_file	353	
+#define		SYS_acl_check_fd	354	
+#define		SYS_extattrctl	355	
+#define		SYS_extattr_set_file	356	
+#define		SYS_extattr_get_file	357	
+#define		SYS_extattr_delete_file	358	
+#define		SYS_aio_waitcomplete	359	
+#define		SYS_getresuid	360	
+#define		SYS_getresgid	361	
+#define		SYS_kqueue	362	
+#define		SYS_kevent	363	
+#define		SYS_null	364	
+#define		SYS_null	365	
+#define		SYS_null	366	
+#define		SYS_null	367	
+#define		SYS_null	368	
+#define		SYS_null	369	
+#define		SYS_null	370	
+#define		SYS_extattr_set_fd	371	
+#define		SYS_extattr_get_fd	372	
+#define		SYS_extattr_delete_fd	373	
+#define		SYS_setugid	374	
+#define		SYS_null	375	
+#define		SYS_eaccess	376	
+#define		SYS_null	377	
+#define		SYS_nmount	378	
+#define		SYS_null	379	
+#define		SYS_null	380	
+#define		SYS_null	381	
+#define		SYS_null	382	
+#define		SYS_null	383	
+#define		SYS_null	384	
+#define		SYS_null	385	
+#define		SYS_null	386	
+#define		SYS_null	387	
+#define		SYS_null	388	
+#define		SYS_null	389	
+#define		SYS_null	390	
+#define		SYS_lchflags	391	
+#define		SYS_null	392	
+#define		SYS_sendfile	393	
+#define		SYS_null	394	
+#define		SYS_getfsstat	395	
+#define		SYS_statfs	396	
+#define		SYS_fstatfs	397	
+#define		SYS_fhstatfs	398	
+#define		SYS_null	399	
+#define		SYS_semclose	400	
+#define		SYS_sempost	401	
+#define		SYS_semwait	402	
+#define		SYS_semtrywait	403	
+#define		SYS_seminit	404	
+#define		SYS_semopen	405	
+#define		SYS_semunlink	406	
+#define		SYS_semgetvalue	407	
+#define		SYS_semdestroy	408	
+#define		SYS_null	409	
+#define		SYS_null	410	
+#define		SYS_null	411	
+#define		SYS_extattr_set_link	412	
+#define		SYS_extattr_get_link	413	
+#define		SYS_extattr_delete_link	414	
+#define		SYS_null	415	
+#define		SYS_sigaction	416	
+#define		SYS_sigreturn	417	
+#define		SYS_null	418	
+#define		SYS_null	419	
+#define		SYS_null	420	
+#define		SYS_null	421	
+#define		SYS_null	422	
+#define		SYS_null	423	
+#define		SYS_swapoff	424	
+#define		SYS_acl_get_link	425	
+#define		SYS_acl_set_link	426	
+#define		SYS_acl_delete_link	427	
+#define		SYS_acl_check_link	428	
+#define		SYS_sigwait	429	
+#define		SYS_thr_create	430	
+#define		SYS_thr_exit	431	
+#define		SYS_null	432	
+#define		SYS_thr_kill	433	
+#define		SYS_null	434	
+#define		SYS_null	435	
+#define		SYS_jail_attach	436	
+#define		SYS_extattr_list_fd	437	
+#define		SYS_extattr_list_file	438	
+#define		SYS_extattr_list_link	439	
+#define		SYS_null	440	
+#define		SYS_semwait	441	
+#define		SYS_null	442	
+#define		SYS_null	443	
+#define		SYS_modunload	444	
+#define		SYS_audit	445	
+#define		SYS_auditon	446	
+#define		SYS_getauid	447	
+#define		SYS_setauid	448	
+#define		SYS_getaudit	449	
+#define		SYS_setaudit	450	
+#define		SYS_getaudit_addr	451	
+#define		SYS_setaudit_addr	452	
+#define		SYS_auditctl	453	
+#define		SYS_null	454	
+#define		SYS_thr_new	455	
+#define		SYS_null	456	
+#define		SYS_mq_open	457	
+#define		SYS_mq_setattr	458	
+#define		SYS_mq_timedreceive	459	
+#define		SYS_mq_timedsend	460	
+#define		SYS_mq_	461
+#define		SYS_mq_unlink	462	
+#define		SYS_null	463	
+#define		SYS_null	464	
+#define		SYS_aio_fsync	465	
+#define		SYS_rtprio	466	
+#define		SYS_null	467	
+#define		SYS_null	468	
+#define		SYS_null	469	
+#define		SYS_null	470	
+#define		SYS_sctp_peeloff	471	
+#define		SYS_sctp_generic_sendmsg	472	
+#define		SYS_sctp_generic_sendmsg_iov	473	
+#define		SYS_sctp_generic_recvmsg	474	
+#define		SYS_pread	475	
+#define		SYS_pwrite	476	
+#define		SYS_mmap	477	
+#define		SYS_lseek	478	
+#define		SYS_truncate	479	
+#define		SYS_ftruncate	480	
+#define		SYS_thr_kill2	481	
+#define		SYS_shmopen	482	
+#define		SYS_shmunlink	483	
+#define		SYS_null	484	
+#define		SYS_null	485	
+#define		SYS_null	486	
+#define		SYS_null	487	
+#define		SYS_null	488	
+#define		SYS_faccessat	489	
+#define		SYS_fchmodat	490	
+#define		SYS_fchownat	491	
+#define		SYS_fexecve	492	
+#define		SYS_fstatat	493	
+#define		SYS_futimesat	494	
+#define		SYS_linkat	495	
+#define		SYS_mkdirat	496	
+#define		SYS_mkfifoat	497	
+#define		SYS_mk	498
+#define		SYS_openat_rwtc	499	
+#define		SYS_readlinkat	500	
+#define		SYS_renameat	501	
+#define		SYS_symlinkat	502	
+#define		SYS_unlinkat	503	
+#define		SYS_posix_openpt	504	
+#define		SYS_null	505	
+#define		SYS_jail_get	506	
+#define		SYS_jail_set	507	
+#define		SYS_jail_remove	508	
+#define		SYS_closefrom	509	
+#define		SYS_semctl	510	
+#define		SYS_msgctl	511	
+#define		SYS_shmctl	512	
+#define		SYS_lpathconf	513	
+#define		SYS_null	514	
+#define		SYS_cap_rights_get	515	
+#define		SYS_cap_enter	516	
+#define		SYS_cap_getmode	517	
+#define		SYS_pdfork	518	
+#define		SYS_pdkill	519	
+#define		SYS_pdgetpid	520	
+#define		SYS_pdwait	521	
+#define		SYS_select	522	
+#define		SYS_getloginclass	523	
+#define		SYS_setloginclass	524	
+#define		SYS_null	525	
+#define		SYS_null	526	
+#define		SYS_null	527	
+#define		SYS_null	528	
+#define		SYS_null	529	
+#define		SYS_posix_fallocate	530	
+#define		SYS_posix_fadvise	531	
+#define		SYS_wait6	532	
+#define		SYS_cap_rights_limit	533	
+#define		SYS_cap_ioctls_limit	534	
+#define		SYS_cap_ioctls_get	535	
+#define		SYS_cap_fcntls_limit	536	
+#define		SYS_cap_fcntls_get	537	
+#define		SYS_bindat	538	
+#define		SYS_connectat	539	
+#define		SYS_chflagsat	540	
+#define		SYS_accept	541	
+#define		SYS_pipe	542	
+#define		SYS_aio_mlock	543	
+#define		SYS_procctl	544	
+#define		SYS_poll	545	
+#define		SYS_futimes	546	
+#define		SYS_futimesat	547	
+#define		SYS_null	548	
+#define		SYS_null	549	
+#define		SYS_fsync	550	
+#define		SYS_fstat	551	
+#define		SYS_fstatat	552	
+#define		SYS_fhstat	553	
+#define		SYS_getdirentries 	554
+#define		SYS_statfs	555	
+#define		SYS_fstatfs	556	
+#define		SYS_getfsstat	557	
+#define		SYS_fhstatfs	558	
+#define		SYS_mk	559
+#define		SYS_kevent	560	
+#define		SYS_null	561	
+#define		SYS_null	562	
+#define		SYS_null	563	
