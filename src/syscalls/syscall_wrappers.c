@@ -773,6 +773,7 @@ long syscall(long n, ...)
 
 int clock_gettime(clockid_t clk, struct timespec *ts)
 {
+#ifdef SYS_clock_gettime
 	int r = __syscall(SYS_clock_gettime, clk, ts);
 	if (!r) return r;
 	if (r == -ENOSYS) {
@@ -785,6 +786,12 @@ int clock_gettime(clockid_t clk, struct timespec *ts)
 	}
 	errno = -r;
 	return -1;
+#endif
+#ifdef SYS_gettimeofday
+	__syscall(SYS_gettimeofday, clk, ts, 0);
+	ts->tv_nsec = (int)ts->tv_nsec * 1000;
+	return 0;
+#endif
 }
 
 time_t time(time_t *t)
