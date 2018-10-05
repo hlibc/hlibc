@@ -13,7 +13,7 @@ GENH = include/bits/alltypes.h
 CPPFLAGS =
 CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
 CFLAGS_ALL = $(CFLAGS_C99FSE)
-CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH) -I./os/$(OPERATING_SYSTEM)
+CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
 CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
 CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
 AR = ar

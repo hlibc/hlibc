@@ -48,6 +48,8 @@ inspect_compiler()
 	fi
 }
 
+
+OPERATING_SYSTEM="linux"
 CFLAGS_C99FSE=
 CFLAGS_AUTO=
 prefix="/usr/local/hlibc"
@@ -78,6 +80,24 @@ do	case "$i" in
 			;;
 	esac
 done
+
+# detect the operating system
+OS_DIRTY_STR=$(uname -o)
+
+case $OS_DIRTY_STR in
+	*linux*|*Linux*)
+		OPERATING_SYSTEM="linux"
+			;;
+	*FreeBSD*|*freebsd*|*Freebsd*)
+		OPERATING_SYSTEM="freebsd"
+			;;
+	*NetBSD*|*netbsd*|*Netbsd*)
+		OPERATING_SYSTEM="netbsd"
+			;;
+	*OpenBSD*|*openbsd*|*Openbsd*)
+		OPERATING_SYSTEM="openbsd"
+			;;
+esac
 
 # extrapolate the installation prefix
 exec_prefix="${prefix}"
@@ -121,7 +141,7 @@ case "$architecture" in
 		;;
 	x86_64*)
 		ARCH="x86_64"
-		;; 
+		;;
 	*)
 		fatal "Unknown architecture !!"
 		;;
@@ -161,6 +181,7 @@ CC = $CC
 CFLAGS = $CFLAGS_AUTO $CFLAGS
 CFLAGS_C99FSE = $CFLAGS_C99FSE
 DISABLE_PIE = $DISABLE_PIE
+OPERATING_SYSTEM = $OPERATING_SYSTEM
 " > config.mak
 
 # Adjust the compiler wrapper if clang is being used
