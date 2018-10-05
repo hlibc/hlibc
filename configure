@@ -50,7 +50,7 @@ inspect_compiler()
 
 
 OPERATING_SYSTEM="linux"
-CFLAGS_C99FSE=
+FREESTANDING=
 CFLAGS_AUTO=
 prefix="/usr/local/hlibc"
 architecture=
@@ -82,13 +82,14 @@ do	case "$i" in
 done
 
 # detect the operating system
-OS_DIRTY_STR=$(uname -o)
+OS_DIRTY_STR=$(uname -a)
 
 case $OS_DIRTY_STR in
 	*linux*|*Linux*)
 		OPERATING_SYSTEM="linux"
 			;;
 	*FreeBSD*|*freebsd*|*Freebsd*)
+		print "Note that the FreeBSD 'c99' command has a bug and won't accept '-dumpmachine'"
 		OPERATING_SYSTEM="freebsd"
 			;;
 	*NetBSD*|*netbsd*|*Netbsd*)
@@ -96,6 +97,11 @@ case $OS_DIRTY_STR in
 			;;
 	*OpenBSD*|*openbsd*|*Openbsd*)
 		OPERATING_SYSTEM="openbsd"
+			;;
+	*arwin*|*eopard*)
+		# The output of `uname' in apple does not actually say "apple"
+		# so we try to detect the release name
+		OPERATING_SYSTEM="apple"
 			;;
 esac
 
@@ -112,7 +118,7 @@ temporary_file="./temporary_work_file"
 
 print "Attempting to detect a C compiler ..."
 if [ -z "${CC}" ]
-then    for i in unlikely-cc c99 gcc cc clang pcc tcc
+then    for i in unlikely-cc gcc cc clang c99 pcc tcc
         do      if detectcommand "$i"
                 then    CC="$i"
                         break
@@ -148,9 +154,9 @@ case "$architecture" in
 esac
 
 # Obtain a freestanding C99 env
-inspect_compiler CFLAGS_C99FSE -ffreestanding
-inspect_compiler CFLAGS_C99FSE -std=c99
-inspect_compiler CFLAGS_C99FSE -nostdinc
+inspect_compiler FREESTANDING -ffreestanding
+inspect_compiler FREESTANDING -std=c99
+inspect_compiler FREESTANDING -nostdinc
 inspect_compiler CFLAGS_AUTO -pipe
 inspect_compiler CFLAGS_AUTO -Os
 
@@ -179,7 +185,7 @@ includes = $includes
 syslibraries = $syslibraries
 CC = $CC
 CFLAGS = $CFLAGS_AUTO $CFLAGS
-CFLAGS_C99FSE = $CFLAGS_C99FSE
+FREESTANDING = $FREESTANDING
 DISABLE_PIE = $DISABLE_PIE
 OPERATING_SYSTEM = $OPERATING_SYSTEM
 " > config.mak
