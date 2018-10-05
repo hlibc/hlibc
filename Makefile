@@ -11,11 +11,11 @@ OBJS = $(SRCS:.c=.o)
 GENH = include/bits/alltypes.h
 
 CPPFLAGS =
-CFLAGS_C99FSE = -std=c99 -ffreestanding -nostdinc
-CFLAGS_ALL = $(CFLAGS_C99FSE)
-CFLAGS_ALL += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
-CFLAGS_ALL += $(CPPFLAGS) $(CFLAGS)
-CFLAGS_ALL_STATIC = $(CFLAGS_ALL)
+FREESTANDING = -std=c99 -ffreestanding -nostdinc
+CFLAGS_STATIC = $(FREESTANDING)
+CFLAGS_STATIC += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
+CFLAGS_STATIC += $(CPPFLAGS) $(CFLAGS)
+
 AR = ar
 RANLIB = ranlib
 ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
@@ -59,10 +59,10 @@ include/bits/alltypes.h: include/bits/alltypes.h.sh
 	sh $< > $@
 
 %.o: $(ARCH)/%.s
-	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
+	$(CC) $(CFLAGS_STATIC) -c -o $@ $<
 
 %.o: %.c $(GENH)
-	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
+	$(CC) $(CFLAGS_STATIC) -c -o $@ $<
 
 lib/libc.a: $(OBJS)
 	$(RM) -f $@
