@@ -1,0 +1,6 @@
+
+This area is currently a bit of a stub. It contains support for linux but the
+other operating system directories are not yet used. As such, it represents the
+future direction and goals for hlibc.
+
+
