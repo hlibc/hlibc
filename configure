@@ -43,7 +43,7 @@ setdir () {
 	fi
 }
 
-tryflag () {
+inspect_compiler () {
 	printf "trying %s... " "$2"
 	print "typedef int x;" > "$tmpc"
 	if "$CC" "$2" -c -o /dev/null "$tmpc" 2>/dev/null
@@ -99,7 +99,7 @@ setdir syslibdir '/lib'
 
 # tempfile
 tmpc="./temporary_work_file"
-rm "$tmpc"
+[ -f "${tmpc}" ] && rm "$tmpc"
 
 print "Attempting to detect a C compiler ..."
 if [ -z "${CC}" ]
@@ -142,22 +142,22 @@ case "$target" in
 esac
 
 # Try to get a conforming C99 freestanding environment
-tryflag CFLAGS_C99FSE -std=c99
-tryflag CFLAGS_C99FSE -nostdinc
-tryflag CFLAGS_C99FSE -ffreestanding
-tryflag CFLAGS_AUTO -Os
-tryflag CFLAGS_AUTO -pipe
+inspect_compiler CFLAGS_C99FSE -std=c99
+inspect_compiler CFLAGS_C99FSE -nostdinc
+inspect_compiler CFLAGS_C99FSE -ffreestanding
+inspect_compiler CFLAGS_AUTO -Os
+inspect_compiler CFLAGS_AUTO -pipe
 
 # nasty i486 hack
 if test "$ARCH" = "i386"
-then	tryflag CFLAGS_AUTO -march=i486
-	tryflag CFLAGS_AUTO -mtune=generic
+then	inspect_compiler CFLAGS_AUTO -march=i486
+	inspect_compiler CFLAGS_AUTO -mtune=generic
 fi
 
 # Some patched GCC builds have these defaults messed up...
-tryflag CFLAGS_AUTO -fno-stack-protector
-tryflag DISABLE_PIE -fno-pie
-tryflag DISABLE_PIE -no-pie
+inspect_compiler CFLAGS_AUTO -fno-stack-protector
+inspect_compiler DISABLE_PIE -fno-pie
+inspect_compiler DISABLE_PIE -no-pie
 
 print "Generating a config.mak for the main Makefile"
 
@@ -184,6 +184,6 @@ case "$CC" in
 		print "" >> config.mak
 		;;
 esac
-
+rm "$tmpc"
 print "done"
 
