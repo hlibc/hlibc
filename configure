@@ -126,11 +126,12 @@ case "$target" in
 esac
 
 # Obtain a freestanding C99 env
+inspect_compiler CFLAGS_C99FSE -ffreestanding
 inspect_compiler CFLAGS_C99FSE -std=c99
 inspect_compiler CFLAGS_C99FSE -nostdinc
-inspect_compiler CFLAGS_C99FSE -ffreestanding
-inspect_compiler CFLAGS_AUTO -Os
 inspect_compiler CFLAGS_AUTO -pipe
+inspect_compiler CFLAGS_AUTO -Os
+
 
 # nasty i486 hack
 if test "$ARCH" = "i386"
