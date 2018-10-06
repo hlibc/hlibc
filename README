@@ -9,6 +9,8 @@ hlibc
 	hlibc is targeted at the linux kernel's syscall ABI and currently
 	supports the i386, x86_64, arm and aarch64 architectures.
 
+	hlibc has rudimentary support for x86_64 FreeBSD.
+
 
 	hlibc focuses primarily on algorithmic correctness and effectiveness
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc
@@ -17,9 +19,9 @@ hlibc
 	libc in order to handle the basic case of printing IEEE floats in a
 	correct manner.
 
-	Because hlibc does not need to be installed in order to be used it
-	is well suited toward use in the classroom or as a tool for
-	understanding how more complex libc might work.
+	Because hlibc does not need to be installed in order to be used it is
+	well suited toward use in the classroom or as a tool for understanding 
+	how more complex libc might work.
 
 	The simplicity of hlibc should allow for it to be easily ported to new
 	operating systems.
@@ -51,6 +53,23 @@ BUILDING:
 	libc.a and header files, completely excluding those of the host. Run
 	`readelf -a' on the resulting binary and inspect the output to ensure
 	that it was not contaminated by the host libc.
+
+
+	Building on FreeBSD:
+
+		pkg install gcc
+
+		git clone https://github.com/hlibc/hlibc
+
+		cd hlibc
+		CC=gcc ./configure --prefix=/home/$USER/buildarea
+		gmake
+		gmake install
+
+	FreeBSD support is still experimental. some known issues:
+		* only gcc works with the compiler wrapper
+		* only supports x86_64
+		* stdio does not work, but basic syscalls do
 
 
 RELENG:
