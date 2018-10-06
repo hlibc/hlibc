@@ -428,7 +428,11 @@ int open(const char *filename, int flags, ...)
 
 int brk(void *end)
 {
+#ifdef SYS_brk
 	return -(__syscall(SYS_brk, end) != (unsigned long)end);
+#else // more hacks to make FreeBSD build
+	return 1;
+#endif
 }
 
 int chroot(const char *path)
