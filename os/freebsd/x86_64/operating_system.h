@@ -569,5 +569,13 @@
 #define		SYS_null	562	
 #define		SYS_null	563	
 
+// from linux_syscall.h
+
+#define LINUX_SYS_linux_nanosleep       162
+#define     LINUX32_SYS_linux_clock_gettime 265
+
+
 /* Begin aligning FreeBSD functionalities with that of the linux counterparts */
 #define SYS_getdents SYS_getdirentries
+#define SYS_nanosleep		LINUX_SYS_linux_nanosleep
+#define SYS_clock_gettime	LINUX32_SYS_linux_clock_gettime
