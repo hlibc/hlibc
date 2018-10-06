@@ -7,10 +7,12 @@ hlibc
 	point research and the study of fdlibm's core components.
 
 	hlibc is targeted at the linux kernel's syscall ABI and currently
-	supports the i386, x86_64, arm and aarch64 architectures.
+	supports the i386, x86_64, arm and aarch64 architectures. 
 
-	hlibc has rudimentary support for x86_64 FreeBSD.
-
+	hlibc is targeted at POSIX systems and works with the linux and FreeBSD
+	kernels' syscall ABI. Currently i386, x86_64, arm and aarch64 i
+	architectures are supported for linux and x86_64 is supported for 
+	FreeBSD.
 
 	hlibc focuses primarily on algorithmic correctness and effectiveness
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc
@@ -23,7 +25,7 @@ hlibc
 	well suited toward use in the classroom or as a tool for understanding 
 	how more complex libc might work.
 
-	The simplicity of hlibc should allow for it to be easily ported to new
+	The simplicity of hlibc allows for it to be easily ported to new
 	operating systems.
 
 	As much as possible, linux and glibc specific functionalities are
@@ -57,7 +59,7 @@ BUILDING:
 
 	Building on FreeBSD:
 
-		pkg install gcc
+		pkg install gcc git
 
 		git clone https://github.com/hlibc/hlibc
 
@@ -66,11 +68,11 @@ BUILDING:
 		gmake
 		gmake install
 
-	FreeBSD support is still experimental. some known issues:
-		* only gcc works with the compiler wrapper
-		* only supports x86_64
-		* stdio does not work, but basic syscalls do
-
+	FreeBSD support is still experimental. Currently, only the gcc compiler
+	wrapper is working correctly. Clang does work, but for whatever reason
+	the compiler wrapper logic is broken. If you choose to use clang then
+	the libc.a and the crt*.o files must be linked in by hand.
+	
 
 RELENG:
 -------
