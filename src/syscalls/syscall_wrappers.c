@@ -722,7 +722,11 @@ mode_t umask(mode_t mode)
 
 int utimensat(int fd, const char *path, const struct timespec times[2], int flags)
 {
+#ifdef SYS_utimensat
 	return __syscall(SYS_utimensat, fd, path, times, flags);
+#else // hacks to make FreeBSD build
+	return 1;
+#endif
 }
 
 int tcgetattr(int fd, struct termios *tio)
