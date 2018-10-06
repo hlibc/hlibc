@@ -63,18 +63,6 @@ do	case "$i" in
 		--prefix=*)
 			prefix=${i#*=}
 			;;
-		--* )
-			fatal "$i not recognized!!"
-			;;
-		CC=*)
-			CC=${i#*=}
-			;;
-		CFLAGS=*)
-			CFLAGS=${i#*=}
-			;;
-		CPPFLAGS=*)
-			CPPFLAGS=${i#*=}
-			;;
 		*)
 			fatal "$i is not a valid option !!"
 			;;
