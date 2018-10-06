@@ -88,13 +88,15 @@ endif
 	chmod +x $@
 
 $(DESTDIR)$(binaries)/%: tools/%
-	install -D $< $@
+	mkdir -p $(prefix)/bin
+	cp -a $< $@
 
 $(DESTDIR)$(libraries)/%: lib/%
-	install -D -m 644 $< $@
+	mkdir -p $(prefix)/lib
+	cp -a $< $@
 
 $(DESTDIR)$(includes)/%: include/%
-	install -D -m 644 $< $@
+	cp -a include $(prefix)
 
 $(DESTDIR)$(syslibraries):
 	install -d -m 755 $(DESTDIR)$(syslibraries)

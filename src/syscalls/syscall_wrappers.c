@@ -669,11 +669,6 @@ int mkdirat(int fd, const char *path, mode_t mode)
 	return __syscall(SYS_mkdirat, fd, path, mode);
 } 
 
-int mkfifo(const char *path, mode_t mode)
-{
-	return mknod(path, mode | S_IFIFO, 0);
-}
-
 mode_t umask(mode_t mode)
 {
 	return __syscall(SYS_umask, mode);
