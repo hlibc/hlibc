@@ -411,11 +411,7 @@ int open(const char *filename, int flags, ...)
 #ifdef SYS_open
 	return __syscall(SYS_open, filename, flags|O_LARGEFILE, mode);
 #else
-#ifdef SYS_openat
 	return __syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
-#else
-	return 1;
-#endif // FreeBSD hacks
 #endif
 
 }
