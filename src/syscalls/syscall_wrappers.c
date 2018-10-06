@@ -444,7 +444,7 @@ int mount(const char *special, const char *dir, const char *fstype, unsigned lon
 {
 	return __syscall(SYS_mount, special, dir, fstype, flags, data);
 }
-
+#ifdef SYS_brk
 void *sbrk(intptr_t inc)
 {
 	unsigned long cur = __syscall(SYS_brk, 0);
@@ -452,7 +452,7 @@ void *sbrk(intptr_t inc)
 		return (void *)-1;
 	return (void *)cur;
 }
-
+#endif
 pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
 {
 	return __syscall(SYS_wait4, pid, status, options, usage);
@@ -480,11 +480,12 @@ int setpriority(int which, id_t who, int prio)
 {
 	return __syscall(SYS_getpriority, which, who, prio);
 }
-
+#ifdef SYS_uname
 int uname(struct utsname *uts)
 {
 	return __syscall(SYS_uname, uts);
 }
+#endif // FreeBSD hacks
 
 int mlockall(int flags)
 {
@@ -619,12 +620,12 @@ pid_t wait(int *status)
 {
 	return waitpid((pid_t)-1, status, 0);
 }
-
+#ifdef SYS_waitid
 int waitid(idtype_t type, id_t id, siginfo_t *info, int options)
 {
 	return __syscall(SYS_waitid, type, id, info, options, 0);
 }
-
+#endif
 pid_t waitpid(pid_t pid, int *status, int options)
 {
 	return __syscall(SYS_wait4, pid, status, options, 0);
