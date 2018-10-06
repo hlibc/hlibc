@@ -743,7 +743,11 @@ int tcsetattr(int fd, int act, const struct termios *tio)
 
 int nanosleep(const struct timespec *req, struct timespec *rem)
 {
+#ifdef SYS_nanosleep
 	return __syscall(SYS_nanosleep, req, rem);
+#else // temporary hack to make FreeBSD build
+	return 1;
+#endif
 }
 
 long __syscall_ret(unsigned long r)
