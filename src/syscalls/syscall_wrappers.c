@@ -399,7 +399,7 @@ int fcntl(int fd, int cmd, ...)
 		return __syscall(SYS_fcntl, fd, cmd, arg);
 	return __syscall(SYS_fcntl, fd, cmd, arg);
 }
-
+#ifdef SYS_openat
 int openat(int fd, const char *filename, int flags, ...)
 {
 	mode_t mode;
@@ -409,7 +409,7 @@ int openat(int fd, const char *filename, int flags, ...)
 	va_end(ap);
 	return __syscall(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
 }
-
+#endif // hacks to make FreeBSD build
 int open(const char *filename, int flags, ...)
 {
 
