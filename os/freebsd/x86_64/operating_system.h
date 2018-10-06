@@ -1,4 +1,9 @@
-			
+/*
+	This file is written from scratch based on the syscall numbers from
+	"syscall.master" in FreeBSD.
+	It is copyrighted: Copyright CM Graff 2018
+*/
+
 #define		SYS_null	0	
 #define		SYS_exit	1	
 #define		SYS_fork	2	
@@ -195,7 +200,7 @@
 #define		SYS_null	193	
 #define		SYS_getrlimit	194	
 #define		SYS_setrlimit	195	
-#define		SYS_getdirentries	196	
+//#define		SYS_getdirentries	196	
 #define		SYS_mmap	197	
 #define		SYS_null	198	
 #define		SYS_lseek	199	
@@ -553,7 +558,7 @@
 #define		SYS_fstat	551	
 #define		SYS_fstatat	552	
 #define		SYS_fhstat	553	
-#define		SYS_getdirentries 	554
+//#define		SYS_getdirentries 	554
 #define		SYS_statfs	555	
 #define		SYS_fstatfs	556	
 #define		SYS_getfsstat	557	
@@ -563,3 +568,6 @@
 #define		SYS_null	561	
 #define		SYS_null	562	
 #define		SYS_null	563	
+
+/* Begin aligning FreeBSD functionalities with that of the linux counterparts */
+#define SYS_getdents SYS_getdirentries

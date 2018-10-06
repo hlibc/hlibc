@@ -310,11 +310,7 @@ int closedir(DIR *dir)
 
 int getdents(int fd, struct dirent *buf, size_t len)
 {
-#ifdef SYS_getdents
 	return __syscall(SYS_getdents, fd, buf, len);
-#else
-	return 1;
-#endif
 }
 
 DIR *opendir(const char *name)
