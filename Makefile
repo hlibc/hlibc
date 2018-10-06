@@ -51,7 +51,9 @@ include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease run ./configure first\n"
 	@test "$(ARCH)" || echo "\tOr use 'make test' to invoke the test suite\n"
 	@test "$(ARCH)" || exit 1
-	cp -r arch/$(ARCH)/bits include/
+	mkdir -p include/bits/
+	cp -r arch/$(ARCH)/bits/* include/bits/
+	cp -r $(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
 
 include/bits/alltypes.h.sh: include/bits
 
