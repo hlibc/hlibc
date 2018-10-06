@@ -403,17 +403,7 @@ int fcntl(int fd, int cmd, ...)
 		return __syscall(SYS_fcntl, fd, cmd, arg);
 	return __syscall(SYS_fcntl, fd, cmd, arg);
 }
-#ifdef SYS_openat
-int openat(int fd, const char *filename, int flags, ...)
-{
-	mode_t mode;
-	va_list ap;
-	va_start(ap, flags);
-	mode = va_arg(ap, mode_t);
-	va_end(ap);
-	return __syscall(SYS_openat, fd, filename, flags|O_LARGEFILE, mode);
-}
-#endif // hacks to make FreeBSD build
+
 int open(const char *filename, int flags, ...)
 {
 
@@ -434,15 +424,6 @@ int open(const char *filename, int flags, ...)
 
 }
 
-int brk(void *end)
-{
-#ifdef SYS_brk
-	return -(__syscall(SYS_brk, end) != (unsigned long)end);
-#else // more hacks to make FreeBSD build
-	return 1;
-#endif
-}
-
 int chroot(const char *path)
 {
 	return __syscall(SYS_chroot, path);
@@ -452,15 +433,7 @@ int mount(const char *special, const char *dir, const char *fstype, unsigned lon
 {
 	return __syscall(SYS_mount, special, dir, fstype, flags, data);
 }
-#ifdef SYS_brk
-void *sbrk(intptr_t inc)
-{
-	unsigned long cur = __syscall(SYS_brk, 0);
-	if (inc && __syscall(SYS_brk, cur+inc) != cur+inc)
-		return (void *)-1;
-	return (void *)cur;
-}
-#endif
+
 pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
 {
 	return __syscall(SYS_wait4, pid, status, options, usage);
@@ -488,12 +461,6 @@ int setpriority(int which, id_t who, int prio)
 {
 	return __syscall(SYS_getpriority, which, who, prio);
 }
-#ifdef SYS_uname
-int uname(struct utsname *uts)
-{
-	return __syscall(SYS_uname, uts);
-}
-#endif // FreeBSD hacks
 
 int mlockall(int flags)
 {
@@ -628,12 +595,7 @@ pid_t wait(int *status)
 {
 	return waitpid((pid_t)-1, status, 0);
 }
-#ifdef SYS_waitid
-int waitid(idtype_t type, id_t id, siginfo_t *info, int options)
-{
-	return __syscall(SYS_waitid, type, id, info, options, 0);
-}
-#endif
+
 pid_t waitpid(pid_t pid, int *status, int options)
 {
 	return __syscall(SYS_wait4, pid, status, options, 0);
@@ -688,11 +650,6 @@ int fstat(int fd, struct stat *buf)
 	return __syscall(SYS_fstat, fd, buf);
 }
 
-int futimens(int fd, const struct timespec times[2])
-{
-	return utimensat(fd, 0, times, 0);
-}
-
 int lchmod(const char *path, mode_t mode)
 {
 	return fchmodat(AT_FDCWD, path, mode, AT_SYMLINK_NOFOLLOW);
@@ -710,18 +667,7 @@ int lstat(const char *restrict path, struct stat *restrict buf)
 int mkdirat(int fd, const char *path, mode_t mode)
 {
 	return __syscall(SYS_mkdirat, fd, path, mode);
-}
-#ifdef SYS_mknodat
-int mkfifoat(int fd, const char *path, mode_t mode)
-{
-	return mknodat(fd, path, mode | S_IFIFO, 0);
-}
-
-int mknodat(int fd, const char *path, mode_t mode, dev_t dev)
-{
-	return __syscall(SYS_mknodat, fd, path, mode, dev & 0xffff);
-}
-#endif
+} 
 
 int mkfifo(const char *path, mode_t mode)
 {
@@ -731,15 +677,6 @@ int mkfifo(const char *path, mode_t mode)
 mode_t umask(mode_t mode)
 {
 	return __syscall(SYS_umask, mode);
-}
-
-int utimensat(int fd, const char *path, const struct timespec times[2], int flags)
-{
-#ifdef SYS_utimensat
-	return __syscall(SYS_utimensat, fd, path, times, flags);
-#else // hacks to make FreeBSD build
-	return 1;
-#endif
 }
 
 int tcgetattr(int fd, struct termios *tio)
@@ -812,7 +749,7 @@ int clock_gettime(clockid_t clk, struct timespec *ts)
 	__syscall(SYS_gettimeofday, clk, ts, 0);
 	ts->tv_nsec = (int)ts->tv_nsec * 1000;
 	return 0;
-#endif
+#endif // FreeBSD hacks
 }
 
 time_t time(time_t *t)
