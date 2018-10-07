@@ -52,8 +52,8 @@ include/bits:
 	@test "$(ARCH)" || echo "\tOr use 'make test' to invoke the test suite\n"
 	@test "$(ARCH)" || exit 1
 	mkdir -p include/bits/
-	cp -r arch/$(ARCH)/bits/* include/bits/
-	cp -r os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
+	cp -R arch/$(ARCH)/bits/* include/bits/
+	cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
 
 include/bits/alltypes.h.sh: include/bits
 
@@ -91,14 +91,14 @@ endif
 
 $(DESTDIR)$(binaries)/%: tools/%
 	mkdir -p $(prefix)/bin
-	cp -a $< $@
+	cp -R $< $@
 
 $(DESTDIR)$(libraries)/%: lib/%
 	mkdir -p $(prefix)/lib
-	cp -a $< $@
+	cp -R $< $@
 
 $(DESTDIR)$(includes)/%: include/%
-	cp -a include $(prefix)
+	cp -R include $(prefix)
 
 $(DESTDIR)$(syslibraries):
 	install -d -m 755 $(DESTDIR)$(syslibraries)

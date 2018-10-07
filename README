@@ -6,10 +6,10 @@ hlibc
 	a minimalistic fork of Sun fdlibm focused on IEEE-754-2008 floating
 	point research and the study of fdlibm's core components.
 
-	hlibc is targeted at POSIX systems and works with the linux and FreeBSD
-	kernels' syscall ABI. Currently i386, x86_64, arm and aarch64
+	hlibc is targeted at POSIX systems and works with the linux, FreeBSD and
+	OpenBSD kernels' syscall ABI. Currently i386, x86_64, arm and aarch64
 	architectures are supported for linux and x86_64 is supported for 
-	FreeBSD.
+	FreeBSD and OpenBSD.
 
 	hlibc focuses primarily on algorithmic correctness and effectiveness
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc
@@ -71,7 +71,18 @@ BUILDING:
 	wrapper is working correctly. Clang does work, but for whatever reason
 	the compiler wrapper logic is broken. If you choose to use clang then
 	the libc.a and the crt*.o files must be linked in by hand.
-	
+
+	Building on OpenBSD:
+
+		git clone https://github.com/hlibc/hlibc
+
+		cd hlibc
+		CC=clang ./configure --prefix=/home/$USER/buildarea
+		gmake
+		gmake install
+
+	OpenBSD support is still in its early stages. At this time gcc is not
+	working however llvm/clang is working fine.
 
 RELENG:
 -------
