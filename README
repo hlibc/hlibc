@@ -84,8 +84,8 @@ BUILDING:
 	OpenBSD support is still in its early stages. At this time gcc is not
 	working however llvm/clang is working fine. OpenBSD is purportedly
 	switching its focus to llvm/clang and will not likely be updating gcc
-	support. For this reason, it's likely advisable to simply use clang
-	instead of gcc when building hlibc on OpenBSD.
+	support. For this reason, it's advisable to simply use clang instead 
+	of gcc when building hlibc on OpenBSD.
 
 
 RELENG:
