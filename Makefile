@@ -53,7 +53,7 @@ include/bits:
 	@test "$(ARCH)" || exit 1
 	mkdir -p include/bits/
 	cp -r arch/$(ARCH)/bits/* include/bits/
-	cp -r $(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
+	cp -r os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
 
 include/bits/alltypes.h.sh: include/bits
 
