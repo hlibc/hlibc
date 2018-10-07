@@ -1,4 +1,8 @@
 # hlibc makefile
+# Use GNU make. "gmake" on the BSDs and simply "make" on linux systems
+# `cp' is used instead of `install' in order to provide portability across
+# operating systems. Likewise, `cp -R' is used instead of `cp -a' or `cp -r'
+# in order to cater to OpenBSD's unique `cp' command.
 
 binaries = $(exec_prefix)/bin
 prefix = /usr/local/hlibc

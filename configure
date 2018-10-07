@@ -85,10 +85,7 @@ case $OS_DIRTY_STR in
 			;;
 	*OpenBSD*|*openbsd*|*Openbsd*)
 		OPERATING_SYSTEM="openbsd"
-			;;
-	*aix*|*AIX*|*Aix*)
-		OPERATING_SYSTEM="aix"
-			;;
+			;; 
 esac
 
 # extrapolate the installation prefix
