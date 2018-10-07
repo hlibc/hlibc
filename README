@@ -14,11 +14,11 @@ hlibc
 	hlibc focuses primarily on algorithmic correctness and effectiveness
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc
 	has correct getc/putc semantics which are designed to eliminate short
-	read and writes. These getc/putc semantics lie at the heart of the a
-	libc's stdio and canonically define a majority of its usefulness.
-	Indeed, no programming language has ever succeeded in completely
-	replacing C's stdio functionalities with a shorter, more concise or
-	more effective interface.
+	read and writes. These getc/putc semantics lie at the heart of a libc's
+	stdio and canonically define a majority of its usefulness.  Indeed, no
+	programming language has ever succeeded in completely replacing C's 
+	stdio functionalities with a shorter, more concise or more effective 
+	interface.
 
 	Because hlibc does not need to be installed in order to be used it is
 	well suited toward use in the classroom or as a tool for understanding 
