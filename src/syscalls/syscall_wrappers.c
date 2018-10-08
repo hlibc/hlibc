@@ -392,11 +392,6 @@ int tcsetattr(int fd, int act, const struct termios *tio)
 	return ioctl(fd, TCSETS+act, tio);
 }
 
-int nanosleep(const struct timespec *req, struct timespec *rem)
-{
-	return __syscall(SYS_nanosleep, req, rem);
-}
-
 long __syscall_ret(unsigned long r)
 {
 	if (r > -4096UL) {
