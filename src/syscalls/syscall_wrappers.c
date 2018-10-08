@@ -44,11 +44,6 @@ struct __DIR_s
 	char buf[2048];
 };
 
-int chdir(const char *path)
-{
-	return __syscall(SYS_chdir, path);
-}
-
 int close(int fd)
 {
 	return __syscall(SYS_close, fd);
