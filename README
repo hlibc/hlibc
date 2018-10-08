@@ -70,7 +70,11 @@ BUILDING:
 	FreeBSD support is still experimental. Currently, only the gcc compiler
 	wrapper is working correctly. Clang does work, but for whatever reason
 	the compiler wrapper logic is broken. If you choose to use clang then
-	the libc.a and the crt*.o files must be linked in by hand.
+	the libc.a and the crt*.o files must be linked in by hand. To make this
+	process easier a special compiler wrapper has been added called
+	"compiler-handlink" and can be used as follows:
+
+		/home/$USER/buildarea/bin/compiler-handlink hello.c
 
 	Building on OpenBSD:
 

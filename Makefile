@@ -29,7 +29,7 @@ EMPTY_LIBS = lib/libm.a
 STATIC_LIBS = lib/libc.a
 
 ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
-ALL_TOOLS = tools/compiler
+ALL_TOOLS = tools/compiler tools/compiler-handlink
 
 -include config.mak
 
@@ -91,6 +91,13 @@ ifeq ($(CC_IS_CLANG),yes)
 else
 	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libraries)" >> $@
 endif
+	chmod +x $@
+
+tools/compiler-handlink: config.mak
+	printf '#!/bin/sh\n' > $@
+	printf 'printf "cc = "\n' >> $@
+	printf 'set -x\n' >> $@
+	printf -- '$(CC) $(DISABLE_PIE) $(WRAP_OPT) -nostdinc -nostdlib -I$(prefix)/include "$$@" $(prefix)/lib/crt1.o $(prefix)/lib/libc.a ' >> $@
 	chmod +x $@
 
 $(DESTDIR)$(binaries)/%: tools/%
