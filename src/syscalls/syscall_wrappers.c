@@ -44,33 +44,6 @@ struct __DIR_s
 	char buf[2048];
 };
 
-int close(int fd)
-{
-	return __syscall(SYS_close, fd);
-}
-
-int dup2(int old, int new)
-{
-	int r;
-#ifdef SYS_dup2
-	while ((r=__syscall(SYS_dup2, old, new))==-EBUSY);
-#else
-	if (old==new) {
-		r = __syscall(SYS_fcntl, old, F_GETFD);
-		if (r >= 0)
-			return old;
-	} else {
-		while ((r=__syscall(SYS_dup3, old, new, 0))==-EBUSY);
-	}
-#endif
-	return __syscall_ret(r);
-}
-
-int dup(int fd)
-{
-	return __syscall(SYS_dup, fd);
-}
-
 int ftruncate(int fd, off_t length)
 {
 	return __syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
@@ -511,6 +484,7 @@ pid_t waitpid(pid_t pid, int *status, int options)
 
 int poll(struct pollfd *fds, nfds_t n, int timeout)
 {
+	
 #ifdef SYS_poll
 	return __syscall(SYS_poll, fds, n, timeout);
 #else
