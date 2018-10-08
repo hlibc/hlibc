@@ -29,9 +29,6 @@ extern char **__environ;
 
 long __syscall_ret(unsigned long);
 
-int brk(void *);
-void *sbrk(intptr_t);
-
 #define socketcall __socketcall
 
 struct __DIR_s
@@ -44,79 +41,6 @@ struct __DIR_s
 	char buf[2048];
 };
 
-int ftruncate(int fd, off_t length)
-{
-	return __syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
-}
-
-gid_t getegid(void)
-{
-	return __syscall(SYS_getegid);
-}
-
-uid_t geteuid(void)
-{
-	return __syscall(SYS_geteuid);
-}
-
-gid_t getgid(void)
-{
-	return __syscall(SYS_getgid);
-}
-
-int getgroups(int count, gid_t list[])
-{
-	return __syscall(SYS_getgroups, count, list);
-}
-
-char *getlogin(void)
-{
-	return getenv("LOGNAME");
-}
-
-pid_t getpgid(pid_t pid)
-{
-	return __syscall(SYS_getpgid, pid);
-}
-
-pid_t getpgrp(void)
-{
-#ifdef	SYS_getpgrp
-	return __syscall(SYS_getpgrp);
-#else
-	return __syscall(SYS_getpgid, 0);
-#endif
-}
-
-pid_t getpid(void)
-{
-	return __syscall(SYS_getpid);
-}
-
-pid_t getppid(void)
-{
-	return __syscall(SYS_getppid);
-}
-
-pid_t getsid(pid_t pid)
-{
-	return __syscall(SYS_getsid, pid);
-}
-
-uid_t getuid(void)
-{
-	return __syscall(SYS_getuid);
-}
-
-int link(const char *existing, const char *new)
-{
-#ifdef	SYS_link
-	return __syscall(SYS_link, existing, new);
-#else
-	return __syscall(SYS_linkat, AT_FDCWD, existing, new);
-#endif
-}
-
 off_t lseek(int fd, off_t offset, int whence)
 {
 #ifdef SYS__llseek
@@ -125,61 +49,6 @@ off_t lseek(int fd, off_t offset, int whence)
 #else
 	return __syscall(SYS_lseek, fd, offset, whence);
 #endif
-}
-
-int nice(int inc)
-{
-#ifdef SYS_nice
-	return __syscall(SYS_nice, inc);
-#else
-	return setpriority(PRIO_PROCESS, 0, getpriority(PRIO_PROCESS, 0)+inc);
-#endif
-}
-
-int pipe(int fd[2])
-{
-#ifdef	SYS_pipe
-	return __syscall(SYS_pipe, fd);
-#else
-	return __syscall(SYS_pipe2, fd, 0);
-#endif
-}
-
-ssize_t read(int fd, void *buf, size_t count)
-{
-	return __syscall(SYS_read, fd, buf, count);
-}
-
-ssize_t readlink(const char *restrict path, char *restrict buf, size_t bufsize)
-{
-#ifdef SYS_readlink
-	return __syscall(SYS_readlink, path, buf, bufsize);
-#else
-	return __syscall(SYS_readlinkat, AT_FDCWD, path, buf, bufsize);
-#endif
-}
-
-int rmdir(const char *path)
-{
-#ifdef SYS_rmdir
-	return __syscall(SYS_rmdir, path);
-#else
-	return __syscall(SYS_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
-#endif
-}
-
-int symlink(const char *existing, const char *new)
-{
-#ifdef SYS_symlink
-	return __syscall(SYS_symlink, existing, new);
-#else
-	return __syscall(SYS_symlinkat, existing, AT_FDCWD, new);
-#endif
-}
-
-void sync(void)
-{
-	__syscall(SYS_sync);
 }
 
 pid_t tcgetpgrp(int fd)
@@ -345,14 +214,6 @@ pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
 	return __syscall(SYS_wait4, pid, status, options, usage);
 }
 
-int getpriority(int which, id_t who)
-{
-	int ret = __syscall(SYS_getpriority, which, who);
-	if (ret < 0)
-		return ret;
-	return 20-ret;
-}
-
 int ioctl(int fd, int req, ...)
 {
 	void *arg;
@@ -361,11 +222,6 @@ int ioctl(int fd, int req, ...)
 	arg = va_arg(ap, void *);
 	va_end(ap);
 	return __syscall(SYS_ioctl, fd, req, arg);
-}
-
-int setpriority(int which, id_t who, int prio)
-{
-	return __syscall(SYS_getpriority, which, who, prio);
 }
 
 void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
