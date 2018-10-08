@@ -81,6 +81,9 @@ case $OS_DIRTY_STR in
 		OPERATING_SYSTEM="freebsd"
 			;;
 	*NetBSD*|*netbsd*|*Netbsd*)
+		print "NetBSD is not fully supported."
+		print "It will build, and likely works, however NetBSD needs a note in the ELF headers"
+		print "which hlibc has no functionality to provide at this time."
 		OPERATING_SYSTEM="netbsd"
 			;;
 	*OpenBSD*|*openbsd*|*Openbsd*)
