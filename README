@@ -39,6 +39,7 @@ BUILDING:
 	redirects linking options allowing hlibc to be installed and used
 	without root privilege.
 
+	Building on Linux:
 
 		git clone https://github.com/hlibc/hlibc
 
@@ -75,6 +76,10 @@ BUILDING:
 	"compiler-handlink" and can be used as follows:
 
 		/home/$USER/buildarea/bin/compiler-handlink hello.c
+
+	Using compiler-handlink is not advised for general use and will fail on
+	many architectures such as linux on aarch64 (arm v8). It will however,
+	work for most x86 circumstances.
 
 	Building on OpenBSD:
 
