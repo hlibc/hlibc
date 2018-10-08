@@ -41,6 +41,11 @@ struct __DIR_s
 	char buf[2048];
 };
 
+int ftruncate(int fd, off_t length)
+{
+	return __syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
+}
+
 off_t lseek(int fd, off_t offset, int whence)
 {
 #ifdef SYS__llseek
