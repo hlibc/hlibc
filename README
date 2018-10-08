@@ -32,6 +32,9 @@ hlibc
 	are described in the POSIX, C99 and C11 standards.
 
 
+	hlibc was authored by CM Graff.
+
+
 BUILDING:
 ---------
 	
