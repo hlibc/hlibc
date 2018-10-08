@@ -44,15 +44,6 @@ struct __DIR_s
 	char buf[2048];
 };
 
-int access(const char *filename, int amode)
-{
-#ifdef	SYS_access
-	return __syscall(SYS_access, filename, amode);
-#else
-	return __syscall(SYS_faccessat, AT_FDCWD, filename, amode, 0);
-#endif
-}
-
 int chdir(const char *path)
 {
 	return __syscall(SYS_chdir, path);
