@@ -77,5 +77,4 @@ static inline long __syscall6(long n, long a, long b, long c, long d, long e, lo
 
 
 #define __socketcall(nm,a,b,c,d,e,f) syscall(SYS_##nm, a, b, c, d, e, f)
-#define __socketcall_cp(nm,a,b,c,d,e,f) syscall_cp(SYS_##nm, a, b, c, d, e, f)
 

@@ -62,6 +62,5 @@ static inline long __syscall6(long __n, long __a1, long __a2, long __a3, long __
 }
 
 #define __socketcall(nm,a,b,c,d,e,f) syscall(SYS_##nm, a, b, c, d, e, f)
-#define __socketcall_cp(nm,a,b,c,d,e,f) syscall_cp(SYS_##nm, a, b, c, d, e, f)
 
 #include <operating_system.h>
