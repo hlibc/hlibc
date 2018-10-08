@@ -90,16 +90,6 @@ int ftruncate(int fd, off_t length)
 	return __syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
 }
 
-char *getcwd(char *buf, size_t size)
-{
-	char tmp[PATH_MAX];
-	if (!buf)
-		buf = tmp, size = PATH_MAX;
-	if (__syscall(SYS_getcwd, buf, size) < 0)
-		return 0;
-	return buf == tmp ? strdup(buf) : buf;
-}
-
 gid_t getegid(void)
 {
 	return __syscall(SYS_getegid);
