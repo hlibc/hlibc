@@ -14,7 +14,6 @@
 #include <sys/mman.h>
 #include <sys/resource.h>
 #include <sys/select.h>
-#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
@@ -29,7 +28,6 @@ extern char **__environ;
 
 long __syscall_ret(unsigned long);
 
-#define socketcall __socketcall
 
 struct __DIR_s
 {
@@ -248,16 +246,6 @@ int munmap(void *start, size_t len)
 	int ret;
 	ret = __syscall(SYS_munmap, start, len);
 	return ret;
-}
-
-ssize_t sendto(int fd, const void *buf, size_t len, int flags, const struct sockaddr *addr, socklen_t alen)
-{
-	return socketcall(sendto, fd, buf, len, flags, addr, alen);
-}
-
-int socket(int domain, int type, int protocol)
-{
-	return socketcall(socket, domain, type, protocol, 0, 0, 0);
 }
 
 int execl(const char *path, const char *argv0, ...)

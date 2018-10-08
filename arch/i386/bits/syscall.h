@@ -55,6 +55,3 @@ static inline long __syscall6(long __n, long __a1, long __a2, long __a3, long __
 
 #include <operating_system.h>
 
-#define __socketcall(nm,a,b,c,d,e,f) syscall(SYS_socketcall, __SC_##nm, \
-    ((long [6]){ (long)a, (long)b, (long)c, (long)d, (long)e, (long)f }))
-
