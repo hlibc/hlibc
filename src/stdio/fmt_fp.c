@@ -49,8 +49,10 @@ static void pad(char *f, char c, int w, int l, int fl)
 static char *fmt_u(uintmax_t x, char *s)
 {
 	unsigned long y;
-	for (   ; x>ULONG_MAX; x/=10) *--s = '0' + x%10;
-	for (y=x;	   y; y/=10) *--s = '0' + y%10;
+	for (; x>ULONG_MAX; x/=10) 
+		*--s = '0' + x%10;
+	for (y=x; y; y/=10)
+		*--s = '0' + y%10;
 	return s;
 }
 
@@ -137,7 +139,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	}
 
 	if (a<z)
-		for (i=10, e=9*(r-a); *a>=i; i*=10, e++);
+		for (i=10, e=9*(r-a); *a>=i; i*=10, e++)
+			;
 	else
 		e=0;
 
@@ -149,14 +152,17 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		d = r + 1 + (j+9*LDBL_MAX_EXP)/9 - LDBL_MAX_EXP;
 		j += 9*LDBL_MAX_EXP;
 		j %= 9;
-		for (i=10, j++; j<9; i*=10, j++);
+		for (i=10, j++; j<9; i*=10, j++)
+			;
 		x = *d % i;
 		/* Are there any significant digits past j? */
 		if (x || d+1!=z) {
 			long double round = CONCAT(0x1p,LDBL_MANT_DIG);
 			long double small;
-			if (*d/i & 1) round += 2;
-			if (x<i/2) small=0x0.8p0;
+			if (*d/i & 1)
+				round += 2;
+			if (x<i/2)
+				small=0x0.8p0;
 			else if (x==i/2 && d+1==z)
 				small=0x1.0p0;
 			else
@@ -173,16 +179,20 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 				}
 				if (d<a)
 					a=d;
-				for (i=10, e=9*(r-a); *a>=i; i*=10, e++);
+				for (i=10, e=9*(r-a); *a>=i; i*=10, e++)
+					;
 			}
 		}
-		if (z>d+1) z=d+1;
-		for (; !z[-1] && z>a; z--);
+		if (z>d+1)
+			z=d+1;
+		for (; !z[-1] && z>a; z--)
+			;
 	}
 	
 	l = 1 + p + (p || (fl&ALT_FORM));
 	if ((t|32)=='f') {
-		if (e>0) l+=e;
+		if (e>0)
+			l+=e;
 	} 
 
 	pad(f, ' ', w, pl+l, fl);
