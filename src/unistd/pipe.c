@@ -1,12 +1,12 @@
 #include <sys/syscall.h>
 #include <unistd.h>
 
-int pipe(int filedes[2])
+int pipe(int fildes[2])
 {
 #ifdef  SYS_pipe
-        return __syscall(SYS_pipe, filedes);
+        return __syscall(SYS_pipe, fildes);
 #else
-        return __syscall(SYS_pipe2, filedes, 0);
+        return __syscall(SYS_pipe2, fildes, 0);
 #endif
 }
 
