@@ -3,21 +3,24 @@ licensed under the MIT license. All files without copyright comments in
 this area are original works by CM Graff, the others are copyrighted by
 author, except for detailed below. 
 
-	Contributors to hlibc
-	---------------------
+	Contributors to hlibc (in order of contributions)
+	------------------------------------------------
 	CM Graff
-	Iain Hill
-	Evgeniy Popov
-	Tuomo Venäläinen
-	Zach van Rijn
-	Adrian Parvin D. Ouano
 	Bao Hexing
+	Iain Hill
+	Adrian Parvin D. Ouano
 	Mohammad M. Rakib
-	Eigenfeld Aparicio
 	James Buren
+	Tuomo Venäläinen
+	Evgeniy Popov
+	Nicholas Chambers
 	Xnrand (grumble)
-	Nicholas Chambers (uplime)
 
+	Contributors of minor changes such as formatting or whitespace fixes
+	--------------------------------------------------------------------
+	Zach van Rijn
+	Eigenfeld Aparicio 
+	
 
 musl libc   (src/syscalls/  src/stdio/fmt_fp.c)
 -----------------------------------------------
