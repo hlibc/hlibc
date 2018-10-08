@@ -149,11 +149,6 @@ uid_t getuid(void)
 	return __syscall(SYS_getuid);
 }
 
-int linkat(int fd1, const char *existing, int fd2, const char *new, int flag)
-{
-	return __syscall(SYS_linkat, fd1, existing, fd2, new, flag);
-}
-
 int link(const char *existing, const char *new)
 {
 #ifdef	SYS_link
@@ -196,11 +191,6 @@ ssize_t read(int fd, void *buf, size_t count)
 	return __syscall(SYS_read, fd, buf, count);
 }
 
-ssize_t readlinkat(int fd, const char *path, char *buf, size_t bufsize)
-{
-	return __syscall(SYS_readlinkat, fd, path, buf, bufsize);
-}
-
 ssize_t readlink(const char *restrict path, char *restrict buf, size_t bufsize)
 {
 #ifdef SYS_readlink
@@ -210,16 +200,6 @@ ssize_t readlink(const char *restrict path, char *restrict buf, size_t bufsize)
 #endif
 }
 
-ssize_t readv(int fd, const struct iovec *iov, int count)
-{
-	return __syscall(SYS_readv, fd, iov, count);
-}
-
-int renameat(int oldfd, const char *old, int newfd, const char *new)
-{
-	return __syscall(SYS_renameat, oldfd, old, newfd, new);
-}
-
 int rmdir(const char *path)
 {
 #ifdef SYS_rmdir
@@ -227,11 +207,6 @@ int rmdir(const char *path)
 #else
 	return __syscall(SYS_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
 #endif
-}
-
-int symlinkat(const char *existing, int fd, const char *new)
-{
-	return __syscall(SYS_symlinkat, existing, fd, new);
 }
 
 int symlink(const char *existing, const char *new)
@@ -267,11 +242,6 @@ int truncate(const char *path, off_t length)
 	return __syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
 }
 
-int unlinkat(int fd, const char *path, int flag)
-{
-	return __syscall(SYS_unlinkat, fd, path, flag);
-}
-
 int unlink(const char *path)
 {
 #ifdef SYS_unlink
@@ -284,11 +254,6 @@ int unlink(const char *path)
 ssize_t write(int fd, const void *buf, size_t count)
 {
 	return __syscall(SYS_write, fd, buf, count);
-}
-
-ssize_t writev(int fd, const struct iovec *iov, int count)
-{
-	return __syscall(SYS_writev, fd, iov, count);
 }
 
 int closedir(DIR *dir)
@@ -444,16 +409,6 @@ int setpriority(int which, id_t who, int prio)
 	return __syscall(SYS_getpriority, which, who, prio);
 }
 
-int mlockall(int flags)
-{
-	return __syscall(SYS_mlockall, flags);
-}
-
-int mlock(const void *addr, size_t len)
-{
-	return __syscall(SYS_mlock, addr, len);
-}
-
 void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 {
 	void *ret;
@@ -466,21 +421,6 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	ret = (void *)__syscall(SYS_mmap, start, len, prot, flags, fd, off);
 #endif
 	return ret;
-}
-
-int msync(void *start, size_t len, int flags)
-{
-	return __syscall(SYS_msync, start, len, flags);
-}
-
-int munlockall(void)
-{
-	return __syscall(SYS_munlockall);
-}
-
-int munlock(const void *addr, size_t len)
-{
-	return __syscall(SYS_munlock, addr, len);
 }
 
 int munmap(void *start, size_t len)
@@ -608,33 +548,9 @@ int chmod(const char *path, mode_t mode)
 #endif
 }
 
-int fchmodat(int fd, const char *path, mode_t mode, int flag)
-{
-	return __syscall(SYS_fchmodat, fd, path, mode, flag);
-}
-
-int fchmod(int fd, mode_t mode)
-{
-	return __syscall(SYS_fchmod, fd, mode);
-}
-
-int fstatat(int fd, const char *path, struct stat *buf, int flag)
-{
-#ifdef SYS_fstatat
-	return __syscall(SYS_fstatat, fd, path, buf, flag);
-#else
-	return __syscall(SYS_newfstatat, fd, path, buf, flag);
-#endif
-}
-
 int fstat(int fd, struct stat *buf)
 {
 	return __syscall(SYS_fstat, fd, buf);
-}
-
-int lchmod(const char *path, mode_t mode)
-{
-	return fchmodat(AT_FDCWD, path, mode, AT_SYMLINK_NOFOLLOW);
 }
 
 int lstat(const char *restrict path, struct stat *restrict buf)
@@ -645,11 +561,6 @@ int lstat(const char *restrict path, struct stat *restrict buf)
 	return __syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
 #endif
 }
-
-int mkdirat(int fd, const char *path, mode_t mode)
-{
-	return __syscall(SYS_mkdirat, fd, path, mode);
-} 
 
 mode_t umask(mode_t mode)
 {
