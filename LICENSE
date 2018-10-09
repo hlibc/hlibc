@@ -3,8 +3,8 @@ licensed under the MIT license. All files without copyright comments in
 this area are original works by CM Graff, the others are copyrighted by
 author, except for detailed below. 
 
-	Contributors to hlibc (in order of contributions)
-	------------------------------------------------
+	Contributors to hlibc
+	---------------------
 	CM Graff
 	Bao Hexing
 	Iain Hill
@@ -15,9 +15,6 @@ author, except for detailed below.
 	Evgeniy Popov
 	Nicholas Chambers
 	Xnrand (grumble)
-
-	Contributors of minor changes (such as formatting or whitespace fixes)
-	----------------------------------------------------------------------
 	Zach van Rijn
 	Eigenfeld Aparicio 
 	
