@@ -73,19 +73,6 @@ int truncate(const char *path, off_t length)
 	return __syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
 }
 
-int unlink(const char *path)
-{
-#ifdef SYS_unlink
-	return __syscall(SYS_unlink, path);
-#else
-	return __syscall(SYS_unlinkat, AT_FDCWD, path, 0);
-#endif
-}
-
-ssize_t write(int fd, const void *buf, size_t count)
-{
-	return __syscall(SYS_write, fd, buf, count);
-}
 
 int closedir(DIR *dir)
 {
@@ -200,11 +187,6 @@ int open(const char *filename, int flags, ...)
 	return __syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
 #endif
 
-}
-
-int chroot(const char *path)
-{
-	return __syscall(SYS_chroot, path);
 }
 
 int mount(const char *special, const char *dir, const char *fstype, unsigned long flags, const void *data)
