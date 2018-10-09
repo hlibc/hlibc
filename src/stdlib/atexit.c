@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-int __internal_atexit(void (*f)(void), int fireoff)
+static int __internal_atexit(void (*f)(void), int fireoff)
 {
 	static void (*funcs[32])(void);
 	static size_t i = 0;
