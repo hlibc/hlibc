@@ -2,87 +2,45 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#define COUNT 32
-
-static struct fl
+int __internal_atexit(void (*f)(void), int fireoff)
 {
-	struct fl *next;
-	void (*f[COUNT])(void *);
-	void *a[COUNT];
-} builtin, *head;
+	static void (*funcs[32])(void);
+	static size_t i = 0;
 
-/*
- * __funcs_on_exit: Iterate through the array of function pointers collected by
- * the atexit() function.
- */
-void __funcs_on_exit()
-{
-	int i;
-	void (*func)(void *), *arg;
+	if (i == 32)
+		return 1;
 
-	if (!head)
-		return;
-
-	for (i=COUNT-1; i>=0 && !head->f[i]; i--)
-		;
-
-	if (i>=0)
-		for (; i>=0 && head->f[i]; i--) {
-			func = head->f[i];
-			arg = head->a[i];
-			head->f[i] = 0;
-			func(arg);
-		}
-}
-
-/*
- * __cxa_atexit: Add the given function pointer to the array of function
- * pointers that are called by the exit of the main() function.
- */
-static int __cxa_atexit(void (*func)(void *), void *arg)
-{
-	int i;
-	/* Defer initialization of head so it can be in BSS */
-	if (!head) head = &builtin;
-
-	/* Append function to the list. */
-	for (i=0; i<COUNT && head->f[i]; i++)
-		;
-
-	/* If there is still a slot available, use it. */
-	if (i < COUNT) {
-		head->f[i] = func;
-		head->a[i] = arg;
+	if (fireoff == 0)
+	{
+		funcs[i++] = f;
+		return 0;
 	}
+	for (;i>0;)
+		funcs[--i]();
+
 	return 0;
 }
 
-static void call(void *p)
+int atexit(void (*f)(void))
 {
-	((void (*)(void))(uintptr_t)p)();
+	return __internal_atexit(f, 0);
 }
 
-int atexit(void (*func)(void))
+void exit(int status)
 {
-	return __cxa_atexit(call, (void *)(uintptr_t)func);
-}
-
-void __funcs_on_exit();
-
-void exit(int code)
-{
-	__funcs_on_exit();
+	__internal_atexit(NULL, 1);
 	fflush(NULL);
-	_Exit(code);
-	for(;;);
+	_Exit(status);
+	for(;;)
+		;
 }
 
-void _Exit(int ec)
+void _Exit(int status)
 {
 #ifdef SYS_exit_group
-	__syscall(SYS_exit_group, ec);
+	__syscall(SYS_exit_group, status);
 #endif
-	__syscall(SYS_exit, ec);
+	__syscall(SYS_exit, status);
 }
 
 void _exit(int status)
