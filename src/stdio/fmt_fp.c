@@ -121,9 +121,13 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		if (!z[-1] && z>a)
 			z--;
 		if (carry)
-			*--a = carry;
+		{
+			a--;
+			*a = carry;
+			
+		}
 		e2-=sh;
-	}
+	} 
 	while (e2<0) {
 		uint32_t carry=0, *z2;
 		int sh=MIN(9,-e2);
