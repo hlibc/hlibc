@@ -4,7 +4,7 @@
 
 extern char **__environ;
 
-int __libc_start_main(int (*main)(int, char **, char **), int argc, char **argv)
+int __load_main(int (*main)(int, char **, char **), int argc, char **argv)
 {
 	char **envp = argv+argc+1;
 	__environ = envp;

@@ -23,4 +23,4 @@ _start:
 	ldr	w1, [x29,44]
 	ldr	x2, [x29,32]
 	mov	x5, 0
-	bl	__libc_start_main
+	bl	__load_main

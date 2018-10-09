@@ -11,5 +11,5 @@ _start:
 	push %eax
 	push %ecx
 	push $main /* 1st arg: application entry ip */
-	call __libc_start_main /* hlibc init will run the program */
+	call __load_main /* hlibc init will run the program */
 1:	jmp 1b

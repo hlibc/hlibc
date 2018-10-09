@@ -10,5 +10,5 @@ _start:
 	mov %rsp, %rdx
 	andq $-16, %rsp
 	mov $main, %rdi
-	call __libc_start_main
+	call __load_main
 
