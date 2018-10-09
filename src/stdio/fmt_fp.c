@@ -59,10 +59,14 @@ static char *fmt_u(uintmax_t x, char *s)
 int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 {
 	__last = 0;
-	uint32_t big[(LDBL_MAX_EXP+LDBL_MANT_DIG)/9+1];
+	/*
+		We massivly overshoot the size needed for the bignumnum
+		arrays so as to avoid pedantry and over-complication.
+	*/
+	uint32_t bignum[LDBL_MANT_DIG * 5];
 	uint32_t *a, *d, *r, *z;
 	int e2=0, e, i, j, l;
-	char buf[9+LDBL_MANT_DIG/4], *s;
+	char buf[LDBL_MANT_DIG * 5], *s;
 	const char *prefix="-0X+0X 0X-0x+0x 0x";
 	int pl;
 
@@ -97,9 +101,9 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		y *= 0x1p28, e2-=28;
 
 	if (e2<0)
-		a = r = z = big;
+		a = r = z = bignum;
 	else
-		a = r = z = big+sizeof(big)/sizeof(*big) - LDBL_MANT_DIG - 1;
+		a = r = z = bignum+sizeof(bignum)/sizeof(*bignum) - LDBL_MANT_DIG - 1;
 
 	do {
 		*z = y;
