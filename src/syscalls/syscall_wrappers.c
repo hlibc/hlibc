@@ -184,26 +184,6 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	return ret;
 }
 
-int execl(const char *path, const char *argv0, ...)
-{
-	int argc;
-	va_list ap;
-	va_start(ap, argv0);
-	for (argc=1; va_arg(ap, const char *); argc++)
-		;
-	va_end(ap);
-	{
-		int i;
-		char *argv[argc+1];
-		va_start(ap, argv0);
-		argv[0] = (char *)argv0;
-		for (i=1; i<argc; i++)
-			argv[i] = va_arg(ap, char *);
-		argv[i] = NULL;
-		return execv(path, argv);
-	}
-}
-
 int execv(const char *path, char *const argv[])
 {
 	return execve(path, argv, __environ);
