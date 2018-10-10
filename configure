@@ -125,7 +125,7 @@ case "$architecture" in
 	arm*)
 		ARCH="arm"
 		;;
-	aarch64*)
+	*arm64*|*aarch64*)
 		ARCH="aarch64"
 		;;
 	i*86*)
