@@ -18,7 +18,6 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
-#include <sys/wait.h>
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
@@ -99,8 +98,6 @@ DIR *opendir(const char *name)
 	dir->fd = fd;
 	return dir;
 }
-
-int getdents(int, struct dirent *, size_t);
 
 struct dirent *readdir(DIR *dir)
 {
@@ -222,13 +219,6 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	return ret;
 }
 
-int munmap(void *start, size_t len)
-{
-	int ret;
-	ret = __syscall(SYS_munmap, start, len);
-	return ret;
-}
-
 int execl(const char *path, const char *argv0, ...)
 {
 	int argc;
@@ -300,11 +290,6 @@ int execvp(const char *file, char *const argv[])
 			break;
 	}
 	return -1;
-}
-
-pid_t wait(int *status)
-{
-	return waitpid((pid_t)-1, status, 0);
 }
 
 pid_t waitpid(pid_t pid, int *status, int options)
