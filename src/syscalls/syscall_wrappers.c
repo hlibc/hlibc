@@ -13,7 +13,6 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
-#include <sys/select.h>
 #include <sys/stat.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
@@ -322,20 +321,6 @@ int poll(struct pollfd *fds, nfds_t n, int timeout)
 	return __syscall(SYS_ppoll, fds, n, timeout>=0 ?
 		&((struct timespec){ .tv_sec = timeout/1000,
 		.tv_nsec = timeout%1000*1000000 }) : 0, 0, _NSIG/8);
-#endif
-}
-
-int select(int n, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *tv)
-{
-	return __syscall(SYS_select, n, rfds, wfds, efds, tv);
-}
-
-int chmod(const char *path, mode_t mode)
-{ 
-#ifdef SYS_chmod
-	return __syscall(SYS_chmod, path, mode);
-#else
-	return __syscall(SYS_fchmodat, AT_FDCWD, path, mode);
 #endif
 }
 
