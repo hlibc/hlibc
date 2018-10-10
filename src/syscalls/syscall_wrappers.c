@@ -12,8 +12,6 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
-#include <sys/resource.h>
-#include <sys/stat.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -35,11 +33,6 @@ struct __DIR_s
 	int lock[2];
 	char buf[2048];
 };
-
-int ftruncate(int fd, off_t length)
-{
-	return __syscall(SYS_ftruncate, fd, __SYSCALL_LL_O(length));
-}
 
 off_t lseek(int fd, off_t offset, int whence)
 {
@@ -63,11 +56,6 @@ int tcsetpgrp(int fd, pid_t pgrp)
 {
 	int pgrp_int = pgrp;
 	return ioctl(fd, TIOCSPGRP, &pgrp_int);
-}
-
-int truncate(const char *path, off_t length)
-{
-	return __syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
 }
 
 int closedir(DIR *dir)
@@ -180,7 +168,6 @@ int open(const char *filename, int flags, ...)
 #else
 	return __syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
 #endif
-
 }
 
 void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
@@ -279,20 +266,6 @@ int poll(struct pollfd *fds, nfds_t n, int timeout)
 	return __syscall(SYS_ppoll, fds, n, timeout>=0 ?
 		&((struct timespec){ .tv_sec = timeout/1000,
 		.tv_nsec = timeout%1000*1000000 }) : 0, 0, _NSIG/8);
-#endif
-}
-
-int fstat(int fd, struct stat *buf)
-{
-	return __syscall(SYS_fstat, fd, buf);
-}
-
-int lstat(const char *restrict path, struct stat *restrict buf)
-{
-#ifdef SYS_lstat
-	return __syscall(SYS_lstat, path, buf);
-#else
-	return __syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
 #endif
 }
 
