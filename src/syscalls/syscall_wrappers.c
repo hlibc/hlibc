@@ -18,7 +18,6 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
-#include <termios.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -185,26 +184,6 @@ int open(const char *filename, int flags, ...)
 
 }
 
-int mount(const char *special, const char *dir, const char *fstype, unsigned long flags, const void *data)
-{
-	return __syscall(SYS_mount, special, dir, fstype, flags, data);
-}
-
-pid_t wait4(pid_t pid, int *status, int options, struct rusage *usage)
-{
-	return __syscall(SYS_wait4, pid, status, options, usage);
-}
-
-int ioctl(int fd, int req, ...)
-{
-	void *arg;
-	va_list ap;
-	va_start(ap, req);
-	arg = va_arg(ap, void *);
-	va_end(ap);
-	return __syscall(SYS_ioctl, fd, req, arg);
-}
-
 void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 {
 	void *ret;
@@ -292,11 +271,6 @@ int execvp(const char *file, char *const argv[])
 	return -1;
 }
 
-pid_t waitpid(pid_t pid, int *status, int options)
-{
-	return __syscall(SYS_wait4, pid, status, options, 0);
-}
-
 int poll(struct pollfd *fds, nfds_t n, int timeout)
 {
 	
@@ -326,22 +300,6 @@ int lstat(const char *restrict path, struct stat *restrict buf)
 mode_t umask(mode_t mode)
 {
 	return __syscall(SYS_umask, mode);
-}
-
-int tcgetattr(int fd, struct termios *tio)
-{
-	if (ioctl(fd, TCGETS, tio))
-		return -1;
-	return 0;
-}
-
-int tcsetattr(int fd, int act, const struct termios *tio)
-{
-	if (act < 0 || act > 2) {
-		errno = EINVAL;
-		return -1;
-	}
-	return ioctl(fd, TCSETS+act, tio);
 }
 
 long __syscall_ret(unsigned long r)
