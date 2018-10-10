@@ -70,7 +70,6 @@ int truncate(const char *path, off_t length)
 	return __syscall(SYS_truncate, path, __SYSCALL_LL_O(length));
 }
 
-
 int closedir(DIR *dir)
 {
 	int ret = close(dir->fd);
@@ -295,11 +294,6 @@ int lstat(const char *restrict path, struct stat *restrict buf)
 #else
 	return __syscall(SYS_fstatat, AT_FDCWD, path, buf, AT_SYMLINK_NOFOLLOW);
 #endif
-}
-
-mode_t umask(mode_t mode)
-{
-	return __syscall(SYS_umask, mode);
 }
 
 long __syscall_ret(unsigned long r)
