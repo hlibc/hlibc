@@ -46,7 +46,7 @@ int tcsetpgrp(int fd, pid_t pgrp)
 	int pgrp_int = pgrp;
 	return ioctl(fd, TIOCSPGRP, &pgrp_int);
 }
-int getdents(unsigned int, struct dirent *, unsigned int);
+
 struct dirent *readdir(DIR *dir)
 {
 	struct dirent *de;

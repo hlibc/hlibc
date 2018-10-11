@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <dirent.h>
 
 extern char **__environ;
 
@@ -71,7 +72,7 @@ FILE *fopen(const char *, const char *);
 int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
 int fprintf(FILE *, const char *, ...);
-
+int getdents(unsigned int fd, struct dirent *dirp, unsigned int count);
 
 /* internal */
 int __fillbuf(FILE *);
