@@ -10,7 +10,7 @@ extern "C" {
 
 #include <bits/alltypes.h>
 
-typedef struct __DIR_s DIR;
+typedef struct DIR DIR;
 
 struct dirent
 {
@@ -23,18 +23,11 @@ struct dirent
 
 #define d_fileno d_ino
 
-int            closedir(DIR *);
-DIR           *fdopendir(int);
-DIR           *opendir(const char *);
-struct dirent *readdir(DIR *);
-int            readdir_r(DIR *, struct dirent *, struct dirent **);
-void           rewinddir(DIR *);
-void           seekdir(DIR *, long);
-long           telldir(DIR *);
-int            dirfd(DIR *);
+int closedir(DIR *);
 
-int alphasort(const struct dirent **, const struct dirent **);
-int scandir(const char *, struct dirent ***, int (*)(const struct dirent *), int (*)(const struct dirent **, const struct dirent **));
+DIR *opendir(const char *);
+struct dirent *readdir(DIR *);
+int dirfd(DIR *);
 
 #ifdef _GNU_SOURCE
 #define DT_UNKNOWN 0
@@ -46,18 +39,6 @@ int scandir(const char *, struct dirent ***, int (*)(const struct dirent *), int
 #define DT_LNK 10
 #define DT_SOCK 12
 #define DT_WHT 14
-#define IFTODT(x) ((x)>>12 & 017)
-#define DTTOIF(x) ((x)<<12)
-#endif
-
-#ifdef _LARGEFILE64_SOURCE
-#define dirent64 dirent
-#define readdir64 readdir
-#define readdir64_r readdir_r
-#define scandir64 scandir
-#define alphasort64 alphasort
-#define off64_t off_t
-#define ino64_t ino_t
 #endif
 
 #ifdef __cplusplus

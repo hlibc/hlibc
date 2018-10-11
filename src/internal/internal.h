@@ -41,6 +41,17 @@ typedef struct
 	size_t ungot;
 } FILE;
 
+struct DIR
+{
+        int fd;
+        off_t tell;
+        int buf_pos;
+        int buf_end;
+        int lock[2];
+        char buf[2048];
+};
+
+
 extern FILE _IO_stream[FOPEN_MAX];
 extern FILE *stdin;
 extern FILE *stdout;
@@ -56,6 +67,8 @@ int fclose(FILE *);
 FILE *fopen(const char *, const char *);
 int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
+
+int fprintf(FILE *, const char *, ...);
 
 /* internal */
 int __fillbuf(FILE *);

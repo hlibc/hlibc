@@ -7,7 +7,7 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -18,21 +18,10 @@
 #include <sys/utsname.h>
 #include <time.h>
 #include <unistd.h>
-
+#include "../internal/internal.h"
 extern char **__environ;
 
 long __syscall_ret(unsigned long);
-
-
-struct DIR
-{
-	int fd;
-	off_t tell;
-	int buf_pos;
-	int buf_end;
-	int lock[2];
-	char buf[2048];
-};
 
 off_t lseek(int fd, off_t offset, int whence)
 {
@@ -58,31 +47,9 @@ int tcsetpgrp(int fd, pid_t pgrp)
 	return ioctl(fd, TIOCSPGRP, &pgrp_int);
 }
 
-int closedir(DIR *dir)
-{
-	int ret = close(dir->fd);
-	free(dir);
-	return ret;
-}
-
 int getdents(int fd, struct dirent *buf, size_t len)
 {
 	return __syscall(SYS_getdents, fd, buf, len);
-}
-
-DIR *opendir(const char *name)
-{
-	int fd;
-	DIR *dir;
-
-	if ((fd = open(name, O_RDONLY|O_DIRECTORY|O_CLOEXEC)) < 0)
-		return 0;
-	if (!(dir = calloc(1, sizeof *dir))) {
-		close(fd);
-		return 0;
-	}
-	dir->fd = fd;
-	return dir;
 }
 
 struct dirent *readdir(DIR *dir)
