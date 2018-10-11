@@ -16,7 +16,7 @@ long syscall(long number, ...)
         e=va_arg(i, long);
         f=va_arg(i, long);
         va_end(i);
-	ret = __syscall(number, a, b, c, d, e, f);
+	ret = __syscall6(number, a, b, c, d, e, f);
 	if (ret > -4096UL) {
                 errno = -ret;
                 return -1;
