@@ -47,12 +47,10 @@ typedef struct
 
 struct DIR
 {
-        int fd;
-        off_t tell;
-        int buf_pos;
-        int buf_end;
-        int lock[2];
-        char buf[2048];
+        int fildes; 
+        size_t position;
+        size_t eob;
+        char buffer[2048];
 };
 
 

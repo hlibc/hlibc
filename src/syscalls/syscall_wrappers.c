@@ -47,23 +47,6 @@ int tcsetpgrp(int fd, pid_t pgrp)
 	return ioctl(fd, TIOCSPGRP, &pgrp_int);
 }
 
-struct dirent *readdir(DIR *dir)
-{
-	struct dirent *de;
-	
-	if (dir->buf_pos >= dir->buf_end) {
-		int len = getdents(dir->fd, (void *)dir->buf, sizeof dir->buf);
-		if (len <= 0) 
-			return 0;
-		dir->buf_end = len;
-		dir->buf_pos = 0;
-	}
-	de = (void *)(dir->buf + dir->buf_pos);
-	dir->buf_pos += de->d_reclen;
-	dir->tell = de->d_off;
-	return de;
-}
-
 char *getenv(const char *name)
 {
 	int i;
