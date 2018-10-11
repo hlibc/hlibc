@@ -15,33 +15,6 @@
 #include <unistd.h>
 #include "../internal/internal.h"
 
-void abort(void)
-{
-	//raise(SIGABRT);
-	for (;;);
-}
-
-int raise(int sig)
-{ 
-	return sig;
-}
-
-int fcntl(int fd, int cmd, ...)
-{
-	long arg;
-	va_list ap;
-	va_start(ap, cmd);
-	arg = va_arg(ap, long);
-	va_end(ap);
-	if (cmd == F_SETFL)
-		arg |= O_LARGEFILE;
-	if (cmd == F_SETLKW)
-		return syscall(SYS_fcntl, fd, cmd, arg);
-	if (cmd == F_GETOWN)
-		return syscall(SYS_fcntl, fd, cmd, arg);
-	return syscall(SYS_fcntl, fd, cmd, arg);
-}
-
 int clock_gettime(clockid_t clk, struct timespec *ts)
 { 
 	int r = syscall(SYS_clock_gettime, clk, ts);
