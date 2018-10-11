@@ -24,7 +24,7 @@ extern char **__environ;
 long __syscall_ret(unsigned long);
 
 
-struct __DIR_s
+struct DIR
 {
 	int fd;
 	off_t tell;
@@ -78,7 +78,7 @@ DIR *opendir(const char *name)
 	if ((fd = open(name, O_RDONLY|O_DIRECTORY|O_CLOEXEC)) < 0)
 		return 0;
 	if (!(dir = calloc(1, sizeof *dir))) {
-		__syscall(SYS_close, fd);
+		close(fd);
 		return 0;
 	}
 	dir->fd = fd;
@@ -157,7 +157,6 @@ int fcntl(int fd, int cmd, ...)
 
 int open(const char *filename, int flags, ...)
 {
-
 	mode_t mode;
 	va_list ap;
 	va_start(ap, flags);
@@ -277,7 +276,8 @@ long syscall(long n, ...)
 int clock_gettime(clockid_t clk, struct timespec *ts)
 { 
 	int r = __syscall(SYS_clock_gettime, clk, ts);
-	if (!r) return r;
+	if (!r)
+		return r;
 	if (r == -ENOSYS) {
 		if (clk == CLOCK_REALTIME) {
 			__syscall(SYS_gettimeofday, clk, ts, 0);
