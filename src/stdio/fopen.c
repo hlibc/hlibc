@@ -4,7 +4,7 @@ FILE *fopen(const char *name, const char *mode)
 {
 	int fd = 0;
 	FILE *o;
-	int perms = 0666; // not yet used
+	int perms = 0666;
 	int outfile = 0;
 	int seek = -1;
 
