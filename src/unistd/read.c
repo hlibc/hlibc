@@ -3,6 +3,6 @@
 
 ssize_t read(int fildes, void *buf, size_t nbyte)
 {
-        return __syscall(SYS_read, fildes, buf, nbyte);
+        return syscall(SYS_read, fildes, buf, nbyte);
 }
 

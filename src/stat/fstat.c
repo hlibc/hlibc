@@ -4,6 +4,6 @@
 
 int fstat(int fd, struct stat *buf)
 {
-        return __syscall(SYS_fstat, fd, buf);
+        return syscall(SYS_fstat, fd, buf);
 }
 

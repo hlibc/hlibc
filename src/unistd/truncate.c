@@ -3,6 +3,6 @@
 int truncate(int fildes, off_t length)
 {
 	/* note that the "length" argument is adjusted by some libc impls */
-        return __syscall(SYS_truncate, fildes, length);
+        return syscall(SYS_truncate, fildes, length);
 }
 

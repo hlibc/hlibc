@@ -21,15 +21,15 @@
 
 extern char **__environ;
 
-long __syscall_ret(unsigned long);
+long syscall_ret(unsigned long);
 
 off_t lseek(int fd, off_t offset, int whence)
 {
 #ifdef SYS__llseek
 	off_t result;
-	return __syscall(SYS__llseek, fd, offset>>32, offset, &result, whence) ? -1 : result;
+	return syscall(SYS__llseek, fd, offset>>32, offset, &result, whence) ? -1 : result;
 #else
-	return __syscall(SYS_lseek, fd, offset, whence);
+	return syscall(SYS_lseek, fd, offset, whence);
 #endif
 }
 
@@ -88,10 +88,10 @@ int fcntl(int fd, int cmd, ...)
 	if (cmd == F_SETFL)
 		arg |= O_LARGEFILE;
 	if (cmd == F_SETLKW)
-		return __syscall(SYS_fcntl, fd, cmd, arg);
+		return syscall(SYS_fcntl, fd, cmd, arg);
 	if (cmd == F_GETOWN)
-		return __syscall(SYS_fcntl, fd, cmd, arg);
-	return __syscall(SYS_fcntl, fd, cmd, arg);
+		return syscall(SYS_fcntl, fd, cmd, arg);
+	return syscall(SYS_fcntl, fd, cmd, arg);
 }
 
 int execvp(const char *file, char *const argv[])
@@ -139,12 +139,12 @@ int execvp(const char *file, char *const argv[])
 
 int clock_gettime(clockid_t clk, struct timespec *ts)
 { 
-	int r = __syscall(SYS_clock_gettime, clk, ts);
+	int r = syscall(SYS_clock_gettime, clk, ts);
 	if (!r)
 		return r;
 	if (r == -ENOSYS) {
 		if (clk == CLOCK_REALTIME) {
-			__syscall(SYS_gettimeofday, clk, ts, 0);
+			syscall(SYS_gettimeofday, clk, ts, 0);
 			ts->tv_nsec = (int)ts->tv_nsec * 1000;
 			return 0;
 		}

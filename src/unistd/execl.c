@@ -17,6 +17,6 @@ int execl(const char *path, const char *arg, ...)
               argv[i] = va_arg(j, char *);
 	argv[i] = NULL;
         va_end(j);
-	return __syscall(SYS_execve, path, argv, __environ);
+	return syscall(SYS_execve, path, argv, __environ);
 }
 

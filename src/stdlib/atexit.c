@@ -38,9 +38,9 @@ void exit(int status)
 void _Exit(int status)
 {
 #ifdef SYS_exit_group
-	__syscall(SYS_exit_group, status);
+	syscall(SYS_exit_group, status);
 #endif
-	__syscall(SYS_exit, status);
+	syscall(SYS_exit, status);
 }
 
 void _exit(int status)

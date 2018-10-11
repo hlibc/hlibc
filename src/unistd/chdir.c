@@ -3,7 +3,7 @@
 
 int chdir(const char *path)
 {
-	return __syscall(SYS_chdir, path);
+	return syscall(SYS_chdir, path);
 }
 
 

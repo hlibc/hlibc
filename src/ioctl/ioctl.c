@@ -9,5 +9,5 @@ int ioctl(int fildes, int request, ... /* arg */)
         va_start(i, request);
         argument = va_arg(i, void *);
         va_end(i);
-        return __syscall(SYS_ioctl, fildes, request, argument);
+        return syscall(SYS_ioctl, fildes, request, argument);
 }

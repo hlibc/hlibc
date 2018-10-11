@@ -4,5 +4,5 @@
 
 int munmap(void *addr, size_t len)
 { 
-        return  __syscall(SYS_munmap, addr, len);
+        return  syscall(SYS_munmap, addr, len);
 }

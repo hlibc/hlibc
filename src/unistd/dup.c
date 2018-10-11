@@ -3,6 +3,6 @@
 
 int dup(int fd)
 {
-	return __syscall(SYS_dup, fd);
+	return syscall(SYS_dup, fd);
 }
 

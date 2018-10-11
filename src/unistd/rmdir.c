@@ -4,9 +4,9 @@
 int rmdir(const char *path)
 {
 #ifdef SYS_rmdir
-        return __syscall(SYS_rmdir, path);
+        return syscall(SYS_rmdir, path);
 #else
-        return __syscall(SYS_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
+        return syscall(SYS_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
 #endif
 }
 

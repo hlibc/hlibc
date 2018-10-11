@@ -3,6 +3,6 @@
 
 int nanosleep(const struct timespec *rqtp, struct timespec *rmtp)
 {
-        return __syscall(SYS_nanosleep, rqtp, rmtp);
+        return syscall(SYS_nanosleep, rqtp, rmtp);
 }
 

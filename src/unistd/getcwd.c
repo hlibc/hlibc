@@ -10,7 +10,7 @@ char *getcwd(char *buffer, size_t len)
                 if(!(buffer = malloc(len)))
 			return NULL;
 	}
-        if (__syscall(SYS_getcwd, buffer, len) < 0)
+        if (syscall(SYS_getcwd, buffer, len) < 0)
                 return NULL;
 
         return buffer;

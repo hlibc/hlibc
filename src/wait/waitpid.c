@@ -4,5 +4,5 @@
 
 pid_t waitpid(pid_t pid, int *stat_loc, int options)
 {
-        return __syscall(SYS_wait4, pid, stat_loc, options, 0);
+        return syscall(SYS_wait4, pid, stat_loc, options, 0);
 }

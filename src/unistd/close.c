@@ -3,6 +3,6 @@
 
 int close(int fd)
 {
-	return __syscall(SYS_close, fd);
+	return syscall(SYS_close, fd);
 }
 
