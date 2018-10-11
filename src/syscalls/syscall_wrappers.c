@@ -18,18 +18,6 @@
 
 extern char **__environ;
 
-long syscall_ret(unsigned long);
-
-off_t lseek(int fd, off_t offset, int whence)
-{
-#ifdef SYS__llseek
-	off_t result;
-	return syscall(SYS__llseek, fd, offset>>32, offset, &result, whence) ? -1 : result;
-#else
-	return syscall(SYS_lseek, fd, offset, whence);
-#endif
-}
-
 char *getenv(const char *name)
 {
 	int i;
@@ -47,13 +35,6 @@ void abort(void)
 {
 	//raise(SIGABRT);
 	for (;;);
-}
-
-void __assert_fail(const char *expr, const char *file, int line, const char *func)
-{
-	fprintf(stderr, "Assertion failed: %s (%s: %s: %d)\n", expr, file, func, line);
-	fflush(NULL);
-	abort();
 }
 
 int raise(int sig)
