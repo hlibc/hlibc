@@ -1,5 +1,6 @@
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <fcntl.h>
 int link(const char *existing, const char *new)
 {
 #ifdef  SYS_link
