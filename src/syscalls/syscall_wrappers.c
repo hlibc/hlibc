@@ -150,16 +150,6 @@ void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
 	return ret;
 }
 
-int execv(const char *path, char *const argv[])
-{
-	return execve(path, argv, __environ);
-}
-
-int execve(const char *path, char *const argv[], char *const envp[])
-{
-	return __syscall(SYS_execve, path, argv, envp);
-}
-
 int execvp(const char *file, char *const argv[])
 {
 	const char *p, *z, *path = getenv("PATH");
