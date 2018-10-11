@@ -1,6 +1,6 @@
 #include <sys/syscall.h>
 #include <sys/stat.h>
-
+#include <fcntl.h>
 int chmod(const char *path, mode_t mode)
 {
 #ifdef SYS_chmod
