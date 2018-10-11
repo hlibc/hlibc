@@ -137,31 +137,6 @@ int execvp(const char *file, char *const argv[])
 	return -1;
 }
 
-long __syscall_ret(unsigned long r)
-{
-	if (r > -4096UL) {
-		errno = -r;
-		return -1;
-	}
-	return r;
-}
-
-#undef syscall
-long syscall(long n, ...)
-{
-	va_list ap;
-	long a, b, c, d, e, f;
-	va_start(ap, n);
-	a=va_arg(ap, long);
-	b=va_arg(ap, long);
-	c=va_arg(ap, long);
-	d=va_arg(ap, long);
-	e=va_arg(ap, long);
-	f=va_arg(ap, long);
-	va_end(ap);
-	return __syscall_ret(__syscall(n, a, b, c, d, e, f));
-}
-
 int clock_gettime(clockid_t clk, struct timespec *ts)
 { 
 	int r = __syscall(SYS_clock_gettime, clk, ts);
