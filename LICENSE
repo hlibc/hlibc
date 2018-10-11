@@ -19,9 +19,9 @@ author, except for detailed below.
 	Eigenfeld Aparicio 
 	
 
-musl libc   (src/syscalls/  src/stdio/fmt_fp.c)
------------------------------------------------
-These two files are Copyright © 2005-2012 Rich Felker and licensed under
+musl libc  (src/stdio/fmt_fp.c)
+-------------------------------
+This file is Copyright © 2005-2012 Rich Felker and licensed under
 the MIT license.
 
 
