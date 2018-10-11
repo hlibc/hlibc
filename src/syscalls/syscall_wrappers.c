@@ -94,20 +94,6 @@ int fcntl(int fd, int cmd, ...)
 	return __syscall(SYS_fcntl, fd, cmd, arg);
 }
 
-int open(const char *filename, int flags, ...)
-{
-	mode_t mode;
-	va_list ap;
-	va_start(ap, flags);
-	mode = va_arg(ap, mode_t);
-	va_end(ap);
-#ifdef SYS_open
-	return __syscall(SYS_open, filename, flags|O_LARGEFILE, mode);
-#else
-	return __syscall(SYS_openat, AT_FDCWD, filename, flags|O_LARGEFILE, mode);
-#endif
-}
-
 int execvp(const char *file, char *const argv[])
 {
 	const char *p, *z, *path = getenv("PATH");
@@ -149,18 +135,6 @@ int execvp(const char *file, char *const argv[])
 			break;
 	}
 	return -1;
-}
-
-int poll(struct pollfd *fds, nfds_t n, int timeout)
-{
-	
-#ifdef SYS_poll
-	return __syscall(SYS_poll, fds, n, timeout);
-#else
-	return __syscall(SYS_ppoll, fds, n, timeout>=0 ?
-		&((struct timespec){ .tv_sec = timeout/1000,
-		.tv_nsec = timeout%1000*1000000 }) : 0, 0, _NSIG/8);
-#endif
 }
 
 long __syscall_ret(unsigned long r)
