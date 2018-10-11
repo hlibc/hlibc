@@ -22,6 +22,6 @@ long syscall(long number, ...)
                 errno = -ret;
                 return -1;
         }
-
         return ret;
 }
+

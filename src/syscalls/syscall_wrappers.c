@@ -1,22 +1,19 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <limits.h>
-#include <poll.h>
+#include <limits.h> 
 #include <signal.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
+#include <string.h> 
 #include <sys/syscall.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/utsname.h>
 #include <time.h>
 #include <unistd.h>
+
 #include "../internal/internal.h"
 
 extern char **__environ;
@@ -31,20 +28,6 @@ off_t lseek(int fd, off_t offset, int whence)
 #else
 	return syscall(SYS_lseek, fd, offset, whence);
 #endif
-}
-
-pid_t tcgetpgrp(int fd)
-{
-	int pgrp;
-	if (ioctl(fd, TIOCGPGRP, &pgrp) < 0)
-		return -1;
-	return pgrp;
-}
-
-int tcsetpgrp(int fd, pid_t pgrp)
-{
-	int pgrp_int = pgrp;
-	return ioctl(fd, TIOCSPGRP, &pgrp_int);
 }
 
 char *getenv(const char *name)
@@ -92,49 +75,6 @@ int fcntl(int fd, int cmd, ...)
 	if (cmd == F_GETOWN)
 		return syscall(SYS_fcntl, fd, cmd, arg);
 	return syscall(SYS_fcntl, fd, cmd, arg);
-}
-
-int execvp(const char *file, char *const argv[])
-{
-	const char *p, *z, *path = getenv("PATH");
-	size_t l, k;
-
-	errno = ENOENT;
-	if (!*file)
-		return -1;
-
-	if (strchr(file, '/'))
-		return execv(file, argv);
-
-	if (!path)
-		path = "/usr/local/bin:/bin:/usr/bin";
-	k = strnlen(file, NAME_MAX+1);
-	if (k > NAME_MAX) {
-		errno = ENAMETOOLONG;
-		return -1;
-	}
-	l = strnlen(path, PATH_MAX-1)+1;
-
-	for(p=path; ; p=z) {
-		char b[l+k+1];
-		z = strchr(p, ':');
-		if (!z)
-			z = p+strlen(p);
-		if (z-p >= l) {
-			if (!*z++)
-				break;
-			continue;
-		}
-		memcpy(b, p, z-p);
-		b[z-p] = '/';
-		memcpy(b+(z-p)+(z>p), file, k+1);
-		execv(b, argv);
-		if (errno != ENOENT)
-			return -1;
-		if (!*z++)
-			break;
-	}
-	return -1;
 }
 
 int clock_gettime(clockid_t clk, struct timespec *ts)

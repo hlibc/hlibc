@@ -71,6 +71,7 @@ int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
 int fprintf(FILE *, const char *, ...);
 int getdents(unsigned int fd, struct dirent *dirp, unsigned int count);
+ int sprintf(char *str, const char *format, ...);
 
 /* internal */
 int __fillbuf(FILE *);
