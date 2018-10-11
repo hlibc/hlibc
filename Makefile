@@ -17,7 +17,7 @@ GENH = include/bits/alltypes.h
 CPPFLAGS =
 FREESTANDING = -std=c99 -ffreestanding -nostdinc
 CFLAGS_STATIC = $(FREESTANDING)
-CFLAGS_STATIC += -D_XOPEN_SOURCE=700 -I./include -I./arch/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
+CFLAGS_STATIC += -D_XOPEN_SOURCE=700 -I./include -I./machine/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
 CFLAGS_STATIC += $(CPPFLAGS) $(CFLAGS)
 
 AR = ar
@@ -40,7 +40,7 @@ all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libraries)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includes)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(binaries)/%)
 
 clean:
-	-$(RM) -f crt/*.o
+	-$(RM) -f machine/crt/*.o
 	-$(RM) -f $(OBJS)
 	-$(RM) -f $(ALL_LIBS) lib/*.[ao]
 	-$(RM) -f $(ALL_TOOLS)
@@ -56,7 +56,7 @@ include/bits:
 	@test "$(ARCH)" || echo "\tOr use 'make test' to invoke the test suite\n"
 	@test "$(ARCH)" || exit 1
 	mkdir -p include/bits/
-	cp -R arch/$(ARCH)/bits/* include/bits/
+	cp -R machine/$(ARCH)/bits/* include/bits/
 	cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
 
 include/bits/alltypes.h.sh: include/bits
@@ -79,7 +79,7 @@ $(EMPTY_LIBS):
 	$(RM) -f $@
 	$(AR) rc $@
 
-lib/%.o: crt/%.o
+lib/%.o: machine/crt/%.o
 	cp $< $@
 
 tools/compiler: config.mak
@@ -125,7 +125,7 @@ test:
 release:
 	./tools/.release
 
-.PRECIOUS: $(CRT_LIBS:lib/%=crt/%)
+.PRECIOUS: $(CRT_LIBS:lib/%=machine/crt/%)
 
 .PHONY: all clean install
 

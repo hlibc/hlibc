@@ -19,14 +19,14 @@ author, except for detailed below.
 	Eigenfeld Aparicio 
 	
 
-musl libc  (src/stdio/fmt_fp.c)
--------------------------------
+src/stdio/fmt_fp.c
+------------------
 This file is Copyright © 2005-2012 Rich Felker and licensed under
 the MIT license.
 
 
-Mathematics Library (src/libm/)
-------------------------------
+src/libm/
+---------
 The mathematics library was written at Sun laboratories and is "licensed"
 with no restrictions but the following clause:
 
@@ -40,24 +40,6 @@ with no restrictions but the following clause:
 	----------------------------
 	Copyright © 1993,2004 Sun Microsystems
 	Copyright © 2003-2009 Bruce D. Evans
-
-
-Header files (include/)
------------------------
-Public domain header files from musl-0.9.0 and grafland libc 
-
-
-Crt files (crt/)
-----------------
-Public domain crt files from musl-0.9.0 
-
-caveat:
-	The aarch64 crt files are copyright:
-		CM Graff 2018
-
-	The x86_64 crt files are copyright:
-		Adrian Parvin D. Ouano 2017
-		CM Graff 2018
 
 MIT LICENSE:
 ------------
