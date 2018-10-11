@@ -1,4 +1,4 @@
-static inline long __syscall6(long number, long a, long b, long c, long d, long e, long f)
+static inline long __internal_syscall(long number, long a, long b, long c, long d, long e, long f)
 {
 	unsigned long ret;
 	register long g __asm__("r8") = e;

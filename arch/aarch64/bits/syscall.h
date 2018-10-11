@@ -4,7 +4,7 @@
         return x0; \
         } while (0)
 
-static inline long __syscall6(long n, long a, long b, long c, long d, long e, long f)
+static inline long __internal_syscall(long n, long a, long b, long c, long d, long e, long f)
 {
         register long x8 __asm__("x8") = n;
         register long x0 __asm__("x0") = a;
