@@ -108,20 +108,6 @@ int open(const char *filename, int flags, ...)
 #endif
 }
 
-void *mmap(void *start, size_t len, int prot, int flags, int fd, off_t off)
-{
-	void *ret;
-	if (sizeof(off_t) > sizeof(long))
-		if (((long)off & 0xfff) | ((long)((unsigned long long)off>>(12 + 8*(sizeof(off_t)-sizeof(long))))))
-			start = (void *)-1;
-#ifdef SYS_mmap2
-	ret = (void *)__syscall(SYS_mmap2, start, len, prot, flags, fd, off>>12);
-#else
-	ret = (void *)__syscall(SYS_mmap, start, len, prot, flags, fd, off);
-#endif
-	return ret;
-}
-
 int execvp(const char *file, char *const argv[])
 {
 	const char *p, *z, *path = getenv("PATH");
