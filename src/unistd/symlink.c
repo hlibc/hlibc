@@ -1,5 +1,6 @@
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 int symlink(const char *path1, const char *path2)
 {
