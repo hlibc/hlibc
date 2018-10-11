@@ -7,7 +7,6 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
-//#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -19,6 +18,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "../internal/internal.h"
+
 extern char **__environ;
 
 long __syscall_ret(unsigned long);
@@ -46,12 +46,7 @@ int tcsetpgrp(int fd, pid_t pgrp)
 	int pgrp_int = pgrp;
 	return ioctl(fd, TIOCSPGRP, &pgrp_int);
 }
-
-int getdents(int fd, struct dirent *buf, size_t len)
-{
-	return __syscall(SYS_getdents, fd, buf, len);
-}
-
+int getdents(unsigned int, struct dirent *, unsigned int);
 struct dirent *readdir(DIR *dir)
 {
 	struct dirent *de;
@@ -67,12 +62,6 @@ struct dirent *readdir(DIR *dir)
 	dir->buf_pos += de->d_reclen;
 	dir->tell = de->d_off;
 	return de;
-}
-
-int clearenv()
-{
-	__environ[0] = 0;
-	return 0;
 }
 
 char *getenv(const char *name)

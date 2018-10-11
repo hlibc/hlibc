@@ -21,6 +21,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+extern char **__environ;
+
+
 typedef struct
 {
 	int fd;
@@ -67,8 +70,8 @@ int fclose(FILE *);
 FILE *fopen(const char *, const char *);
 int setvbuf(FILE *, char *, int, size_t);
 pid_t waitpid(pid_t, int *, int);
-
 int fprintf(FILE *, const char *, ...);
+
 
 /* internal */
 int __fillbuf(FILE *);
