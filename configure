@@ -69,7 +69,7 @@ do	case "$i" in
 	esac
 done
 
-# detect the operating system
+# Detect the operating system
 OS_DIRTY_STR=$(uname -a)
 
 case $OS_DIRTY_STR in
@@ -91,7 +91,7 @@ case $OS_DIRTY_STR in
 			;; 
 esac
 
-# tempfile
+# Obtain a temporary file
 temporary_file="./temporary_work_file"
 [ -f "${temporary_file}" ] && rm "$temporary_file"
 
@@ -134,12 +134,12 @@ inspect_compiler FREESTANDING -nostdinc
 inspect_compiler CFLAGS_SUPPLEMENT -pipe
 inspect_compiler CFLAGS_SUPPLEMENT -Os
 
-# correct broken compiler installations
+# Correct broken compiler installations
 inspect_compiler CFLAGS_SUPPLEMENT -fno-stack-protector
 inspect_compiler DISABLE_PIE -fno-pie
 inspect_compiler DISABLE_PIE -no-pie
 
-# create the config.mak
+# Create the config.mak
 print "Generating a config.mak for the main Makefile"
 
 print "
@@ -161,8 +161,9 @@ case "$CC" in
 		;;
 esac
 
-# clean up and report
+# Clean up and report
 rm "$temporary_file" .temporary
 
 print "done"
+
 
