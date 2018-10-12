@@ -129,6 +129,10 @@ TESTING:
 
 		https://github.com/hlibc/hlibc-test
 
+	hlibc-test also contains the utility suite `hbox' which has several
+	standalone tools such as `ls', `cp' and et cetera. hbox is not actively
+	developed at this time and is mostly used to test hlibc.
+
 
 WEB HOME:
 ---------
