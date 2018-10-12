@@ -2,6 +2,8 @@
 
 # hlibc configure script
 
+set -e
+
 print()
 {
 	printf -- "%s\n" "$*"
@@ -48,6 +50,11 @@ inspect_compiler()
 	fi
 }
 
+print "The hlibc configure script uses set -e and exits upon error"
+print "Remove set -e if you believe it is failing from a trivial error"
+print "Likewise, the makefile has no error supression. It can be activated"
+print "with the -i (ignore errors) flag"
+print
 
 OPERATING_SYSTEM="linux"
 FREESTANDING=

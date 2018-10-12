@@ -41,11 +41,11 @@ all:
 	$(MAKE) static
 
 install:
-	-mkdir -p $(prefix)/bin $(prefix)/lib
-	-cp -R include $(prefix)/
-	-cp libc.a libm.a $(prefix)/lib/
-	-cp machine/crt/*.o $(prefix)/lib/
-	-./tools/gcc-wrap.specs.sh $(prefix)/include $(prefix)/lib $(prefix)/ > $(prefix)/lib/gcc-wrap.specs
+	mkdir -p $(prefix)/bin $(prefix)/lib
+	cp -R include $(prefix)/
+	cp libc.a libm.a $(prefix)/lib/
+	cp machine/crt/*.o $(prefix)/lib/
+	./tools/gcc-wrap.specs.sh $(prefix)/include $(prefix)/lib $(prefix)/ > $(prefix)/lib/gcc-wrap.specs
 	$(MAKE) create_compiler
 
 static: $(OBJ) $(AOBJ)
