@@ -1,7 +1,26 @@
+# hlibc makefile 
+#
+# Copyright © 2018 CM Graff
+#
+# Use GNU make. ("gmake" on the BSDs and simply "make" on linux systems.)
+#
+# 
+# `cp' is used instead of `install' in order to provide portability across
+# operating systems. Likewise, `cp -R' is used instead of `cp -a' or `cp -r'
+# in order to cater to OpenBSD's unique `cp' command.
+#
+# This makefile is purposefully written in simple and readable make.
+# We sacrifice a small amount of repition in order to concentrate on the
+# important task of not rebuilding object files and simply copy the 
+# headers and compiler wrappers procedurally.
+#
+#
+
+
+
 SRCS = $(wildcard src/*.c src/*/*.c machine/crt/*.c)
 ASRCS = $(wildcard machine/crt/$(ARCH)/*.s src/*/$(ARCH)/*.s)
 OBJ = $(SRCS:.c=.o)
-
 AOBJ = $(ASRCS:.s=.o)
 CPPFLAGS =
 FREESTANDING = -std=c99 -ffreestanding -nostdinc -nostdlib
@@ -37,7 +56,6 @@ clean:
 
 cleanall:
 	rm -rf system-root
-
 
 create_compiler:
 	printf '#!/bin/sh\n' > $(prefix)/bin/compiler
