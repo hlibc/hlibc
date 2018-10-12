@@ -165,10 +165,10 @@ libraries = $libraries
 includes = $includes
 syslibraries = $syslibraries
 CC = $CC
-CFLAGS = $CFLAGS_SUPPLEMENT $CFLAGS
-FREESTANDING = $FREESTANDING
-DISABLE_PIE = $DISABLE_PIE
-OPERATING_SYSTEM = $OPERATING_SYSTEM
+CFLAGS += $CFLAGS_SUPPLEMENT $CFLAGS
+FREESTANDING += $FREESTANDING
+DISABLE_PIE += $DISABLE_PIE
+OPERATING_SYSTEM += $OPERATING_SYSTEM
 " > config.mak
 
 # Adjust the compiler wrapper if clang is being used
