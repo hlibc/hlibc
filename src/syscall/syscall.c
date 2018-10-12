@@ -2,7 +2,7 @@
 #include <sys/syscall.h>
 #include <stdarg.h>
 #include <errno.h>
-
+#include "../internal/internal.h"
 long syscall(long number, ...)
 {
 	long ret = 0;
