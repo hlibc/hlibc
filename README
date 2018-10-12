@@ -176,3 +176,13 @@ RELEASES:
 
 	No releases are available at this time.
 
+
+
+NOTES:
+------
+
+From https://stackoverflow.com/questions/24491386/is-there-an-equivalent-to-spec-files-for-clang-llvm-and-where-can-i-find-a-refe
+To override linker search path, check the man page for ld to identify the flags you need (e.g. -syslibroot) and tell clang to pass them to the linker via -Wl. For example, this command enabled me to use a custom version of libstdc++: clang++ -std=c++11 -stdlib=libstdc++ -nostdinc++ -isystem/path/to/alt-stdlib/include/c++ -isystem/path/to/alt-stdlib/include/c++/x86_64-apple-darwin14.4.0 -L/path/to/alt-stdlib/lib -lstdc++ -Wl,-syslibroot,/usr/lib -Wl,-syslibroot,/path/to/alt-stdlib/lib test.cpp
+
+
+
