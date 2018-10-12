@@ -91,13 +91,6 @@ case $OS_DIRTY_STR in
 			;; 
 esac
 
-# extrapolate the installation prefix
-exec_prefix="${prefix}"
-binaries="${prefix}/bin"
-libraries="${prefix}/lib"
-includes="${prefix}/include"
-syslibraries="/lib"
-
 # tempfile
 temporary_file="./temporary_work_file"
 [ -f "${temporary_file}" ] && rm "$temporary_file"
@@ -141,12 +134,6 @@ inspect_compiler FREESTANDING -nostdinc
 inspect_compiler CFLAGS_SUPPLEMENT -pipe
 inspect_compiler CFLAGS_SUPPLEMENT -Os
 
-# nasty i486 hack
-if test "$ARCH" = "i386"
-then	inspect_compiler CFLAGS_SUPPLEMENT -march=i486
-	inspect_compiler CFLAGS_SUPPLEMENT -mtune=generic
-fi
-
 # correct broken compiler installations
 inspect_compiler CFLAGS_SUPPLEMENT -fno-stack-protector
 inspect_compiler DISABLE_PIE -fno-pie
@@ -159,11 +146,6 @@ print "
 # Automatically generated
 ARCH = $ARCH
 prefix = $prefix
-exec_prefix = $exec_prefix
-binaries = $binaries
-libraries = $libraries
-includes = $includes
-syslibraries = $syslibraries
 CC = $CC
 CFLAGS += $CFLAGS_SUPPLEMENT $CFLAGS
 FREESTANDING += $FREESTANDING

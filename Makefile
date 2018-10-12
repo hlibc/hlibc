@@ -46,7 +46,7 @@ create_compiler:
 ifeq ($(CC_IS_CLANG),yes)
 	printf 'clang $(WRAP_OPT) -nostdinc -isystem $(prefix)/include --sysroot $(prefix) "$$@" ' >>  $(prefix)/bin/compiler
 else
-	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libraries)" >> $(prefix)/bin/compiler
+	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(prefix)/lib" >> $(prefix)/bin/compiler
 endif
 	chmod +x $(prefix)/bin/compiler
 
