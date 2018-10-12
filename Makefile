@@ -33,6 +33,8 @@ WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
 -include config.mak
 
 all:
+	@test $(ARCH) || printf "\n  Run configure first!\n\n"
+	@test $(ARCH) || exit 1 
 	cp -R machine/$(ARCH)/bits include/
 	cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
 	cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/operating_system.h include/bits/
@@ -44,7 +46,6 @@ install:
 	-cp libc.a libm.a $(prefix)/lib/
 	-cp machine/crt/*.o $(prefix)/lib/
 	-./tools/gcc-wrap.specs.sh $(prefix)/include $(prefix)/lib $(prefix)/ > $(prefix)/lib/gcc-wrap.specs
-	
 	$(MAKE) create_compiler
 
 static: $(OBJ) $(AOBJ)
