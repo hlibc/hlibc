@@ -12,7 +12,7 @@ syslibraries = /lib
 
 SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
-GENH = include/bits/types.h
+
 
 CPPFLAGS =
 FREESTANDING = -std=c99 -ffreestanding -nostdinc
@@ -22,7 +22,8 @@ CFLAGS_STATIC += $(CPPFLAGS) $(CFLAGS)
 
 AR = ar
 RANLIB = ranlib
-ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
+ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h))
+
 CRT_LIBS = lib/crt1.o lib/crti.o lib/crtn.o
 TOOL_LIBS = lib/gcc-wrap.specs
 EMPTY_LIBS = lib/libm.a
@@ -35,7 +36,15 @@ ALL_TOOLS = tools/compiler tools/compiler-handlink
 
 WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
 
-all: $(ALL_LIBS) $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
+
+all:
+	
+	-mkdir -p include/bits/
+	-cp -R machine/$(ARCH)/bits/* include/bits/
+	-cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
+	most
+
+most: $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libraries)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includes)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(binaries)/%)
 
@@ -44,7 +53,6 @@ clean:
 	-$(RM) -f $(OBJS)
 	-$(RM) -f $(ALL_LIBS) lib/*.[ao]
 	-$(RM) -f $(ALL_TOOLS)
-	-$(RM) -f $(GENH) 
 	-$(RM) -rf include/bits
 	-$(RM) -f config.mak
 
@@ -55,19 +63,11 @@ include/bits:
 	@test "$(ARCH)" || echo "\n\tPlease run ./configure first\n"
 	@test "$(ARCH)" || echo "\tOr use 'make test' to invoke the test suite\n"
 	@test "$(ARCH)" || exit 1
-	mkdir -p include/bits/
-	cp -R machine/$(ARCH)/bits/* include/bits/
-	cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
-
-include/bits/types.h: include/bits
-
-include/bits/targ: include/bits/types.h
-	sh $< > $@
 
 %.o: $(ARCH)/%.s
 	$(CC) $(CFLAGS_STATIC) -c -o $@ $<
 
-%.o: %.c $(GENH)
+%.o: %.c 
 	$(CC) $(CFLAGS_STATIC) -c -o $@ $<
 
 lib/libc.a: $(OBJS)
