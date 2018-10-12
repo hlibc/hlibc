@@ -8,7 +8,6 @@ binaries = $(exec_prefix)/bin
 prefix = /usr/local/hlibc
 includes = $(prefix)/include
 libraries = $(prefix)/lib
-syslibraries = /lib
 
 SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
@@ -17,7 +16,8 @@ OBJS = $(SRCS:.c=.o)
 CPPFLAGS =
 FREESTANDING = -std=c99 -ffreestanding -nostdinc
 CFLAGS_STATIC = $(FREESTANDING)
-CFLAGS_STATIC += -D_XOPEN_SOURCE=700 -I./include -I./machine/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
+#CFLAGS_STATIC += -D_XOPEN_SOURCE=700 -I./include -I./machine/$(ARCH) -I./os/$(OPERATING_SYSTEM)/$(ARCH)
+CFLAGS_STATIC += -D_XOPEN_SOURCE=700 -I./include 
 CFLAGS_STATIC += $(CPPFLAGS) $(CFLAGS)
 
 AR = ar
@@ -35,16 +35,17 @@ ALL_TOOLS = tools/compiler tools/compiler-handlink
 -include config.mak
 
 WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
+start:
 
-
-all:
-	
 	-mkdir -p include/bits/
 	-cp -R machine/$(ARCH)/bits/* include/bits/
 	-cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
-	most
+	-cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/operating_system.h include/bits/
 
-most: $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
+all: start
+#	most
+
+#most: $(ALL_TOOLS) $(ALL_TOOLS:tools/%=/lib)
 
 install: $(ALL_LIBS:lib/%=$(DESTDIR)$(libraries)/%) $(ALL_INCLUDES:include/%=$(DESTDIR)$(includes)/%) $(ALL_TOOLS:tools/%=$(DESTDIR)$(binaries)/%)
 
@@ -110,9 +111,6 @@ $(DESTDIR)$(libraries)/%: lib/%
 
 $(DESTDIR)$(includes)/%: include/%
 	cp -R include $(prefix)
-
-$(DESTDIR)$(syslibraries):
-	install -d -m 755 $(DESTDIR)$(syslibraries)
 
 lib/gcc-wrap.specs: tools/gcc-wrap.specs.sh config.mak
 	sh $< "$(includes)" "$(libraries)"  > $@
