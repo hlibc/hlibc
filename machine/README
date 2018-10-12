@@ -1,1 +1,2 @@
-The arch directory contains architecture specific assembly code and constants.
+The machine/ directory contains architecture specific assembly code and 
+constants.
