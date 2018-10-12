@@ -22,16 +22,21 @@ all:
 install:
 	-mkdir -p $(prefix)/bin $(prefix)/lib
 	-cp -R include $(prefix)/
-	-cp libc.a $(prefix)/lib/
+	-cp libc.a libm.a $(prefix)/lib/
 	-cp machine/crt/*.o $(prefix)/lib/
 	-./tools/gcc-wrap.specs.sh $(prefix)/include $(prefix)/lib $(prefix)/ > $(prefix)/lib/gcc-wrap.specs
+	
 	$(MAKE) create_compiler
 
 static: $(OBJ) $(AOBJ)
 	$(AR) -cvq libc.a $(OBJ) $(AOBJ)
+	$(AR) rc libm.a
 
 clean:
-	$(RM) -rf $(OBJ) config.mak usr libc.a include/bits $(AOBJ)
+	$(RM) -rf $(OBJ) config.mak usr libc.a libm.a include/bits $(AOBJ)
+
+cleanall:
+	rm -rf system-root
 
 
 create_compiler:
@@ -44,4 +49,10 @@ else
 	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(libraries)" >> $(prefix)/bin/compiler
 endif
 	chmod +x $(prefix)/bin/compiler
+
+
+test:
+	-$(MAKE) -C system-root/hlibc-test/ clean
+	-$(RM) -rf system-root/bin system-root/lib system-root/include
+	./tools/build.sh $(CC) $(PWD)/system-root/
 
