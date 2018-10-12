@@ -76,7 +76,7 @@ BUILDING:
 	binaries may need to be "branded". This is the case at least for 
 	aarch64, but not x86_64. They can be branded with the following command:
 
-		brandelf freebsd <filename>
+		brandelf -t freebsd <filename>
 
 	Using compiler-handlink is not advised for general use and will fail on 
 	many architectures such as linux on aarch64 (arm v8). It will however, 
