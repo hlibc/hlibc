@@ -33,7 +33,7 @@ static: $(OBJ) $(AOBJ)
 	$(AR) rc libm.a
 
 clean:
-	$(RM) -rf $(OBJ) config.mak usr libc.a libm.a include/bits $(AOBJ)
+	$(RM) -rf $(OBJ) config.mak libc.a libm.a include/bits $(AOBJ)
 
 cleanall:
 	rm -rf system-root
