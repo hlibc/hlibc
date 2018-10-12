@@ -60,7 +60,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 {
 	__last = 0;
 	/*
-		We massivly overshoot the size needed for the bignumnum
+		We massivly overshoot the size needed for the bignum
 		arrays so as to avoid pedantry and over-complication.
 	*/
 	uint32_t bignum[LDBL_MANT_DIG * 5];
