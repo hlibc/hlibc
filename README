@@ -4,7 +4,8 @@ hlibc
 	hlibc is a freestanding libc that implements a subset of the POSIX, C99 
 	and C11 hosted implementation requirements. The mathematics library is 
 	a minimalistic fork of Sun fdlibm focused on IEEE-754-2008 floating 
-	point research and the study of fdlibm's core components.
+	point research and the study of fdlibm's core components. The normative
+	case of IEEE-754-2008 floats 'f' are correctly printed and rounded.
 
 	hlibc is targeted at POSIX systems and works with the linux, FreeBSD 
 	and OpenBSD kernels' syscall ABI. Currently the x86_64 and aarch64 
@@ -30,7 +31,10 @@ hlibc
 	which are described in the POSIX, C99 and C11 standards.
 
 
-	hlibc was authored by CM Graff.
+	hlibc was originally authored by CM Graff. Along the way many people
+	have contributed code, all of whom are listed in the LICENSE and the
+	files they authored hold their copyrights.
+	
 
 
 BUILDING:
@@ -78,10 +82,6 @@ BUILDING:
 
 		brandelf -t freebsd <filename>
 
-	Using compiler-handlink is not advised for general use and will fail on 
-	many architectures such as linux on aarch64 (arm v8). It will however, 
-	work for most x86 circumstances.
-
 	Building on OpenBSD:
 
 		git clone https://github.com/hlibc/hlibc
@@ -96,6 +96,19 @@ BUILDING:
 	switching its focus to llvm/clang and will not likely be updating gcc 
 	support. For this reason, it's advisable to simply use clang instead of 
 	gcc when building hlibc on OpenBSD.
+
+
+	Note on BSDs:
+
+		BSDs have the tendency to require that ELF binaries contain
+		"notes" or "branding". There is of course no standardized way
+		to handle this. I have provided some instructions and tested
+		against various workarounds. If you want to primarily develop
+		hlibc on a BSD variant then it would be prudent to create some
+		automatic methods for handling these "notes" or "branding". At
+		this time, it seems like it would needlessly inflate the hlibc
+		code base to carry code and methods for handling all of the 
+		various permutations needed by the BSDs.
 
 
 RELENG:
