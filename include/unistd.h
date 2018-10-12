@@ -31,7 +31,7 @@ extern "C" {
 #define __NEED_pid_t
 #define __NEED_intptr_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 int pipe(int [2]);
 int close(int);

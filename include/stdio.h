@@ -10,7 +10,7 @@
 #include <sys/wait.h> 
 #define __NEED_ssize_t
 #define __NEED_off_t 
-#include <bits/alltypes.h> 
+#include <bits/types.h> 
 #define NULL ((void*)0) 
 #define EOF (-1) 
 #undef SEEK_SET

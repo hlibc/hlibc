@@ -8,7 +8,7 @@ extern "C" {
 #define __NEED_size_t
 #define __NEED_gid_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 struct group
 {

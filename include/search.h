@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #define __NEED_size_t
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef enum { FIND, ENTER } ACTION;
 typedef enum { preorder, postorder, endorder, leaf } VISIT;

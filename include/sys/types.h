@@ -51,7 +51,7 @@ extern "C" {
 #define __NEED_pthread_key_t
 #define __NEED_pthread_once_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef unsigned char u_int8_t;
 typedef __uint16_t u_int16_t;

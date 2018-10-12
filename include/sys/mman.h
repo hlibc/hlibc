@@ -8,7 +8,7 @@ extern "C" {
 #define __NEED_size_t
 #define __NEED_off_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #include <bits/mman.h>
 

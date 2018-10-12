@@ -26,7 +26,7 @@ extern "C" {
 #define __NEED_locale_t
 #endif
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 struct tm
 {

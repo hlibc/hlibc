@@ -15,7 +15,7 @@ extern "C" {
 #define __NEED_size_t
 #define __NEED_wchar_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 int atoi (const char *);
 long atol (const char *);

@@ -12,7 +12,7 @@ syslibraries = /lib
 
 SRCS = $(sort $(wildcard src/*/*.c))
 OBJS = $(SRCS:.c=.o)
-GENH = include/bits/alltypes.h
+GENH = include/bits/types.h
 
 CPPFLAGS =
 FREESTANDING = -std=c99 -ffreestanding -nostdinc
@@ -59,9 +59,9 @@ include/bits:
 	cp -R machine/$(ARCH)/bits/* include/bits/
 	cp -R os/$(OPERATING_SYSTEM)/$(ARCH)/bits/* include/bits/
 
-include/bits/alltypes.h.sh: include/bits
+include/bits/types.h: include/bits
 
-include/bits/alltypes.h: include/bits/alltypes.h.sh
+include/bits/targ: include/bits/types.h
 	sh $< > $@
 
 %.o: $(ARCH)/%.s

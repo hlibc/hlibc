@@ -18,7 +18,7 @@ extern "C" {
 #define __NEED_locale_t
 #endif
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 void *memcpy (void *, const void *, size_t);
 void *memmove (void *, const void *, size_t);

@@ -9,7 +9,7 @@ extern "C" {
 #define __NEED_ssize_t
 #define __NEED_struct_iovec
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 ssize_t readv (int, const struct iovec *, int);
 ssize_t writev (int, const struct iovec *, int);

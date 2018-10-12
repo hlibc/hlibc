@@ -23,7 +23,7 @@ extern "C" {
 #define __NEED_sigset_t
 #define __NEED_siginfo_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #define SIG_HOLD ((void (*)(int)) 2)
 

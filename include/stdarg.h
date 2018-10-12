@@ -7,7 +7,7 @@ extern "C" {
 
 #define __NEED_va_list
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #if __GNUC__ >= 3
 #define va_start(v,l)   __builtin_va_start(v,l)

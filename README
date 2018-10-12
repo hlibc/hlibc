@@ -7,9 +7,9 @@ hlibc
 	point research and the study of fdlibm's core components.
 
 	hlibc is targeted at POSIX systems and works with the linux, FreeBSD and
-	OpenBSD kernels' syscall ABI. Currently i386, x86_64, arm and aarch64
-	architectures are supported for linux. x86_64 and aarch64 are supported
-	for FreeBSD and x86_64 is supported for OpenBSD.
+	OpenBSD kernels' syscall ABI. Currently the x86_64 and aarch64
+	architectures are supported for linux and FreeBSD and x86_64 is 
+	supported for OpenBSD.
 
 	hlibc focuses primarily on algorithmic correctness and effectiveness
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc

@@ -10,7 +10,7 @@ extern "C" {
 #define __NEED___uint16_t
 #define __NEED___uint32_t
 #define __NEED___uint64_t
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #if 100*__GNUC__+__GNUC_MINOR__ >= 303
 #define NAN       __builtin_nanf("")

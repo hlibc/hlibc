@@ -11,7 +11,7 @@ extern "C" {
 #define __NEED_struct_timespec
 #define __NEED_sigset_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #define FD_SETSIZE 1024
 

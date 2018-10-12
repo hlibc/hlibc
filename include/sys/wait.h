@@ -9,7 +9,7 @@ extern "C" {
 #define __NEED_pid_t
 #define __NEED_id_t
 #define __NEED_siginfo_t
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef int idtype_t;
 

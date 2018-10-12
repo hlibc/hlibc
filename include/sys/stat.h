@@ -16,7 +16,7 @@ extern "C" {
 #define __NEED_blkcnt_t
 #define __NEED_struct_timespec
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #include <bits/stat.h>
 

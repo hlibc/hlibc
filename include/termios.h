@@ -7,7 +7,7 @@ extern "C" {
 
 #define __NEED_pid_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef unsigned char cc_t;
 typedef unsigned int speed_t;

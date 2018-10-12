@@ -12,7 +12,7 @@
 #define __NEED_size_t
 #define __NEED_wchar_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #define offsetof(type, member) ((size_t)( (char *)&(((type *)0)->member) - (char *)0 ))
 

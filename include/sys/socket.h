@@ -13,7 +13,7 @@ extern "C" {
 #define __NEED_gid_t
 #define __NEED_struct_iovec
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #include <bits/socket.h>
 

@@ -24,7 +24,7 @@
 #define __NEED_intptr_t
 #define __NEED_uintptr_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef int8_t  int_least8_t;
 typedef int16_t int_least16_t;

@@ -7,7 +7,7 @@ extern "C" {
 
 #define __NEED_size_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef struct {
 	size_t gl_pathc;

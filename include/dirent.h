@@ -8,7 +8,7 @@ extern "C" {
 #define __NEED_ino_t
 #define __NEED_off_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef struct DIR DIR;
 

@@ -122,14 +122,8 @@ architecture=$("$CC" -dumpmachine 2>/dev/null)
 print "$architecture"
 
 case "$architecture" in
-	arm*)
-		ARCH="arm"
-		;;
 	*arm64*|*aarch64*)
 		ARCH="aarch64"
-		;;
-	i*86*)
-		ARCH="i386"
 		;;
 	*amd64*|x86_64*)
 		ARCH="x86_64"
@@ -138,6 +132,7 @@ case "$architecture" in
 		fatal "Unknown architecture !!"
 		;;
 esac
+
 
 # Obtain a freestanding C99 env
 inspect_compiler FREESTANDING -ffreestanding

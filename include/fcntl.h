@@ -9,7 +9,7 @@ extern "C" {
 #define __NEED_pid_t
 #define __NEED_mode_t
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 #include <bits/fcntl.h>
 

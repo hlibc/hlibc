@@ -13,7 +13,7 @@ extern "C" {
 #define __NEED_pid_t
 #endif
 
-#include <bits/alltypes.h>
+#include <bits/types.h>
 
 typedef unsigned long long rlim_t;
 
