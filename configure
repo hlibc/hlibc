@@ -78,6 +78,9 @@ case $OS_DIRTY_STR in
 	*linux*|*Linux*)
 		OPERATING_SYSTEM="linux"
 			;;
+	*aix*)
+		OPERATING_SYSTEM="aix"
+			;;
 	*FreeBSD*|*freebsd*|*Freebsd*)
 		print "Note that the FreeBSD 'c99' command has a bug and won't accept '-dumpmachine'"
 		OPERATING_SYSTEM="freebsd"
@@ -119,6 +122,9 @@ print "$architecture"
 case "$architecture" in
 	*arm64*|*aarch64*)
 		ARCH="aarch64"
+		;;
+	*ppc64*|*powerpc64*)
+		ARCH="powerpc64"
 		;;
 	*amd64*|x86_64*)
 		ARCH="x86_64"
