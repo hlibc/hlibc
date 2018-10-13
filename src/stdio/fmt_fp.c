@@ -132,7 +132,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		uint32_t carry=0, *z2;
 		int sh=MIN(9,-e2);
 		for (d=a; d<z; d++) {
-			uint32_t rm = *d & (1 * __upow(2, sh))-1;
+			uint32_t rm = *d % ( __upow(2, sh)); 
 			*d = (*d / __upow(2, sh)) + carry;
 			carry = (1000000000 / __upow(2, sh)) * rm;
 		}
@@ -140,9 +140,6 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			a++;
 		if (carry)
 			*z++ = carry;
-		/* Avoid (slow!) computation past requested precision */
-		z2 = ((t|32)=='f' ? r : a) + 2 + p/9;
-		z = MIN(z, z2);
 		e2+=sh;
 	}
 
@@ -151,6 +148,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			;
 	else
 		e=0;
+
 
 	/* Perform rounding: j is precision after the radix (possibly neg) */
 	j = p - ((t|32)!='f')*e - ((t|32)=='g' && p);
