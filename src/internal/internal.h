@@ -107,6 +107,10 @@ int __safe_usub_sz(size_t, size_t, size_t *);
 int __safe_uadd_sz(size_t, size_t, size_t *, size_t);
 int __safe_udiv_sz(size_t, size_t, size_t *);
 int __safe_umul_sz(size_t, size_t, size_t *, size_t);
+
+/* modulus substitute */
+int32_t __mod(int32_t, int32_t);
+
 /* internal conversion table */
 int __isalnum[256];
 
