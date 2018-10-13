@@ -11,11 +11,11 @@ print()
 
 menu()
 {
-print "hlibc 2016-2018, CM Graff et al.
+	print "hlibc 2016-2018, CM Graff et al.
 
 	--prefix=PREFIX         main installation prefix [/usr/local/hlibc] 
-"
-exit 0
+	"
+	exit 0
 }
 
 fatal()
@@ -50,11 +50,6 @@ inspect_compiler()
 	fi
 }
 
-print "The hlibc configure script uses set -e and exits upon error"
-print "Remove set -e if you believe it is failing from a trivial error"
-print "Likewise, the makefile has no error supression. It can be activated"
-print "with the -i (ignore errors) flag"
-print
 
 OPERATING_SYSTEM="linux"
 FREESTANDING=
@@ -64,7 +59,7 @@ architecture=
 
 for i in "$@"
 do	case "$i" in
-		--help)
+		-h|--help)
 			menu
 			;;
 		--prefix=*)
