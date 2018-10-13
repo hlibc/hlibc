@@ -128,11 +128,12 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		}
 		e2-=sh;
 	} 
+
 	while (e2<0) {
 		uint32_t carry=0, *z2;
 		int sh=MIN(9,-e2);
 		for (d=a; d<z; d++) {
-			uint32_t rm = *d % ( __upow(2, sh)); 
+			uint32_t rm = *d % __upow(2, sh);
 			*d = (*d / __upow(2, sh)) + carry;
 			carry = (1000000000 / __upow(2, sh)) * rm;
 		}
@@ -161,11 +162,14 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		for (i=10, j++; j<9; i*=10, j++)
 			;
 		x = *d % i;
+		//x = __mod(*d, i);
 		/* Are there any significant digits past j? */
 		if (x || d+1!=z) {
 			long double round = CONCAT(0x1p,LDBL_MANT_DIG);
 			long double small;
-			if (*d/i & 1)
+			//if (*d/i & 1)
+			//if (__mod(*d/i, 1) == 0)
+			if (*d/i % 1 == 0)
 				round += 2;
 			if (x<i/2)
 				small=0x0.8p0;
