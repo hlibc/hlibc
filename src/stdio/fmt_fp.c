@@ -18,14 +18,15 @@
 #include <math.h>
 #include <float.h>
 #include <string.h>
-
-static size_t __upow(size_t i, size_t j)
-{
-	size_t t = 1;
-	while (j--)
-		t *= i;
-	return t;
-}
+static uint64_t pt[30] = {
+	1, 
+	2, 4, 8, 16, 32,
+	64, 128, 256, 512, 1024,
+	2048, 4096, 8192, 16384, 32768,
+	65536, 131072, 262144, 524288, 1048576,
+	2097152, 4194304, 8388608, 16777216, 33554432,
+	67108864, 134217728, 268435456, 536870912,
+};
 
 static size_t __last = 0;
 
@@ -113,13 +114,18 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 
 	uint32_t carry = 0;
 	int sh = 0;
-	/* this is a bignum multiplication */
-	
+	/*
+		2^N ...
+		2^4  16 2^5  32 2^6  64 2^7  128  2^8 256  2^9 512   
+		low sh stays between 4 and 512 as 2->9
+		high sh stays between 4 and 536870912 as 2->29
+	*/
+	/* this is a bignum multiplication */ 
 	while (e2>0) {
 		carry = 0;
 		sh = MIN(29, e2);
 		for (d = z-1; d>=a; d--) {
-			uint64_t x = ((uint64_t)*d * __upow(2, sh))+carry;
+			uint64_t x = ((uint64_t)*d * pt[sh])+carry;
 			*d = x % base;
 			carry = x / base;
 		}
@@ -130,17 +136,17 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			a--;
 			*a = carry;
 		}
-		e2-=sh;
+		e2-=sh; 
 	}
 
-	/* 'rm' must stand for remainder, so this is a division variant */
+	/* this is a bignum division/remainder variant */
 	while (e2<0) {
 		carry = 0;
 		sh = MIN(9, -e2);
 		for (d = a; d<z; d++) {
-			uint32_t rm = *d % __upow(2, sh);
-			*d = (*d / __upow(2, sh)) + carry;
-			carry = (base / __upow(2, sh)) * rm;
+			uint32_t rm = *d % pt[sh];
+			*d = (*d / pt[sh]) + carry;
+			carry = (base / pt[sh]) * rm;
 		}
 		if (!*a)
 			a++;
@@ -148,7 +154,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			*z++ = carry;
 		e2+=sh;
 	}
-
+	
+	
 	if (a<z)
 		for (i=10, e=9*(r-a); *a>=i; i*=10, e++)
 			;
