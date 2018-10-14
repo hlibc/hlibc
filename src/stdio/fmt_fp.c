@@ -2,6 +2,12 @@
 	Copyright 2010 Rich Felker
 
 	Modifications to this file are Copyright 2017 Christopher M. Graff
+
+	This algorithm was likely derived from plan9 which was in turn derived
+	from the dragon4 algorithm by Steele and White.
+
+	The two main bignum operation loops are standalone and as far as my
+	tests reveal are never both entered when printing a given float.
 */
 #include "../internal/internal.h"
 #include <stdint.h>
@@ -61,21 +67,19 @@ static char *fmt_u(uintmax_t x, char *s)
 
 int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 {
-	__last = 0;
-	/*
-		We massivly overshoot the size needed for the bignum
-		arrays so as to avoid pedantry and over-complication.
-	*/
-	uint32_t bignum[LDBL_MANT_DIG * 5];
-	uint32_t *a, *d, *r, *z;
+	__last = 0; 
+	uint32_t bignum[(LDBL_MAX_EXP+LDBL_MANT_DIG)/9+1];
+	uint32_t *a, *d, *r, *z, *hold;
 	int e2=0, e, i, j, l;
-	char buf[LDBL_MANT_DIG * 5], *s;
+	char buf[9+LDBL_MANT_DIG/4], *s; 
 	const char *prefix="-0X+0X 0X-0x+0x 0x";
 	int pl;
 	uint64_t base = 1000000000;
 
-	uint32_t rm = 0;
-	uint64_t prd = 0;
+	uint32_t rm = 0; /* remainder */
+	uint64_t prd = 0; /* product */
+	uint32_t carry = 0; /* the same 'carry' as from grade school */
+	char sh = 0; /* the iterator */
 
 
 	pl=1;
@@ -98,6 +102,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		return MAX(w, 3+pl);
 	}
 
+	size_t len = sizeof(bignum)/sizeof(*bignum) - LDBL_MANT_DIG - 1;
+
 	y = frexpl(y, &e2) * 2;
 	if (y)
 		e2--;
@@ -108,18 +114,19 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	if (y)
 		y *= 0x1p28, e2-=28;
 
+	hold = bignum;
+
 	if (e2<0)
 		a = r = z = bignum;
 	else
-		a = r = z = bignum+sizeof(bignum)/sizeof(*bignum) - LDBL_MANT_DIG - 1;
+		a = r = z = bignum+len;
 
 	do {
+		/* here 'z' is incremented past 'a' for later use in look comparison */
 		*z = y;
 		y = base*(y-*z++);
 	} while (y);
 
-	uint32_t carry = 0;
-	int sh = 0;
 	/*
 		2^N ...
 		2^4  16 2^5  32 2^6  64 2^7  128  2^8 256  2^9 512   
@@ -127,24 +134,63 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		high sh stays between 4 and 536870912 as 2->29
 	*/
 	/* this is a bignum multiplication */ 
+	int k = z -hold;
+	int ko =  z -hold;
+	int lenz =  z -hold;
+	
+
+	
+
+	
+	/* this multiplication reminds me loosely of an algorithm for
+	base conversion which uses modified bignum multiplication.
+	Becase there is no actual second operand other than the powers of 2
+	table.
+	Though, I suppose dthe second operand in this case is in fact the powers
+	of 2 table itself -- whereas the base conversion code actually seeds the carry
+	and performs the multiplication against the input base. If the base of the operation
+	was considered to be a powers of 2 string then one could consider it fairly similar
+	*/
 	while (e2>0) {
+	
 		sh = MIN(29, e2);
+	
 		for (carry = 0, d = z-1; d>=a; d--) {
 			prd = *d * pt[sh] + carry;
 			carry = prd / base;
 			*d = prd % base;
 		}
+	
+		/*
+		for (carry = 0, k = (z-hold - (z-hold))-1; k>=( a-hold) - (a-hold) ; k--) {
+			prd = d[k -1] * pt[sh] + carry;
+			carry = prd / base;
+			d[k -1]  = prd % base;
+		}
+	
+		*/
 		if (!z[-1] && z > a)
+		{
 			z--;
+		}
+
+	
 		if (carry) {
+			
 			a--;
 			*a = carry;
 		}
+	
+		ko = a-hold;
+		lenz = z-hold;
 		e2-=sh; 
 	}
+	//d = d + (z-a);
 
 	/* this is a bignum division/remainder variant */
 	while (e2<0) {
+
+
 		sh = MIN(9, -e2);
 		for (carry = 0, d = a; d<z; d++) {
 			rm = *d % pt[sh];
@@ -157,6 +203,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			*z++ = carry;
 		e2+=sh;
 	}
+	
+		
 	
 	if (a<z)
 		for (i=10, e=9*(r-a); *a>=i; i*=10, e++)
