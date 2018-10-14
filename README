@@ -184,4 +184,15 @@ RELEASES:
 
 	No releases are available at this time.
 
+NOTES:
+-----
+
+	The plan9 float printing library supposedly was inspird by
+	"Inspired by "How to Print Floating-Point Numbers Accurately" by
+ 	* Guy L. Steele, Jr. and Jon L. White". Which is likely the dragon4
+	variant of the float printing algorithm. fmt_fp.c appears to have
+	been derived from this technique as well. The author of fmt_fp.c
+	referred to it as the "naive algorithm" and stated that otherwise
+	there was no available information.
+
 
