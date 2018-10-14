@@ -18,6 +18,8 @@
 #include <math.h>
 #include <float.h>
 #include <string.h>
+
+/* powers of 2 table */
 static uint64_t pt[30] = {
 	1, 
 	2, 4, 8, 16, 32,
@@ -126,17 +128,15 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	*/
 	/* this is a bignum multiplication */ 
 	while (e2>0) {
-		carry = 0;
 		sh = MIN(29, e2);
-		for (d = z-1; d>=a; d--) {
+		for (carry = 0, d = z-1; d>=a; d--) {
 			prd = *d * pt[sh] + carry;
-			*d = prd % base;
 			carry = prd / base;
+			*d = prd % base;
 		}
 		if (!z[-1] && z > a)
 			z--;
-		if (carry)
-		{
+		if (carry) {
 			a--;
 			*a = carry;
 		}
@@ -145,9 +145,8 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 
 	/* this is a bignum division/remainder variant */
 	while (e2<0) {
-		carry = 0;
 		sh = MIN(9, -e2);
-		for (d = a; d<z; d++) {
+		for (carry = 0, d = a; d<z; d++) {
 			rm = *d % pt[sh];
 			*d = (*d / pt[sh]) + carry;
 			carry = (base / pt[sh]) * rm;
@@ -158,7 +157,6 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			*z++ = carry;
 		e2+=sh;
 	}
-	
 	
 	if (a<z)
 		for (i=10, e=9*(r-a); *a>=i; i*=10, e++)
