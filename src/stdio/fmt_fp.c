@@ -72,6 +72,10 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	int pl;
 	uint64_t base = 1000000000;
 
+	uint32_t rm = 0;
+	uint64_t prd = 0;
+
+
 	pl=1;
 	if (y<0 || 1/y<0) {
 		y=-y;
@@ -125,9 +129,9 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		carry = 0;
 		sh = MIN(29, e2);
 		for (d = z-1; d>=a; d--) {
-			uint64_t x = ((uint64_t)*d * pt[sh])+carry;
-			*d = x % base;
-			carry = x / base;
+			prd = *d * pt[sh] + carry;
+			*d = prd % base;
+			carry = prd / base;
 		}
 		if (!z[-1] && z > a)
 			z--;
@@ -144,7 +148,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		carry = 0;
 		sh = MIN(9, -e2);
 		for (d = a; d<z; d++) {
-			uint32_t rm = *d % pt[sh];
+			rm = *d % pt[sh];
 			*d = (*d / pt[sh]) + carry;
 			carry = (base / pt[sh]) * rm;
 		}
