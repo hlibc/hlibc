@@ -4,7 +4,13 @@
 	Modifications to this file are Copyright 2017 Christopher M. Graff
 
 	This algorithm was likely derived from plan9 which was in turn derived
-	from the dragon4 algorithm by Steele and White.
+	from the dragon4 algorithm by Steele and White. The original paper
+	can befound here:
+		kurtstephens.com/files/p372-steele.pdf
+	It is titled "How to Print Floating-Point Numbers Accurately" and is
+	a canonical early and historical reference for float printing. It does
+	however, referece the work of Knuth which helps to put perspective on 
+	its place within historical context.
 
 	The two main bignum operation loops are standalone and as far as my
 	tests reveal are never both entered when printing a given float.
