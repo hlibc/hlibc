@@ -8,6 +8,26 @@
 
 	The two main bignum operation loops are standalone and as far as my
 	tests reveal are never both entered when printing a given float.
+
+	'sh' is the incrementor used to access the powers of 2 array. the bignum
+	operations can be considered to be a bignum multiplied or divided by the
+	array of powers of 2
+
+	The array of powers of 2 is notated as follows: 
+	
+		2^N ...
+		2^4  16 2^5  32 2^6  64 2^7  128  2^8 256  2^9 512   
+		low sh (division) stays between 4 and 512 as 2->9
+		high sh (multiplication) stays between 4 and 536870912 as 2->29
+
+
+	'd' the main pointer to the bignum does not need to be set at a particular
+	pointer offset after it leaves the bignum multiplication and division
+	operations. It therefore can be rewritten to be an array instead of 
+	pointer offset operation. However, due to the diminishing offsets of
+	'a' and 'z' this has proved difficult to do. Most of the unused temporary
+	variables that I have added are here for the purpose of such a rewrite. They
+	can of course be deleted.
 */
 #include "../internal/internal.h"
 #include <stdint.h>
@@ -127,30 +147,12 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		y = base*(y-*z++);
 	} while (y);
 
-	/*
-		2^N ...
-		2^4  16 2^5  32 2^6  64 2^7  128  2^8 256  2^9 512   
-		low sh stays between 4 and 512 as 2->9
-		high sh stays between 4 and 536870912 as 2->29
-	*/
+	
 	/* this is a bignum multiplication */ 
 	int k = z -hold;
 	int ko =  z -hold;
 	int lenz =  z -hold;
 	
-
-	
-
-	
-	/* this multiplication reminds me loosely of an algorithm for
-	base conversion which uses modified bignum multiplication.
-	Becase there is no actual second operand other than the powers of 2
-	table.
-	Though, I suppose dthe second operand in this case is in fact the powers
-	of 2 table itself -- whereas the base conversion code actually seeds the carry
-	and performs the multiplication against the input base. If the base of the operation
-	was considered to be a powers of 2 string then one could consider it fairly similar
-	*/
 	while (e2>0) {
 	
 		sh = MIN(29, e2);
@@ -185,7 +187,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		lenz = z-hold;
 		e2-=sh; 
 	}
-	//d = d + (z-a);
+
 
 	/* this is a bignum division/remainder variant */
 	while (e2<0) {
