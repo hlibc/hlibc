@@ -69,6 +69,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 	char buf[LDBL_MANT_DIG * 5], *s;
 	const char *prefix="-0X+0X 0X-0x+0x 0x";
 	int pl;
+	uint64_t base = 1000000000;
 
 	pl=1;
 	if (y<0 || 1/y<0) {
@@ -107,35 +108,39 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 
 	do {
 		*z = y;
-		y = 1000000000*(y-*z++);
+		y = base*(y-*z++);
 	} while (y);
 
+	uint32_t carry = 0;
+	int sh = 0;
+	/* this is a bignum multiplication */
+	
 	while (e2>0) {
-		uint32_t carry=0;
-		int sh=MIN(29,e2);
-		for (d=z-1; d>=a; d--) {
+		carry = 0;
+		sh = MIN(29, e2);
+		for (d = z-1; d>=a; d--) {
 			uint64_t x = ((uint64_t)*d * __upow(2, sh))+carry;
-			*d = x % 1000000000;
-			carry = x / 1000000000;
+			*d = x % base;
+			carry = x / base;
 		}
-		if (!z[-1] && z>a)
+		if (!z[-1] && z > a)
 			z--;
 		if (carry)
 		{
 			a--;
 			*a = carry;
-			
 		}
 		e2-=sh;
-	} 
+	}
 
+	/* 'rm' must stand for remainder, so this is a division variant */
 	while (e2<0) {
-		uint32_t carry=0, *z2;
-		int sh=MIN(9,-e2);
-		for (d=a; d<z; d++) {
+		carry = 0;
+		sh = MIN(9, -e2);
+		for (d = a; d<z; d++) {
 			uint32_t rm = *d % __upow(2, sh);
 			*d = (*d / __upow(2, sh)) + carry;
-			carry = (1000000000 / __upow(2, sh)) * rm;
+			carry = (base / __upow(2, sh)) * rm;
 		}
 		if (!*a)
 			a++;
@@ -183,7 +188,7 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 			/* Decide whether to round by probing round+small */
 			if (round+small != round) {
 				*d = *d + i;
-				while (*d > 999999999) {
+				while (*d > (base-1)) {
 					*d--=0;
 					(*d)++;
 				}
