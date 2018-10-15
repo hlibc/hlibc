@@ -1,7 +1,12 @@
 /*
+
+
 	Copyright 2010 Rich Felker
 
-	Modifications to this file are Copyright 2017 Christopher M. Graff
+	Copyright 2017 Christopher M. Graff    (the heavy modifications)
+
+
+
 
 	This algorithm was likely derived from plan9 which was in turn derived
 	from the dragon4 algorithm by Steele and White. The original paper
@@ -9,7 +14,7 @@
 		kurtstephens.com/files/p372-steele.pdf
 	It is titled "How to Print Floating-Point Numbers Accurately" and is
 	a canonical early and historical reference for float printing. It does
-	however, referece the work of Knuth which helps to put perspective on 
+	however, reference the work of Knuth which helps to put perspective on 
 	its place within historical context.
 
 	The two main bignum operation loops are standalone and as far as my
@@ -34,6 +39,39 @@
 	'a' and 'z' this has proved difficult to do. Most of the unused temporary
 	variables that I have added are here for the purpose of such a rewrite. They
 	can of course be deleted.
+
+
+	Generalization of the algorithm:
+	The multiplication operation has numbers in the array with a maximum value
+	of 536870912 ergo the operating base would be base 536870913 such as base 10's
+	highest number is 9.
+
+	the target array is empty. initially it carries no digits of its own. THis is
+	in juztaposition to the array of powers of 2 aforementioned.
+
+	The powers of 2 array contains exactly 29 digits and spans values of 4 to
+	536870912.
+
+
+
+	2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
+        65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 
+	33554432, 67108864, 134217728, 268435456, 536870912,
+
+
+
+	tangential:
+
+		The plan9 float printing library apparently was
+        "Inspired by "How to Print Floating-Point Numbers Accurately" by
+        * Guy L. Steele, Jr. and Jon L. White". Which is likely the dragon4
+        variant of the float printing algorithm. fmt_fp.c appears to have
+        been derived from this technique as well.
+
+        Some interesting links:
+
+                https://research.swtch.com/ftoa
+
 */
 #include "../internal/internal.h"
 #include <stdint.h>
@@ -148,57 +186,43 @@ int fmt_fp(char *f, long double y, int w, int p, int fl, int t)
 		a = r = z = bignum+len;
 
 	do {
-		/* here 'z' is incremented past 'a' for later use in look comparison */
+		/* here 'z' is incremented past 'a' for later use in loop comparison */
 		*z = y;
 		y = base*(y-*z++);
 	} while (y);
 
 	
 	/* this is a bignum multiplication */ 
-	int k = z -hold;
-	int ko =  z -hold;
-	int lenz =  z -hold;
-	
 	while (e2>0) {
-	
 		sh = MIN(29, e2);
-	
 		for (carry = 0, d = z-1; d>=a; d--) {
-			prd = *d * pt[sh] + carry;
+			prd = *d * pt[sh]  + carry;
 			carry = prd / base;
 			*d = prd % base;
 		}
 	
 		/*
-		for (carry = 0, k = (z-hold - (z-hold))-1; k>=( a-hold) - (a-hold) ; k--) {
-			prd = d[k -1] * pt[sh] + carry;
+		for (carry = 0, k = (z - hold) -1; k>= a-hold ; k--) {
+			prd = d[k] * pt[sh] + carry;
 			carry = prd / base;
-			d[k -1]  = prd % base;
+			d[k]  = prd % base;
 		}
-	
 		*/
+
 		if (!z[-1] && z > a)
 		{
 			z--;
 		}
 
-	
 		if (carry) {
-			
 			a--;
 			*a = carry;
 		}
-	
-		ko = a-hold;
-		lenz = z-hold;
 		e2-=sh; 
 	}
 
-
 	/* this is a bignum division/remainder variant */
 	while (e2<0) {
-
-
 		sh = MIN(9, -e2);
 		for (carry = 0, d = a; d<z; d++) {
 			rm = *d % pt[sh];
