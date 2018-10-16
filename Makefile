@@ -67,9 +67,6 @@ ifeq ($(CC_IS_CLANG),yes)
 else
 	printf 'exec gcc $(DISABLE_PIE) $(WRAP_OPT) "$$@" -specs %s/gcc-wrap.specs\n' "$(prefix)/lib" >> $(prefix)/bin/compiler
 endif
-ifeq ($(OPERATING_SYSTEM),freebsd)
-	printf 'brandelf -t freebsd "$$@" ' >> $(prefix)/bin/compiler
-endif
 	chmod +x $(prefix)/bin/compiler
 
 
