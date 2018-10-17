@@ -135,6 +135,12 @@ case "$architecture" in
 esac
 
 
+# one offs
+AS="as"
+if [ $OPERATING_SYSTEM = "openbsd" -a $ARCH = "aarch64" ]
+then export AS="$CC -x assembler"
+fi
+
 # Obtain a freestanding C99 env
 inspect_compiler FREESTANDING -ffreestanding
 inspect_compiler FREESTANDING -std=c99
@@ -159,6 +165,7 @@ CFLAGS += $CFLAGS_SUPPLEMENT $CFLAGS
 FREESTANDING += $FREESTANDING
 DISABLE_PIE += $DISABLE_PIE
 OPERATING_SYSTEM += $OPERATING_SYSTEM
+AS = $AS
 " > config.mak
 
 # Adjust the compiler wrapper if clang is being used

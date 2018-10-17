@@ -27,6 +27,7 @@ FREESTANDING = -std=c99 -ffreestanding -nostdinc -nostdlib
 CFLAGS = $(FREESTANDING)
 CFLAGS += -D_XOPEN_SOURCE=700 -I./include
 CFLAGS += $(CPPFLAGS)
+AS = as
 
 WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
 
