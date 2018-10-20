@@ -91,7 +91,7 @@ double sin(double);
 double sqrt(double);
 double floor(double);
 double frexp(double, int *);
-
+double log10(double);
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)
 #define MAXFLOAT        3.40282347e+38F
 #define M_E             2.7182818284590452354   /* e */
