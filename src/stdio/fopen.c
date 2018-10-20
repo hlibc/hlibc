@@ -18,7 +18,7 @@ FILE *fopen(const char *name, const char *mode)
 	}
 
 	o = __init_file(o);
-
+	
 	while (*mode) {
 		switch (*mode++) {
 		case 'r':
@@ -28,45 +28,43 @@ FILE *fopen(const char *name, const char *mode)
 			case '+':
 				outfile |= O_RDWR;
 				o->write = 1;
-				break;
-			default:
-				break;
+				goto end;
 			}
-			break;
+			goto end;
 		case 'w':
 			outfile = O_TRUNC | O_CREAT | O_RDWR;
 			o->write = 1;
 			switch (*mode) {
 			case '+':
+				o->read = 1;
 				outfile &= ~O_TRUNC;
 				seek = SEEK_END;
-				break;
-			default:
-				break;
+				goto end;
 			}
-			break;
+			goto end;
 		case 'a':
 			outfile = O_CREAT | O_APPEND;
 			o->write = 1;
+			seek = SEEK_END;
 			switch (*mode) {
 			case '+':
 				outfile |= O_RDWR;
 				o->read = 1;
-				break;
-			default:
-				break;
+				goto end;
 			}
-			seek = SEEK_END;
-			break;
+			goto end;
 		default:
 			return NULL;
 		}
 	}
-	
+	end:
 	if (name != NULL) {
 		if ((fd = open(name, outfile, perms)) == -1) {
 			return NULL;
 		}
+	}else {
+		/* activate popen mode FIXME */
+		o->write = o->read = 1; 
 	}
 
 	if (seek == SEEK_END) {
