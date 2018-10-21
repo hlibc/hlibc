@@ -1,6 +1,5 @@
 #include "../internal/internal.h"
 
-
 FILE *__internal_fopen(const char *name, const char *mode, int popen)
 {
 	int fd = 0;
@@ -30,24 +29,25 @@ FILE *__internal_fopen(const char *name, const char *mode, int popen)
 			o->read = 1; 
 			break;
 		case 'w':
-			outfile |= O_TRUNC;
-			outfile |= O_CREAT;
-			outfile |= O_WRONLY;
+			outfile |= O_WRONLY|O_CREAT|O_TRUNC;
 			o->write = 1; 
 			break;
 		case 'a':
-			outfile |= O_CREAT;
-			outfile |= O_APPEND;
+			outfile |= O_WRONLY|O_CREAT|O_APPEND;
 			o->write = 1; 
 			break;
 		case 'b':
 			break;
 		case '+':
 			outfile |= O_RDWR;
-			outfile &= ~O_WRONLY;
+			outfile &= ~(O_RDONLY|O_WRONLY);
 			o->read = 1;
 			o->write = 1; 
 			break;
+		/* invalid mode string. reset the file object */
+		default:
+			__init_file(o);
+			return NULL;
 		}
 	}
 
