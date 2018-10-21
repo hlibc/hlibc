@@ -7,7 +7,7 @@ FILE *popen(const char *command, const char *type)
 	int pipefd[2] = { 0 };
 	char *argv[] = { "/bin/sh", "-c", NULL, NULL };
 
-	if ((ret = fopen(NULL, type)) == NULL) {
+	if ((ret = __internal_fopen(NULL, type, 1)) == NULL) {
 		return NULL;
 	}
 	if (command == NULL) {
