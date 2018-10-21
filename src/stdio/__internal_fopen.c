@@ -28,30 +28,29 @@ FILE *__internal_fopen(const char *name, const char *mode, int popen)
 		case 'r':
 			outfile |= O_RDONLY;
 			o->read = 1; 
-			goto i;
+			break;
 		case 'w':
 			outfile |= O_TRUNC;
 			outfile |= O_CREAT;
 			outfile |= O_WRONLY;
 			o->write = 1; 
-			goto i;
+			break;
 		case 'a':
 			outfile |= O_CREAT;
 			outfile |= O_APPEND;
 			o->write = 1; 
-			goto i;
+			break;
 		case 'b':
-			goto i;
+			break;
 		case '+':
 			outfile |= O_RDWR;
 			outfile &= ~O_WRONLY;
-			outfile &= ~O_RDONLY;
 			o->read = 1;
 			o->write = 1; 
-			goto i;
+			break;
 		}
-		i:;
 	}
+
 	if (popen == 0) {
 		if ((fd = open(name, outfile, omode)) == -1) {
 			return NULL;
