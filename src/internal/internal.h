@@ -122,6 +122,9 @@ char *__tol_inter(const char *, int, long long *);
 /* a simple wrapper for mmap */
 void *__mmap_inter(size_t);
 
-long __internal_syscall(long number, long a, long b, long c, long d, long e, long f);
+long __internal_syscall(long, long, long, long, long, long, long);
+
+/* internal fopen to handle the needs of popen */
+FILE *__internal_fopen(const char *, const char *, int);
 
 #endif

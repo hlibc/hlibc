@@ -1,11 +1,15 @@
 #include "../internal/internal.h"
 
-FILE *fopen(const char *name, const char *mode)
+
+FILE *__internal_fopen(const char *name, const char *mode, int popen)
 {
 	int fd = 0;
 	FILE *o;
 	mode_t omode = 0666;
 	int outfile = 0;
+
+	if (name == NULL && popen == 0)
+		return NULL;
 
 	for (o = _IO_stream; o < _IO_stream + FOPEN_MAX; o++) {
 		if (o->read == 0 && o->write == 0) {
@@ -47,16 +51,20 @@ FILE *fopen(const char *name, const char *mode)
 		}
 		i:;
 	}
-	if (name != NULL) {
+	if (popen == 0) {
 		if ((fd = open(name, outfile, omode)) == -1) {
 			return NULL;
 		}
 	}else {
-		/* activate popen mode FIXME */
 		o->write = o->read = 1; 
 	}
 
 	o->fd = fd;
 
 	return o;
+}
+
+FILE *fopen(const char *name, const char *mode)
+{
+	return __internal_fopen(name, mode, 0);
 }
