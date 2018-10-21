@@ -44,7 +44,6 @@ FILE *__internal_fopen(const char *name, const char *mode, int popen)
 			o->read = 1;
 			o->write = 1; 
 			break;
-		/* invalid mode string. reset the file object */
 		default:
 			__init_file(o);
 			return NULL;

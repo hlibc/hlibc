@@ -3,35 +3,35 @@
 
 FILE *popen(const char *command, const char *type)
 {
-	FILE *ret;
+	FILE *o;
 	int pipefd[2] = { 0 };
 	char *argv[] = { "/bin/sh", "-c", NULL, NULL };
 
-	if ((ret = __internal_fopen(NULL, type, 1)) == NULL) {
+	if ((o = __internal_fopen(NULL, type, 1)) == NULL) {
 		return NULL;
 	}
 	if (command == NULL) {
 		return NULL;
 	}
 	if ((pipe(pipefd)) == -1) {
-		goto errorplace;
+		goto error;
 	}
-	if ((ret->pid = fork()) == -1) {
-		goto errorplace;
+	if ((o->pid = fork()) == -1) {
+		goto error;
 	}
 
-	ret->fd = pipefd[0];
+	o->fd = pipefd[0];
 
-	if (ret->pid == 0) {
+	if (o->pid == 0) {
 		argv[2] = (char *)command;
 		if ((close(pipefd[0])) == -1) {
-			goto errorplace;
+			goto error;
 		}
 		if ((dup2(pipefd[1], 1)) == -1) {
-			goto errorplace;
+			goto error;
 		}
 		if ((close(pipefd[1])) == -1) {
-			goto errorplace;
+			goto error;
 		}
 		execvp(argv[0], argv);
 		_exit(127);
@@ -40,9 +40,9 @@ FILE *popen(const char *command, const char *type)
 		close(pipefd[1]);
 	}
 
-	return ret;
+	return o;
 
-errorplace:
-	fclose(ret);
+	error:
+	fclose(o);
 	return NULL;
 }
