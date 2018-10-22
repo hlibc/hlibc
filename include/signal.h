@@ -8,6 +8,16 @@ extern "C" {
 #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
  || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE)
 
+struct sigaction {
+        union {
+                void (*sa_handler)(int);
+                void (*sa_sigaction)(int, siginfo_t *, void *);
+        } __sa_handler;
+        sigset_t sa_mask;
+        int sa_flags;
+        void (*sa_restorer)(void);
+};
+
 #ifdef _GNU_SOURCE
 #define __siginfo siginfo
 #endif
