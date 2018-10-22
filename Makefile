@@ -10,9 +10,9 @@
 # in order to cater to OpenBSD's unique `cp' command.
 #
 # This makefile is purposefully written in simple and readable make.
-# We sacrifice a small amount of repition in order to concentrate on the
-# important task of not rebuilding object files and simply copy the 
-# headers and compiler wrappers procedurally.
+# We sacrifice a small amount of repitition in order to concentrate on the
+# important task of not rebuilding object files and simply copy the headers
+# and compiler wrappers procedurally.
 #
 #
 
@@ -29,7 +29,7 @@ CFLAGS += -D_XOPEN_SOURCE=700 -I./include
 CFLAGS += $(CPPFLAGS)
 AS = as
 
-WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE
+WRAP_OPT = -fno-stack-protector -static -D_GNU_SOURCE -fno-builtin
 
 -include config.mak
 
