@@ -114,7 +114,7 @@ BUILDING:
 RELENG:
 -------
 
-	Release engineeering and versioning in hlibc is fully automated:
+	Release engineering and versioning in hlibc is fully automated:
 
 		make release
 
