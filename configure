@@ -13,26 +13,35 @@ menu()
 {
 	print "hlibc 2016-2018, CM Graff et al.
 
-	--prefix=PREFIX         main installation prefix [/usr/local/hlibc] 
+	Usage:
+
+	--prefix=PREFIX	 main installation prefix [/usr/local/hlibc]
+
+	Command line variables are added last to the config.mak and passed
+	to the makefile. For instance:
+
+	./configure AS='cc -x assembler'
+	
+	
 	"
 	exit 0
 }
 
 fatal()
 {
-        (>&2 print "fatal" "$*")
-        exit 1
+	(>&2 print "fatal" "$*")
+	exit 1
 }
 
 detectcommand()
 {
-        printf "trying $i .. "
-        if command -v "$1" >/dev/null 2>&1
-        then    print "yes"
-                return 0
-        else    print "no"
-                return 1
-        fi
+	printf "trying $i .. "
+	if command -v "$1" >/dev/null 2>&1
+	then	print "yes"
+		return 0
+	else	print "no"
+		return 1
+	fi
 }
 
 inspect_compiler()
@@ -57,6 +66,8 @@ CFLAGS_SUPPLEMENT=
 prefix="/usr/local/hlibc"
 architecture=
 
+print "# Automatically generated" > config.mak
+
 for i in "$@"
 do	case "$i" in
 		-h|--help)
@@ -64,6 +75,9 @@ do	case "$i" in
 			;;
 		--prefix=*)
 			prefix=${i#*=}
+			;;
+		*=*)
+			# Let these be added at the end
 			;;
 		*)
 			fatal "$i is not a valid option !!"
@@ -102,16 +116,16 @@ temporary_file="./temporary_work_file"
 
 print "Attempting to detect a C compiler ..."
 if [ -z "${CC}" ]
-then    for i in unlikely-cc gcc cc clang c99 pcc tcc
-        do      if detectcommand "$i"
-                then    CC="$i"
-                        break
-                fi
-        done
-        if [ -z "${CC}" ]
-        then    fatal "No compiler was able to be found. Giving up."
-        fi
-else    detectcommand "${CC}"
+then	for i in unlikely-cc gcc cc clang c99 pcc tcc
+	do	if detectcommand "$i"
+		then	CC="$i"
+			break
+		fi
+	done
+	if [ -z "${CC}" ]
+	then	fatal "No compiler was able to be found. Giving up."
+	fi
+else	detectcommand "${CC}"
 fi
 
 # Find target architecture
@@ -154,7 +168,7 @@ inspect_compiler DISABLE_PIE -no-pie
 print "Generating a config.mak for the main Makefile"
 
 print "
-# Automatically generated
+
 ARCH = $ARCH
 prefix = $prefix
 CC = $CC
@@ -172,6 +186,12 @@ case "$CC" in
 		print "" >> config.mak
 		;;
 esac
+
+for i in "$@"
+do	case "$i" in 
+		*=*)	print "${i%=*} = ${i#*=}" >> config.mak ;;
+	esac
+done
 
 # Clean up and report
 rm "$temporary_file" .temporary

@@ -5,9 +5,13 @@ int __flushbuf(int x, FILE *o)
 {
 	size_t bufsize = BUFSIZ;
 
-	if (o->unbuf)
+	if (o->unbuf) {
 		bufsize = 1;
-	if (o->buf == NULL) {
+		if (o->buf == NULL) {
+			o->lp = o->rp = o->buf = o->unmalloced;
+		}
+	}
+	if (o->buf == NULL && o->unbuf == 0) {
 		if ((o->buf = malloc(bufsize)) == NULL) {
 			return EOF;
 		}

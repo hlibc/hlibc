@@ -38,11 +38,12 @@ typedef struct
 	/**/
 	char *buf;
 	char *rp;
-	char *lp;
+	char *lp; /* currently not used */
 	size_t len;
 	pid_t pid;
 	char ungotten[8];
 	size_t ungot;
+	char unmalloced[1];
 } FILE;
 
 struct DIR

@@ -28,11 +28,11 @@ typedef struct chain
 
 static chain **tchain; 
 
-// shoot for a 64 unit granularity [512, 32768]
-#define HASHSIZE UINT_MAX / (256*512*64) // 512
-#define CHAINLEN UINT_MAX / (256*512*128) // 256
-#define WRAP UINT_MAX / (HASHSIZE*CHAINLEN) // 32768
-#define HASH UINT_MAX / CHAINLEN // 16777216
+/* shoot for a 64 unit granularity ~[512, 32768) */
+#define HASHSIZE UINT_MAX / (256*512*64)	/* ~512 */
+#define CHAINLEN UINT_MAX / (256*512*128)	/* ~256 */
+#define WRAP UINT_MAX / (HASHSIZE*CHAINLEN)	/* ~32768 */
+#define HASH UINT_MAX / CHAINLEN		/* ~16777216 */
 
 static const size_t chunk_size = 8096;
 
@@ -194,8 +194,10 @@ void free(void *ptr)
 		return;
 	}
 	o = (object *)ptr - 1;
-	if (o->size >= UINT_MAX)
+	if (o->size >= UINT_MAX) {
 		munmap(o, o->size);
+		return;
+	}
 	addfreenode(o);
 }
 

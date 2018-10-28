@@ -8,7 +8,7 @@ int __load_main(int (*main)(int, char **, char **), int argc, char **argv)
 {
 	char **envp = argv+argc+1;
 	__environ = envp;
-	void initmag(void);
+	//void initmag(void);
 	exit(main(argc, argv, envp));
 	return 0;
 }

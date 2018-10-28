@@ -7,11 +7,17 @@ int __fillbuf(FILE *o)
 	ssize_t ret = 0;
 	if (o->read && o->eof || o->err)
 		return EOF;
-	if (o->unbuf)
+	if (o->unbuf) {
 		bufsize = 1;
-	if (o->buf == NULL) {
-		if ((o->buf = malloc(bufsize)) == NULL) {
-			return EOF;
+		if (o->buf == NULL)
+		o->lp = o->rp = o->buf = o->unmalloced;
+		
+	}
+	else {
+		if (o->buf == NULL) {
+			if ((o->buf = malloc(bufsize)) == NULL) {
+				return EOF;
+			}
 		}
 	}
 
