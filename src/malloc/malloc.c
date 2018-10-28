@@ -29,10 +29,11 @@ typedef struct chain
 static chain **tchain; 
 
 /* shoot for a 64 unit granularity ~[512, 32768) as (32768/512 = 64) */
-#define HASHSIZE UINT_MAX / (256*512*64)	/* ~2^32 / 2^23 = ~512 */
-#define CHAINLEN UINT_MAX / (256*512*128)	/* ~2^32 / 2^24 = ~256 */
-#define WRAP UINT_MAX / (HASHSIZE*CHAINLEN)	/* ~2^32 / (~256*~512) = ~32768 */
-#define HASH UINT_MAX / CHAINLEN		/* ~2^32 / ~256 = ~16777216 */
+#define TWOTO32 4294967296			/* 2^32 */
+#define HASHSIZE TWOTO32 / (256*512*64)		/* ~2^32 / 2^23 = ~512 */
+#define CHAINLEN TWOTO32 / (256*512*128)	/* ~2^32 / 2^24 = ~256 */
+#define WRAP TWOTO32 / (HASHSIZE*CHAINLEN)	/* ~2^32 / (~256*~512) = ~32768 */
+#define HASH TWOTO32 / CHAINLEN			/* ~2^32 / ~256 = ~16777216 */
 
 static const size_t chunk_size = 4096;
 
@@ -171,7 +172,7 @@ static object *morecore(size_t size)
 
 void *malloc(size_t size)
 {
-	if (size >= UINT_MAX)
+	if (size >= TWOTO32)
 	{
 		goto core;
 	}
