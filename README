@@ -158,6 +158,18 @@ REVISION CONTROL:
 
 	https://github.com/hlibc/hlibc
 
+
+KNOWN BUGS:
+-----------
+
+	hlibc's malloc appears to have issues with allocating for pointers to
+	structures of size one. This has not been reproduced in the test suite
+	but is evident in modified variations of some libraries despite the
+	unmodified versions passing all of their native control tests. Fixing
+	this bug is a top priority and measures are being taken to reproduce
+	it.
+
+
 CONTACT:
 --------
 
