@@ -195,7 +195,7 @@ void free(void *ptr)
 		return;
 	}
 	o = (object *)ptr - 1;
-	if (o->size >= UINT_MAX) {
+	if (o->size >= TWOTO32) {
 		munmap(o, o->size);
 		return;
 	}
