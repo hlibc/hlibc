@@ -9,12 +9,6 @@
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-/*
-typedef size_t (*__f)(size_t, int, char *, FILE *);
-static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o);
-static size_t __printf_buffer(size_t i, int x, char *s, FILE *o);
-static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o);
-*/
 size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
@@ -41,7 +35,7 @@ size_t __snprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)o;
 	s[i] = x;
-	s[i + 1] = 0; /* this needs to be fixed */
+	s[i + 1] = 0;
 	return i + 1;
 }
 
@@ -49,7 +43,7 @@ size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)o;
 	s[i] = x;
-	s[i + 1] = 0; /* this needs to be fixed */
+	s[i + 1] = 0;
 	return i + 1;
 }
 
@@ -233,6 +227,9 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 			case 'o':
 				zuval = va_arg(ap, unsigned long);
 				base = 8;
+				goto uinteger;
+			case 'u':
+				zuval = va_arg(ap, unsigned long);
 				goto uinteger;
 			case 'l':
 				switch (*++p) {
