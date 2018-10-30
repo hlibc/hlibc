@@ -5,7 +5,7 @@ int dprintf(int fd, const char *fmt, ...)
 	int ret = 0;
 	va_list argptr;
 	va_start(argptr, fmt);
-	ret = __printf_inter(stdout + fd, NULL, 0, 3, fmt, argptr);
+	ret = __printf_inter(stdout + fd, NULL, 0, __dprintf_buffer, fmt, argptr);
 	va_end(argptr);
 	return ret;
 }

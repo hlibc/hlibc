@@ -9,10 +9,13 @@
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
+/*
 typedef size_t (*__f)(size_t, int, char *, FILE *);
-
-static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
+static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o);
+static size_t __printf_buffer(size_t i, int x, char *s, FILE *o);
+static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o);
+*/
+size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
 	static char b[BUFSIZ];
@@ -27,14 +30,22 @@ static size_t __dprintf_buffer(size_t i, int x, char *s, FILE *o)
 	return i + 1;
 }
 
-static size_t __printf_buffer(size_t i, int x, char *s, FILE *o)
+size_t __printf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)s;
 	putc(x, o);
 	return i + 1;
 }
 
-static size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
+size_t __snprintf_buffer(size_t i, int x, char *s, FILE *o)
+{
+	(void)o;
+	s[i] = x;
+	s[i + 1] = 0; /* this needs to be fixed */
+	return i + 1;
+}
+
+size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
 	(void)o;
 	s[i] = x;
@@ -88,7 +99,7 @@ static void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c 
 	}
 }
 
-int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, va_list ap)
+int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_list ap)
 { 
 	char *p = NULL;
 	size_t i = 0;
@@ -100,7 +111,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	converted[0] = 0;
 	size_t convlen = 0;
 	size_t j = 0;
-	__f f;
+
 	/* data types */
 	int cval = 0;
 	char *sval = NULL;
@@ -124,18 +135,8 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 	int hasdot = 0;
 	char padd = ' ';
 
-	if (flag == 2) {	/* flag 2 == snprintf */
+	if (f == __snprintf_buffer) {
 		bound = lim - 1;
-		f = __sprintf_buffer;
-	}
-	else if (flag == 1){	/* flag 1 == sprintf */
-		f = __sprintf_buffer;
-	}
-	else if (flag == 0) {	/* flag 0 == printf, vprintf */
-		f = __printf_buffer;
-	}
-	else if (flag == 3) {	/* flag 3 == dprintf */
-		f = __dprintf_buffer;
 	}
 
 	for (p = (char*)fmt; *p && i < bound; p++) {
@@ -357,10 +358,10 @@ int __printf_inter(FILE *fp, char *str, size_t lim, int flag, const char *fmt, v
 			padd = ' ';
 	}
 	
-	if (flag == 3) { /* dprintf flush */
+	if (f == __dprintf_buffer) { /* dprintf flush */
 		f(i, -1, str, fp); /* don't incr for dprintf flushing */
-	}else if (flag > 0) {
-		if (flag == 2)
+	}else if (f != __printf_buffer) {
+		if (f == __snprintf_buffer)
 			f(bound, 0, str, fp);
 		else
 			f(i, 0, str, fp); /* don't incr for '\0' */
