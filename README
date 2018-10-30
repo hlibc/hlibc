@@ -35,26 +35,6 @@ hlibc
 	have contributed code, all of whom are listed in the LICENSE and the
 	files they authored hold their copyrights.
 
-CORRECTNESS:
-------------
-
-	hlibc pays careful attention to mathematics boundaries. A series of 
-	safe arithmetic functions have been devised which use the inverse
-	properties of the arithmetic operators in order to provide checks which
-	can catch and respond to arithmetic overflow before it happens. These
-	functions borrow from the concept of saturation arithmetic but extend
-	its principles to be useful in a production environment where a
-	saturation boundary is not acceptable.
-
-	The hlibc-test test suite has identified issues with boundary arithmetic
-	in nearly every production level libc as of mid 2018 -- even those
-	claiming degrees of mathematical correctness. Some of these bugs are 
-	long standing and affect stdio implementations across the board.
-
-	Because these issues are potentially CVE level, please contact us
-	by email if you are interested in learning more about how to fix or
-	mitigate these errors.
-
 
 BUILDING:
 ---------
@@ -128,6 +108,53 @@ BUILDING:
 		this time, it seems like it would needlessly inflate the hlibc
 		code base to carry code and methods for handling all of the 
 		various permutations needed by the BSDs.
+
+
+MATHEMATICAL CORRECTNESS:
+------------------------
+
+	hlibc pays careful attention to mathematics boundaries. A series of 
+	safe arithmetic functions have been devised which use the inverse
+	properties of the arithmetic operators in order to provide checks which
+	can catch and respond to arithmetic overflow before it happens. These
+	functions borrow from the concept of saturation arithmetic but extend
+	its principles to be useful in a production environment where a
+	saturation boundary is not acceptable.
+
+	The hlibc-test test suite has identified issues with boundary arithmetic
+	in nearly every production level libc as of mid 2018 -- even those
+	claiming degrees of mathematical correctness. Some of these bugs are 
+	long standing and affect stdio implementations across the board. A
+	common misunderstanding pertains to the incorporation of EOVERFLOW
+	semantics as described by POSIX as extensions to the C standard. For
+	instance:
+
+	http://pubs.opengroup.org/onlinepubs/9699919799/functions/fprintf.html
+	"
+		In addition, all forms of fprintf() shall fail if: 
+
+	[EOVERFLOW]
+		The value to be returned is greater than {INT_MAX}. 
+
+		The snprintf() function shall fail if:
+
+	[EOVERFLOW]
+		The value of n is greater than {INT_MAX}. [Option End] 
+	"
+
+	Though the C standard states that arguments of size INT_MAX are
+	undefined behavior -- the handling of such errors is represented
+	inconsistently in many of the penetration tested libc. Attempts
+	are made to produce correct output but failures can be identified
+	on specific numerical intervals.
+
+	Because these issues are potentially CVE level, please contact us
+	by email if you are interested in learning more about how to fix or
+	mitigate these errors.
+
+	Continued research in proper arithmetic bounding and improvement of
+	hlibc from the results is a top priority that is helping to guide the 
+	development process.
 
 
 RELENG:
