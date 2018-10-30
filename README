@@ -34,7 +34,26 @@ hlibc
 	hlibc was originally authored by CM Graff. Along the way many people
 	have contributed code, all of whom are listed in the LICENSE and the
 	files they authored hold their copyrights.
-	
+
+CORRECTNESS:
+------------
+
+	hlibc pays careful attention to mathematics boundaries. A series of 
+	safe arithmetic functions have been devised which use the inverse
+	properties of the arithmetic operators in order to provide checks which
+	can catch and respond to arithmetic overflow before it happens. These
+	functions borrow from the concept of saturation arithmetic but extend
+	its principles to be useful in a production environment where a
+	saturation boundary is not acceptable.
+
+	The hlibc-test test suite has identified issues with boundary arithmetic
+	in nearly every production level libc as of mid 2018 -- even those
+	claiming degrees of mathematical correctness. Some of these bugs are 
+	long standing and affect stdio implementations across the board.
+
+	Because these issues are potentially CVE level, please contact us
+	by email if you are interested in learning more about how to fix or
+	mitigate these errors.
 
 
 BUILDING:
