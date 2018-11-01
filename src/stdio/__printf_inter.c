@@ -370,7 +370,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 	
 	if (i >= INT_MAX) {
 		errno = EOVERFLOW;
-		i = -1;
+		i = 0;
 	}
 
 	return i;
