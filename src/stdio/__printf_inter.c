@@ -88,14 +88,6 @@ static size_t __uint2str(char *s, uintmax_t n, int base)
 	return __uint2str_inter(s, n, base, i);
 }
 
-static void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c , FILE *d)
-{
-	size_t i = 0;
-	for (i=0;want > have +i;++i) {
-		a = f(a, b, c, d);
-	}
-}
-
 int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_list ap)
 { 
 	char *p = NULL;
@@ -131,6 +123,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 	int pls2spc = 0;
 	int hasdot = 0;
 	char padd = ' ';
+	size_t pp = 0;
 
 	if (f == __snprintf_buffer) {
 		bound = lim - 1;
@@ -296,14 +289,17 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 					if (len > off)
 						padding += len - off;
 				}
-				__padding(len, padding, f, i, padd, str, fp);
+				for (size_t pp=0; padding > len+ pp;++pp) {
+					i = f(i, padd, str, fp);
+				}
 			}
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
-			if (leftadj == 1)
-			{
-				__padding(z, padding, f, i, padd, str, fp);
+			if (leftadj == 1) { 
+				for (size_t pp=0; padding > z+ pp;++pp) {
+					i = f(i, padd, str, fp);
+				}
 			}
 			goto end;
 		character:
@@ -311,24 +307,35 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 			goto end;
 		integer:
 			convlen = __int2str(converted, lval, base);
-			if (leftadj == 0)
-				__padding(convlen, padding, f, i, padd, str, fp);
+			if (leftadj == 0) {
+				for (size_t pp=0;padding > convlen+ pp;++pp) {
+					i = f(i, padd, str, fp);
+				}
+			}
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			if (leftadj == 1 && j < padding)
-				__padding(j, padding, f, i, padd, str, fp);
+			if (leftadj == 1 && j < padding) {
+				for (size_t pp=0;padding > j  + pp;++pp) {
+					i = f(i, padd, str, fp);
+				}
+			}
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
-			if (leftadj == 0)
-				__padding(convlen, padding, f, i, padd, str, fp);
-	
+			if (leftadj == 0) {
+				for (size_t pp=0;padding > convlen + pp;++pp) {
+					i = f(i, padd, str, fp);
+				}
+			}
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			if (leftadj == 1 && j < padding)
-				__padding(j, padding, f, i, padd, str, fp);
+			if (leftadj == 1 && j < padding) {
+				for (size_t pp=0; padding < j+ pp;++pp) {
+					i = f(i, padd, str, fp);
+				}
+			}
 			goto end;
 		floating:
 			/* 	fmt_fp accepts the following flags:
