@@ -1,27 +1,13 @@
 #ifndef _INTTYPES_H
 #define _INTTYPES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
-
-#define __NEED_wchar_t
 #include <bits/types.h>
 
 typedef struct { intmax_t quot, rem; } imaxdiv_t;
-
 intmax_t imaxabs(intmax_t);
 imaxdiv_t imaxdiv(intmax_t, intmax_t);
 
-intmax_t strtoimax(const char *, char **, int);
-uintmax_t strtoumax(const char *, char **, int);
-
-intmax_t wcstoimax(const wchar_t *, wchar_t **, int);
-uintmax_t wcstoumax(const wchar_t *, wchar_t **, int);
-
-#if !defined __cplusplus || defined __STDC_FORMAT_MACROS
 
 #define __PRI64  "ll"
 #define __PRIPTR "l"
@@ -216,12 +202,6 @@ uintmax_t wcstoumax(const wchar_t *, wchar_t **, int);
 #define SCNoPTR __PRIPTR "o"
 #define SCNuPTR __PRIPTR "u"
 #define SCNxPTR __PRIPTR "x"
-
-#endif
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 
