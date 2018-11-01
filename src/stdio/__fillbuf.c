@@ -10,7 +10,7 @@ int __fillbuf(FILE *o)
 	if (o->unbuf) {
 		bufsize = 1;
 		if (o->buf == NULL)
-		o->lp = o->rp = o->buf = o->unmalloced;
+			o->lp = o->rp = o->buf = o->unmalloced;
 		
 	}
 	else {

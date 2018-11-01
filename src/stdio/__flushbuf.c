@@ -13,6 +13,7 @@ int __flushbuf(int x, FILE *o)
 	}
 	if (o->buf == NULL && o->unbuf == 0) {
 		if ((o->buf = malloc(bufsize)) == NULL) {
+			errno = ENOMEM;
 			return EOF;
 		}
 		o->lp = o->rp = o->buf;
