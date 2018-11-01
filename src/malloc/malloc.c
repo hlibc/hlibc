@@ -156,7 +156,7 @@ static object *morecore(size_t size)
 	}
 
 	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
-		goto NULL;
+		return NULL;
 	}
 
 	if (!(o = __mmap_inter(size + sizeof(object)))) {
