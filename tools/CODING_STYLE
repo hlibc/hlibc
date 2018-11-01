@@ -1,0 +1,97 @@
+INDENTATION:
+tabs are used for all indentations. the rationale is readability and
+ease of movement through the code while editing. 
+
+
+COLUMNS:
+No mare than 80 characters. An exception can be made for function
+prototypes and argument lists.
+
+
+
+BRACKETS:
+wherever practical we use brackets. if the code readability is greatly
+improved by not using them then an exception could be made. Newlines
+are always used.
+
+right:
+	if () {
+		;
+	}
+
+	for (;;) {
+		;
+	}
+wrong:
+	if ()
+		;
+
+	for (;;)
+		;
+
+	if ();
+	if ();
+
+
+SPACING:
+
+Spaces should encasulate arithmetic and equality operators. The goal is to use
+as little whitespace as possible without squishing everything into an awful lump
+
+	if (i < j) {
+		;
+	}
+	for (i = 0; i < j; ++i) {
+		;
+	}
+
+
+FOR LOOPS:
+
+if a for loop requires a precondition don't micro-optimize by putting it in 
+a conditional before the loop. Instead, use a /**/ comment with no content
+to indicate that it is a precondition and put it in the loop itself.
+
+wrong:
+
+	if (condition) {
+		precondition;
+	}
+	for (;i<j;) {
+		;
+	}
+correct:
+
+	for (; condition && /**/ i < j;) {
+		;
+	}
+
+INITIALIZATION and DECLARATION:
+
+	Don't declare block scope variables, initialize variables whenever
+	possible in the function preamble:
+
+	type *function(type *a)
+	{
+		type i = 0;
+		type j = 0;
+		type k = 0;
+
+		for (i = 0; i < j; ++i) {
+			k = i;
+			for (;k < j;) {
+				a[i] = k;
+			}
+		}
+		return a;
+	}
+
+Don't use while loops unless a do-while construction provides the best possible
+practice.
+
+MACROS:
+
+macros are only acceptable for polymorphism where otherwise the code would
+require many many repitition of the same block of code and lead to difficulties
+in duplicating it. for an example of acceptable use of macros look at the
+safe arithmetic API
