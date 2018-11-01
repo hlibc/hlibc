@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <float.h>
+#include <errno.h>
 
 static int __convtab[20] = { '0', '1', '2', '3', '4', '5', '6', '7',
 			     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -31,7 +32,7 @@ size_t __printf_buffer(size_t i, int x, char *s, FILE *o)
 	return i + 1;
 }
 
-size_t __snprintf_buffer(size_t i, int x, char *s, FILE *o)
+static size_t __sprintf_family(size_t i, int x, char *s, FILE *o) 
 {
 	(void)o;
 	s[i] = x;
@@ -39,12 +40,14 @@ size_t __snprintf_buffer(size_t i, int x, char *s, FILE *o)
 	return i + 1;
 }
 
+size_t __snprintf_buffer(size_t i, int x, char *s, FILE *o)
+{
+	return __sprintf_family(i, x, s, o);
+}
+
 size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 {
-	(void)o;
-	s[i] = x;
-	s[i + 1] = 0;
-	return i + 1;
+	return __sprintf_family(i, x, s, o);
 }
 
 static size_t __uint2str_inter(char *s, uintmax_t n, int base, size_t i)
@@ -118,7 +121,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 	size_t precision = 6;
 
 	/* field width */
-	size_t off = INT_MAX;	/* upper bound for meaningful comparison */
+	size_t off = SIZE_MAX;	/* upper bound for meaningful comparison */
 	size_t z = 0;
 	size_t padding = 0;
 	int zeropad = 0;
@@ -343,7 +346,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 		end:
 			converted[0] = 0;
 			precision = 6;
-			off = INT_MAX;
+			off = SIZE_MAX;
 			base = 10;
 			padding = 0;
 			zeropad = 0;
@@ -354,6 +357,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 			hasdot = 0;
 			padd = ' ';
 	}
+		
 	
 	if (f == __dprintf_buffer) { /* dprintf flush */
 		f(i, -1, str, fp); /* don't incr for dprintf flushing */
@@ -363,6 +367,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 		else
 			f(i, 0, str, fp); /* don't incr for '\0' */
 	}
+	
+	if (i >= INT_MAX) {
+		errno = EOVERFLOW;
+		i = -1;
+	}
+
 	return i;
 }
 

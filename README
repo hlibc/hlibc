@@ -116,7 +116,7 @@ MATHEMATICAL CORRECTNESS:
 	hlibc pays careful attention to mathematics boundaries. A series of 
 	safe arithmetic functions have been devised which use the inverse
 	properties of the arithmetic operators in order to provide checks which
-	can catch and respond to arithmetic overflow before it happens. These
+	can catch and respond to arithmetic overflow before they happens. These
 	functions borrow from the concept of saturation arithmetic but extend
 	its principles to be useful in a production environment where a
 	saturation boundary is not acceptable.
@@ -142,19 +142,20 @@ MATHEMATICAL CORRECTNESS:
 		The value of n is greater than {INT_MAX}. [Option End] 
 	"
 
-	Though the C standard states that arguments of size INT_MAX are
-	undefined behavior -- the handling of such errors is represented
-	inconsistently in many of the penetration tested libc. Attempts
-	are made to produce correct output but failures can be identified
-	on specific numerical intervals.
+	Though the C standard states that arguments of size INT_MAX to 
+	stdio based formatting functions are undefined behavior -- the 
+	handling of such errors is represented inconsistently in many of 
+	the control subject libcs. Attempts are made to produce correct
+	output but failures can nonetheless be identified on specific
+	numerical intervals.
 
 	Because these issues are potentially CVE level, please contact us
 	by email if you are interested in learning more about how to fix or
 	mitigate these errors.
 
-	Continued research in proper arithmetic bounding and improvement of
-	hlibc from the results is a top priority that is helping to guide the 
-	development process.
+	Continued research of proper arithmetic bounding and improvement of
+	hlibc from the results is a top priority that guides its development
+	process.
 
 
 RELENG:
