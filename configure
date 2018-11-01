@@ -3,8 +3,7 @@
 # hlibc configure script
 
 
-print()
-{
+print() {
 	printf -- "%s\n" "$*"
 }
 

@@ -18,8 +18,8 @@
 
 
 
-SRCS = $(wildcard src/*.c src/*/*.c machine/crt/*.c)
-ASRCS = $(wildcard machine/crt/$(ARCH)/*.s src/*/$(ARCH)/*.s)
+SRCS = $(wildcard src/*.c src/*/*.c machine/*.c)
+ASRCS = $(wildcard machine/$(ARCH)/*.s src/*/$(ARCH)/*.s)
 OBJ = $(SRCS:.c=.o)
 AOBJ = $(ASRCS:.s=.o)
 CPPFLAGS =
@@ -45,7 +45,7 @@ install:
 	mkdir -p $(prefix)/bin $(prefix)/lib
 	cp -R include $(prefix)/
 	cp libc.a libm.a $(prefix)/lib/
-	cp machine/crt/*.o $(prefix)/lib/
+	cp machine/*.o $(prefix)/lib/
 	./tools/gcc-wrap.specs.sh $(prefix)/include $(prefix)/lib $(prefix)/ > $(prefix)/lib/gcc-wrap.specs
 	$(MAKE) create_compiler
 

@@ -7,18 +7,18 @@ long syscall(long number, ...)
 {
 	long ret = 0;
         long a, b, c, d, e, f;
+	a = b = c = d = e = f = -1;
         va_list i;
         va_start(i, number);
-        a=va_arg(i, long);
-        b=va_arg(i, long);
-        c=va_arg(i, long);
-        d=va_arg(i, long);
-        e=va_arg(i, long);
-        f=va_arg(i, long);
+        a = va_arg(i, long);
+        b = va_arg(i, long);
+        c = va_arg(i, long);
+        d = va_arg(i, long);
+        e = va_arg(i, long);
+        f = va_arg(i, long);
         va_end(i);
 	ret = __internal_syscall(number, a, b, c, d, e, f);
 	if (ret > -4096UL) {
-
                 errno = -ret;
                 return -1;
         }
