@@ -281,25 +281,21 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 		}
 
 		string:
-			len = strlen(sval);
-			if (leftadj == 0)
-			{
-				if (off < len && padding > len - off)
-				{
-					if (len > off)
-						padding += len - off;
-				}
-				for (size_t pp=0; padding > len+ pp;++pp) {
-					i = f(i, padd, str, fp);
-				}
+			len = strlen(sval); 
+			if (leftadj == 0 && /**/ off < len && padding > len - off) {
+				if (len > off)
+					padding += len - off;
 			}
+			for (pp = 0; leftadj == 0 && /**/ padding > len + pp;++pp) {
+				i = f(i, padd, str, fp);
+			}
+			
 			for (z = 0; *sval && z < off; sval++, ++z) {
 				i = f(i, *sval, str, fp);
 			}
-			if (leftadj == 1) { 
-				for (size_t pp=0; padding > z+ pp;++pp) {
-					i = f(i, padd, str, fp);
-				}
+
+			for (pp = 0;leftadj == 1 && /**/ padding > z + pp;++pp) {
+				i = f(i, padd, str, fp);
 			}
 			goto end;
 		character:
@@ -307,34 +303,26 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 			goto end;
 		integer:
 			convlen = __int2str(converted, lval, base);
-			if (leftadj == 0) {
-				for (size_t pp=0;padding > convlen+ pp;++pp) {
-					i = f(i, padd, str, fp);
-				}
+			for (pp = 0;leftadj == 0 && /**/ padding > convlen + pp;++pp) {
+				i = f(i, padd, str, fp);
 			}
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			if (leftadj == 1 && j < padding) {
-				for (size_t pp=0;padding > j  + pp;++pp) {
-					i = f(i, padd, str, fp);
-				}
+			for (pp = 0;leftadj == 1 && j < padding && /**/ padding > j + pp;++pp) {
+				i = f(i, padd, str, fp);
 			}
 			goto end;
 		uinteger:
 			convlen = __uint2str(converted, zuval, base);
-			if (leftadj == 0) {
-				for (size_t pp=0;padding > convlen + pp;++pp) {
-					i = f(i, padd, str, fp);
-				}
+			for (pp = 0;leftadj == 0 && /**/ padding > convlen + pp;++pp) {
+				i = f(i, padd, str, fp);
 			}
 			for (j = 0; j < convlen; ++j) {
 				i = f(i, converted[j], str, fp);
 			}
-			if (leftadj == 1 && j < padding) {
-				for (size_t pp=0; padding < j+ pp;++pp) {
-					i = f(i, padd, str, fp);
-				}
+			for (pp = 0;leftadj == 1 && j < padding && /**/ padding < j+ pp;++pp) {
+				i = f(i, padd, str, fp);
 			}
 			goto end;
 		floating:
