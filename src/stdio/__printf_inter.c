@@ -92,7 +92,7 @@ static void __padding(size_t have, size_t want, __f f, size_t a, int b, char *c 
 {
 	size_t i = 0;
 	for (i=0;want > have +i;++i) {
-		f(a, b, c, d);
+		a = f(a, b, c, d);
 	}
 }
 
