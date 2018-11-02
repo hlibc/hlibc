@@ -129,7 +129,7 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 		bound = lim - 1;
 	}
 
-	for (p = (char*)fmt; *p && i < bound; p++) {
+	for (p = (char *)fmt; *p && i < bound; p++) {
 		if (*p != '%') {
 			i = f(i, *p, str, fp);
 			goto end;
@@ -365,9 +365,12 @@ int __printf_inter(FILE *fp, char *str, size_t lim, __f f, const char *fmt, va_l
 	
 	if (i >= INT_MAX) {
 		errno = EOVERFLOW;
-		i = 0;
+		goto error;
 	}
 
 	return i;
+
+	error:
+	return -1;
 }
 

@@ -6,8 +6,8 @@ int __puts_inter(const char *s, FILE *fp, int append)
 	 * the printf family of function is only specified to handle INT_MAX
 	 * number of bytes whereas puts has no such retriction.
 	 */
-	
-	while ((*s)) {
+
+	while (*s) {
 		putc(*s++, fp);
 	}
 	if (append) {
