@@ -3,7 +3,22 @@
 #include <string.h>
 #include <stdlib.h>
 
-int __fscanf_inter(const char *str, FILE *restrict stream, const char *restrict format, va_list ap)
+typedef int (*__scan)(FILE *o, const char *s);
+
+int __fgetc(FILE *o, const char *s)
+{
+	(void)s;
+	return fgetc(o);
+}
+
+int __sscan(FILE *o, const char *s)
+{
+	(void)o;
+	static size_t i = 0;
+	return s[i++];
+}
+
+int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, va_list ap)
 {
 	char *p = NULL;
 	size_t i = 0;
@@ -12,24 +27,31 @@ int __fscanf_inter(const char *str, FILE *restrict stream, const char *restrict 
 	size_t j = 0;
 	int c = 0;
 	int *ints = NULL;
+	__scan f;
+
+	if (!(str))
+		f = __fgetc;
+	else
+		f = __sscan;
 	
-	for (p = (char *)format; *p; p++) {
+	for (p = (char *)fmt; *p; p++) {
 		if (*p != '%') {
-			   fgetc(stream);
-			   continue;
+			/* FIXME */
+			f(o, str);
+			continue;
 		}
 		++p;
 		switch (*p) {
                 case 's':
 			sval = va_arg(ap, char *);
-			for (c = 0, j = 0;((c = fgetc(stream)) != ' ');++j) {
+			for (c = 0, j = 0;((c = f(o, str)) != ' ');++j) {
 				sval[j] = c;
 			}
 			i+=j;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
-			for (s[0] = 0, c = 0, j = 0;((c = fgetc(stream)) != ' ');++j) {
+			for (s[0] = 0, c = 0, j = 0;((c = f(o, str)) != ' ');++j) {
 				s[j] = c;
 			}
 			s[j] = 0;
