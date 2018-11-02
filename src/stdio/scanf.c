@@ -2,7 +2,6 @@
 #include <limits.h>
 
 
-
 int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list ap)
 {
 	char *p = NULL;
@@ -24,7 +23,17 @@ int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list a
 				fgetc(stream);
 			break;
 		}
-		
 	}
 	return 0;
+}
+
+
+int fscanf(FILE *stream, const char *fmt, ...)
+{
+	int ret = 0;
+        va_list argptr;
+        va_start(argptr, fmt);
+        ret = __fscanf_inter(stream, fmt, argptr);
+        va_end(argptr);
+        return ret;
 }
