@@ -2,18 +2,18 @@
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
+
 int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list ap)
 {
 	char *p = NULL;
 	size_t i = 0;
-	size_t bound = INT_MAX;
 	char *sval = NULL;
 	char s[1000] = { 0 };
 	size_t j = 0;
 	int c = 0;
 	int *ints = NULL;
 	
-	for (p = (char *)format; *p && i < bound; p++) {
+	for (p = (char *)format; *p; p++) {
 		if (*p != '%') {
 			   fgetc(stream);
 			   continue;
@@ -25,6 +25,7 @@ int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list a
 			for (c = 0, j = 0;((c = fgetc(stream)) != ' ');++j) {
 				sval[j] = c;
 			}
+			i+=j;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
@@ -33,10 +34,15 @@ int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list a
 			}
 			s[j] = 0;
 			*ints = strtol(s, NULL, 10);
+			i+=j;
 			break;
+		default:
+			goto eof;
 		}
 	}
 	return i;
+	eof:
+	return EOF;
 }
 
 
