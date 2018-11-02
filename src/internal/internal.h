@@ -84,6 +84,8 @@ int __flushbuf(int, FILE *);
 int __printf_inter(FILE *, char *, size_t, __f, const char *, va_list);
 int __puts_inter(const char *, FILE *, int);
 FILE *__init_file(FILE*);
+size_t __int2str(char *, intmax_t, int);
+size_t __uint2str(char *, uintmax_t, int);
 
 /* number to string */ 
 int fmt_fp(char *, long double, int, int, int, int);
@@ -137,5 +139,8 @@ size_t __dprintf_buffer(size_t, int, char *, FILE *);
 size_t __printf_buffer(size_t, int, char *, FILE *);
 size_t __sprintf_buffer(size_t, int, char *, FILE *);
 size_t __snprintf_buffer(size_t, int, char *, FILE *);
+
+/* silly debugging */
+void __debug(int);
 
 #endif

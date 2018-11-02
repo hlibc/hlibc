@@ -50,6 +50,7 @@ size_t __sprintf_buffer(size_t i, int x, char *s, FILE *o)
 	return __sprintf_family(i, x, s, o);
 }
 
+
 static size_t __uint2str_inter(char *s, uintmax_t n, int base, size_t i)
 {
 	if (n / base) {
@@ -68,7 +69,7 @@ static size_t __int2str_inter(char *s, intmax_t n, int base, size_t i)
 	return ++i;
 }
 
-static size_t __int2str(char *s, intmax_t n, int base)
+size_t __int2str(char *s, intmax_t n, int base)
 {
 	size_t i = 0;
 	int toggle = 0;
@@ -82,7 +83,7 @@ static size_t __int2str(char *s, intmax_t n, int base)
 	return __int2str_inter(s + toggle, n, base, i) + toggle;
 }
 
-static size_t __uint2str(char *s, uintmax_t n, int base)
+size_t __uint2str(char *s, uintmax_t n, int base)
 {
 	size_t i = 0;
 	return __uint2str_inter(s, n, base, i);
