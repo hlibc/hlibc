@@ -1,6 +1,6 @@
 #include "../internal/internal.h"
 #include <limits.h>
-
+#include <string.h>
 
 int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list ap)
 {
@@ -9,7 +9,7 @@ int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list a
 	size_t bound = INT_MAX;
 	char *sval = NULL;
 	size_t j = 0;
-	
+	int c = 0;
 	for (p = (char *)format; *p && i < bound; p++) {
 		if (*p != '%') {
 			   fgetc(stream);
@@ -19,12 +19,13 @@ int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list a
 		switch (*p) {
                 case 's':
 			sval = va_arg(ap, char *);
-			for (j=0;sval[j];++j)
-				fgetc(stream);
+			for (j=0;((c = fgetc(stream)) != ' ');++j) {
+				sval[j] = c;
+			}
 			break;
 		}
 	}
-	return 0;
+	return i;
 }
 
 
