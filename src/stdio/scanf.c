@@ -67,7 +67,6 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 	return EOF;
 }
 
-
 int fscanf(FILE *stream, const char *fmt, ...)
 {
 	int ret = 0;
@@ -103,6 +102,7 @@ int vscanf(const char *fmt, va_list ap)
 	int ret = 0;
 	ret = __fscanf_inter(NULL, stdin, fmt, ap);
 	va_end(ap);
+	return ret;
 }
 
 int vsscanf(const char *str, const char *fmt, va_list ap)
@@ -110,6 +110,7 @@ int vsscanf(const char *str, const char *fmt, va_list ap)
 	int ret = 0;
 	ret = __fscanf_inter(str, stdin, fmt, ap);
 	va_end(ap);
+	return ret;
 }
 
 int vfscanf(FILE *stream, const char *fmt, va_list ap)
@@ -117,5 +118,6 @@ int vfscanf(FILE *stream, const char *fmt, va_list ap)
 	int ret = 0;
 	ret = __fscanf_inter(NULL, stream, fmt, ap);
 	va_end(ap);
+	return ret;
 }
 
