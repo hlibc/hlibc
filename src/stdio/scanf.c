@@ -76,3 +76,24 @@ int sscanf(const char *str, const char *fmt, ...)
         return ret;
 }
 
+int vscanf(const char *fmt, va_list ap)
+{
+	int ret = 0;
+	ret = __fscanf_inter(NULL, stdin, fmt, ap);
+	va_end(ap);
+}
+
+int vsscanf(const char *str, const char *fmt, va_list ap)
+{
+	int ret = 0;
+	ret = __fscanf_inter(str, stdin, fmt, ap);
+	va_end(ap);
+}
+
+int vfscanf(FILE *stream, const char *fmt, va_list ap)
+{
+	int ret = 0;
+	ret = __fscanf_inter(NULL, stream, fmt, ap);
+	va_end(ap);
+}
+
