@@ -116,7 +116,7 @@ MATHEMATICAL CORRECTNESS:
 	hlibc pays careful attention to mathematics boundaries. A series of 
 	safe arithmetic functions have been devised which use the inverse
 	properties of the arithmetic operators in order to provide checks which
-	can catch and respond to arithmetic overflow before they happens. These
+	can catch and respond to arithmetic overflow before they happen. These
 	functions borrow from the concept of saturation arithmetic but extend
 	its principles to be useful in a production environment where a
 	saturation boundary is not acceptable.
