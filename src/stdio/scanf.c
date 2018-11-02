@@ -18,6 +18,17 @@ int __sscan(FILE *o, const char *s)
 	return s[i++];
 }
 
+static int tk(int c)
+{
+	if (c == ' ')
+		return 0;
+	if (c == '\t')
+		return 0;
+	if (c == '\n')
+		return 0;
+	return 1;
+}
+
 int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, va_list ap)
 {
 	char *p = NULL;
@@ -44,14 +55,14 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		switch (*p) {
                 case 's':
 			sval = va_arg(ap, char *);
-			for (c = 0, j = 0;((c = f(o, str)) != ' ');++j) {
+			for (c = 0, j = 0;tk(c = f(o, str));++j) {
 				sval[j] = c;
 			}
 			i+=j;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
-			for (s[0] = 0, c = 0, j = 0;((c = f(o, str)) != ' ');++j) {
+			for (s[0] = 0, c = 0, j = 0;tk(c = f(o, str));++j) {
 				s[j] = c;
 			}
 			s[j] = 0;
