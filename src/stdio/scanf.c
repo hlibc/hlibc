@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-int __fscanf_inter(FILE *restrict stream, const char *restrict format, va_list ap)
+int __fscanf_inter(const char *str, FILE *restrict stream, const char *restrict format, va_list ap)
 {
 	char *p = NULL;
 	size_t i = 0;
@@ -51,7 +51,28 @@ int fscanf(FILE *stream, const char *fmt, ...)
 	int ret = 0;
         va_list argptr;
         va_start(argptr, fmt);
-        ret = __fscanf_inter(stream, fmt, argptr);
+        ret = __fscanf_inter(NULL, stream, fmt, argptr);
         va_end(argptr);
         return ret;
 }
+
+int scanf(const char *fmt, ...)
+{
+	int ret = 0;
+        va_list argptr;
+        va_start(argptr, fmt);
+        ret = __fscanf_inter(NULL, stdin, fmt, argptr);
+        va_end(argptr);
+        return ret;
+}
+
+int sscanf(const char *str, const char *fmt, ...)
+{
+	int ret = 0;
+        va_list argptr;
+        va_start(argptr, fmt);
+        ret = __fscanf_inter(str, stdin, fmt, argptr);
+        va_end(argptr);
+        return ret;
+}
+
