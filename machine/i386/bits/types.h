@@ -1,3 +1,5 @@
+#ifndef __HAS_TYPES__
+#define __HAS_TYPES__
 
 typedef unsigned size_t;
 
@@ -87,32 +89,6 @@ typedef int gid_t;
 
 typedef int key_t;
 
-typedef struct __pthread * pthread_t;
-
-typedef int pthread_once_t;
-
-typedef int pthread_key_t;
-
-typedef int pthread_spinlock_t;
-
-typedef struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
-
-typedef unsigned pthread_mutexattr_t;
-
-typedef unsigned pthread_condattr_t;
-
-typedef unsigned pthread_barrierattr_t;
-
-typedef struct { unsigned __attr[2]; } pthread_rwlockattr_t;
-
-typedef struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
-
-typedef struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
-
-typedef struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
-
-typedef struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
-
 typedef long long off_t;
 
 typedef unsigned int mode_t;
@@ -156,4 +132,4 @@ typedef int nl_item;
 typedef struct __locale * locale_t;
 
 struct iovec { void *iov_base; size_t iov_len; };
-
+#endif
