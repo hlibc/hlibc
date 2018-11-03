@@ -9,7 +9,7 @@ typedef long ptrdiff_t;
 
 typedef __builtin_va_list va_list;
 
-typedef struct __va_list * va_list;
+//typedef struct __va_list * va_list;
 
 typedef __WCHAR_TYPE__ wchar_t;
 
@@ -63,13 +63,13 @@ typedef long          intptr_t;
 
 typedef unsigned long uintptr_t;
 
-typedef float float_t;
+//typedef float float_t;
 
-typedef double double_t;
+//typedef double double_t;
 
-typedef long double float_t;
+//typedef long double float_t;
 
-typedef long double double_t;
+//typedef long double double_t;
 
 typedef long time_t;
 
