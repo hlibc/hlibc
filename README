@@ -8,9 +8,9 @@ hlibc
 	case of IEEE-754-2008 floats 'f' are correctly printed and rounded.
 
 	hlibc is targeted at POSIX systems and works with the Linux, FreeBSD 
-	and OpenBSD kernels' syscall ABI. Currently the x86_64 and aarch64 
-	architectures are supported for Linux and FreeBSD and x86_64 is 
-	supported for OpenBSD.
+	and OpenBSD kernels' syscall ABI. Currently the i386. x86_64 and aarch64 
+	architectures are supported for Linux, x86_64 and aarch64 for FreeBSD 
+	and x86_64 is supported for OpenBSD.
 
 	hlibc focuses primarily on algorithmic correctness and effectiveness 
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc 
