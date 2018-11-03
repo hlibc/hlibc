@@ -9,5 +9,8 @@
 */
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 { 
+	if (sizeof(off_t) > sizeof(long))
+                if (((long)offset & 0xfff) | ((long)((unsigned long long)off>>(12 + 8*(sizeof(off_t)-sizeof(long))))))
+                        addr = (void *)-1;
 	return (void *)syscall(SYS_mmap, addr, length, prot, flags, fd, offset);
 }
