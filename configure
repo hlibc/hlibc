@@ -132,6 +132,9 @@ architecture=$("$CC" -dumpmachine 2>/dev/null)
 print "$architecture"
 
 case "$architecture" in
+	*i*86*)
+		ARCH="i386"
+		;;
 	*arm64*|*aarch64*)
 		ARCH="aarch64"
 		;;
