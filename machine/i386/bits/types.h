@@ -1,21 +1,23 @@
-#ifndef __HAS_TYPES__
-#define __HAS_TYPES__
 
-typedef unsigned long size_t;
+typedef unsigned size_t;
 
-typedef long ssize_t;
+typedef int ssize_t;
 
 typedef long ptrdiff_t;
 
 typedef __builtin_va_list va_list;
 
-typedef int wchar_t;
+typedef struct __va_list * va_list;
 
-typedef int wint_t;
+typedef __WCHAR_TYPE__ wchar_t;
 
-typedef int wctrans_t;
+typedef long wchar_t;
 
-typedef int wctype_t;
+typedef long wint_t;
+
+typedef long wctrans_t;
+
+typedef long wctype_t;
 
 typedef signed char int8_t;
 
@@ -23,7 +25,7 @@ typedef short       int16_t;
 
 typedef int         int32_t;
 
-typedef long        int64_t;
+typedef long long   int64_t;
 
 typedef unsigned char      uint8_t;
 
@@ -31,13 +33,13 @@ typedef unsigned short     uint16_t;
 
 typedef unsigned int       uint32_t;
 
-typedef unsigned long      uint64_t;
+typedef unsigned long long uint64_t;
 
 typedef unsigned short     __uint16_t;
 
 typedef unsigned int       __uint32_t;
 
-typedef unsigned long      __uint64_t;
+typedef unsigned long long __uint64_t;
 
 typedef int8_t    int_fast8_t;
 
@@ -59,15 +61,19 @@ typedef long          intptr_t;
 
 typedef unsigned long uintptr_t;
 
-typedef double float_t;
+typedef float float_t;
 
 typedef double double_t;
 
+typedef long double float_t;
+
+typedef long double double_t;
+
 typedef long time_t;
 
-typedef long suseconds_t;
+typedef int suseconds_t;
 
-struct timeval { time_t tv_sec; long tv_usec; };
+struct timeval { time_t tv_sec; int tv_usec; };
 
 struct timespec { time_t tv_sec; long tv_nsec; };
 
@@ -75,21 +81,47 @@ typedef int pid_t;
 
 typedef int id_t;
 
-typedef unsigned int uid_t;
+typedef int uid_t;
 
-typedef unsigned int gid_t;
+typedef int gid_t;
 
 typedef int key_t;
 
-typedef long off_t;
+typedef struct __pthread * pthread_t;
+
+typedef int pthread_once_t;
+
+typedef int pthread_key_t;
+
+typedef int pthread_spinlock_t;
+
+typedef struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
+
+typedef unsigned pthread_mutexattr_t;
+
+typedef unsigned pthread_condattr_t;
+
+typedef unsigned pthread_barrierattr_t;
+
+typedef struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+
+typedef struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
+
+typedef struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
+
+typedef struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
+
+typedef struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+
+typedef long long off_t;
 
 typedef unsigned int mode_t;
 
-typedef unsigned long nlink_t;
+typedef unsigned int nlink_t;
 
 typedef unsigned long long ino_t;
 
-typedef unsigned long dev_t;
+typedef long long dev_t;
 
 typedef long blksize_t;
 
@@ -103,7 +135,7 @@ typedef void * timer_t;
 
 typedef int clockid_t;
 
-typedef long clock_t;
+typedef unsigned long clock_t;
 
 typedef struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
 
@@ -125,4 +157,3 @@ typedef struct __locale * locale_t;
 
 struct iovec { void *iov_base; size_t iov_len; };
 
-#endif
