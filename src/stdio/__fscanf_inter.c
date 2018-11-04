@@ -45,9 +45,10 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 
 	for (p = (char *)fmt; *p; p++) {
 		if (*p != '%') {
-			/* FIXME */
-			f(o, str);
-			continue;
+			if ((c = f(o, str)) == *p)
+				continue;
+			else
+				break;
 		}
 		++p;
 		switch (*p) {
@@ -55,19 +56,17 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 			sval = va_arg(ap, char *);
 			for (c = 0, j = 0;tk(c = f(o, str));) {
 				if (c != '\n')
-					sval[j++] = c;
+					sval[j++] = c, i++;
 			}
-			i += j;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
 			for (s[0] = 0, c = 0, j = 0;tk(c = f(o, str));) {
 				if (c != '\n')
-					s[j++] = c;
+					s[j++] = c, i++;
 			}
 			s[j] = 0;
 			*ints = strtol(s, NULL, 10);
-			i += j;
 			break;
 		default:
 			goto eof;
