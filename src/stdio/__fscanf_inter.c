@@ -5,13 +5,13 @@
 
 typedef int (*__scan)(FILE *o, const char *s);
 
-int __fgetc(FILE *o, const char *s)
+static int __fgetc(FILE *o, const char *s)
 {
 	(void)s;
 	return fgetc(o);
 }
 
-int __sscan(FILE *o, const char *s)
+static int __sscan(FILE *o, const char *s)
 {
 	(void)o;
 	static size_t i = 0;
@@ -42,7 +42,7 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		f = __fgetc;
 	else
 		f = __sscan;
-	
+
 	for (p = (char *)fmt; *p; p++) {
 		if (*p != '%') {
 			/* FIXME */
@@ -51,22 +51,23 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		}
 		++p;
 		switch (*p) {
-                case 's':
+		case 's':
 			sval = va_arg(ap, char *);
 			for (c = 0, j = 0;tk(c = f(o, str));) {
 				if (c != '\n')
 					sval[j++] = c;
 			}
-			i+=j;
+			i += j;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
-			for (s[0] = 0, c = 0, j = 0;tk(c = f(o, str));++j) {
-				s[j] = c;
+			for (s[0] = 0, c = 0, j = 0;tk(c = f(o, str));) {
+				if (c != '\n')
+					s[j++] = c;
 			}
 			s[j] = 0;
 			*ints = strtol(s, NULL, 10);
-			i+=j;
+			i += j;
 			break;
 		default:
 			goto eof;
