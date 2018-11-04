@@ -86,6 +86,7 @@ int __puts_inter(const char *, FILE *, int);
 FILE *__init_file(FILE*);
 size_t __int2str(char *, intmax_t, int);
 size_t __uint2str(char *, uintmax_t, int);
+int __fscanf_inter(const char *, FILE *restrict, const char *restrict, va_list);
 
 /* number to string */ 
 int fmt_fp(char *, long double, int, int, int, int);
