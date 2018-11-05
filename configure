@@ -136,7 +136,7 @@ then	print
 	print "Falling back to uname -m which is not compiler specific"
 	print "This will mess up cross compiling unless your host and target are the same"
 	architecture=$(uname -m 2>/dev/null)
-else
+fi
 
 print "$architecture"
 

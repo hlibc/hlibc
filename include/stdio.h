@@ -7,9 +7,7 @@
 #include <string.h> 
 /* for popen / pclose */
 #include <sys/types.h>
-#include <sys/wait.h> 
-#define __NEED_ssize_t
-#define __NEED_off_t 
+#include <sys/wait.h>
 #include <bits/types.h> 
 #define NULL ((void*)0) 
 #define EOF (-1) 

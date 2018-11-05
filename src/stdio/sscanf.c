@@ -1,6 +1,6 @@
 #include "../internal/internal.h"
 
-int sscanf(const char *str, const char *fmt, ...);
+int sscanf(const char *str, const char *fmt, ...)
 {
 	int ret = 0;
         va_list argptr;
