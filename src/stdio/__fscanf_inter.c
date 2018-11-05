@@ -58,6 +58,7 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 				if (c != '\n')
 					sval[j++] = c, i++;
 			}
+			sval[j] = 0;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
