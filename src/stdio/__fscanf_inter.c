@@ -60,7 +60,7 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 			sval = va_arg(ap, char *);
 			sval[j] = 0;
 			for (c = 0, j = 0;tk(c = f(o, str));) {
-				if (c != '\n' || c == EOF) {
+				if (c != '\n') {
 					sval[j++] = c;
 					i++;
 					sval[j] = 0;
