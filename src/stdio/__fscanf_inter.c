@@ -22,6 +22,8 @@ static int tk(int c)
 {
 	if (c == ' ')
 		return 0;
+	if (c == '\n')
+		return 0;
 	if (c == '\t')
 		return 0;
 	if (c == EOF)
@@ -56,13 +58,14 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		switch (*p) {
 		case 's':
 			sval = va_arg(ap, char *);
+			sval[j] = 0;
 			for (c = 0, j = 0;tk(c = f(o, str));) {
-				if (c != '\n') {
+				if (c != '\n' || c == EOF) {
 					sval[j++] = c;
 					i++;
 					sval[j] = 0;
-				}
-				
+				}else
+				sval[j] = 0;
 				if (c == EOF)
 					goto eof;
 			}
