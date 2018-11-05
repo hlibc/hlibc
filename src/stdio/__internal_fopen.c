@@ -3,7 +3,7 @@
 FILE *__internal_fopen(const char *name, const char *mode, int popen)
 {
 	int fd = 0;
-	FILE *o;
+	FILE *o = NULL;
 	/* this is 0666 */
 	mode_t omode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 	int outfile = 0;
@@ -41,8 +41,7 @@ FILE *__internal_fopen(const char *name, const char *mode, int popen)
 		case '+':
 			outfile |= O_RDWR;
 			outfile &= ~(O_RDONLY|O_WRONLY);
-			o->read = 1;
-			o->write = 1; 
+			o->read = o->write = 1; 
 			break;
 		default:
 			__init_file(o);
