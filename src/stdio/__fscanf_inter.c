@@ -21,25 +21,11 @@ static int __sscan(FILE *o, const char *s)
 
 static int tk(int c)
 {
-	if (c == ' ')
-		return 0;
-	if (c == '\n')
-		return 0;
-	if (c == '\t')
+	if (isspace(c))
 		return 0;
 	if (c == EOF)
 		return 0;
 	return 1;
-}
-static int scantk(int c)
-{
-	if (c == ' ')
-		return 1;
-	if (c == '\t')
-		return 1;
-	if (c == '\n')
-		return 1;
-	return 0;
 }
 
 int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, va_list ap)
