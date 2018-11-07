@@ -216,6 +216,8 @@ KNOWN BUGS:
 	this bug is a top priority and measures are being taken to reproduce
 	it.
 
+	The fcsanf family is under construction at this time. Though it can be
+	linked in, it should not be used until this notice is removed.
 
 CONTACT:
 --------
