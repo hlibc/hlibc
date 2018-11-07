@@ -19,6 +19,25 @@ static int __sscan(FILE *o, const char *s)
 	return s[i++];
 }
 
+static int dectk(int c)
+{
+	switch(c) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			return 1;
+	}
+	//if (c == EOF)
+	//	return 0;
+	return 0;
+}
 static int tk(int c)
 {
 	if (isspace(c))
@@ -32,12 +51,15 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 {
 	char *p = NULL;
 	size_t i = 0;
-	char *sval = NULL;
-	char s[1000] = { 0 };
+	static char array[1024] = { 0 };
 	size_t j = 0;
 	int c = 0;
 	int *ints = NULL;
 	__scan f;
+	char *ps = array;
+	char *s = NULL;
+	int lever = 0;
+	int base = 10;
 
 	if (!(str))
 		f = __fgetc;
@@ -51,39 +73,57 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		++p;
 		switch (*p) {
 		case 's':
-			sval = va_arg(ap, char *);
-			int lever = 0;
-			while (isspace((c = f(o, str)))) {
+			s = va_arg(ap, char *);
+			for (lever = 0;isspace((c = f(o, str)));) {
 				lever = 1;
 			}
-			if (lever == 1) {
+			if (lever == 1 && c != EOF) {
 				ungetc(c, o);
 				lever = 0;
 			}
-			sval[j] = 0;
-			for (c = 0, j = 0;tk(c = f(o, str));) { 
-				sval[j++] = c;
+	
+			for (s[0] = 0, c = 0, j = 0;tk(c = f(o, str));) { 
+				s[j++] = c;
+				s[j] = 0;
 				i++;
-				sval[j] = 0;
 				lever = 1;
 			}
 
-			if (lever == 1 && c != EOF)
-			{
+			if (lever == 1 && c != EOF) {
 				ungetc(c, o);
 				lever = 0;
 			}
 			if (c == EOF)
 				goto eof;
 			break;
-		case 'd': 
+		case 'd':
+			base = 10;
 			ints = va_arg(ap, int *);
-			for (s[0] = 0, c = 0, j = 0;tk(c = f(o, str));) {
-				if (c != '\n')
-					s[j++] = c, i++;
+			
+			for (lever = 0;isspace((c = f(o, str)));) {
+				lever = 1;
 			}
-			s[j] = 0;
-			*ints = strtol(s, NULL, 10);
+			if (lever == 1 && c != EOF) {
+				ungetc(c, o);
+				lever = 0;
+			}
+			for (ps[0] = 0, c = 0, j = 0;dectk(c = f(o, str));) {
+				ps[j++] = c;
+				ps[j] = 0;
+				i++;
+				lever = 1;
+			}
+			*ints = strtoul(ps, NULL, base);
+			
+			if (dectk(c) == 0 || (lever == 1 && c != EOF)) {
+				ungetc(c, o);
+				lever = 0;
+			}
+			
+			if (c == EOF)
+				goto eof;
+
+			
 			break;
 		}
 	}
