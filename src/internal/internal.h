@@ -66,6 +66,7 @@ int fputc(int, FILE *);
 int fflush(FILE *);
 int ferror(FILE *stream);
 int getc(FILE *);
+int ungetc(int, FILE *);
 int fclose(FILE *);
 FILE *fopen(const char *, const char *);
 int setvbuf(FILE *, char *, int, size_t);
