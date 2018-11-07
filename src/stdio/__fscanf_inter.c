@@ -30,6 +30,16 @@ static int tk(int c)
 		return EOF;
 	return 1;
 }
+static int scantk(int c)
+{
+	if (c == ' ')
+		return 1;
+	if (c == '\t')
+		return 1;
+	//if (c == '\n')
+	//	return 1;
+	return 0;
+}
 
 int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, va_list ap)
 {
@@ -49,15 +59,20 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 
 	for (p = (char *)fmt; *p; p++) {
 		if (*p != '%') {
-			if ((c = f(o, str)) == *p)
-				continue;
-			else
-				break;
+			;// FIXME
 		}
 		++p;
 		switch (*p) {
 		case 's':
 			sval = va_arg(ap, char *);
+			int lever = 0;
+			while (scantk((c = f(o, str))))
+			{
+				lever = 1;
+			}
+			if (lever == 1)
+				ungetc(c, o);
+			
 			sval[j] = 0;
 			for (c = 0, j = 0;tk(c = f(o, str));) {
 				if (c != '\n') {
@@ -65,11 +80,10 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 					i++;
 					sval[j] = 0;
 				}else
-				sval[j] = 0;
-				if (c == EOF)
-					goto eof;
+					sval[j] = 0;
 			}
-			
+			if (c == EOF)
+				goto eof;
 			break;
 		case 'd': 
 			ints = va_arg(ap, int *);
@@ -80,8 +94,6 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 			s[j] = 0;
 			*ints = strtol(s, NULL, 10);
 			break;
-		default:
-			goto eof;
 		}
 	}
 	return i;
