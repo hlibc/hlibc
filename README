@@ -122,16 +122,6 @@ MATHEMATICAL CORRECTNESS:
 	saturation boundary is not acceptable.
 
 
-RELENG:
--------
-
-	Release engineering and versioning in hlibc is fully automated:
-
-		make release
-
-	Details can be found within tools/.release.
-
-
 TESTING:
 --------
 
