@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 typedef int (*__scan)(FILE *o, const char *s);
 
@@ -66,7 +67,7 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		case 's':
 			sval = va_arg(ap, char *);
 			int lever = 0;
-			while (scantk((c = f(o, str)))) {
+			while (isspace((c = f(o, str)))) {
 				lever = 1;
 			}
 			if (lever == 1) {
