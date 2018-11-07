@@ -27,7 +27,7 @@ static int tk(int c)
 	if (c == '\t')
 		return 0;
 	if (c == EOF)
-		return EOF;
+		return 0;
 	return 1;
 }
 static int scantk(int c)
@@ -36,8 +36,8 @@ static int scantk(int c)
 		return 1;
 	if (c == '\t')
 		return 1;
-	//if (c == '\n')
-	//	return 1;
+	if (c == '\n')
+		return 1;
 	return 0;
 }
 
@@ -66,21 +66,25 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 		case 's':
 			sval = va_arg(ap, char *);
 			int lever = 0;
-			while (scantk((c = f(o, str))))
-			{
+			while (scantk((c = f(o, str)))) {
 				lever = 1;
 			}
-			if (lever == 1)
+			if (lever == 1) {
 				ungetc(c, o);
-			
+				lever = 0;
+			}
 			sval[j] = 0;
-			for (c = 0, j = 0;tk(c = f(o, str));) {
-				if (c != '\n') {
-					sval[j++] = c;
-					i++;
-					sval[j] = 0;
-				}else
-					sval[j] = 0;
+			for (c = 0, j = 0;tk(c = f(o, str));) { 
+				sval[j++] = c;
+				i++;
+				sval[j] = 0;
+				lever = 1;
+			}
+
+			if (lever == 1 && c != EOF)
+			{
+				ungetc(c, o);
+				lever = 0;
 			}
 			if (c == EOF)
 				goto eof;
