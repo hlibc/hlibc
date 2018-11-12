@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+static char __unbuf[8] = { 0 };
+static size_t __unbufi = 0;
+
 typedef int (*__scan)(FILE *o, const char *s);
 
 static int __fgetc(FILE *o, const char *s)
@@ -16,7 +19,18 @@ static int __sscan(FILE *o, const char *s)
 {
 	(void)o;
 	static size_t i = 0;
+	if (__unbufi > 0) {
+		return __unbuf[__unbufi--];
+	}
 	return s[i++];
+}
+
+static int __sscan_ungetc(FILE *o, int c)
+{
+	(void)o;
+	if (__unbufi < 8)
+	__unbuf[__unbufi++] = c;
+	return 0;
 }
 
 static int dectk(int c)
@@ -34,8 +48,6 @@ static int dectk(int c)
 		case '9':
 			return 1;
 	}
-	//if (c == EOF)
-	//	return 0;
 	return 0;
 }
 static int tk(int c)
@@ -56,7 +68,7 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 	int c = 0;
 	int *ints = NULL;
 	__scan f;
-	char *ps = array;
+	static char *ps = array;
 	char *s = NULL;
 	int lever = 0;
 	int base = 10;
@@ -107,15 +119,17 @@ int __fscanf_inter(const char *str, FILE *restrict o, const char *restrict fmt, 
 				ungetc(c, o);
 				lever = 0;
 			}
+		
 			for (ps[0] = 0, c = 0, j = 0;dectk(c = f(o, str));) {
 				ps[j++] = c;
 				ps[j] = 0;
 				i++;
 				lever = 1;
 			}
+			if ( j > 0)
 			*ints = strtoul(ps, NULL, base);
 			
-			if (dectk(c) == 0 || (lever == 1 && c != EOF)) {
+			if (lever == 1 && c != EOF) {
 				ungetc(c, o);
 				lever = 0;
 			}
