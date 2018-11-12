@@ -1,6 +1,6 @@
 # hlibc makefile 
 #
-# Copyright © 2018 CM Graff
+# Copyright  2018 CM Graff
 #
 # Use GNU make. ("gmake" on the BSDs and simply "make" on linux systems.)
 #
@@ -54,7 +54,11 @@ static: $(OBJ) $(AOBJ)
 	$(AR) rc libm.a
 
 clean:
-	$(RM) -rf $(OBJ) config.mak libc.a libm.a include/bits $(AOBJ)
+	$(RM) -rf $(OBJ) libc.a libm.a include/bits $(AOBJ)
+	$(MAKE) distclean
+
+distclean:
+	$(RM) config.mak
 
 cleanall:
 	rm -rf system-root
