@@ -30,21 +30,21 @@ static chain **tchain;
 
 /* shoot for a 64 unit granularity ~[512, 32768) as (32768/512 = 64) */
 #define TWOTO32 4294967296			/* 2^32 */
-#define HASHSIZE TWOTO32 / (256*512*64)		/* ~2^32 / 2^23 = ~512 */
+#define FOLDSIZE TWOTO32 / (256*512*64)		/* ~2^32 / 2^23 = ~512 */
 #define CHAINLEN TWOTO32 / (256*512*128)	/* ~2^32 / 2^24 = ~256 */
-#define WRAP TWOTO32 / (HASHSIZE*CHAINLEN)	/* ~2^32 / (~256*~512) = ~32768 */
-#define HASH TWOTO32 / CHAINLEN			/* ~2^32 / ~256 = ~16777216 */
+#define SLOT TWOTO32 / (FOLDSIZE*CHAINLEN)	/* ~2^32 / (~256*~512) = ~32768 */
+#define FOLD TWOTO32 / CHAINLEN			/* ~2^32 / ~256 = ~16777216 */
 
 static const size_t chunk_size = 4096;
 
 static size_t magno(size_t i)
 {
-	return i / HASH;
+	return i / FOLD;
 }
 
-static size_t hash(size_t i)
+static size_t bulletno(size_t i)
 {
-	return i / WRAP;
+	return i / SLOT;
 }
 
 static void initmag(size_t i)
@@ -61,8 +61,8 @@ static void initmag(size_t i)
 
 	if (!c->magazine)
 	{
-		c->magazine = __mmap_inter(sizeof (flist) * HASHSIZE);
-		c->_fhead = __mmap_inter(sizeof (flist) * HASHSIZE);
+		c->magazine = __mmap_inter(sizeof (flist) * FOLDSIZE);
+		c->_fhead = __mmap_inter(sizeof (flist) * FOLDSIZE);
 	
 	}
 	tchain[z] = c;
@@ -79,11 +79,11 @@ static flist *delmiddle(flist *o)
 
 static int addfreenode(object *node)
 {
-	size_t hashv = hash(node->size);
+	size_t bulletnov = bulletno(node->size);
 	flist *o = NULL; 
 	size_t z = magno(node->size);
 	chain *c = tchain[z];
-	flist *last = c->_fhead[hashv]; 
+	flist *last = c->_fhead[bulletnov]; 
 
 	if (!(o = __mmap_inter(sizeof(flist)))) {
 		return 1;
@@ -95,9 +95,9 @@ static int addfreenode(object *node)
 	o->next = NULL;
 	o->prev = last;
 	o->node = node; 
-	c->_fhead[hashv] = o;
-	if (!(c->magazine[hashv])) { 
-		 c->magazine[hashv] = o;
+	c->_fhead[bulletnov] = o;
+	if (!(c->magazine[bulletnov])) { 
+		 c->magazine[bulletnov] = o;
 	}
 	tchain[z] = c;
 	return 0;
@@ -107,14 +107,14 @@ static object *findfree(size_t size)
 {
 	object *t = NULL;
 	object *ret = NULL; 
-	size_t i = hash(size);
+	size_t i = bulletno(size);
 	size_t z = magno(size);
 	flist *o = NULL;
 	chain *c;
 	
 	for (; z < CHAINLEN && ret == NULL; ++z) {
 		c = tchain[z];
-		 for (; c && i < HASHSIZE && ret == NULL; ++i) {
+		for (; c && i < FOLDSIZE && ret == NULL; ++i) {
 			for (o = c->magazine[i]; o ; o = o->next) {
 				t = o->node;
 				if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
