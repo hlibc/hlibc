@@ -8,6 +8,23 @@
 #include <errno.h>
 #include <limits.h>
 
+/*
+	The hlibc malloc uses a table chain allocator which is accessed through
+	a series of divisions which reduce the input to a granulated range. New
+	magazies are dynamically allocated. There is no superstructure, instead
+	the free list is used to track all allocations and are not added until
+	free() time.
+*/
+
+
+/* shoot for a 64 unit granularity ~[512, 32768) as (32768/512 = 64) */
+#define TWOTO32 4294967296			/* 2^32 */
+#define FOLDSIZE TWOTO32 / (256*512*64)		/* ~2^32 / 2^23 = ~512 */
+#define CHAINLEN TWOTO32 / (256*512*128)	/* ~2^32 / 2^24 = ~256 */
+#define SLOT TWOTO32 / (FOLDSIZE*CHAINLEN)	/* ~2^32 / (~256*~512) = ~32768 */
+#define FOLD TWOTO32 / CHAINLEN			/* ~2^32 / ~256 = ~16777216 */
+
+
 typedef struct object
 {
 	size_t size; 
@@ -27,13 +44,6 @@ typedef struct chain
 }chain;
 
 static chain **tchain; 
-
-/* shoot for a 64 unit granularity ~[512, 32768) as (32768/512 = 64) */
-#define TWOTO32 4294967296			/* 2^32 */
-#define FOLDSIZE TWOTO32 / (256*512*64)		/* ~2^32 / 2^23 = ~512 */
-#define CHAINLEN TWOTO32 / (256*512*128)	/* ~2^32 / 2^24 = ~256 */
-#define SLOT TWOTO32 / (FOLDSIZE*CHAINLEN)	/* ~2^32 / (~256*~512) = ~32768 */
-#define FOLD TWOTO32 / CHAINLEN			/* ~2^32 / ~256 = ~16777216 */
 
 static const size_t chunk_size = 4096;
 
