@@ -62,7 +62,7 @@ static void initmag(size_t i)
 	size_t z = magno(i);
 
 	if (!tchain)
-		tchain = __mmap_inter(sizeof(chain *) * CHAINLEN);
+		tchain = __mmap_inter(sizeof(chain) * CHAINLEN);
 
 	chain *c = tchain[z]; 
 	if (c == NULL) {
