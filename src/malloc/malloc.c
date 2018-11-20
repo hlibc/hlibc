@@ -11,9 +11,9 @@
 /*
 	The hlibc malloc uses a table chain allocator which is accessed through
 	a series of divisions which reduce the input to a granulated range. New
-	magazies are dynamically allocated. There is no superstructure, instead
-	the free list is used to track all allocations and are not added until
-	free() time.
+	magazines are dynamically allocated. There is no superstructure, instead
+	the free list is used to track all allocations and objects are not added 
+	until free() time.
 */
 
 
