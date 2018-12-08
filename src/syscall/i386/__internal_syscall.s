@@ -16,12 +16,3 @@ __internal_syscall:
         popl    %edi 
         ret
 
-
-
-
-
-
-
-
-
-
