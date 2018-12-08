@@ -62,7 +62,7 @@ static void initmag(size_t i)
 	size_t z = magno(i);
 
 	if (!tchain)
-		tchain = __mmap_inter(sizeof(chain) * CHAINLEN);
+		tchain = __mmap_inter(sizeof (chain) * CHAINLEN);
 
 	chain *c = tchain[z]; 
 	if (c == NULL) {
@@ -90,8 +90,8 @@ static flist *delmiddle(flist *o)
 static int addfreenode(object *node)
 {
 	size_t bulletnov = bulletno(node->size);
-	flist *o = NULL; 
 	size_t z = magno(node->size);
+	flist *o = NULL;
 	chain *c = tchain[z];
 	flist *last = c->_fhead[bulletnov]; 
 
@@ -148,29 +148,16 @@ static object *findfree(size_t size)
 
 static object *morecore(size_t size)
 {
-	object *o = NULL; 
-
-	size_t sum = 0;
-	size_t orig = size;
-	size_t mul = 1;
+	object *o = NULL;
 	size_t t = 0;
-
-	if (size > chunk_size)
-		mul += (size / chunk_size);
-
-	if ((size_t)-1 / chunk_size < mul)
-		size = orig;
-	else {
-		size = (chunk_size * mul);
-	}
 
 	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
 		goto error;
 	}
 
-	if (!(o = __mmap_inter(size + sizeof(object)))) {
+	if (!(o = __mmap_inter(t))) {
 		goto error;
-	} 
+	}
 	o->size = size;
 	return o;
 
@@ -181,12 +168,22 @@ static object *morecore(size_t size)
 
 void *malloc(size_t size)
 {
-	if (size >= TWOTO32)
-	{
+	size_t mul = 1;
+	object *o = NULL;
+	if (size >= TWOTO32) {
 		goto core;
 	}
+
+        if (size > chunk_size) {
+                mul += (size / chunk_size);
+	}
+
+        if (!((size_t)-1 / chunk_size < mul)) {
+                size = (chunk_size * mul);
+	}
+
 	initmag(size);
-	object *o;
+	
 	if (!(o = findfree(size))) {
 		core:
 		if (!(o = morecore(size))) {
