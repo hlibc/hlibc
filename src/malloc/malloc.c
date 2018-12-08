@@ -27,7 +27,7 @@
 
 typedef struct object
 {
-	size_t size; 
+	size_t size;
 } object;
 
 typedef struct flist
@@ -95,7 +95,7 @@ static int addfreenode(object *node)
 	chain *c = tchain[z];
 	flist *last = c->_fhead[bulletnov]; 
 
-	if (!(o = __mmap_inter(sizeof(flist)))) {
+	if (!(o = __mmap_inter(sizeof (flist)))) {
 		return 1;
 	}
 
@@ -116,11 +116,12 @@ static int addfreenode(object *node)
 static object *findfree(size_t size)
 {
 	object *t = NULL;
-	object *ret = NULL; 
+	object *ret = NULL;
+	flist *o = NULL;
+	chain *c = NULL;
+
 	size_t i = bulletno(size);
 	size_t z = magno(size);
-	flist *o = NULL;
-	chain *c;
 	
 	for (; z < CHAINLEN; ++z) {
 		c = tchain[z];
@@ -135,7 +136,7 @@ static object *findfree(size_t size)
 					goto end;
 				}else {
 					o = delmiddle(o);
-					munmap(t, t->size + sizeof(object));
+					munmap(t, t->size + sizeof (object));
 					t = NULL;
 				}
 			}
@@ -151,7 +152,7 @@ static object *morecore(size_t size)
 	object *o = NULL;
 	size_t t = 0;
 
-	if (__safe_uadd_sz(size, sizeof(object), &t, SIZE_MAX) == -1) {
+	if (__safe_uadd_sz(size, sizeof (object), &t, SIZE_MAX) == -1) {
 		goto error;
 	}
 
@@ -196,7 +197,7 @@ void *malloc(size_t size)
 
 void free(void *ptr)
 {
-	object *o;
+	object *o = NULL;
 	if (!ptr) {
 		return;
 	}
@@ -210,8 +211,8 @@ void free(void *ptr)
 
 void *realloc(void *ptr, size_t size)
 {
-	void *ret;
-	object *o;
+	void *ret = NULL;
+	object *o = NULL;
 	if (!ptr) {
 		return malloc(size);
 	}
@@ -232,7 +233,7 @@ void *realloc(void *ptr, size_t size)
 
 void *calloc(size_t nmemb, size_t size)
 {
-	void *o;
+	void *o = NULL;
 	size_t t = 0;
 	if(__safe_umul_sz(nmemb, size, &t, (size_t)-1) == -1) { 
 		return NULL;
