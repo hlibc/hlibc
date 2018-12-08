@@ -122,9 +122,9 @@ static object *findfree(size_t size)
 	flist *o = NULL;
 	chain *c;
 	
-	for (; z < CHAINLEN && ret == NULL; ++z) {
+	for (; z < CHAINLEN; ++z) {
 		c = tchain[z];
-		for (; c && i < FOLDSIZE && ret == NULL; ++i) {
+		for (; c && i < FOLDSIZE; ++i) {
 			for (o = c->magazine[i]; o ; o = o->next) {
 				t = o->node;
 				if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
@@ -132,7 +132,7 @@ static object *findfree(size_t size)
 				if (t->size >= size && ret == NULL) {
 					o = delmiddle(o);
 					ret = t;
-					break;
+					goto end;
 				}else {
 					o = delmiddle(o);
 					munmap(t, t->size + sizeof(object));
@@ -141,9 +141,8 @@ static object *findfree(size_t size)
 			}
 		}
 		i = 0;
-		tchain[z] = c;
 	}
-	
+	end:
 	return ret;
 }
 
