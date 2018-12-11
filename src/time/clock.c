@@ -1,6 +1,6 @@
 #include <time.h>
 #include <sys/syscall.h>
-
+// TODO: provide arithmetic boundary checks and return a -1
 clock_t clock()
 {
         struct timespec t = {0};
