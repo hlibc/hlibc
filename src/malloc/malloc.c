@@ -60,12 +60,12 @@ static size_t bulletno(size_t i)
 static void initmag(size_t i)
 {
 	size_t z = magno(i);
+	chain *c = NULL;
 
 	if (!tchain)
 		tchain = __mmap_inter(sizeof (chain) * CHAINLEN);
 
-	chain *c = tchain[z]; 
-	if (c == NULL) {
+	if (!(c = tchain[z])) {
 		c = __mmap_inter(sizeof (chain));
 	}
 
