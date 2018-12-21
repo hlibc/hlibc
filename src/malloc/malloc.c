@@ -40,7 +40,7 @@ typedef struct flist
 typedef struct chain
 { 
 	flist **magazine;
-	flist **_fhead;
+	flist **head;
 }chain;
 
 static chain **tchain; 
@@ -72,7 +72,7 @@ static void initmag(size_t i)
 	if (!c->magazine)
 	{
 		c->magazine = __mmap_inter(sizeof (flist) * FOLDSIZE);
-		c->_fhead = __mmap_inter(sizeof (flist) * FOLDSIZE);
+		c->head = __mmap_inter(sizeof (flist) * FOLDSIZE);
 	
 	}
 	tchain[z] = c;
@@ -89,11 +89,11 @@ static flist *delmiddle(flist *o)
 
 static int addfreenode(object *node)
 {
-	size_t bulletnov = bulletno(node->size);
-	size_t z = magno(node->size);
+	size_t bullet = bulletno(node->size);
+	size_t mag = magno(node->size);
 	flist *o = NULL;
-	chain *c = tchain[z];
-	flist *last = c->_fhead[bulletnov]; 
+	chain *c = tchain[mag];
+	flist *last = c->head[bullet]; 
 
 	if (!(o = __mmap_inter(sizeof (flist)))) {
 		return 1;
@@ -105,11 +105,11 @@ static int addfreenode(object *node)
 	o->next = NULL;
 	o->prev = last;
 	o->node = node; 
-	c->_fhead[bulletnov] = o;
-	if (!(c->magazine[bulletnov])) { 
-		 c->magazine[bulletnov] = o;
+	c->head[bullet] = o;
+	if (!(c->magazine[bullet])) { 
+		 c->magazine[bullet] = o;
 	}
-	tchain[z] = c;
+	tchain[mag] = c;
 	return 0;
 }
 
@@ -128,7 +128,7 @@ static object *findfree(size_t size)
 		for (; c && i < FOLDSIZE; ++i) {
 			for (o = c->magazine[i]; o ; o = o->next) {
 				t = o->node;
-				if (t == NULL || o == c->_fhead[i] || o == c->magazine[i])
+				if (t == NULL || o == c->head[i] || o == c->magazine[i])
 					continue;
 				if (t->size >= size && ret == NULL) {
 					o = delmiddle(o);
