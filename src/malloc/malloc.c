@@ -73,7 +73,6 @@ static void initmag(size_t i)
 	{
 		c->magazine = __mmap_inter(sizeof (flist) * FOLDSIZE);
 		c->head = __mmap_inter(sizeof (flist) * FOLDSIZE);
-	
 	}
 	tchain[z] = c;
 }
