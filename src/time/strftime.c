@@ -9,7 +9,7 @@ static const char *weekdays[] =
 	"Wednesday",
 	"Thursday",
 	"Friday",
-	"Saturday",
+	"Saturday"
 };
 
 static const char *months[] =
@@ -25,7 +25,7 @@ static const char *months[] =
 	"September",
 	"October",
 	"November",
-	"December",
+	"December"
 };
 
 size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timeptr)
