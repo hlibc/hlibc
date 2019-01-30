@@ -3,8 +3,7 @@
 
 size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timeptr)
 {
-	static char *__days[] =
-	{
+	static char *__days[] = {
 		"Sunday",
 		"Monday",
 		"Tuesday",
@@ -13,8 +12,7 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 		"Friday",
 		"Saturday"
 	};
-	static char *__mons[] =
-	{
+	static char *__mons[] = {
 		"January",
 		"February",
 		"March",
@@ -141,17 +139,12 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 			dostr:
 				p = tmpbuf;
 			dostr_deep:
-				while (*p) {
-					if (ret < maxsize) {
-						*dp++ = (*p++);
-						ret++;
-					}
-				}
-				break;
+				len = maxsize;
+				goto dostrn_deep;
 			dostrn:
 				p = tmpbuf;
 			dostrn_deep:
-				while (len-- > 0) {
+				while (len-- > 0 && *p) {
 					if (ret < maxsize) {
 						*dp++ = (*p++);
 						ret++;
