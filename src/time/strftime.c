@@ -1,35 +1,33 @@
 #include <stdio.h>
 #include <time.h>
 
-static const char *__days[] =
-{
-	"Sunday",
-	"Monday",
-	"Tuesday",
-	"Wednesday",
-	"Thursday",
-	"Friday",
-	"Saturday"
-};
-
-static const char *__mons[] =
-{
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December"
-};
-
 size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timeptr)
 {
+	static char *__days[] =
+	{
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday"
+	};
+	static char *__mons[] =
+	{
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December"
+	};
 	size_t ret = 0;
 	size_t r = 0;
 	int vary = 0;
