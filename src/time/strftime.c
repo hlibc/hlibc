@@ -36,7 +36,7 @@ size_t strftime(char *s, size_t maxsize, const char *format, const struct tm *ti
 	size_t r = 0;
 	int vary = 0;
 	char *p;
-	int len;
+	size_t len;
 	char tmpbuf[10];
 
 	if (format == NULL || s == NULL || maxsize <= 0)
@@ -171,7 +171,7 @@ size_t strftime(char *s, size_t maxsize, const char *format, const struct tm *ti
 				(ret < maxsize ? (*dp++ = (*p++), ret++) : 0);
 			break;
 		dostrn:
-			while(len-- > 0)
+			while (len-- > 0)
 				(ret < maxsize ? (*dp++ = (*p++), ret++) : 0);
 			break;
 		}
