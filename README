@@ -185,4 +185,12 @@ USEFUL LINKS:
 	Information about the syscall layers of various OS
 		https://john-millikin.com/unix-syscalls
 
+ROADMAP:
+-------
+
+	ftell and clearerr for GNU sed-3.01
+	sysconf for GNU grep-2.4
+	finish the scanf family
+
+
 
