@@ -61,8 +61,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				p = __mons[t->tm_mon];
 				goto dostr_deep;
 			case 'c': 
-				r = strftime(s, max - ret, "%X %x", t);
-				if (r <= 0) 
+				if ((r = strftime(s, max - ret, "%X %x", t)) <= 0)
 					return r;
 				s += r;
 				ret += r;
@@ -109,15 +108,13 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				sprintf(tmpbuf, "%02d", t->tm_wday); 
 				goto dostr;
 			case 'x':
-				r = strftime(s, max - ret, "%B %d, %Y", t);
-				if (r <= 0)
+				if ((r = strftime(s, max - ret, "%B %d, %Y", t)) <= 0)
 					return r;
 				s += r;
 				ret += r;
 				break;
 			case 'X':
-				r = strftime(s, max - ret, "%H:%M:%S", t);
-				if (r <= 0)
+				if ((r = strftime(s, max - ret, "%H:%M:%S", t)) <= 0)
 					return r;
 				s += r;
 				ret += r;
