@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 
-static const char *weekdays[] =
+static const char *__days[] =
 {
 	"Sunday",
 	"Monday",
@@ -12,7 +12,7 @@ static const char *weekdays[] =
 	"Saturday"
 };
 
-static const char *months[] =
+static const char *__mons[] =
 {
 	"January",
 	"February",
@@ -33,40 +33,40 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 	size_t ret = 0;
 	size_t r = 0;
 	int vary = 0;
-	char *p;
-	size_t len;
-	char tmpbuf[10];
+	char *p = NULL;
+	size_t len = 0;
+	char tmpbuf[64];
 
 	if (fp == NULL || dp == NULL || maxsize <= 0)
 		return 0;
 
-	while (*fp)
-	{
-		if (*fp != '%')
-		{
-			(ret < maxsize ? (*dp++ = (*fp++), ret++) : 0);
+	while (*fp) {
+		if (*fp != '%') {
+			if (ret < maxsize) {
+				*dp++ = (*fp++);
+				ret++;
+			}
 			continue;
 		}
 
-		switch(*++fp)
-		{ 
+		switch(*++fp) { 
 			case 'a':
-				p = weekdays[timeptr->tm_wday];
+				p = __days[timeptr->tm_wday];
 				len = 3;
 				goto dostrn_deep;
 			case 'A':
-				p = weekdays[timeptr->tm_wday];
+				p = __days[timeptr->tm_wday];
 				goto dostr_deep;
 			case 'b':
-				p = months[timeptr->tm_mon];
+				p = __mons[timeptr->tm_mon];
 				len = 3;
 				goto dostrn_deep;
 			case 'B':
-				p = months[timeptr->tm_mon];
+				p = __mons[timeptr->tm_mon];
 				goto dostr_deep;
 			case 'c': 
 				r = strftime(dp, maxsize - ret, "%X %x", timeptr);
-				if(r <= 0) 
+				if (r <= 0) 
 					return r;
 				dp += r;
 				ret += r;
@@ -93,7 +93,10 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 				sprintf(tmpbuf, "%02d", timeptr->tm_min); 
 				goto dostr;
 			case 'p':
-				p = timeptr->tm_hour < 12 ? "AM" : "PM";
+				if (timeptr->tm_hour < 12)
+					p = "AM";
+				else
+					p = "PM";
 				goto dostr;
 			case 'S':
 				sprintf(tmpbuf, "%02d", timeptr->tm_sec); 
@@ -132,27 +135,37 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 			case 'Z':
 				break;
 			case '%':
-				(ret < maxsize ? (*dp++ = ('%'), ret++) : 0);
+				if (ret < maxsize) {
+					*dp++ = ('%');
+					ret++;
+				}
 				break;
 			dostr:
 				p = tmpbuf;
 			dostr_deep:
-				while (*p)
-					(ret < maxsize ? (*dp++ = (*p++), ret++) : 0);
+				while (*p) {
+					if (ret < maxsize) {
+						*dp++ = (*p++);
+						ret++;
+					}
+				}
 				break;
 			dostrn:
 				p = tmpbuf;
 			dostrn_deep:
-				while (len-- > 0)
-					(ret < maxsize ? (*dp++ = (*p++), ret++) : 0);
+				while (len-- > 0) {
+					if (ret < maxsize) {
+						*dp++ = (*p++);
+						ret++;
+					}
+				}
 				break;
 		}
 
 		fp++;
 	}
 	
-	if (ret >= maxsize)
-	{
+	if (ret >= maxsize) {
 		dp[maxsize - 1] = 0;
 		return 0;
 	}
