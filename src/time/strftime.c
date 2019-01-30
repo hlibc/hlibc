@@ -53,17 +53,17 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 			case 'a':
 				p = weekdays[timeptr->tm_wday];
 				len = 3;
-				goto dostrn;
+				goto dostrn_deep;
 			case 'A':
 				p = weekdays[timeptr->tm_wday];
-				goto dostr;
+				goto dostr_deep;
 			case 'b':
 				p = months[timeptr->tm_mon];
 				len = 3;
-				goto dostrn;
+				goto dostrn_deep;
 			case 'B':
 				p = months[timeptr->tm_mon];
-				goto dostr;
+				goto dostr_deep;
 			case 'c': 
 				r = strftime(dp, maxsize - ret, "%X %x", timeptr);
 				if(r <= 0) 
@@ -72,39 +72,31 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 				ret += r;
 				break;
 			case 'd':
-				sprintf(tmpbuf, "%02d", timeptr->tm_mday);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_mday); 
 				goto dostr;
 			case 'e':
-				sprintf(tmpbuf, "%2d", timeptr->tm_mday);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%2d", timeptr->tm_mday); 
 				goto dostr;
 			case 'H':
-				sprintf(tmpbuf, "%02d", timeptr->tm_hour);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_hour); 
 				goto dostr;
 			case 'I':
-				sprintf(tmpbuf, "%02d", ((timeptr->tm_hour + 11) % 12) + 1);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", ((timeptr->tm_hour + 11) % 12) + 1); 
 				goto dostr;
 			case 'j':
-				sprintf(tmpbuf, "%03d", timeptr->tm_yday + 1);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%03d", timeptr->tm_yday + 1); 
 				goto dostr;
 			case 'm':
-				sprintf(tmpbuf, "%02d", timeptr->tm_mon + 1);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_mon + 1); 
 				goto dostr;
 			case 'M':
-				sprintf(tmpbuf, "%02d", timeptr->tm_min);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_min); 
 				goto dostr;
 			case 'p':
 				p = timeptr->tm_hour < 12 ? "AM" : "PM";
 				goto dostr;
 			case 'S':
-				sprintf(tmpbuf, "%02d", timeptr->tm_sec);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_sec); 
 				goto dostr;
 			case 'U':
 			case 'W':
@@ -112,12 +104,10 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 				if (*fp == 'W')
 					vary--;
 				vary = (vary + 7) % 7;
-				sprintf(tmpbuf, "%02d", (timeptr->tm_yday + vary) / 7);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", (timeptr->tm_yday + vary) / 7); 
 				goto dostr;
 			case 'w':
-				sprintf(tmpbuf, "%02d", timeptr->tm_wday);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_wday); 
 				goto dostr;
 			case 'x':
 				r = strftime(dp, maxsize - ret, "%B %d, %Y", timeptr);
@@ -134,12 +124,10 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 				ret += r;
 				break;
 			case 'y':
-				sprintf(tmpbuf, "%02d", timeptr->tm_year % 100);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%02d", timeptr->tm_year % 100); 
 				goto dostr;
 			case 'Y':
-				sprintf(tmpbuf, "%d", timeptr->tm_year + 1900);
-				p = tmpbuf;
+				sprintf(tmpbuf, "%d", timeptr->tm_year + 1900); 
 				goto dostr;
 			case 'Z':
 				break;
@@ -147,10 +135,14 @@ size_t strftime(char *dp, size_t maxsize, const char *fp, const struct tm *timep
 				(ret < maxsize ? (*dp++ = ('%'), ret++) : 0);
 				break;
 			dostr:
+				p = tmpbuf;
+			dostr_deep:
 				while (*p)
 					(ret < maxsize ? (*dp++ = (*p++), ret++) : 0);
 				break;
 			dostrn:
+				p = tmpbuf;
+			dostrn_deep:
 				while (len-- > 0)
 					(ret < maxsize ? (*dp++ = (*p++), ret++) : 0);
 				break;
