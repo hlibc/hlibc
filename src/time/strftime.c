@@ -165,6 +165,10 @@ while(*fp != '\0')
 		case 'd':	/* day of month as decimal number (01-31) */
 			Printf("%02d", timeptr->tm_mday);
 			break;
+		
+		case 'e':	/* CM Graff added in 2019 */
+			Printf("%2d", timeptr->tm_mday);
+			break;
 
 		case 'H':	/* hour (24-hour clock) as decimal (00-23) */
 			Printf("%02d", timeptr->tm_hour);
