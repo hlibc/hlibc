@@ -39,7 +39,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 	while (*fmt) {
 		if (*fmt != '%') {
 			if (ret < max) {
-				*s++ = (*fmt++);
+				*s++ = *fmt++;
 				ret++;
 			}
 			continue;
@@ -132,7 +132,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				break;
 			case '%':
 				if (ret < max) {
-					*s++ = ('%');
+					*s++ = '%';
 					ret++;
 				}
 				break;
@@ -146,7 +146,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 			dostrn_deep:
 				while (len-- > 0 && *p) {
 					if (ret < max) {
-						*s++ = (*p++);
+						*s++ = *p++;
 						ret++;
 					}
 				}
