@@ -6,7 +6,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 	static char *__days3[] = {
 		"Sun",
 		"Mon",
-		"Tues",
+		"Tue",
 		"Wed",
 		"Thu",
 		"Fri",
