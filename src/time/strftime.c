@@ -3,6 +3,15 @@
 
 size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 {
+	static char *__days3[] = {
+		"Sun",
+		"Mon",
+		"Tues",
+		"Wed",
+		"Thu",
+		"Fri",
+		"Sat"
+	};
 	static char *__days[] = {
 		"Sunday",
 		"Monday",
@@ -11,6 +20,20 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 		"Thursday",
 		"Friday",
 		"Saturday"
+	};
+	static char *__mons3[] = {
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec"
 	};
 	static char *__mons[] = {
 		"January",
@@ -30,7 +53,6 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 	size_t r = 0;
 	int vary = 0;
 	char *p = NULL;
-	size_t len = 0;
 	char tmpbuf[64];
 
 	if (fmt == NULL || s == NULL || max <= 0)
@@ -47,19 +69,17 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 
 		switch(*++fmt) { 
 			case 'a':
-				p = __days[t->tm_wday];
-				len = 3;
-				goto dostrn_deep;
+				p = __days3[t->tm_wday];
+				goto string_deep;
 			case 'A':
 				p = __days[t->tm_wday];
-				goto dostr_deep;
+				goto string_deep;
 			case 'b':
-				p = __mons[t->tm_mon];
-				len = 3;
-				goto dostrn_deep;
+				p = __mons3[t->tm_mon];
+				goto string_deep;
 			case 'B':
 				p = __mons[t->tm_mon];
-				goto dostr_deep;
+				goto string_deep;
 			case 'c': 
 				if ((r = strftime(s, max - ret, "%X %x", t)) <= 0)
 					return r;
@@ -68,34 +88,34 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				break;
 			case 'd':
 				sprintf(tmpbuf, "%02d", t->tm_mday); 
-				goto dostr;
+				goto string;
 			case 'e':
 				sprintf(tmpbuf, "%2d", t->tm_mday); 
-				goto dostr;
+				goto string;
 			case 'H':
 				sprintf(tmpbuf, "%02d", t->tm_hour); 
-				goto dostr;
+				goto string;
 			case 'I':
 				sprintf(tmpbuf, "%02d", ((t->tm_hour + 11) % 12) + 1); 
-				goto dostr;
+				goto string;
 			case 'j':
 				sprintf(tmpbuf, "%03d", t->tm_yday + 1); 
-				goto dostr;
+				goto string;
 			case 'm':
 				sprintf(tmpbuf, "%02d", t->tm_mon + 1); 
-				goto dostr;
+				goto string;
 			case 'M':
 				sprintf(tmpbuf, "%02d", t->tm_min); 
-				goto dostr;
+				goto string;
 			case 'p':
 				if (t->tm_hour < 12)
 					p = "AM";
 				else
 					p = "PM";
-				goto dostr;
+				goto string;
 			case 'S':
 				sprintf(tmpbuf, "%02d", t->tm_sec); 
-				goto dostr;
+				goto string;
 			case 'U':
 			case 'W':
 				vary = t->tm_wday - t->tm_yday % 7;
@@ -103,10 +123,10 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 					vary--;
 				vary = (vary + 7) % 7;
 				sprintf(tmpbuf, "%02d", (t->tm_yday + vary) / 7); 
-				goto dostr;
+				goto string;
 			case 'w':
 				sprintf(tmpbuf, "%02d", t->tm_wday); 
-				goto dostr;
+				goto string;
 			case 'x':
 				if ((r = strftime(s, max - ret, "%B %d, %Y", t)) <= 0)
 					return r;
@@ -121,10 +141,10 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				break;
 			case 'y':
 				sprintf(tmpbuf, "%02d", t->tm_year % 100); 
-				goto dostr;
+				goto string;
 			case 'Y':
 				sprintf(tmpbuf, "%d", t->tm_year + 1900); 
-				goto dostr;
+				goto string;
 			case 'Z':
 				break;
 			case '%':
@@ -133,15 +153,10 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 					ret++;
 				}
 				break;
-			dostr:
+			string:
 				p = tmpbuf;
-			dostr_deep:
-				len = max;
-				goto dostrn_deep;
-			dostrn:
-				p = tmpbuf;
-			dostrn_deep:
-				while (len-- > 0 && *p) {
+			string_deep:
+				while (*p) {
 					if (ret < max) {
 						*s++ = *p++;
 						ret++;
