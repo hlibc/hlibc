@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <time.h>
 
+/*
+	This strftime implementation is in its early stages
+	* and + are not implemented.
+*/
+
 size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 {
-	static char *__days3[] = {
+	static char *days3[] = {
 		"Sun",
 		"Mon",
 		"Tue",
@@ -12,7 +17,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 		"Fri",
 		"Sat"
 	};
-	static char *__days[] = {
+	static char *days[] = {
 		"Sunday",
 		"Monday",
 		"Tuesday",
@@ -21,7 +26,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 		"Friday",
 		"Saturday"
 	};
-	static char *__mons3[] = {
+	static char *mons3[] = {
 		"Jan",
 		"Feb",
 		"Mar",
@@ -35,7 +40,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 		"Nov",
 		"Dec"
 	};
-	static char *__mons[] = {
+	static char *mons[] = {
 		"January",
 		"February",
 		"March",
@@ -49,11 +54,16 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 		"November",
 		"December"
 	};
+	static char *ampm[] = {
+		"AM",
+		"PM"
+	};
 	size_t ret = 0;
-	size_t r = 0;
+	size_t tmp = 0;
 	int vary = 0;
 	char *p = NULL;
 	char tmpbuf[64];
+	char *st = s; /* save the caller's pointer position */
 
 	if (fmt == NULL || s == NULL || max <= 0)
 		return 0;
@@ -69,22 +79,22 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 
 		switch(*++fmt) { 
 			case 'a':
-				p = __days3[t->tm_wday];
+				p = days3[t->tm_wday];
 				goto string_deep;
 			case 'A':
-				p = __days[t->tm_wday];
+				p = days[t->tm_wday];
 				goto string_deep;
 			case 'b':
-				p = __mons3[t->tm_mon];
+				p = mons3[t->tm_mon];
 				goto string_deep;
 			case 'B':
-				p = __mons[t->tm_mon];
+				p = mons[t->tm_mon];
 				goto string_deep;
 			case 'c': 
-				if ((r = strftime(s, max - ret, "%X %x", t)) <= 0)
-					return r;
-				s += r;
-				ret += r;
+				if ((tmp = strftime(s, max - ret, "%X %x", t)) <= 0)
+					return tmp;
+				s += tmp;
+				ret += tmp;
 				break;
 			case 'd':
 				sprintf(tmpbuf, "%02d", t->tm_mday); 
@@ -109,9 +119,9 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				goto string;
 			case 'p':
 				if (t->tm_hour < 12)
-					p = "AM";
+					p = ampm[0];
 				else
-					p = "PM";
+					p = ampm[1];
 				goto string;
 			case 'S':
 				sprintf(tmpbuf, "%02d", t->tm_sec); 
@@ -128,16 +138,16 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 				sprintf(tmpbuf, "%02d", t->tm_wday); 
 				goto string;
 			case 'x':
-				if ((r = strftime(s, max - ret, "%B %d, %Y", t)) <= 0)
-					return r;
-				s += r;
-				ret += r;
+				if ((tmp = strftime(s, max - ret, "%B %d, %Y", t)) <= 0)
+					return tmp;
+				s += tmp;
+				ret += tmp;
 				break;
 			case 'X':
-				if ((r = strftime(s, max - ret, "%H:%M:%S", t)) <= 0)
-					return r;
-				s += r;
-				ret += r;
+				if ((tmp = strftime(s, max - ret, "%H:%M:%S", t)) <= 0)
+					return tmp;
+				s += tmp;
+				ret += tmp;
 				break;
 			case 'y':
 				sprintf(tmpbuf, "%02d", t->tm_year % 100); 
@@ -148,6 +158,7 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 			case 'Z':
 				break;
 			case '%':
+				/* TODO: should these be <= ?, and can it be a condition of the outer loop */
 				if (ret < max) {
 					*s++ = '%';
 					ret++;
@@ -167,8 +178,10 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 		fmt++;
 	}
 	
-	if (ret >= max) {
-		s[max - 1] = 0;
+	if (ret > max) {
+		/* when ret > max, C99 says to return 0 and the contents are unspecified */
+		/* we nul terminate in order to suppress potential security flaws */
+		st[max - 1] = 0;
 		return 0;
 	}
 
@@ -176,3 +189,5 @@ size_t strftime(char *s, size_t max, const char *fmt, const struct tm *t)
 
 	return ret;
 }
+
+
