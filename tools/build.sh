@@ -9,7 +9,7 @@ make install
 cd "${2}"
 
 # retrieve and build hlibc-test (passing it two compilers(libc) to compare)
-git clone git@github.com:hlibc/hlibc-test.git
+git clone https://github.com/hlibc/hlibc
 ./hlibc-test/build.sh "${1}" "${2}/bin/compiler"
 
 
