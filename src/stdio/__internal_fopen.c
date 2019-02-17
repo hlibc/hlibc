@@ -1,14 +1,16 @@
 #include "../internal/internal.h"
 
-FILE *__internal_fopen(const char *name, const char *mode, int popen)
+FILE *__internal_fopen(const char *name, const char *mode, int type)
 {
 	int fd = 0;
 	FILE *o = NULL;
 	/* this is 0666 */
 	mode_t omode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 	int outfile = 0;
+	// type == 1 == fopen, type == 0 == normal, type == 2 == tmpfile
+	// O_CREAT and O_EXCL
 
-	if (name == NULL && popen == 0)
+	if (name == NULL && type == 0)
 		return NULL;
 
 	for (o = _IO_stream; o < _IO_stream + FOPEN_MAX; o++) {
@@ -49,7 +51,9 @@ FILE *__internal_fopen(const char *name, const char *mode, int popen)
 		}
 	}
 
-	if (popen == 0) {
+	if (type == 0 || type == 2) {
+		if (type == 2) /* this is used by tmpfile */
+			outfile |= O_CREAT|O_EXCL;
 		if ((fd = open(name, outfile, omode)) == -1) {
 			return NULL;
 		}

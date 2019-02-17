@@ -5,20 +5,28 @@
 	mkstemp and mkdtemp go in stdlib.h
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "../internal/internal.h"
 
 char *tmpnam(char *s)
 {
-	static char buf[4096];
+	static char name[4096];
 	srand(time(NULL));
 	int num = rand() % 1000;
-	if (s)
-		sprintf(buf, "%s/%d-temporary.txt", s, num);
-	else
-		sprintf(buf, "%d-temporary.txt", num);
-	return buf;
+	char counter = 128;
+	do {
+		if (s)
+			sprintf(name, "%s/%d-temporary.txt", s, num);
+		else
+			sprintf(name, "%d-temporary.txt", num);
+		if (access(name, X_OK) == 0)
+			break;
+		++num;
+	} while (counter--);
+	if (counter == 0)
+		return NULL;
+	return name;
 }
 
 FILE *tmpfile(void)
@@ -27,13 +35,11 @@ FILE *tmpfile(void)
 	char counter = 128;
 	char *name = NULL;
 	do {
-		name = tmpnam("/tmp/");
-		if (access(name, X_OK) == 0 )
-		{
-			if (!(fp = fopen(name, "w")))
-				return NULL;
-			break;
-		}
+		/* reundantly cycle within tmpnam */
+		name = tmpnam("/tmp/"); 
+		/* __internal_fopen handles O_CREAT and O_EXCL */
+		if (!(fp = __internal_fopen(name, "w", 2)))
+			;
 	}
 	while (counter--);
 	return fp;
