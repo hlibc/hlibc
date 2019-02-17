@@ -88,6 +88,10 @@ int scanf(const char *format, ...);
 int fscanf(FILE *stream, const char *format, ...);
 int sscanf(const char *str, const char *format, ...);
 
+/* tmp */
+char *tmpnam(char *);
+FILE *tmpfile(void);
+
 
 /* opaque objects */
 extern FILE *stdin;

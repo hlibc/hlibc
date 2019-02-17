@@ -17,6 +17,10 @@ extern "C" {
 
 #include <bits/types.h>
 
+/* tmp */
+int mkstemp(char *);
+char *mkdtemp(char *);
+
 int atoi (const char *);
 long atol (const char *);
 long long atoll (const char *);
