@@ -3,23 +3,43 @@
 
 	tmpnam and tmpfile go in stdio.h 
 	mkstemp and mkdtemp go in stdlib.h
+
+	Copyright 2019 CM Graff
+	Thanks to ryuo and alphamule for providing feedback during
+	the design stage of this code.
 */
 
 #include <stdlib.h>
 #include <time.h>
 #include "../internal/internal.h"
+static char *__hubris = "ABCDEFghijkLMNOpqrSTUVwyxz";
+                      
+static size_t __int2_hubris(char *s, uintmax_t n, int base, size_t i)
+{
+        if (n / base) {
+                i = __int2_hubris(s, n / base, base, i);
+        }
+        s[i] = __hubris[(n % base)];
+        return ++i;
+}
 
 char *tmpnam(char *s)
 {
-	static char name[4096];
+	static char storage[4096];
+	char *name = storage;
 	srand(time(NULL));
-	int num = rand() % 1000;
+	int num = rand() % 100000 + time(NULL);
+	/* 128 passes should be sufficient to reject */
 	char counter = 128;
-	do {
-		if (s)
-			sprintf(name, "%s/%d-temporary.txt", s, num);
-		else
-			sprintf(name, "%d-temporary.txt", num);
+	char numstore[1024];
+	char *p = numstore;
+
+	if (s)
+		name = s;
+
+	do { 
+		p[__int2_hubris(p, num, 10, 0)] = 0;
+		sprintf(name, "/tmp/%s", p);
 		if (access(name, X_OK) == 0)
 			break;
 		++num;
@@ -34,14 +54,14 @@ FILE *tmpfile(void)
 	FILE *fp = NULL;
 	char counter = 128;
 	char *name = NULL;
+	char buf[1024];
 	do {
-		/* reundantly cycle within tmpnam */
-		name = tmpnam("/tmp/"); 
+		/* redundantly cycle within tmpnam */
+		name = tmpnam(buf); 
 		/* __internal_fopen handles O_CREAT and O_EXCL */
 		if (!(fp = __internal_fopen(name, "w", 2)))
 			;
-	}
-	while (counter--);
+	} while (counter--);
 	return fp;
 }
 
