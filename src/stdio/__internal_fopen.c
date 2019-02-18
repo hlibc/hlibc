@@ -1,5 +1,11 @@
 #include "../internal/internal.h"
 
+/*
+	Copyright CM Graff 2018,2019
+
+	type == 1 == fopen, type == 0 == normal, type == 2 == tmpfile
+*/
+
 FILE *__internal_fopen(const char *name, const char *mode, int type)
 {
 	int fd = 0;
@@ -7,8 +13,7 @@ FILE *__internal_fopen(const char *name, const char *mode, int type)
 	/* this is 0666 */
 	mode_t omode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 	int outfile = 0;
-	// type == 1 == fopen, type == 0 == normal, type == 2 == tmpfile
-	// O_CREAT and O_EXCL
+	
 
 	if (name == NULL && type == 0)
 		return NULL;
@@ -52,7 +57,7 @@ FILE *__internal_fopen(const char *name, const char *mode, int type)
 	}
 
 	if (type == 0 || type == 2) {
-		 /* this is used by tmpfile */
+		/* this is used by tmpfile */
 		if (type == 2) {
 			outfile |= O_CREAT|O_EXCL;
 		}

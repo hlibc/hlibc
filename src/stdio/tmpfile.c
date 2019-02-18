@@ -1,9 +1,4 @@
 /*
-	This temporary file implementation is under construction
-
-	tmpnam and tmpfile go in stdio.h 
-	mkstemp and mkdtemp go in stdlib.h
-
 	Copyright 2019 CM Graff
 	Thanks to ryuo and alphamule for providing feedback during
 	the design stage of this code.
@@ -32,7 +27,7 @@ char *tmpnam(char *s)
 	int num = rand() % 100000 + time(NULL);
 	/* 128 passes should be sufficient to reject */
 	char counter = 128;
-	char numstore[1024];
+	char numstore[26];
 	char *p = numstore;
 
 	if (s)
@@ -64,15 +59,5 @@ FILE *tmpfile(void)
 			break;
 	} while (counter--);
 	return fp;
-}
-
-int mkstemp(char *template)
-{
-	;
-}
-
-char *mkdtemp(char *template)
-{
-	;
 }
 
