@@ -42,7 +42,8 @@ char *tmpnam(char *s)
 
 	do { 
 		p[__int2_hubris(p, num, 10, 0)] = 0;
-		sprintf(name, "/tmp/%s", p);
+		strcpy(name, "/tmp/");
+		strcat(name, p);
 		if (access(name, X_OK) == 0)
 			break;
 		++num;
