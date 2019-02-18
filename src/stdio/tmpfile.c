@@ -9,20 +9,22 @@
 		*) add the L_tmpnam variable
 
 		*) create better prng char strings
+
+		*) prng against the array of debris
 */
 
 #include <stdlib.h>
 #include <time.h>
 #include "../internal/internal.h"
 
-static char *__hubris = "ABCDEFghijkLMNOpqrSTUVwyxz";
+static char *__debris = "ABCDEFghijkLMNOpqrSTUVwyxz";
                       
-static size_t __int2_hubris(char *s, uintmax_t n, int base, size_t i)
+static size_t __int2_debris(char *s, uintmax_t n, int base, size_t i)
 {
         if (n / base) {
-                i = __int2_hubris(s, n / base, base, i);
+                i = __int2_debris(s, n / base, base, i);
         }
-        s[i] = __hubris[(n % base)];
+        s[i] = __debris[(n % base)];
         return ++i;
 }
 
@@ -41,7 +43,7 @@ char *tmpnam(char *s)
 		name = s;
 
 	do { 
-		p[__int2_hubris(p, num, 10, 0)] = 0;
+		p[__int2_debris(p, num, 10, 0)] = 0;
 		strcpy(name, "/tmp/");
 		strcat(name, p);
 		if (access(name, X_OK) == 0)
