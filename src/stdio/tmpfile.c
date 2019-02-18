@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../internal/internal.h"
+
 static char *__hubris = "ABCDEFghijkLMNOpqrSTUVwyxz";
                       
 static size_t __int2_hubris(char *s, uintmax_t n, int base, size_t i)
@@ -59,8 +60,8 @@ FILE *tmpfile(void)
 		/* redundantly cycle within tmpnam */
 		name = tmpnam(buf); 
 		/* __internal_fopen handles O_CREAT and O_EXCL */
-		if (!(fp = __internal_fopen(name, "w", 2)))
-			;
+		if ((fp = __internal_fopen(name, "w+", 2)))
+			break;
 	} while (counter--);
 	return fp;
 }

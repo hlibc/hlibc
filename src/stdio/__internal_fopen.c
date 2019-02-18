@@ -52,8 +52,10 @@ FILE *__internal_fopen(const char *name, const char *mode, int type)
 	}
 
 	if (type == 0 || type == 2) {
-		if (type == 2) /* this is used by tmpfile */
+		 /* this is used by tmpfile */
+		if (type == 2) {
 			outfile |= O_CREAT|O_EXCL;
+		}
 		if ((fd = open(name, outfile, omode)) == -1) {
 			return NULL;
 		}
