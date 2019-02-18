@@ -1,7 +1,14 @@
 /*
+
 	Copyright 2019 CM Graff
+
 	Thanks to ryuo and alphamule for providing feedback during
-	the design stage of this code.
+	the design stage of the temp file functions
+
+	todo:
+		*) add the L_tmpnam variable
+
+		*) create better prng char strings
 */
 
 #include <stdlib.h>
@@ -50,7 +57,7 @@ FILE *tmpfile(void)
 	FILE *fp = NULL;
 	char counter = 128;
 	char *name = NULL;
-	char buf[1024];
+	char buf[4096];
 	do {
 		/* redundantly cycle within tmpnam */
 		name = tmpnam(buf); 
