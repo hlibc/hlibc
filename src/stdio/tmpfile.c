@@ -13,12 +13,14 @@
 		*) prng against the array of debris
 */
 
-#include <stdlib.h>
 #include <time.h>
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 #include "../internal/internal.h"
 
 static char *__debris = "ABCDEFghijkLMNOpqrSTUVwyxz";
-                      
+
 static size_t __int2_debris(char *s, uintmax_t n, int base, size_t i)
 {
         if (n / base) {
@@ -28,46 +30,54 @@ static size_t __int2_debris(char *s, uintmax_t n, int base, size_t i)
         return ++i;
 }
 
-char *tmpnam(char *s)
+char* __generate_tmp_filename(char* buf, int tries)
 {
 	static char storage[4096];
-	char *name = storage;
+
+	char* name = (buf ? buf : storage);
+
 	srand(time(NULL));
 	int num = rand() % 100000 + time(NULL);
+
 	/* 128 passes should be sufficient to reject */
-	char counter = 128;
+	int counter = tries;
 	char numstore[26];
 	char *p = numstore;
 
-	if (s)
-		name = s;
-
-	do { 
+	do {
 		p[__int2_debris(p, num, 10, 0)] = 0;
 		strcpy(name, "/tmp/");
 		strcat(name, p);
 		if (access(name, X_OK) == 0)
 			break;
 		++num;
+
 	} while (counter--);
+
 	if (counter == 0)
 		return NULL;
+
 	return name;
+}
+
+char *tmpnam(char *s)
+{
+	return __generate_tmp_filename(s, 128);
 }
 
 FILE *tmpfile(void)
 {
-	FILE *fp = NULL;
-	char counter = 128;
-	char *name = NULL;
-	char buf[4096];
-	do {
-		/* redundantly cycle within tmpnam */
-		name = tmpnam(buf); 
-		/* __internal_fopen handles O_CREAT and O_EXCL */
-		if ((fp = __internal_fopen(name, "w+", 2)))
-			break;
-	} while (counter--);
-	return fp;
+	char* name = __generate_tmp_filename(NULL, 128);
+	if(!name)
+	{
+		errno = EEXIST;
+		return NULL;
+	}
+
+	return __internal_fopen(name, "w+", 2);
 }
+
+
+
+
 
