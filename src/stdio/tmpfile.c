@@ -22,38 +22,47 @@
 /* 128 passes should be sufficient to reject */
 #define MAX_TRIES 128
 
-static char *__debris = "ABCDEFghijkLMNOpqrSTUVwyxz";
+/* mkstemp does at most 6 chars, so we just follow that */
+#define NUM_RAND_CHARS 6
 
-static size_t __int2_debris(char *s, uintmax_t n, int base, size_t i)
+
+static const char* __char_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+static const int   __char_pool_count = 62;
+
+static char* __fill_string_randomly(char* s, int cnt)
 {
-        if (n / base) {
-                i = __int2_debris(s, n / base, base, i);
-        }
-        s[i] = __debris[(n % base)];
-        return ++i;
+	for(int i = 0; i < cnt; i++)
+		s[i] = __char_pool[rand() % __char_pool_count];
+
+	return s + cnt;
 }
 
-char* __generate_tmp_filename(char* buf, int tries)
+
+char* __generate_tmp_filename(char* buf)
 {
 	static char storage[4096];
 
-	char* name = (buf ? buf : storage);
+	char* output = (buf ? buf : storage);
+
+	char* name = strcpy(output, "/tmp/") + 5;
 
 	srand(time(NULL));
-	int num = rand() % 100000 + time(NULL);
 
-	int counter = tries;
-	char numstore[26];
-	char *p = numstore;
+	/* NULL terminate the string. __fill_blabla returns one-past-the-end */
+	__fill_string_randomly(name, NUM_RAND_CHARS)[0] = 0;
+
+	return output;
+}
+
+char* tmpnam(char* s)
+{
+	char* name = NULL;
+	int counter = MAX_TRIES;
 
 	do {
-		p[__int2_debris(p, num, 10, 0)] = 0;
-		strcpy(name, "/tmp/");
-		strcat(name, p);
+		name = __generate_tmp_filename(NULL);
 		if (access(name, X_OK) == 0)
 			break;
-		++num;
-
 	} while (counter--);
 
 	if (counter == 0)
@@ -62,21 +71,32 @@ char* __generate_tmp_filename(char* buf, int tries)
 	return name;
 }
 
-char *tmpnam(char *s)
+FILE* tmpfile(void)
 {
-	return __generate_tmp_filename(s, MAX_TRIES);
-}
+	FILE* fd = NULL;
+	char* name = NULL;
+	int counter = MAX_TRIES;
 
-FILE *tmpfile(void)
-{
-	char* name = __generate_tmp_filename(NULL, MAX_TRIES);
-	if(!name)
+	do {
+		name = __generate_tmp_filename(NULL);
+		if ((fd = __internal_fopen(name, "w+", 2)))
+			break;
+
+	} while (counter--);
+
+	if(fd)
 	{
-		errno = EEXIST;
-		return NULL;
+		/*
+			unlink the file, which removes it from the disk. since we already fopen-ed it, the file
+			will continue to exist until the last user gets closes it. since nobody else know about
+			the file (in theory), this process will be the last user, and the file will be freed when
+			the process exits.
+		*/
+
+		unlink(name);
 	}
 
-	return __internal_fopen(name, "w+", 2);
+	return fd;
 }
 
 
