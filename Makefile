@@ -77,6 +77,6 @@ endif
 
 test:
 	-$(MAKE) -C system-root/hlibc-test/ clean
-	# -$(RM) -rf system-root/bin system-root/lib system-root/include
+	-$(RM) -rf system-root/bin system-root/lib system-root/include
 	./tools/build.sh $(CC) $(PWD)/system-root/
 
