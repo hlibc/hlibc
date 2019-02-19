@@ -46,6 +46,8 @@ char* __generate_tmp_filename(char* buf)
 
 	char* name = strcpy(output, "/tmp/") + 5;
 
+	srand(time(NULL));
+
 	/* NULL terminate the string. __fill_blabla returns one-past-the-end */
 	__fill_string_randomly(name, NUM_RAND_CHARS)[0] = 0;
 
