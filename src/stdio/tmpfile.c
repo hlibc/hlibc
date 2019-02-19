@@ -19,6 +19,9 @@
 #include <stdlib.h>
 #include "../internal/internal.h"
 
+/* 128 passes should be sufficient to reject */
+#define MAX_TRIES 128
+
 static char *__debris = "ABCDEFghijkLMNOpqrSTUVwyxz";
 
 static size_t __int2_debris(char *s, uintmax_t n, int base, size_t i)
@@ -39,7 +42,6 @@ char* __generate_tmp_filename(char* buf, int tries)
 	srand(time(NULL));
 	int num = rand() % 100000 + time(NULL);
 
-	/* 128 passes should be sufficient to reject */
 	int counter = tries;
 	char numstore[26];
 	char *p = numstore;
@@ -62,12 +64,12 @@ char* __generate_tmp_filename(char* buf, int tries)
 
 char *tmpnam(char *s)
 {
-	return __generate_tmp_filename(s, 128);
+	return __generate_tmp_filename(s, MAX_TRIES);
 }
 
 FILE *tmpfile(void)
 {
-	char* name = __generate_tmp_filename(NULL, 128);
+	char* name = __generate_tmp_filename(NULL, MAX_TRIES);
 	if(!name)
 	{
 		errno = EEXIST;
