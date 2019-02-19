@@ -2,13 +2,13 @@
 /* Copyright 2018, CM Graff */
 
 .global _start
-_start: 
+_start:
 	subq $8, %rsp
 	xor %rbp, %rbp
 	pop %rax
 	pop %rsi
 	mov %rsp, %rdx
 	andq $-16, %rsp
-	mov $main, %rdi
+	lea main(%rip), %rdi
 	call __load_main
 

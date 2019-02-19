@@ -1,3 +1,5 @@
 *.o
+*.a
 config.mak
 include/bits
+system-root
