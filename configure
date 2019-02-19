@@ -19,8 +19,8 @@ menu()
 	to the makefile. For instance:
 
 	./configure AS='cc -x assembler'
-	
-	
+
+
 	"
 	exit 0
 }
@@ -103,9 +103,12 @@ case $OS_DIRTY_STR in
 		print "which hlibc has no functionality to provide at this time."
 		OPERATING_SYSTEM="netbsd"
 			;;
+	*Darwin*|*darwin*)
+		OPERATING_SYSTEM="macos"
+			;;
 	*OpenBSD*|*openbsd*|*Openbsd*)
 		OPERATING_SYSTEM="openbsd"
-			;; 
+			;;
 esac
 
 # Obtain a temporary file
@@ -198,7 +201,7 @@ case "$CC" in
 esac
 
 for i in "$@"
-do	case "$i" in 
+do	case "$i" in
 		*=*)	print "${i%=*} = ${i#*=}" >> config.mak ;;
 	esac
 done
