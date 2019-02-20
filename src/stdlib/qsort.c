@@ -13,6 +13,11 @@ static char *element(qsort_t *qs, size_t i)
 	return &qs->arr[qs->size * i];
 }
 
+static int compare(qsort_t *qs, size_t A, size_t B)
+{
+	return qs->cmp(element(qs, A), element(qs, B));
+}
+
 static void swap(qsort_t *qs, size_t A, size_t B)
 {
 	char *a = element(qs, A);
