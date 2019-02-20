@@ -125,4 +125,6 @@ typedef struct __locale * locale_t;
 
 struct iovec { void *iov_base; size_t iov_len; };
 
+typedef uint64_t jmp_buf[8];
+
 #endif

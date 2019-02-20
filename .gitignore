@@ -6,3 +6,4 @@ system-root
 *.sublime-*
 *.code-workspace
 .vscode
+zy-tests
