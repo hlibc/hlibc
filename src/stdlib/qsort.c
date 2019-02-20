@@ -49,7 +49,55 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar) (const void *, c
 		qs.len = nmemb;
 		qs.size = size;
 		qs.cmp = compar;
-
 		sort(&qs);
+	}
+}
+
+static size_t parent(size_t i)
+{
+	return (i - 1) / 2;
+}
+
+static size_t leftchild(size_t i)
+{
+	return (i * 2) + 1;
+}
+
+static size_t rightchild(size_t i)
+{
+	return (i * 2) + 2;
+}
+
+static void siftdown(qsort_t *qs, size_t start, size_t end)
+{
+}
+
+static void heapify(qsort_t *qs)
+{
+	size_t end;
+	size_t node;
+
+	node = parent(end = qs->len - 1);
+
+	while(node > 0)
+	{
+		siftdown(qs, node--, end);
+	}
+
+	siftdown(qs, node, end);
+}
+
+static void sort(qsort_t *qs)
+{
+	size_t node;
+
+	heapify(qs);
+
+	node = qs->len - 1;
+
+	while(node > 0)
+	{
+		swap(qs, 0, node);
+		siftdown(qs, 0, --node);
 	}
 }
