@@ -1,5 +1,5 @@
 /*
-	setlongjmp.s
+	setlongjmp.s (x64)
 	Copyright (c) 2019, zhiayang
 */
 
@@ -55,7 +55,7 @@ setjmp:
 
 // void longjmp(jmp_buf env, int val);
 longjmp:
-	test %rsi, %rsi
+	testq %rsi, %rsi
 	jnz 1f
 
 	// "If the programmer mistakenly passes the value 0 in val,
