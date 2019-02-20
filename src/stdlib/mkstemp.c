@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <sys/stat.h>
+
 #include "../internal/internal.h"
 
 static const char *__char_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -29,7 +31,7 @@ char *__fill_string_randomly(char *s, int cnt)
 #define NUM_TRIES 128
 #define REQUIRED_X_COUNT 6
 
-int mkostemps(char *templ, int suffix_len, int extra_flags)
+static char *__verify_template_xs(char *templ, int suffix_len)
 {
 	size_t templ_len = strlen(templ);
 
@@ -37,8 +39,7 @@ int mkostemps(char *templ, int suffix_len, int extra_flags)
 	if (suffix_len < 0 || templ_len < REQUIRED_X_COUNT
 		|| templ_len - REQUIRED_X_COUNT < (size_t) suffix_len)
 	{
-		errno = EINVAL;
-		return -1;
+		return NULL;
 	}
 
 	// we know that templ_len is at least 6 + suffix_len.
@@ -47,10 +48,24 @@ int mkostemps(char *templ, int suffix_len, int extra_flags)
 	{
 		if (fill_start[i] != 'X')
 		{
-			errno = EINVAL;
-			return -1;
+			return NULL;
 		}
 	}
+
+	return fill_start;
+}
+
+
+
+int mkostemps(char *templ, int suffix_len, int extra_flags)
+{
+	char *fill_start = __verify_template_xs(templ, suffix_len);
+	if (fill_start == NULL)
+	{
+		errno = EINVAL;
+		return -1;
+	}
+
 
 	int fd = -1;
 	int counter = NUM_TRIES;
@@ -95,6 +110,38 @@ int mkstemp(char *templ)
 }
 
 
+
+
+
+char *mkdtemp(char *templ)
+{
+	char *fill_start = __verify_template_xs(templ, 0);
+	if (fill_start == NULL)
+	{
+		errno = EINVAL;
+		return NULL;
+	}
+
+	int counter = NUM_TRIES;
+	do {
+		// ok, now we can fill the chars at fill_start with random chars.
+		char *name = __fill_string_randomly(fill_start, REQUIRED_X_COUNT);
+
+		if(mkdir(name, S_IRUSR | S_IWUSR | S_IXUSR) == 0)
+		{
+			errno = 0;
+			return name;
+		}
+
+	} while (counter--);
+
+	// reset templ back to 'XXXXXX' in case things didn't work out.
+	for (int i = 0; i < REQUIRED_X_COUNT; i++)
+		fill_start[i] = 'X';
+
+	errno = EEXIST;
+	return NULL;
+}
 
 
 
