@@ -14,13 +14,23 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../internal/internal.h"
+
+#include <stdio.h>
 
 /* 128 passes should be sufficient to reject */
 #define MAX_TRIES 128
 
-/* mkstemp does at most 6 chars, so we just follow that */
-#define NUM_RAND_CHARS 6
+/*
+	this is a bad hack!! internal.h and stdio.h are mutually exclusive due
+	to how FILE is declared and defined ):
+
+	so we don't include internal.h and we fwd-declare these guys.
+	we want stdio instead for the L_tmpnam and P_tmpdir constants,
+	so we don't have them in two places.
+*/
+
+char *__fill_string_randomly(char *s, int cnt);
+FILE *__internal_fopen(const char *, const char *, int);
 
 
 static char *__generate_tmp_filename(char *buf)
@@ -34,7 +44,7 @@ static char *__generate_tmp_filename(char *buf)
 	srand(time(NULL));
 
 	/* NULL terminate the string. __fill_blabla returns one-past-the-end */
-	__fill_string_randomly(name, NUM_RAND_CHARS)[0] = 0;
+	__fill_string_randomly(name, L_tmpnam - strlen(P_tmpdir))[0] = 0;
 
 	return output;
 }

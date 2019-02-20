@@ -4,13 +4,13 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <string.h> 
+#include <string.h>
 /* for popen / pclose */
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <bits/types.h> 
-#define NULL ((void*)0) 
-#define EOF (-1) 
+#include <bits/types.h>
+#define NULL ((void*)0)
+#define EOF (-1)
 #undef SEEK_SET
 #undef SEEK_CUR
 #undef SEEK_END
@@ -21,6 +21,8 @@
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 1000
 #define TMP_MAX 10000
+#define P_tmpdir "/tmp/"
+#define L_tmpnam 11         /* this is 5 + 6 -- aka strlen("/tmp/") + NUM_RAND_CHARS */
 
 /* The opaque stdio declaration */
 typedef struct FILE FILE;
