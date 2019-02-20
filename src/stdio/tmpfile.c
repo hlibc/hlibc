@@ -1,6 +1,7 @@
 /*
 
 	Copyright 2019 CM Graff
+	Copyright 2019 zhiayang
 
 	Thanks to ryuo and alphamule for providing feedback during
 	the design stage of the temp file functions
@@ -26,25 +27,25 @@
 #define NUM_RAND_CHARS 6
 
 
-static const char* __char_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+static const char *__char_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 static const int   __char_pool_count = 62;
 
-static char* __fill_string_randomly(char* s, int cnt)
+static char *__fill_string_randomly(char *s, int cnt)
 {
-	for(int i = 0; i < cnt; i++)
+	for (int i = 0; i < cnt; i++)
 		s[i] = __char_pool[rand() % __char_pool_count];
 
 	return s + cnt;
 }
 
 
-char* __generate_tmp_filename(char* buf)
+char *__generate_tmp_filename(char *buf)
 {
 	static char storage[4096];
 
-	char* output = (buf ? buf : storage);
+	char *output = (buf ? buf : storage);
 
-	char* name = strcpy(output, "/tmp/") + 5;
+	char *name = strcpy(output, "/tmp/") + 5;
 
 	srand(time(NULL));
 
@@ -54,9 +55,9 @@ char* __generate_tmp_filename(char* buf)
 	return output;
 }
 
-char* tmpnam(char* s)
+char *tmpnam(char *s)
 {
-	char* name = NULL;
+	char *name = NULL;
 	int counter = MAX_TRIES;
 
 	do {
@@ -71,10 +72,10 @@ char* tmpnam(char* s)
 	return name;
 }
 
-FILE* tmpfile(void)
+FILE *tmpfile(void)
 {
-	FILE* fd = NULL;
-	char* name = NULL;
+	FILE *fd = NULL;
+	char *name = NULL;
 	int counter = MAX_TRIES;
 
 	do {
@@ -84,7 +85,7 @@ FILE* tmpfile(void)
 
 	} while (counter--);
 
-	if(fd)
+	if (fd)
 	{
 		/*
 			unlink the file, which removes it from the disk. since we already fopen-ed it, the file
