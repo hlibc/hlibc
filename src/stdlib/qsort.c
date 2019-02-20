@@ -43,10 +43,13 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar) (const void *, c
 {
 	qsort_t qs;
 
-	qs.arr = base;
-	qs.len = nmemb;
-	qs.size = size;
-	qs.cmp = compar;
+	if(nmemb > 1)
+	{
+		qs.arr = base;
+		qs.len = nmemb;
+		qs.size = size;
+		qs.cmp = compar;
 
-	sort(&qs);
+		sort(&qs);
+	}
 }
