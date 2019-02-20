@@ -98,10 +98,18 @@ size_t wcstombs (char *, const wchar_t *, size_t);
 int posix_memalign (void **, size_t, size_t);
 int setenv (const char *, const char *, int);
 int unsetenv (const char *);
-int mkstemp (char *);
-char *mkdtemp (char *);
 int getsubopt (char **, char *const *, char **);
 int rand_r (unsigned *);
+
+char *mkdtemp (char *);
+
+int mkstemp (char *);
+int mkstemps (char *, int suffixlen);
+
+#if defined(_GNU_SOURCE)
+int mkostemp (char *templ, int flags);
+int mkostemps (char *templ, int suffixlen, int flags);
+#endif
 
 #endif
 
