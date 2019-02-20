@@ -54,14 +54,14 @@ static: $(OBJ) $(AOBJ)
 	-$(AR) rc libm.a
 
 clean:
-	$(RM) -rf $(OBJ) libc.a libm.a include/bits $(AOBJ)
+	-$(RM) -rf $(OBJ) libc.a libm.a include/bits $(AOBJ)
 	$(MAKE) distclean
 
 distclean:
-	$(RM) config.mak
+	-$(RM) config.mak
 
 cleanall:
-	rm -rf system-root
+	-$(RM) -rf system-root
 
 create_compiler:
 	printf '#!/bin/sh\n' > $(prefix)/bin/compiler

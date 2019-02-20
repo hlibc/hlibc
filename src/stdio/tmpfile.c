@@ -27,19 +27,7 @@
 #define NUM_RAND_CHARS 6
 
 
-static const char *__char_pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-static const int   __char_pool_count = 62;
-
-static char *__fill_string_randomly(char *s, int cnt)
-{
-	for (int i = 0; i < cnt; i++)
-		s[i] = __char_pool[rand() % __char_pool_count];
-
-	return s + cnt;
-}
-
-
-char *__generate_tmp_filename(char *buf)
+static char *__generate_tmp_filename(char *buf)
 {
 	static char storage[4096];
 

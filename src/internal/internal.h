@@ -48,7 +48,7 @@ typedef struct
 
 struct DIR
 {
-        int fildes; 
+        int fildes;
         size_t position;
         size_t eob;
         char buffer[2048];
@@ -89,7 +89,7 @@ size_t __int2str(char *, intmax_t, int);
 size_t __uint2str(char *, uintmax_t, int);
 int __fscanf_inter(const char *, FILE *restrict, const char *restrict, va_list);
 
-/* number to string */ 
+/* number to string */
 int fmt_fp(char *, long double, int, int, int, int);
 #define MAX(a,b) ((a)>(b) ? (a) : (b))
 #define MIN(a,b) ((a)<(b) ? (a) : (b))
@@ -112,7 +112,7 @@ int __safe_usub(uintmax_t, uintmax_t, uintmax_t *);
 int __safe_uadd(uintmax_t, uintmax_t, uintmax_t *, uintmax_t);
 int __safe_udiv(uintmax_t, uintmax_t, uintmax_t *);
 int __safe_umul(uintmax_t, uintmax_t, uintmax_t *, uintmax_t);
-int __safe_usub_sz(size_t, size_t, size_t *);     
+int __safe_usub_sz(size_t, size_t, size_t *);
 int __safe_uadd_sz(size_t, size_t, size_t *, size_t);
 int __safe_udiv_sz(size_t, size_t, size_t *);
 int __safe_umul_sz(size_t, size_t, size_t *, size_t);
@@ -145,4 +145,14 @@ size_t __snprintf_buffer(size_t, int, char *, FILE *);
 /* silly debugging */
 void __debug(int);
 
+/*
+	replaces 'cnt' characters at 's' with a random(ish) character from [A-Za-z0-9].
+	returns s+cnt. defined in stdlib/mkstemp.c
+*/
+char *__fill_string_randomly(char *s, int cnt);
+
+
 #endif
+
+
+

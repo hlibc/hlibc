@@ -4,3 +4,5 @@ config.mak
 include/bits
 system-root
 *.sublime-*
+*.code-workspace
+.vscode
