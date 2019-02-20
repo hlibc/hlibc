@@ -125,12 +125,12 @@ char *mkdtemp(char *templ)
 	int counter = NUM_TRIES;
 	do {
 		// ok, now we can fill the chars at fill_start with random chars.
-		char *name = __fill_string_randomly(fill_start, REQUIRED_X_COUNT);
+		__fill_string_randomly(fill_start, REQUIRED_X_COUNT);
 
-		if(mkdir(name, S_IRUSR | S_IWUSR | S_IXUSR) == 0)
+		if(mkdir(templ, S_IRUSR | S_IWUSR | S_IXUSR) == 0)
 		{
 			errno = 0;
-			return name;
+			return templ;
 		}
 
 	} while (counter--);
