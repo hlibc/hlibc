@@ -8,10 +8,6 @@
 
 	todo:
 		*) add the L_tmpnam variable
-
-		*) create better prng char strings
-
-		*) prng against the array of debris
 */
 
 #include <time.h>
