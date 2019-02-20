@@ -20,10 +20,14 @@ static int compare(qsort_t *qs, size_t A, size_t B)
 
 static void swap(qsort_t *qs, size_t A, size_t B)
 {
-	char *a = element(qs, A);
-	char *b = element(qs, B);
-	size_t i = 0;
+	char *a;
+	char *b;
+	size_t i;
 	char tmp;
+
+	a = element(qs, A);
+	b = element(qs, B);
+	i = 0;
 
 	for( ; i < qs->size ; ++i )
 	{
@@ -33,6 +37,8 @@ static void swap(qsort_t *qs, size_t A, size_t B)
 	}
 }
 
+static void sort(qsort_t *qs);
+
 void qsort(void *base, size_t nmemb, size_t size, int (*compar) (const void *, const void *))
 {
 	qsort_t qs;
@@ -41,4 +47,6 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar) (const void *, c
 	qs.len = nmemb;
 	qs.size = size;
 	qs.cmp = compar;
+
+	sort(&qs);
 }
