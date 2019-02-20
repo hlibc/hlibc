@@ -190,6 +190,7 @@ ROADMAP:
 
 	ftell and clearerr for GNU sed-3.01
 	sysconf for GNU grep-2.4
+	ftell, fseek, longjmp and setjmp for tcc (and probably others)
 	finish the scanf family
 
 
