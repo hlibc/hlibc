@@ -1,5 +1,13 @@
-int raise(int signal)
+/*
+	raise.c
+	Copyright (c), zhiayang
+*/
+
+#include <signal.h>
+#include <unistd.h>
+
+int raise(int sig)
 {
-	/* this is a no-op stub */
-        return signal;
+	/* raise just does kill(sig) on the current process. */
+	kill(getpid(), sig);
 }
