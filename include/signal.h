@@ -80,6 +80,7 @@ struct sigaction {
 #define SIGRTMAX  (__libc_current_sigrtmax())
 
 int kill(pid_t, int);
+int killpg(int pgrp, int sig);
 
 
 #endif
