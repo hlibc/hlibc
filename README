@@ -7,10 +7,9 @@ hlibc
 	point research and the study of fdlibm's core components. The normative
 	case of IEEE-754-2008 floats 'f' are correctly printed and rounded.
 
-	hlibc is targeted at POSIX systems and works with the Linux, FreeBSD 
-	and OpenBSD kernels' syscall ABI. Currently the i386. x86_64 and aarch64 
-	architectures are supported for Linux, x86_64 and aarch64 for FreeBSD 
-	and x86_64 is supported for OpenBSD.
+	hlibc is targeted at POSIX systems and currently works with the Linux
+	kernel's syscall ABI on the i386. x86_64 and aarch64 architectures.
+	FreeBSD and OpenBSD are supported on an experimental level. 
 
 	hlibc focuses primarily on algorithmic correctness and effectiveness 
 	for the sake of educational purposes. Unlike many smaller libcs, hlibc 
@@ -21,10 +20,9 @@ hlibc
 	stdio functionalities with a shorter, more concise or more effective 
 	interface.
 
-	Because hlibc does not need to be installed in order to be used it is 
-	well suited toward use in the classroom or as a tool for understanding 
-	how more complex libc might work.  The simplicity of hlibc allows for 
-	it to be easily ported to new operating systems.
+	Because hlibc does not need to be installed in order to be used, it is
+	well suited for academic study as a tool for understanding how more 
+	complex libc work.
 
 	As much as possible, linux and glibc specific functionalities are 
 	excluded from hlibc. Instead, hlibc focuses on supplying functions 
