@@ -8,14 +8,14 @@
 #define __SC_getpeername 7
 #define __SC_socketpair  8
 #define __SC_send        9
-#define __SC_recv        10
+
 #define __SC_sendto      11
-#define __SC_recvfrom    12
+
 #define __SC_shutdown    13
 #define __SC_setsockopt  14
 #define __SC_getsockopt  15
 #define __SC_sendmsg     16
-#define __SC_recvmsg     17
+
 
 #define SYS_restart_syscall      0
 #define SYS_exit		  1

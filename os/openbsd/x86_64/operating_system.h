@@ -31,9 +31,9 @@
 #define		SYS_getuid	24	
 #define		SYS_geteuid	25	
 #define		SYS_ptrace	26	
-#define		SYS_recvmsg	27	
+
 #define		SYS_sendmsg	28	
-#define		SYS_recvfrom	29	
+
 #define		SYS_accept	30	
 #define		SYS_getpeername	31	
 #define		SYS_getsockname	32	
@@ -106,7 +106,7 @@
 #define		SYS_accept	99	
 #define		SYS_getpriority	100	
 #define		SYS_send	101	
-#define		SYS_recv	102	
+
 #define		SYS_sigreturn	103	
 #define		SYS_bind	104	
 #define		SYS_setsockopt	105	
@@ -117,7 +117,7 @@
 #define		SYS_null	110	
 #define		SYS_null	111	
 #define		SYS_null	112	
-#define		SYS_recvmsg	113	
+
 #define		SYS_sendmsg	114	
 #define		SYS_null	115	
 #define		SYS_gettimeofday	116	
@@ -129,7 +129,7 @@
 #define		SYS_settimeofday	122	
 #define		SYS_fchown	123	
 #define		SYS_fchmod	124	
-#define		SYS_recvfrom	125	
+
 #define		SYS_setreuid	126	
 #define		SYS_setregid	127	
 #define		SYS_rename	128	
@@ -478,7 +478,7 @@
 #define		SYS_sctp_peeloff		471	
 #define		SYS_sctp_generic_sendmsg	472	
 #define		SYS_sctp_generic_sendmsg_iov	473	
-#define		SYS_sctp_generic_recvmsg	474	
+
 #define		SYS_pread	475	
 #define		SYS_pwrite	476	
 #define		SYS_mmap	477	

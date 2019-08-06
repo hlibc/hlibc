@@ -29,9 +29,9 @@
 #define	SYS_getuid         24
 #define	SYS_geteuid        25
 #define	SYS_ptrace         26
-#define	SYS_recvmsg        27
+
 #define	SYS_sendmsg        28
-#define	SYS_recvfrom       29
+
 #define	SYS_accept         30
 #define	SYS_getpeername    31
 #define	SYS_getsockname    32
@@ -104,7 +104,7 @@
 			/* 99  old accept */
 #define	SYS_getpriority    100
 			/* 101  old send */
-			/* 102  old recv */
+
 			/* 103  old sigreturn */
 #define	SYS_bind           104
 #define	SYS_setsockopt     105
@@ -115,7 +115,7 @@
 			/* 110  old sigsetmask */
 #define	SYS_sigsuspend     111
 			/* 112  old sigstack */
-			/* 113  old recvmsg */
+
 			/* 114  old sendmsg */
 			/* 115  old vtrace */
 #define	SYS_gettimeofday   116
@@ -127,7 +127,7 @@
 #define	SYS_settimeofday   122
 #define	SYS_fchown         123
 #define	SYS_fchmod         124
-			/* 125  old recvfrom */
+
 #define	SYS_setreuid       126
 #define	SYS_setregid       127
 #define	SYS_rename         128
@@ -403,9 +403,9 @@
 #define	SYS_open_nocancel  398
 #define	SYS_close_nocancel 399
 #define	SYS_wait4_nocancel 400
-#define	SYS_recvmsg_nocancel 401
+
 #define	SYS_sendmsg_nocancel 402
-#define	SYS_recvfrom_nocancel 403
+
 #define	SYS_accept_nocancel 404
 #define	SYS_msync_nocancel 405
 #define	SYS_fcntl_nocancel 406
@@ -482,7 +482,7 @@
 #define	SYS_proc_trace_log 477
 #define	SYS_bsdthread_ctl  478
 #define	SYS_openbyid_np    479
-#define	SYS_recvmsg_x      480
+
 #define	SYS_sendmsg_x      481
 #define	SYS_thread_selfusage 482
 #define	SYS_csrctl         483

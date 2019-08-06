@@ -43,9 +43,9 @@
 #define SYS_connect			42
 #define SYS_accept				43
 #define SYS_sendto				44
-#define SYS_recvfrom			45
+
 #define SYS_sendmsg			46
-#define SYS_recvmsg			47
+
 #define SYS_shutdown			48
 #define SYS_bind				49
 #define SYS_listen				50
@@ -297,7 +297,7 @@
 #define SYS_pwritev				296
 #define SYS_rt_tgsigqueueinfo		297
 #define SYS_perf_event_open		298
-#define SYS_recvmmsg				299
+
 #define SYS_fanotify_init			300
 #define SYS_fanotify_mark			301
 #define SYS_prlimit64				302

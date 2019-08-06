@@ -209,12 +209,12 @@
 #define SYS_getsockname 204
 #define SYS_getpeername 205
 #define SYS_sendto 206
-#define SYS_recvfrom 207
+
 #define SYS_setsockopt 208
 #define SYS_getsockopt 209
 #define SYS_shutdown 210
 #define SYS_sendmsg 211
-#define SYS_recvmsg 212
+
 #define SYS_readahead 213
 #define SYS_brk 214
 #define SYS_munmap 215
@@ -245,7 +245,7 @@
 #define SYS_rt_tgsigqueueinfo 240
 #define SYS_perf_event_open 241
 #define SYS_accept4 242
-#define SYS_recvmmsg 243
+
 #define SYS_wait4 260
 #define SYS_prlimit64 261
 #define SYS_fanotify_init 262
